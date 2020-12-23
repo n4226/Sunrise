@@ -3,7 +3,7 @@
 project "Sunrise"
 
 	kind "SharedLib"
-	langauge "C++"
+	language "C++"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -25,6 +25,7 @@ project "Sunrise"
 		
 		cppdialect "C++17"
 		staticruntime "on"
+		systemversion "latest"
 
 		defines {
 			"SR_PLATFORM_WINDOWS",
@@ -42,7 +43,7 @@ project "Sunrise"
 		runtime "Release"
 		optimize "on"
 
-	filter "configrations:Dist"
+	filter "configurations:Dist"
 		defines "SR_DIST"
 		runtime "Release"
 		optimize "on"
