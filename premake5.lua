@@ -8,7 +8,8 @@ project "Sunrise"
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
-
+	pchheader "srpch.h"
+	pchsource "src/srpch.cpp"
 
 	files {
 		"src/**.h",
@@ -18,8 +19,12 @@ project "Sunrise"
 	}
 
 	includedirs {
-		"src"
+		"src",
+		"vendor/spdlog/include",
 	}	
+
+	postbuildcommands {
+	}
 
 	filter "system:windows"
 		

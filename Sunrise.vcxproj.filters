@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sunrise">
+      <UniqueIdentifier>{0EBAD311-7A99-52AD-83B1-DD83EF0FB90E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise">
+      <UniqueIdentifier>{061AE66B-72A5-5330-7BB6-D624E7C0AF30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\core">
+      <UniqueIdentifier>{3EFE4F83-2A8D-D94C-D3AB-ED47BF19EAF2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Sunrise.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\core\Application.h">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\core\Engine.h">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\core\EntryPoint.h">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\core\Log.h">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\core\core.h">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\srpch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\core\Log.cpp">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\srpch.cpp" />
+  </ItemGroup>
+</Project>
