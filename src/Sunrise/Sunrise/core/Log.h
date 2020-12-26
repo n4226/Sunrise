@@ -10,7 +10,7 @@
 #include <spdlog/fmt/ostr.h>
 #pragma warning(pop)
 
-namespace Sunrise {
+namespace sunrise {
 
 	class SUNRISE_API Log
 	{
@@ -30,20 +30,20 @@ namespace Sunrise {
 
 }
 
-#if defined SR_DEBUG  || defined SR_RELEASE
+#if defined SR_DEBUG || defined SR_RELEASE
 // Core log macros
-#define SR_CORE_TRACE(...)    ::Sunrise::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define SR_CORE_INFO(...)     ::Sunrise::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define SR_CORE_WARN(...)     ::Sunrise::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define SR_CORE_ERROR(...)    ::Sunrise::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define SR_CORE_CRITICAL(...) ::Sunrise::Log::GetCoreLogger()->critical(__VA_ARGS__)
+#define SR_CORE_TRACE(...)    ::sunrise::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define SR_CORE_INFO(...)     ::sunrise::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define SR_CORE_WARN(...)     ::sunrise::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define SR_CORE_ERROR(...)    ::sunrise::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define SR_CORE_CRITICAL(...) ::sunrise::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // Client log macros
-#define SR_TRACE(...)         ::Sunrise::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define SR_INFO(...)          ::Sunrise::Log::GetClientLogger()->info(__VA_ARGS__)
-#define SR_WARN(...)          ::Sunrise::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define SR_ERROR(...)         ::Sunrise::Log::GetClientLogger()->error(__VA_ARGS__)
-#define SR_CRITICAL(...)      ::Sunrise::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define SR_TRACE(...)         ::sunrise::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define SR_INFO(...)          ::sunrise::Log::GetClientLogger()->info(__VA_ARGS__)
+#define SR_WARN(...)          ::sunrise::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define SR_ERROR(...)         ::sunrise::Log::GetClientLogger()->error(__VA_ARGS__)
+#define SR_CRITICAL(...)      ::sunrise::Log::GetClientLogger()->critical(__VA_ARGS__)
 
 #else
 
@@ -55,11 +55,11 @@ namespace Sunrise {
 #define SR_CORE_CRITICAL(...)
 
 // Client log macros
-#define HZ_TRACE(...)        
-#define HZ_INFO(...)         
-#define HZ_WARN(...)         
-#define HZ_ERROR(...)        
-#define HZ_CRITICAL(...)     
+#define SR_TRACE(...)        
+#define SR_INFO(...)         
+#define SR_WARN(...)         
+#define SR_ERROR(...)        
+#define SR_CRITICAL(...)     
 
 
 #endif

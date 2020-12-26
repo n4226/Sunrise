@@ -6,17 +6,17 @@
 
 #ifdef SR_PLATFORM_WINDOWS
 
-extern Sunrise::Application* Sunrise::CreateApplication();
+extern sunrise::Application* sunrise::CreateApplication();
 
 int main(int arc, char** argv) {
 
-	auto app = Sunrise::CreateApplication();
+	auto app = sunrise::CreateApplication();
 
-	Sunrise::engine = new Sunrise::Engine(app);
+	sunrise::engine = new sunrise::Engine(app);
 
-	Sunrise::engine->startup();
+	sunrise::engine->startup();
 
-	delete Sunrise::engine;
+	delete sunrise::engine;
 }
 
 #endif 

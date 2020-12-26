@@ -6,7 +6,7 @@
 
 //#include "Application.h"
 
-namespace Sunrise {
+namespace sunrise {
 
 	class Application;
 
@@ -17,6 +17,10 @@ namespace Sunrise {
 		~Engine();
 
 		void startup();
+
+		void run();
+
+		void shutdown();
 
 		Application* app;
 

@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -91,6 +91,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>mango.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\marl-main\Debug;vendor\mango-master\mango-master\build\vs2019\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -100,7 +102,7 @@
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -114,6 +116,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>mango.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\marl-main\Debug;vendor\mango-master\mango-master\build\vs2019\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Release-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -123,7 +127,7 @@
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -137,6 +141,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>mango.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\marl-main\Debug;vendor\mango-master\mango-master\build\vs2019\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Dist-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -147,12 +153,53 @@
     <ClInclude Include="src\Sunrise\Sunrise\core\EntryPoint.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Log.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\core.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Image.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\ResourceHeap.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Sampler.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkHelpers.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vk_mem_alloc.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\Box.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\FrustrumMath.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\Math.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\mesh\Mesh.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\mesh\MeshRendering.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\mesh\Triangulation.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\paths\Bezier.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\paths\Path.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\Scene.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h" />
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Log.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Image.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\ResourceHeap.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Sampler.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkHelpers.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vma.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vmaSettings.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\FrustrumMath.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\Math.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\mesh\Mesh.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\mesh\MeshRendering.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\mesh\Triangulation.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\paths\Bezier.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\paths\Path.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\Scene.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp" />
     <ClCompile Include="src\srpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

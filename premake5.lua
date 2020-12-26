@@ -14,13 +14,30 @@ project "Sunrise"
 	files {
 		"src/**.h",
 		"src/**.cpp",
-
 		
+	}
+
+	libdirs {
+		"vendor/marl-main/Debug",
+		"C:/code/visual studio/FSTS/Sunrise/vendor/mango-master/mango-master/build/vs2019/x64/Debug",
+	}
+
+	links {
+		"mango"
 	}
 
 	includedirs {
 		"src",
 		"vendor/spdlog/include",
+		"C:/VulkanSDK/1.2.154.1/Include",
+		"vendor/glm-master",
+		"vendor/marl-main/include",
+		"vendor/stb",
+		"vendor/mango-master/mango-master/include",
+		"vendor/libigl/include",
+		"vendor/HTTPRequest/include",
+		"vendor/httplib/include",
+		"vendor/rapidjson/include",
 	}	
 
 	postbuildcommands {

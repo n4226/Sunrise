@@ -9,7 +9,7 @@
 #include "Engine.h"
 #include "Application.h"
 
-namespace Sunrise {
+namespace sunrise {
 
 
 	Ref<spdlog::logger> Log::s_CoreLogger;
@@ -45,5 +45,7 @@ namespace Sunrise {
 	{
 
 	}
+
+
 
 }

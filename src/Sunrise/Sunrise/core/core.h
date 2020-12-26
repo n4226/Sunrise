@@ -29,7 +29,7 @@
 #define SR_EXPAND_MACRO(x) x
 #define SR_STRINGIFY_MACRO(x) #x
 
-namespace Sunrise {
+namespace sunrise {
 
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
