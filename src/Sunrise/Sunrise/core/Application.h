@@ -7,7 +7,7 @@ namespace sunrise {
 
 	class Scene;
 
-	class SUNRISE_API Application: public RenderContext
+	class SUNRISE_API Application: public gfx::RenderContext
 	{
 	public:
 		Application();

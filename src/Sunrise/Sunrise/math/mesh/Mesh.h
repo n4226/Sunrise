@@ -20,6 +20,11 @@ namespace sunrise {
 		std::vector<std::vector<glm::uint32>> indicies;
 
 
+
+		static std::array<VkVertexInputBindingDescription, 5> getBindingDescription();
+
+		static std::array<VkVertexInputAttributeDescription, 5> getAttributeDescriptions();
+
 		// offset and size functions
 
 		size_t         vertsSize();

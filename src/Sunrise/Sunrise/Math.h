@@ -2,6 +2,14 @@
 
 #include "srpch.h"
 
+// all other math headers
+#include "math/FrustrumMath.h"
+#include "math/Box.h"
+#include "math/paths/Bezier.h"
+#include "math/paths/Path.h"
+#include "math/mesh/Mesh.h"
+#include "math/mesh/Triangulation.h"
+#include "math/mesh/MeshRendering.h"
 
 namespace sunrise::math {
 

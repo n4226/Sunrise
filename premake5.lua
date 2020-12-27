@@ -41,6 +41,7 @@ project "Sunrise"
 		"vendor/HTTPRequest/include",
 		"vendor/httplib/include",
 		"vendor/rapidjson/include",
+		"vendor/rapidjson/include",
 		"vendor/libguarded/src",
 	}	
 

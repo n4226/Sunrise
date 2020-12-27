@@ -1,8 +1,11 @@
 #include "srpch.h"
 #include "Mesh.h"
 
+#include "../../graphics/vulkan/generalAbstractions/AttributeHelpers.h"
 
 namespace sunrise {
+
+	using namespace gfx;
 
 	size_t Mesh::vertsSize()
 	{
@@ -70,7 +73,30 @@ namespace sunrise {
 	}
 
 
+	std::array<VkVertexInputBindingDescription, 5> Mesh::getBindingDescription() {
+		std::array<VkVertexInputBindingDescription, 5> bindingDescriptions = {
+			makeVertBinding(0, sizeof(glm::vec3)),
+			makeVertBinding(1, sizeof(glm::vec2)),
+			makeVertBinding(2, sizeof(glm::vec3)),
+			makeVertBinding(3, sizeof(glm::vec3)),
+			makeVertBinding(4, sizeof(glm::vec3)),
+		};
 
+
+		return bindingDescriptions;
+	}
+
+	std::array<VkVertexInputAttributeDescription, 5> Mesh::getAttributeDescriptions() {
+		std::array<VkVertexInputAttributeDescription, 5> attributeDescriptions = {
+			makeVertAttribute(0,0,VertexAttributeFormat::vec3,0),
+			makeVertAttribute(1,1,VertexAttributeFormat::vec2,0),
+			makeVertAttribute(2,2,VertexAttributeFormat::vec3,0),
+			makeVertAttribute(3,3,VertexAttributeFormat::vec3,0),
+			makeVertAttribute(4,4,VertexAttributeFormat::vec3,0),
+		};
+
+		return attributeDescriptions;
+	}
 
 
 	void makeLibiglMesh(const Mesh& mesh, size_t subMesh, Eigen::MatrixXd& verts, Eigen::MatrixXi& indicies)

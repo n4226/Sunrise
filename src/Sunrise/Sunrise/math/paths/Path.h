@@ -1,7 +1,6 @@
 #pragma once
 
 #include "srpch.h"
-#include "../Math.h"
 #include "Bezier.h"
 
 

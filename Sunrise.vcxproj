@@ -148,42 +148,74 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Sunrise.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Engine.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\EntryPoint.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Log.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\core\Window.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\core.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\environment.h" />
     <ClInclude Include="src\Sunrise\Sunrise\debuging\Instrumentor.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileManager.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Image.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\ResourceHeap.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Sampler.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkAbstractions.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkHelpers.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vk_mem_alloc.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\ComputePipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\GraphicsPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\DeferredPassPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\RenderSystem.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\Box.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\FrustrumMath.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\math\Math.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\mesh\Mesh.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\mesh\MeshRendering.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\mesh\Triangulation.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\paths\Bezier.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\paths\Path.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\memory.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\memory\IndexAllocator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Scene.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\CameraSystem.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.h" />
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Log.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\core\Window.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileManager.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.cpp" />
@@ -195,6 +227,17 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vmaSettings.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\ComputePipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\GraphicsPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\DeferredPassPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\RenderSystem.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\FrustrumMath.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\Math.cpp" />
@@ -203,8 +246,19 @@
     <ClCompile Include="src\Sunrise\Sunrise\math\mesh\Triangulation.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\paths\Bezier.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\paths\Path.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\memory\IndexAllocator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Scene.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\CameraSystem.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.cpp" />
     <ClCompile Include="src\srpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

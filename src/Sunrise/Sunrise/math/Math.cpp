@@ -1,10 +1,8 @@
 #include "srpch.h"
-#include "Math.h"
+#include "../Math.h"
 
 
 namespace sunrise {
-
-
 
     glm::dvec3 math::LlatoGeo(glm::dvec3 lla, glm::dvec3 origin, double radius)
     {

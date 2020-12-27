@@ -1,33 +1,30 @@
 #pragma once
 
-//#include "pch.h"
-
 #include "srpch.h"
 #include "BinaryMeshAttrributes.h"
 #include "Sunrise/Sunrise/math/mesh/Mesh.h"
 
-
-template<uint32_t vCount, uint32_t sCount, uint32_t ... indexCount>
-struct __ExampleBinaryMesh {
-	//header
-	glm::uint32_t vertCount = vCount;
-	glm::uint32_t subMeshCount = sCount;
-	glm::uint32_t subMeshCounts[sCount];
-
-
-	//body
-	glm::vec3 verts[vCount];
-	glm::vec2 uvs[vCount];
-	glm::vec3 normals[vCount];
-	glm::vec3 tangents[vCount];
-	glm::vec3 bitangents[vCount];
-
-	// THIS IS NOT expresable in c++ but this is an array of varing length arrays. one for each submesh
-	glm::uint32_t subMeshes[sCount];
-
-};
-
 namespace sunrise {
+
+	template<uint32_t vCount, uint32_t sCount, uint32_t ... indexCount>
+	struct __ExampleBinaryMesh {
+		//header
+		glm::uint32_t vertCount = vCount;
+		glm::uint32_t subMeshCount = sCount;
+		glm::uint32_t subMeshCounts[sCount];
+
+
+		//body
+		glm::vec3 verts[vCount];
+		glm::vec2 uvs[vCount];
+		glm::vec3 normals[vCount];
+		glm::vec3 tangents[vCount];
+		glm::vec3 bitangents[vCount];
+
+		// THIS IS NOT expresable in c++ but this is an array of varing length arrays. one for each submesh
+		glm::uint32_t subMeshes[sCount];
+
+	};
 
 	class SUNRISE_API BinaryMeshSeirilizer
 	{
@@ -67,5 +64,6 @@ namespace sunrise {
 		void* indiciesPtr(size_t subMesh);
 
 	};
+
 
 }

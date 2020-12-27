@@ -16,6 +16,8 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include <nlohmann/json.hpp>
+
 
 #include "marl/defer.h"
 #include "marl/event.h"
@@ -39,6 +41,8 @@
 #include <memory>
 #include <fstream>
 
+#include <optional>
+
 #include <string>
 #include <vector>
 #include <array>
@@ -57,6 +61,7 @@
 
 #include <thread>
 
+#include <filesystem>
 
 
 #ifdef SR_PLATFORM_WINDOWS
@@ -69,6 +74,7 @@
 #include "Sunrise/Sunrise/core/core.h"
 #include "Sunrise/Sunrise/core/environment.h"
 
+// for IntelliSense
 namespace sunrise {
 
 }

@@ -7,6 +7,9 @@
     <Filter Include="Sunrise\Sunrise">
       <UniqueIdentifier>{061AE66B-72A5-5330-7BB6-D624E7C0AF30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sunrise\Sunrise\configuration">
+      <UniqueIdentifier>{2D2E4226-9946-2950-62F3-B8E9CECABDE9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sunrise\Sunrise\core">
       <UniqueIdentifier>{3EFE4F83-2A8D-D94C-D3AB-ED47BF19EAF2}</UniqueIdentifier>
     </Filter>
@@ -19,6 +22,9 @@
     <Filter Include="Sunrise\Sunrise\fileFormats\binary">
       <UniqueIdentifier>{257F72CE-11BB-7538-7ACD-8D2F66281E53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sunrise\Sunrise\fileSystem">
+      <UniqueIdentifier>{7A108601-6620-32D2-CFD9-96F0BB08216B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sunrise\Sunrise\graphics">
       <UniqueIdentifier>{2625D1FC-124A-207D-3B95-050D27191F9B}</UniqueIdentifier>
     </Filter>
@@ -27,6 +33,18 @@
     </Filter>
     <Filter Include="Sunrise\Sunrise\graphics\vulkan\generalAbstractions">
       <UniqueIdentifier>{00A0E6A2-6CB1-8E49-F502-218961131883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\vulkan\renderPipelines">
+      <UniqueIdentifier>{9ED775E9-0A13-D6AC-1308-533C7FC25ADD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete">
+      <UniqueIdentifier>{80E222E4-6CB7-6A97-9566-AA93819A78AE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\vulkan\renderer">
+      <UniqueIdentifier>{8C861C93-7803-10D6-A180-10EA8D5CAC69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\vulkan\resources">
+      <UniqueIdentifier>{10C55A92-7CDF-BD33-C501-CEC7315BE53A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sunrise\Sunrise\math">
       <UniqueIdentifier>{BF3E5583-ABCD-DE4C-54EC-F247405AEFF2}</UniqueIdentifier>
@@ -37,6 +55,9 @@
     <Filter Include="Sunrise\Sunrise\math\paths">
       <UniqueIdentifier>{0E6C436E-FA7B-EF3E-6335-545D4F64DED7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sunrise\Sunrise\memory">
+      <UniqueIdentifier>{CEA2E4AD-BA9C-0D00-A309-A4108FA2736C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sunrise\Sunrise\scene">
       <UniqueIdentifier>{C3836AEE-2FF0-25E9-F8E3-BD46640F4851}</UniqueIdentifier>
     </Filter>
@@ -46,9 +67,15 @@
     <Filter Include="Sunrise\Sunrise\world\materials">
       <UniqueIdentifier>{8EEC1DA7-FACF-2CE7-03D3-5A236F35F337}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sunrise\Sunrise\world\terrain">
+      <UniqueIdentifier>{E1797128-4D92-5852-163F-E8EB8216EDEB}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Sunrise.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h">
+      <Filter>Sunrise\Sunrise\configuration</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h">
       <Filter>Sunrise\Sunrise\core</Filter>
     </ClInclude>
@@ -59,6 +86,9 @@
       <Filter>Sunrise\Sunrise\core</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\core\Log.h">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\core\Window.h">
       <Filter>Sunrise\Sunrise\core</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\core\core.h">
@@ -75,6 +105,15 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.h">
       <Filter>Sunrise\Sunrise\fileFormats\binary</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileManager.h">
+      <Filter>Sunrise\Sunrise\fileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
@@ -94,19 +133,52 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Sampler.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkAbstractions.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkHelpers.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vk_mem_alloc.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\ComputePipeline.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\GraphicsPipeline.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\DeferredPassPipeline.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\RenderSystem.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\resources</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\math\Box.h">
       <Filter>Sunrise\Sunrise\math</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\math\FrustrumMath.h">
-      <Filter>Sunrise\Sunrise\math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\math\Math.h">
       <Filter>Sunrise\Sunrise\math</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\math\mesh\Mesh.h">
@@ -124,16 +196,57 @@
     <ClInclude Include="src\Sunrise\Sunrise\math\paths\Path.h">
       <Filter>Sunrise\Sunrise\math\paths</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\memory.h">
+      <Filter>Sunrise\Sunrise</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\memory\IndexAllocator.h">
+      <Filter>Sunrise\Sunrise\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.h">
+      <Filter>Sunrise\Sunrise\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h">
+      <Filter>Sunrise\Sunrise\scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\scene\Scene.h">
       <Filter>Sunrise\Sunrise\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h">
+      <Filter>Sunrise\Sunrise\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\CameraSystem.h">
+      <Filter>Sunrise\Sunrise\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.h">
+      <Filter>Sunrise\Sunrise\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h">
+      <Filter>Sunrise\Sunrise\world</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h">
       <Filter>Sunrise\Sunrise\world\materials</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.h">
+      <Filter>Sunrise\Sunrise\world\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.h">
+      <Filter>Sunrise\Sunrise\world\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h">
+      <Filter>Sunrise\Sunrise\world\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.h">
+      <Filter>Sunrise\Sunrise\world\terrain</Filter>
+    </ClInclude>
     <ClInclude Include="src\srpch.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\Math.h">
+      <Filter>Sunrise\Sunrise\math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
+      <Filter>Sunrise\Sunrise\configuration</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp">
       <Filter>Sunrise\Sunrise\core</Filter>
     </ClCompile>
@@ -143,11 +256,20 @@
     <ClCompile Include="src\Sunrise\Sunrise\core\Log.cpp">
       <Filter>Sunrise\Sunrise\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\core\Window.cpp">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.cpp">
       <Filter>Sunrise\Sunrise\fileFormats\binary</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.cpp">
       <Filter>Sunrise\Sunrise\fileFormats\binary</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileManager.cpp">
+      <Filter>Sunrise\Sunrise\fileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
@@ -176,6 +298,39 @@
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vmaSettings.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\ComputePipeline.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\GraphicsPipeline.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\DeferredPassPipeline.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\RenderSystem.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\resources</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp">
       <Filter>Sunrise\Sunrise\math</Filter>
     </ClCompile>
@@ -200,11 +355,44 @@
     <ClCompile Include="src\Sunrise\Sunrise\math\paths\Path.cpp">
       <Filter>Sunrise\Sunrise\math\paths</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\memory\IndexAllocator.cpp">
+      <Filter>Sunrise\Sunrise\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.cpp">
+      <Filter>Sunrise\Sunrise\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp">
+      <Filter>Sunrise\Sunrise\scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\scene\Scene.cpp">
       <Filter>Sunrise\Sunrise\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp">
+      <Filter>Sunrise\Sunrise\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\CameraSystem.cpp">
+      <Filter>Sunrise\Sunrise\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.cpp">
+      <Filter>Sunrise\Sunrise\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp">
+      <Filter>Sunrise\Sunrise\world</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp">
       <Filter>Sunrise\Sunrise\world\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.cpp">
+      <Filter>Sunrise\Sunrise\world\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.cpp">
+      <Filter>Sunrise\Sunrise\world\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.cpp">
+      <Filter>Sunrise\Sunrise\world\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.cpp">
+      <Filter>Sunrise\Sunrise\world\terrain</Filter>
     </ClCompile>
     <ClCompile Include="src\srpch.cpp" />
   </ItemGroup>

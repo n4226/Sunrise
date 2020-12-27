@@ -5,6 +5,9 @@
 
 namespace sunrise::gfx {
 
+	class Window;
+	class Renderer;
+
 	class SUNRISE_API RenderContext
 	{
 	public:

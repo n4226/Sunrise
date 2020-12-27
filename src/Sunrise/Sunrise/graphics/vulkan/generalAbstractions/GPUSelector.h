@@ -2,7 +2,6 @@
 
 #include "srpch.h"
 #include <GLFW/glfw3.h>
-#include <optional>
 
 namespace sunrise::gfx {
 

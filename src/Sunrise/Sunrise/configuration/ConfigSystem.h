@@ -1,48 +1,49 @@
 #pragma once
 
-#include "pch.h"
-#include <nlohmann/json.hpp>
+#include "srpch.h"
 
+namespace sunrise {
 
-
-class ConfigSystem
-{
-public:
-	struct Config
+	class ConfigSystem
 	{
-		nlohmann::json toJson();
-		static Config* fromJson(nlohmann::json& j);
+	public:
+		struct Config
+		{
+			nlohmann::json toJson();
+			static Config* fromJson(nlohmann::json& j);
 
-		struct Window {
+			struct Window {
 
-			enum WindowMode: int
-			{
-				windowed,FullscreenBorderless,Fullscreen
+				enum WindowMode : int
+				{
+					windowed, FullscreenBorderless, Fullscreen
+				};
+
+				int monitor;
+				WindowMode mode;
+				glm::ivec2 size;
 			};
 
-			int monitor;
-			WindowMode mode;
-			glm::ivec2 size;
+			struct Camera {
+				glm::vec3 offset;
+				glm::vec3 rotAxis;
+				glm::float32 rotAngleDeg;
+			};
+
+			std::vector<Window> windows;
+			std::vector<Camera> cameras;
 		};
 
-		struct Camera {
-			glm::vec3 offset;
-			glm::vec3 rotAxis;
-			glm::float32 rotAngleDeg;
-		};
+		Config& global();
 
-		std::vector<Window> windows;
-		std::vector<Camera> cameras;
+		void readFromDisk();
+		void writeToDisk();
+		void resetToDefault();
+
+	private:
+		Config* config;
 	};
 
-	Config& global();
+	extern ConfigSystem configSystem;
 
-	void readFromDisk();
-	void writeToDisk();
-	void resetToDefault();
-
-private:
-	Config* config;
-};
-
-extern ConfigSystem configSystem;
+}
