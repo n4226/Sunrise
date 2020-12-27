@@ -1,5 +1,5 @@
+#include "srpch.h"
 #include "GPUSelector.h"
-#include "pch.h"
 
 namespace sunrise::gfx {
 
@@ -11,8 +11,8 @@ namespace sunrise::gfx {
 
 	vk::PhysicalDevice GPUSelector::primaryGPU(vk::Instance instance, vk::SurfaceKHR surface)
 	{
-		PROFILE_FUNCTION
-			uint32_t deviceCount = 0;
+		PROFILE_FUNCTION;
+		uint32_t deviceCount = 0;
 
 		vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
@@ -33,7 +33,7 @@ namespace sunrise::gfx {
 
 	bool GPUSelector::gpuSutable(const vk::PhysicalDevice device, vk::SurfaceKHR surface)
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 			VkPhysicalDeviceProperties deviceProperties;
 		VkPhysicalDeviceFeatures deviceFeatures;
 		vkGetPhysicalDeviceProperties(device, &deviceProperties);
@@ -61,7 +61,7 @@ namespace sunrise::gfx {
 
 	QueueFamilyIndices GPUSelector::gpuQueueFamilies(vk::PhysicalDevice device, vk::SurfaceKHR surface)
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 			uint32_t queueFamilyCount = 0;
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
@@ -99,7 +99,7 @@ namespace sunrise::gfx {
 	}
 
 	SwapChainSupportDetails GPUSelector::querySwapChainSupport(vk::PhysicalDevice device, vk::SurfaceKHR surface) {
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 			SwapChainSupportDetails details;
 
 		details.capabilities = device.getSurfaceCapabilitiesKHR(surface);
@@ -124,7 +124,7 @@ namespace sunrise::gfx {
 	}
 
 	vk::SurfaceFormatKHR GPUSelector::chooseSwapSurfaceFormat(const std::vector<vk::SurfaceFormatKHR>& availableFormats) {
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 			for (const auto& availableFormat : availableFormats) {
 				if (availableFormat.format == vk::Format::eB8G8R8A8Srgb && availableFormat.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear) {
 					return availableFormat;
@@ -135,7 +135,7 @@ namespace sunrise::gfx {
 	}
 
 	vk::PresentModeKHR GPUSelector::chooseSwapPresentMode(const std::vector<vk::PresentModeKHR>& availablePresentModes) {
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 			for (const auto& availablePresentMode : availablePresentModes) {
 				if (availablePresentMode == vk::PresentModeKHR::eMailbox) {
 					return availablePresentMode;
@@ -146,7 +146,7 @@ namespace sunrise::gfx {
 	}
 
 	VkExtent2D GPUSelector::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* window) {
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 			if (capabilities.currentExtent.width != UINT32_MAX && capabilities.currentExtent.width != 0) {
 				return capabilities.currentExtent;
 			}

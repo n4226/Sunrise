@@ -1,9 +1,9 @@
 #pragma once
 
+#include "srpch.h"
 
 
-
-class Scene
+class SUNRISE_API Scene
 {
 public:
 

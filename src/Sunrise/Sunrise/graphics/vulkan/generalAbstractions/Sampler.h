@@ -1,11 +1,11 @@
 #pragma once
 
-#include "pch.h"
+#include "srpch.h"
 
 namespace sunrise::gfx {
 
 
-	class Sampler
+	class SUNRISE_API Sampler
 	{
 	public:
 
@@ -23,7 +23,7 @@ namespace sunrise::gfx {
 			void setAdressModeAll(vk::SamplerAddressMode addressMode);
 
 			bool enableAnisotropy = true;
-			//TODO: ix defualt value
+			//TODO: fix defualt value for non suporting gpus
 			float maxAnisotropy = 16;
 
 			vk::BorderColor borderColor = vk::BorderColor::eFloatOpaqueBlack;

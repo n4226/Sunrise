@@ -1,12 +1,12 @@
 #pragma once
 
-#include "pch.h"
+#include "srpch.h"
 #include "Buffer.h"
 
 namespace sunrise::gfx {
 
 
-	struct ImageCreationOptions {
+	struct SUNRISE_API ImageCreationOptions {
 		// resource spacific
 		ResourceStorageType storage;
 		vk::ImageUsageFlags usage;
@@ -23,14 +23,14 @@ namespace sunrise::gfx {
 
 	};
 
-	struct ImageViewCreationOptions {
+	struct SUNRISE_API ImageViewCreationOptions {
 		vk::ImageViewType type;
 		vk::Format format;
 		vk::ImageAspectFlags aspectFlags;
 		uint32_t mipLevels = 1;
 	};
 
-	class Image
+	class SUNRISE_API Image
 	{
 	public:
 

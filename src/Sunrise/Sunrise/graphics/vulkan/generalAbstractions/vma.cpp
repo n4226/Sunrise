@@ -1,5 +1,9 @@
 
-#define VMA_IMPLEMENTATION 1
+
+#define VMA_IMPLEMENTATION
+
+#include "srpch.h"
+
 #include "vk_mem_alloc.h"
 
 #define STB_IMAGE_IMPLEMENTATION

@@ -20,10 +20,13 @@ project "Sunrise"
 	libdirs {
 		"vendor/marl-main/Debug",
 		"C:/code/visual studio/FSTS/Sunrise/vendor/mango-master/mango-master/build/vs2019/x64/Debug",
+		"C:/VulkanSDK/1.2.154.1/Lib",
+		"vendor/bin/glfw/windows/glfw-3.3.2.bin.WIN64/glfw-3.3.2.bin.WIN64/lib-vc2019"
 	}
 
 	links {
-		"mango"
+		"mango",
+		"vulkan-1",
 	}
 
 	includedirs {
@@ -31,13 +34,14 @@ project "Sunrise"
 		"vendor/spdlog/include",
 		"C:/VulkanSDK/1.2.154.1/Include",
 		"vendor/glm-master",
-		"vendor/marl-main/include",
+		"vendor/marl-main/marl-main/include",
 		"vendor/stb",
 		"vendor/mango-master/mango-master/include",
 		"vendor/libigl/include",
 		"vendor/HTTPRequest/include",
 		"vendor/httplib/include",
 		"vendor/rapidjson/include",
+		"vendor/libguarded/src",
 	}	
 
 	postbuildcommands {
@@ -69,3 +73,6 @@ project "Sunrise"
 		defines "SR_DIST"
 		runtime "Release"
 		optimize "on"
+
+	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp' }
+		flags {"NoPCH"}

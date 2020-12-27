@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../../pch.h"
+#include "srpch.h"
 
-struct ResourceSizeAlignment {
+struct SUNRISE_API ResourceSizeAlignment {
 	VkDeviceSize size;
 	rsize_t alignment;
 };
 
-class ResourceHeap
+class SUNRISE_API ResourceHeap
 {
 public:
 

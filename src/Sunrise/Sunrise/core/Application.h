@@ -1,10 +1,13 @@
 #pragma once
 
 #include "core.h"
+#include "../graphics/vulkan/RenderContext.h"
 
 namespace sunrise {
 
-	class SUNRISE_API Application
+	class Scene;
+
+	class SUNRISE_API Application: public RenderContext
 	{
 	public:
 		Application();
@@ -16,8 +19,16 @@ namespace sunrise {
 
 		virtual const char* getName() = 0;
 
-	private:
 
+		// scene api
+
+		void loadScene(Scene* scene, void* animationProperties);
+
+	private:
+		/// <summary>
+		/// normally just one scene
+		/// </summary>
+		std::vector<Scene*> loadedScenes;
 	};
 
 	class SUNRISE_API NO_APPLICATION: public Application
@@ -28,10 +39,11 @@ namespace sunrise {
 
 
 		 void startup() override;
-		 void run() override;
+		 //void run() override;
 		 void shutdown() override;
 
 		 const char* getName() override;
+
 
 	private:
 

@@ -1,10 +1,10 @@
+#include "srpch.h"
 #include "VkHelpers.h"
-#include "pch.h"
 
-namespace sunrise::gfx {
+namespace sunrise::gfx::vkHelpers {
 
 
-	void VkHelpers::allocateCommandBuffers(vk::Device device, vk::CommandPool pool, vk::CommandBuffer* buffers, uint32_t count, vk::CommandBufferLevel level)
+	void allocateCommandBuffers(vk::Device device, vk::CommandPool pool, vk::CommandBuffer* buffers, uint32_t count, vk::CommandBufferLevel level)
 	{
 
 
@@ -21,7 +21,7 @@ namespace sunrise::gfx {
 		auto result = device.allocateCommandBuffers(&allocInfo, buffers);
 	}
 
-	void VkHelpers::createPoolsAndCommandBufffers(vk::Device device, std::vector<vk::CommandPool>& pools, std::vector<vk::CommandBuffer>& buffers, uint32_t count, uint32_t queueFamilyIndex, vk::CommandBufferLevel level)
+	void createPoolsAndCommandBufffers(vk::Device device, std::vector<vk::CommandPool>& pools, std::vector<vk::CommandBuffer>& buffers, uint32_t count, uint32_t queueFamilyIndex, vk::CommandBufferLevel level)
 	{
 		PROFILE_FUNCTION
 
@@ -36,12 +36,12 @@ namespace sunrise::gfx {
 		for (size_t i = 0; i < count; i++)
 		{
 			pools.push_back(device.createCommandPool(poolInfo));
-			VkHelpers::allocateCommandBuffers(device, pools[i], buffers.data() + i, 1, level);
+			allocateCommandBuffers(device, pools[i], buffers.data() + i, 1, level);
 		}
 
 	}
 
-	vk::ImageView VkHelpers::createImageView(vk::Device device, VkImage image, ImageViewCreationOptions options)
+	vk::ImageView createImageView(vk::Device device, VkImage image, ImageViewCreationOptions options)
 	{
 		VkImageViewCreateInfo createInfo{};
 		createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;

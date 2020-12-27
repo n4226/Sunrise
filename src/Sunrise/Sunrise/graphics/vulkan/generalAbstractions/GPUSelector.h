@@ -1,19 +1,19 @@
 #pragma once
 
-#include "pch.h"
+#include "srpch.h"
 #include <GLFW/glfw3.h>
 #include <optional>
 
 namespace sunrise::gfx {
 
 
-	struct SwapChainSupportDetails {
+	struct SUNRISE_API SwapChainSupportDetails {
 		VkSurfaceCapabilitiesKHR capabilities;
 		std::vector<vk::SurfaceFormatKHR> formats;
 		std::vector<vk::PresentModeKHR> presentModes;
 	};
 
-	struct QueueFamilyIndices {
+	struct SUNRISE_API QueueFamilyIndices {
 		std::optional<uint32_t> graphicsFamily;
 		std::optional<uint32_t> presentFamily;
 		std::optional<uint32_t> resourceTransferFamily;
@@ -22,13 +22,13 @@ namespace sunrise::gfx {
 
 	};
 
-	struct GPUQueues {
+	struct SUNRISE_API GPUQueues {
 		vk::Queue graphics;
 		vk::Queue resourceTransfer;
 		vk::Queue presentation;
 	};
 
-	class GPUSelector
+	class SUNRISE_API GPUSelector
 	{
 	public:
 		static vk::PhysicalDevice primaryGPU(vk::Instance instance, vk::SurfaceKHR surface);

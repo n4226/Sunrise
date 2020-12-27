@@ -51,4 +51,5 @@ namespace sunrise {
 
 #include "Engine.h"
 #include "Log.h"
+#include "../debuging/Instrumentor.h"
 //#include "Application.h"

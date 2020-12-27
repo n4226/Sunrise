@@ -1,12 +1,12 @@
 #pragma once
 
-#include "pch.h"
+#include "srpch.h"
 #include "ResourceHeap.h"
 
 namespace sunrise::gfx {
 
 
-	enum ResourceStorageType
+	enum SUNRISE_API ResourceStorageType
 	{
 		gpu = VMA_MEMORY_USAGE_GPU_ONLY,
 		cpu = VMA_MEMORY_USAGE_CPU_ONLY,
@@ -20,14 +20,14 @@ namespace sunrise::gfx {
 
 	};
 
-	struct BufferCreationOptions {
+	struct SUNRISE_API BufferCreationOptions {
 		ResourceStorageType storage;
 		vk::BufferUsageFlags usage;
 		vk::SharingMode sharingMode;
 		std::vector<uint32_t> queueFamilieIndicies;
 	};
 
-	class Buffer
+	class SUNRISE_API Buffer
 	{
 	public:
 		Buffer(const Buffer& othter) = delete;

@@ -10,11 +10,23 @@
     <Filter Include="Sunrise\Sunrise\core">
       <UniqueIdentifier>{3EFE4F83-2A8D-D94C-D3AB-ED47BF19EAF2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sunrise\Sunrise\debuging">
+      <UniqueIdentifier>{DAA80552-C6CD-54D2-EF18-3A62DB9C53F0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sunrise\Sunrise\fileFormats">
       <UniqueIdentifier>{D1742932-3D82-5718-C668-5303327523CF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sunrise\Sunrise\fileFormats\binary">
       <UniqueIdentifier>{257F72CE-11BB-7538-7ACD-8D2F66281E53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics">
+      <UniqueIdentifier>{2625D1FC-124A-207D-3B95-050D27191F9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\vulkan">
+      <UniqueIdentifier>{0640EF1A-7223-FE5A-7B26-2C97E788C4AB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\vulkan\generalAbstractions">
+      <UniqueIdentifier>{00A0E6A2-6CB1-8E49-F502-218961131883}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sunrise\Sunrise\math">
       <UniqueIdentifier>{BF3E5583-ABCD-DE4C-54EC-F247405AEFF2}</UniqueIdentifier>
@@ -52,11 +64,41 @@
     <ClInclude Include="src\Sunrise\Sunrise\core\core.h">
       <Filter>Sunrise\Sunrise\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\core\environment.h">
+      <Filter>Sunrise\Sunrise\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\debuging\Instrumentor.h">
+      <Filter>Sunrise\Sunrise\debuging</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.h">
       <Filter>Sunrise\Sunrise\fileFormats\binary</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.h">
       <Filter>Sunrise\Sunrise\fileFormats\binary</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Image.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\ResourceHeap.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Sampler.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkHelpers.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vk_mem_alloc.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\math\Box.h">
       <Filter>Sunrise\Sunrise\math</Filter>
@@ -89,14 +131,7 @@
       <Filter>Sunrise\Sunrise\world\materials</Filter>
     </ClInclude>
     <ClInclude Include="src\srpch.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Image.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\ResourceHeap.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Sampler.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vk_mem_alloc.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkHelpers.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp">
@@ -113,6 +148,33 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.cpp">
       <Filter>Sunrise\Sunrise\fileFormats\binary</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Image.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\ResourceHeap.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Sampler.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkHelpers.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vma.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vmaSettings.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp">
       <Filter>Sunrise\Sunrise\math</Filter>
@@ -145,14 +207,5 @@
       <Filter>Sunrise\Sunrise\world\materials</Filter>
     </ClCompile>
     <ClCompile Include="src\srpch.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Image.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\ResourceHeap.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Sampler.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\VkHelpers.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vma.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vmaSettings.cpp" />
   </ItemGroup>
 </Project>

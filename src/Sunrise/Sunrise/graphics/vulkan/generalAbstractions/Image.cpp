@@ -1,5 +1,6 @@
-#include "pch.h"
+#include "srpch.h"
 #include "Image.h"
+#include "VkHelpers.h"
 
 
 namespace sunrise::gfx {
@@ -59,7 +60,7 @@ namespace sunrise::gfx {
 
 		ImageViewCreationOptions viewOptions = { vk::ImageViewType::e2D, options.format, aspectFlags, mipLevels };
 
-		view = VkHelpers::createImageView(device, vkItem, viewOptions);
+		view = vkHelpers::createImageView(device, vkItem, viewOptions);
 	}
 
 	Image::~Image()

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "pch.h"
+#include "srpch.h"
 #include "Image.h"
 
 namespace sunrise::gfx {
 
 
-	namespace VkHelpers
+	namespace vkHelpers
 	{
-		void allocateCommandBuffers(vk::Device device, vk::CommandPool pool, vk::CommandBuffer* buffers, uint32_t count, vk::CommandBufferLevel level = vk::CommandBufferLevel::ePrimary);
+		SUNRISE_API void allocateCommandBuffers(vk::Device device, vk::CommandPool pool, vk::CommandBuffer* buffers, uint32_t count, vk::CommandBufferLevel level = vk::CommandBufferLevel::ePrimary);
 
 		/// <summary>
 		/// create a number of command buffer pools and populate each one with a command buffer
@@ -19,9 +19,9 @@ namespace sunrise::gfx {
 		/// <param name="count"></param>
 		/// <param name="queueFamilyIndex"></param>
 		/// <param name="level"></param>
-		void createPoolsAndCommandBufffers(vk::Device device, std::vector<vk::CommandPool>& pools, std::vector<vk::CommandBuffer>& buffers, uint32_t count, uint32_t queueFamilyIndex, vk::CommandBufferLevel level = vk::CommandBufferLevel::ePrimary);
+		SUNRISE_API void createPoolsAndCommandBufffers(vk::Device device, std::vector<vk::CommandPool>& pools, std::vector<vk::CommandBuffer>& buffers, uint32_t count, uint32_t queueFamilyIndex, vk::CommandBufferLevel level = vk::CommandBufferLevel::ePrimary);
 
-		vk::ImageView createImageView(vk::Device device, VkImage image, ImageViewCreationOptions options);
+		SUNRISE_API vk::ImageView createImageView(vk::Device device, VkImage image, ImageViewCreationOptions options);
 
 	};
 

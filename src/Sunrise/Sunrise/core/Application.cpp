@@ -28,10 +28,6 @@ namespace sunrise {
 	{
 	}
 
-	void NO_APPLICATION::run()
-	{
-	}
-
 	void NO_APPLICATION::shutdown()
 	{
 	}
