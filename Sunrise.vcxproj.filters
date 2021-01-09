@@ -73,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Sunrise.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\Math.h">
+      <Filter>Sunrise\Sunrise</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h">
       <Filter>Sunrise\Sunrise\configuration</Filter>
     </ClInclude>
@@ -239,9 +242,6 @@
       <Filter>Sunrise\Sunrise\world\terrain</Filter>
     </ClInclude>
     <ClInclude Include="src\srpch.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\Math.h">
-      <Filter>Sunrise\Sunrise\math</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">

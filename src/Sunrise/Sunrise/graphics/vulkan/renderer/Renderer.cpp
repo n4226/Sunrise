@@ -1,7 +1,7 @@
-#include "pch.h"
+#include "srpch.h"
 #include "Renderer.h"
-#include "../../../Application/ApplicationRendererBridge/WorldScene.h"
-#include "../../../Application/ApplicationRendererBridge/Application.h"
+#include "../../../world/WorldScene.h"
+#include "../../../core/Application.h"
 
 #include "MaterialManager.h"
 #include "Sunrise/Sunrise/world/terrain/TerrainSystem.h"
@@ -320,7 +320,7 @@ namespace sunrise::gfx {
 		dynamicCommandPools.resize(windows.size());
 		dynamicCommandBuffers.resize(windows.size());
 		for (size_t i = 0; i < windows.size(); i++)
-			VkHelpers::createPoolsAndCommandBufffers
+			vkHelpers::createPoolsAndCommandBufffers
 			(device, dynamicCommandPools[i], dynamicCommandBuffers[i], app.maxSwapChainImages, queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::ePrimary);
 	}
 
@@ -549,14 +549,14 @@ namespace sunrise::gfx {
 
 	void Renderer::beforeRenderScene()
 	{
-		updateCameraUniformBuffer();
+		//updateCameraUniformBuffer();
 
 
 	}
 
 	void Renderer::renderFrame(Window& window)
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 
 
 			/*
@@ -593,6 +593,8 @@ namespace sunrise::gfx {
 
 
 			//updateRunTimeDescriptors(window);
+
+		updateCameraUniformBuffer(window);
 
 #pragma region CreateRootCMDBuffer
 
@@ -697,13 +699,15 @@ namespace sunrise::gfx {
 	}
 
 
-	void Renderer::updateCameraUniformBuffer()
+	void Renderer::updateCameraUniformBuffer(Window& window)
 	{
 		PROFILE_FUNCTION;
 		// update uniform buffer
 
-		for (size_t i = 0; i < windows.size(); i++)
-		{
+		//for (size_t i = 0; i < windows.size(); i++)
+		//{
+		auto i = window.globalIndex;
+
 			auto& camera = windows[i]->camera;
 
 			SceneUniforms uniforms;
@@ -713,13 +717,17 @@ namespace sunrise::gfx {
 			uniformBuffers[i][windows[i]->currentSurfaceIndex]->mapMemory();
 			uniformBuffers[i][windows[i]->currentSurfaceIndex]->tempMapAndWrite(&uniforms, 0, sizeof(uniforms), false);
 
+			//TODO fix this to not depend on world scene
+
 			PostProcessEarthDatAndUniforms postUniforms;
+
+			WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
 
 			postUniforms.camFloatedGloabelPos = glm::vec4(camera.transform.position, 1);
 			glm::qua<glm::float32> sunRot = glm::angleAxis(glm::radians(45.f), glm::vec3(0, 1, 0));
 			postUniforms.sunDir =
 				glm::angleAxis(glm::radians(45.f + sin(world->timef) * 0.f), glm::vec3(-1, 0, 0)) *
-				glm::vec4(glm::normalize(Math::LlatoGeo(world->initialPlayerLLA, glm::dvec3(0), terrainSystem->getRadius())), 1);
+				glm::vec4(glm::normalize(math::LlatoGeo(world->initialPlayerLLA, glm::dvec3(0), terrainSystem->getRadius())), 1);
 			postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>(-(world->origin)), 1);
 			postUniforms.viewMat = camera.view();
 			postUniforms.projMat = camera.projection(windows[i]->swapchainExtent.width, windows[i]->swapchainExtent.height);
@@ -731,8 +739,8 @@ namespace sunrise::gfx {
 			uniformBuffers[i][windows[i]->currentSurfaceIndex]->unmapMemory();
 
 
-			camFrustroms[i] = std::move(Frustum(uniforms.viewProjection));
-		}
+			camFrustroms[i] = std::move(math::Frustum(uniforms.viewProjection));
+		//}
 
 		//camFrustrom = new Frustum(uniforms.viewProjection);
 

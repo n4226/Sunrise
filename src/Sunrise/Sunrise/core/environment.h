@@ -6,6 +6,11 @@
 #define SR_PROFILING_LITE 0
 #define SR_VALIDATION 1
 
+#define SR_MULTI_THREADED_PROFILING 0
+
+#define SR_RenderDocCompatible 1
+
+
 #if SR_PROFILING
 #define PROFILE_SCOPE(name) InstrumentationTimer timer##__line__(name);
 #define PROFILE_FUNCTION PROFILE_SCOPE(__FUNCSIG__)
@@ -41,9 +46,9 @@
 
 #define RenderModeCPU1 0
 #define RenderModeCPU2 1
-#define RenderModeGPU  2
+#define RenderModeGPU  2 
 
-#define RenderMode RenderModeCPU2
+#define RenderMode RenderModeCPU1
 
 
 

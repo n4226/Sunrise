@@ -10,7 +10,10 @@
 
 namespace sunrise {
 
-	class Renderer;
+	namespace gfx {
+		class Renderer;
+	}
+
 	class TerrainSystem;
 
 	struct SUNRISE_API TreeNodeDrawResaourceToCoppy
@@ -46,7 +49,7 @@ namespace sunrise {
 
 	private:
 
-		Renderer* renderer;
+		gfx::Renderer* renderer;
 		TerrainSystem* terrainSystem;
 
 

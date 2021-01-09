@@ -1,48 +1,54 @@
 #pragma once
 
-#include "pch.h"
+#include "srpch.h"
 #include "Renderer.h"
+#include "../generalAbstractions/VkAbstractions.h"
+#include "../resources/ResourceTransferTask.h"
 
-struct MaterialImages
-{
-	std::vector<Image*> albedoImages;
-	std::vector<Image*> normalImages;
-	std::vector<Image*> metallicImages;
-	std::vector<Image*> roughnessImages;
-	std::vector<Image*> aoImages;
-};
+namespace sunrise {
 
-class MaterialManager
-{
-public:
-	MaterialManager(Renderer& renderer);
+	struct MaterialImages
+	{
+		std::vector<gfx::Image*> albedoImages;
+		std::vector<gfx::Image*> normalImages;
+		std::vector<gfx::Image*> metallicImages;
+		std::vector<gfx::Image*> roughnessImages;
+		std::vector<gfx::Image*> aoImages;
+	};
 
-	void loadStatic();
+	class MaterialManager
+	{
+	public:
+		MaterialManager(gfx::Renderer& renderer);
 
-	void loadMat(std::string& matRootPath, const char* matFolder);
+		void loadStatic();
 
-
-private:
-
-
-	std::vector<Image*>  images;
-	std::vector<Buffer*> buffers;
-
-	std::vector<Sampler*> samplers
-		;
-	std::vector<ResourceTransferer::Task> pendingTasks = {};
-	std::vector<ResourceTransferer::Task> pendingGFXTasks = {};
-
- 	std::tuple<Buffer*,Image*> loadTex(const char* path);
-
-	glm::uint32 FinishLoadingTexture(std::tuple<Buffer*, Image*> texture);
-
-	void addTexToGlobal(Image* image, glm::uint32 imageIndex);
-
-	void addCopyToTasks(Buffer* buffer, Image* image);
-	void addMipMapToTasks(Image* image);
+		void loadMat(std::string& matRootPath, const char* matFolder);
 
 
-	Renderer& renderer;
-};
+	private:
 
+
+		std::vector<gfx::Image*>  images;
+		std::vector<gfx::Buffer*> buffers;
+
+		std::vector<gfx::Sampler*> samplers
+			;
+		std::vector<gfx::ResourceTransferer::Task> pendingTasks = {};
+		std::vector<gfx::ResourceTransferer::Task> pendingGFXTasks = {};
+
+		std::tuple<gfx::Buffer*, gfx::Image*> loadTex(const char* path);
+
+		glm::uint32 FinishLoadingTexture(std::tuple<gfx::Buffer*, gfx::Image*> texture);
+
+		void addTexToGlobal(gfx::Image* image, glm::uint32 imageIndex);
+
+		void addCopyToTasks(gfx::Buffer* buffer, gfx::Image* image);
+		void addMipMapToTasks(gfx::Image* image);
+
+
+		gfx::Renderer& renderer;
+	};
+
+
+}

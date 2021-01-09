@@ -4,9 +4,12 @@
 #include "../../graphics/vulkan/renderer/Renderer.h"
 #include "../../fileSystem/FileManager.h"
 #include "../../fileFormats/binary/BinaryMesh.h"
+#include "Sunrise/Sunrise/graphics/vulkan/resources/MeshBuffers.h"
 
 
 namespace sunrise {
+
+	using namespace gfx;
 
 	TreeNodeDrawResaourceToCoppy TerrainMeshLoader::loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob)
 	{
@@ -262,21 +265,12 @@ namespace sunrise {
 
 		//TODO: deallocate buffers here 
 
+		return;
 		renderer->gloablVertAllocator->free(draw.vertIndex, draw.vertcount);
+		//assert((draw.indIndicies.size > 0));
 		renderer->gloablIndAllocator->free(draw.indIndicies[0], draw.totalIndexCount);
 
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 
 	Mesh* TerrainMeshLoader::createChunkMesh(const TerrainQuadTreeNode& chunk)
@@ -287,13 +281,13 @@ namespace sunrise {
 
 		size_t resolution = 10;
 		auto d_resolution = static_cast<double>(resolution);
-		const Box& frame = chunk.frame;
+		const math::Box& frame = chunk.frame;
 
 		glm::uint32 vert = 0;
 		const glm::uint32 startVertOfset = 0;
 
-		auto nonLLAFrameWidth = Math::llaDistance(frame.start, glm::vec2(frame.start.x, frame.start.y + frame.size.y));
-		auto nonLLAFrameHeight = Math::llaDistance(frame.start, glm::vec2(frame.start.x + frame.size.x, frame.start.y));
+		auto nonLLAFrameWidth =  math::llaDistance(frame.start, glm::vec2(frame.start.x, frame.start.y + frame.size.y));
+		auto nonLLAFrameHeight = math::llaDistance(frame.start, glm::vec2(frame.start.x + frame.size.x, frame.start.y));
 
 		for (size_t x = 0; x <= resolution; x++)
 		{
@@ -308,7 +302,7 @@ namespace sunrise {
 				auto lon = frame.start.y + chunkStrideLon;
 				glm::dvec3 lla(lat, lon, 0);
 
-				auto geo_unCentered = Math::LlatoGeo(lla, {}, chunk.tree->radius);
+				auto geo_unCentered = math::LlatoGeo(lla, {}, chunk.tree->radius);
 
 				mesh->verts.emplace_back(geo_unCentered - chunk.center_geo);//Math::LlatoGeo(glm::dvec3(frame.getCenter(), 0), {}, radius));
 #if DEBUG

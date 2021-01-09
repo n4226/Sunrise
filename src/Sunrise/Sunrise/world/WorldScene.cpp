@@ -7,12 +7,12 @@
 namespace sunrise {
 
 
-	WorldScene::WorldScene(Application& app) :
-		app(app)
+	/*WorldScene::WorldScene(Application& app) 
+		:app(app)
 	{
 		PROFILE_FUNCTION;
 
-	}
+	}*/
 
 	WorldScene::~WorldScene()
 	{
@@ -33,7 +33,10 @@ namespace sunrise {
 		for (auto render : app.renderers)
 			render->terrainSystem = terrainSystem;
 
-		generalSystems = { new FloatingOriginSystem(), new CameraSystem() };
+		/// <summary>
+		/// importantthat the camera systemis befoer floating origin so that floating origin snaps before first frame
+		/// </summary>
+		generalSystems = { new CameraSystem(), new FloatingOriginSystem() };
 
 		for (System* sys : generalSystems) {
 			sys->world = this;
@@ -48,6 +51,7 @@ namespace sunrise {
 
 	void WorldScene::update()
 	{
+		PROFILE_FUNCTION;
 		Scene::update();
 
 		//if (frameNum == 2000) {

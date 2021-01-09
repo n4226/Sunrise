@@ -1,5 +1,5 @@
+#include "srpch.h"
 #include "RenderSystem.h"
-#include "pch.h"
 
 
 //System::System(WorldScene* world)
@@ -8,6 +8,12 @@
 //
 //}
 
-void System::update()
-{
+
+namespace sunrise {
+
+
+	void System::update()
+	{
+	}
+
 }

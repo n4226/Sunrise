@@ -1,33 +1,38 @@
 #pragma once
 
-#include <vulkan/vulkan.hpp>
-
-class RenderPassManager
-{
-public:
-
-	RenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat);
-	~RenderPassManager();
+#include "srpch.h"
 
 
-	VkRenderPass renderPass;
+namespace sunrise::gfx {
 
-	static const size_t subPassCount = 2;
-	static const size_t gbufferAttachmentCount = 3;
+	class RenderPassManager
+	{
+	public:
 
-private:
+		RenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat);
+		~RenderPassManager();
 
-	void createMainRenderPass();
 
-	//GBufferFormats
+		VkRenderPass renderPass;
 
-	VkFormat albedoFormat;
-	VkFormat normalFormat;
-	VkFormat aoFormat;
+		static const size_t subPassCount = 2;
+		static const size_t gbufferAttachmentCount = 3;
 
-	VkFormat swapChainImageFormat;
-	VkFormat depthBufferFormat;
+	private:
 
-	vk::Device device;
-};
+		void createMainRenderPass();
 
+		//GBufferFormats
+
+		VkFormat albedoFormat;
+		VkFormat normalFormat;
+		VkFormat aoFormat;
+
+		VkFormat swapChainImageFormat;
+		VkFormat depthBufferFormat;
+
+		vk::Device device;
+	};
+
+
+}

@@ -4,6 +4,8 @@
 
 namespace sunrise {
 
+	using namespace math;
+
 	TerrainQuadTree::TerrainQuadTree(double radius)
 		: radius(radius)
 	{

@@ -1,15 +1,19 @@
+#include "srpch.h"
 #include "Transform.h"
-#include "pch.h"
 
-glm::mat4 Transform::matrix()
-{
 
-    auto mat = glm::translate(glm::mat4(1.f), position);
+namespace sunrise {
 
-    mat *= glm::toMat4(rotation);
+    glm::mat4 Transform::matrix()
+    {
 
-    mat = glm::scale(mat, scale);
+        auto mat = glm::translate(glm::mat4(1.f), position);
 
-    return mat;
+        mat *= glm::toMat4(rotation);
+
+        mat = glm::scale(mat, scale);
+
+        return mat;
+    }
+
 }
-

@@ -66,7 +66,7 @@ namespace sunrise {
 
 #if !SR_DIST
 		auto allocPercent = static_cast<float>(allocatedSize) / (totalSize / 100);
-		if (allocPercent > 0.60)
+		if (allocPercent > 10)
 			SR_CORE_WARN("varible allocator usage is {}%",allocPercent);
 #endif
 

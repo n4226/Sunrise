@@ -56,6 +56,7 @@ public:
 
     void EndSession()
     {
+#if SR_MULTI_THREADED_PROFILING
         {
             auto queue = pendingResults.lock();
             std::vector<ProfileResult>& results = *queue;
@@ -64,6 +65,7 @@ public:
             }
             queue->clear();
         }
+#endif
         //auto m_OutputStream = this->m_OutputStream.lock();
         WriteFooter();
         m_OutputStream.close();
@@ -82,8 +84,6 @@ public:
         //auto m_OutputStream = this->m_OutputStream.lock();
         
 
-        if (m_ProfileCount++ > 0)
-            m_OutputStream << ",";
 
         
 
@@ -94,6 +94,13 @@ public:
 
         if (result.ThreadIDID == main_thread_id)
             mainThread = true;
+#if !SR_MULTI_THREADED_PROFILING
+        else return;
+#endif
+        
+
+        if (m_ProfileCount++ > 0)
+            m_OutputStream << ",";
 
         m_OutputStream << "{";
         m_OutputStream << "\"cat\":\"function\",";
@@ -153,9 +160,12 @@ public:
         long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
 
         uint32_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
-        //Instrumentor::Get().WriteProfile({ m_Name, start, end, threadID });
-        Instrumentor::Get().pendWriteProfile({ m_Name, start, end, threadID, std::this_thread::get_id() });
 
+#if SR_MULTI_THREADED_PROFILING
+        Instrumentor::Get().pendWriteProfile({ m_Name, start, end, threadID, std::this_thread::get_id() });
+#else
+        Instrumentor::Get().WriteProfile({ m_Name, start, end, threadID, std::this_thread::get_id() });
+#endif
         m_Stopped = true;
     }
 private:

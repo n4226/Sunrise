@@ -18,15 +18,18 @@ project "Sunrise"
 	}
 
 	libdirs {
-		"vendor/marl-main/Debug",
-		"C:/code/visual studio/FSTS/Sunrise/vendor/mango-master/mango-master/build/vs2019/x64/Debug",
+		"vendor/marl-main/marl-main/Debug",
+		--"C:/code/visual studio/FSTS/Sunrise/vendor/mango-master/mango-master/build/vs2019/x64/Debug",
+		"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 		"C:/VulkanSDK/1.2.154.1/Lib",
-		"vendor/bin/glfw/windows/glfw-3.3.2.bin.WIN64/glfw-3.3.2.bin.WIN64/lib-vc2019"
+		"vendor/bin/glfw/windows/glfw-3.3.2.bin.WIN64/glfw-3.3.2.bin.WIN64/lib-vc2019",
+
 	}
 
 	links {
 		"mango",
 		"vulkan-1",
+		"marl",
 	}
 
 	includedirs {
@@ -43,15 +46,26 @@ project "Sunrise"
 		"vendor/rapidjson/include",
 		"vendor/rapidjson/include",
 		"vendor/libguarded/src",
+		"vendor/nlohmann/include",
 	}	
 
 	postbuildcommands {
+	
+		-- temp for FSTS
+
+		("{COPY} ../bin/" .. outputdir .. "/Sunrise/Sunrise.dLL ../bin/" .. outputdir .. "/FlightSimTerrainSystem/"),
+		("{COPY} ../bin/" .. outputdir .. "/Sunrise/Sunrise.pdb ../bin/" .. outputdir .. "/FlightSimTerrainSystem/"),
+
+		-- shaders again temp
+		-- C:/code/visual studio/FSTS/Sunrise/src/Sunrise/Sunrise/graphics/shaders
+		--("call C:/code/visual studio/FSTS/Sunrise/src/Sunrise/Sunrise/graphcis/shaders/compileShaders.bat"),
+		--("XCOPY /S /Y src/Sunrise/Sunrise/graphcis/shaders/* ../bin/" .. outputdir .. "/FlightSimTerrainSystem/shaders"),
 	}
 
 	filter "system:windows"
 		
 		cppdialect "C++17"
-		staticruntime "on"
+		staticruntime "off"
 		systemversion "latest"
 
 		defines {

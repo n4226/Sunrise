@@ -8,12 +8,11 @@
 
 namespace sunrise {
 
-	class WorldScene : public Scene
+	class SUNRISE_API WorldScene : public Scene
 	{
 
 	public:
-
-		WorldScene(Application& app);
+		using Scene::Scene;
 		~WorldScene();
 
 		virtual void load() override;
@@ -38,8 +37,6 @@ namespace sunrise {
 			initialPlayerLLA;
 
 		Transform playerTrans;
-
-		Application& app;
 
 	};
 

@@ -4,143 +4,147 @@
 #include "../generalAbstractions/VkAbstractions.h"
 #include "Sunrise/Sunrise/Math.h"
 #include "Sunrise/Sunrise/memory.h"
+#include "Sunrise/Sunrise/graphics/vulkan/resources/MeshBuffers.h"
 
-namespace sunrise::gfx {
+namespace sunrise {
 
 	class MaterialManager;
 	class TerrainSystem;
+	class WorldScene;
+	class Window;
 
-	class ResourceTransferer;
+	namespace gfx {
 
-	class Renderer
-	{
-	public:
+		class ResourceTransferer;
 
-		Renderer(Application& app, vk::Device device, vk::PhysicalDevice physicalDevice, VmaAllocator allocator, std::vector<Window*> windows, GPUQueues& deviceQueues, QueueFamilyIndices& queueFamilyIndices);
-		void createAllResources();
-		~Renderer();
+		class SUNRISE_API Renderer
+		{
+		public:
 
-		void beforeRenderScene();
-		void renderFrame(Window& window);
+			Renderer(Application& app, vk::Device device, vk::PhysicalDevice physicalDevice, VmaAllocator allocator, std::vector<Window*> windows, GPUQueues& deviceQueues, QueueFamilyIndices& queueFamilyIndices);
+			void createAllResources();
+			~Renderer();
 
-		// systems
-		TerrainSystem* terrainSystem;
-		WorldScene* world;
+			void beforeRenderScene();
+			void renderFrame(Window& window);
 
-		MaterialManager* materialManager;
+			// systems
+			TerrainSystem* terrainSystem;
 
-		// handles
-		vk::Device device;
-		vk::PhysicalDevice physicalDevice;
-		VmaAllocator allocator;
-		GPUQueues& deviceQueues;
-		QueueFamilyIndices& queueFamilyIndices;
+			MaterialManager* materialManager;
 
-		std::vector<Window*> windows;
+			// handles
+			vk::Device device;
+			vk::PhysicalDevice physicalDevice;
+			VmaAllocator allocator;
+			GPUQueues& deviceQueues;
+			QueueFamilyIndices& queueFamilyIndices;
 
-
-
-
-		std::vector<std::vector<Buffer*>> uniformBuffers;
-
-		// dindless vars
-
-		VaribleIndexAllocator* gloablVertAllocator;
-		VaribleIndexAllocator* gloablIndAllocator;
-
-		BindlessMeshBuffer* globalMeshBuffer;
-
-		// thye main thread staging buffer
-		BindlessMeshBuffer* globalMeshStagingBuffer;
-
-		libguarded::shared_guarded < std::vector<size_t>> freeThreadLocalGlobalMeshandModelStagingBufferIndicies;
-		libguarded::shared_guarded < std::unordered_map<std::thread::id, size_t>> ThreadLocalGlobalMeshandModelStagingBufferThreadIndicies;
-
-		std::vector<BindlessMeshBuffer*> threadLocalGlobalMeshStagingBuffers;
-
-
-		IndexAllocator* globalModelBufferAllocator;
-		std::array<Buffer*, 2> globalModelBuffers;
-
-		size_t gpuUnactiveGlobalModelBuffer = 1;
-		size_t gpuActiveGlobalModelBuffer = 0;
-
-		Buffer* globalModelBufferStaging;
-
-		std::vector<Buffer*> threadLocalGlobalModelStagingBuffers;
-
-
-		IndexAllocator* matUniformAllocator;
-		Buffer* globalMaterialUniformBufferStaging;
-		Buffer* globalMaterialUniformBuffer;
-
-
-		void windowSizeChanged(size_t windowIndex);
-
-		ResourceTransferer* resouceTransferer;
-
-	private:
-
-		void createRenderResources();
-
-		void makeGlobalMeshBuffers(const VkDeviceSize& vCount, const VkDeviceSize& indexCount);
-
-		void createDescriptorPoolAndSets();
-
-		void allocateDescriptors();
-
-		void resetDescriptorPools();
-
-		void createUniformsAndDescriptors();
-
-		void updateLoadTimeDescriptors(Window& window);
-		void updateRunTimeDescriptors(Window& window);
-
-		void createDynamicRenderCommands();
-
-		void submitFrameQueue(Window& window, vk::CommandBuffer* buffers, uint32_t bufferCount);
+			std::vector<Window*> windows;
 
 
 
-		void encodeDeferredPass(Window& window);
 
-		void encodeGBufferPass(Window& window);
+			std::vector<std::vector<Buffer*>> uniformBuffers;
 
-		void updateCameraUniformBuffer();
+			// dindless vars
 
-		// render resources
+			VaribleIndexAllocator* gloablVertAllocator;
+			VaribleIndexAllocator* gloablIndAllocator;
 
+			BindlessMeshBuffer* globalMeshBuffer;
 
-		std::vector<std::vector<vk::CommandPool  >> dynamicCommandPools;
-		std::vector<std::vector<vk::CommandBuffer>> dynamicCommandBuffers;
+			// thye main thread staging buffer
+			BindlessMeshBuffer* globalMeshStagingBuffer;
 
+			libguarded::shared_guarded < std::vector<size_t>> freeThreadLocalGlobalMeshandModelStagingBufferIndicies;
+			libguarded::shared_guarded < std::unordered_map<std::thread::id, size_t>> ThreadLocalGlobalMeshandModelStagingBufferThreadIndicies;
 
-
-		vk::DescriptorPool descriptorPool;
-		// first dimension is windows second is surface index
-		std::vector<std::vector<VkDescriptorSet>> descriptorSets;
-
-
-		// deferred pass
-
-		Buffer* deferredPassVertBuff;
-		size_t deferredPassBuffIndexOffset;
+			std::vector<BindlessMeshBuffer*> threadLocalGlobalMeshStagingBuffers;
 
 
-		vk::DescriptorPool deferredDescriptorPool;
-		std::vector<std::vector<VkDescriptorSet>> deferredDescriptorSets;
+			IndexAllocator* globalModelBufferAllocator;
+			std::array<Buffer*, 2> globalModelBuffers;
 
-		friend TerrainSystem;
-		friend MaterialManager;
-		friend Application;
+			size_t gpuUnactiveGlobalModelBuffer = 1;
+			size_t gpuActiveGlobalModelBuffer = 0;
+
+			Buffer* globalModelBufferStaging;
+
+			std::vector<Buffer*> threadLocalGlobalModelStagingBuffers;
 
 
-		std::vector<math::Frustum> camFrustroms;
+			IndexAllocator* matUniformAllocator;
+			Buffer* globalMaterialUniformBufferStaging;
+			Buffer* globalMaterialUniformBuffer;
 
-		// handles
 
-		Application& app;
+			void windowSizeChanged(size_t windowIndex);
 
-	};
+			ResourceTransferer* resouceTransferer;
 
+		private:
+
+			void createRenderResources();
+
+			void makeGlobalMeshBuffers(const VkDeviceSize& vCount, const VkDeviceSize& indexCount);
+
+			void createDescriptorPoolAndSets();
+
+			void allocateDescriptors();
+
+			void resetDescriptorPools();
+
+			void createUniformsAndDescriptors();
+
+			void updateLoadTimeDescriptors(Window& window);
+			void updateRunTimeDescriptors(Window& window);
+
+			void createDynamicRenderCommands();
+
+			void submitFrameQueue(Window& window, vk::CommandBuffer* buffers, uint32_t bufferCount);
+
+
+
+			void encodeDeferredPass(Window& window);
+
+			void encodeGBufferPass(Window& window);
+
+			void updateCameraUniformBuffer(Window& window);
+
+			// render resources
+
+
+			std::vector<std::vector<vk::CommandPool  >> dynamicCommandPools;
+			std::vector<std::vector<vk::CommandBuffer>> dynamicCommandBuffers;
+
+
+
+			vk::DescriptorPool descriptorPool;
+			// first dimension is windows second is surface index
+			std::vector<std::vector<VkDescriptorSet>> descriptorSets;
+
+
+			// deferred pass
+
+			Buffer* deferredPassVertBuff;
+			size_t deferredPassBuffIndexOffset;
+
+
+			vk::DescriptorPool deferredDescriptorPool;
+			std::vector<std::vector<VkDescriptorSet>> deferredDescriptorSets;
+
+			friend TerrainSystem;
+			friend MaterialManager;
+			friend Application;
+
+
+			std::vector<math::Frustum> camFrustroms;
+
+			// handles
+
+			Application& app;
+
+		};
+	}
 }

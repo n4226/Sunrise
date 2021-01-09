@@ -4,7 +4,8 @@
 
 namespace sunrise {
 
-	Scene::Scene()
+	Scene::Scene(Application* app)
+		: app(*app)
 	{
 
 	}
@@ -16,10 +17,12 @@ namespace sunrise {
 	void Scene::update()
 	{
 		static auto startTime = std::chrono::high_resolution_clock::now();
-		PROFILE_FUNCTION;
 
 
 		auto currentTime = std::chrono::high_resolution_clock::now();
+		
+		PROFILE_FUNCTION;
+		
 		auto newtime = std::chrono::duration<double, std::chrono::seconds::period>(currentTime - startTime).count();
 		auto newtimef = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 

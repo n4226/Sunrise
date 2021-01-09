@@ -4,11 +4,10 @@
 
 namespace sunrise {
 
-
 	class SUNRISE_API Scene
 	{
 	public:
-		Scene();
+		Scene(Application* app);
 		virtual ~Scene();
 
 		virtual void load() = 0;
@@ -26,6 +25,7 @@ namespace sunrise {
 
 		size_t frameNum = 0;
 
+		Application& app;
 	};
 
 }

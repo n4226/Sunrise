@@ -17,7 +17,9 @@
 #include <vulkan/vulkan.hpp>
 
 #include <nlohmann/json.hpp>
+#include <iomanip>
 
+#include "stb_image.h"
 
 #include "marl/defer.h"
 #include "marl/event.h"

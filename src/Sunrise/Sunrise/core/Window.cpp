@@ -15,6 +15,7 @@ namespace sunrise {
     Window::Window(Application* app, size_t globalIndex)
         : app(*app), globalIndex(globalIndex)
     {
+
     }
 
     void Window::createWindowAndSurface() {
@@ -379,7 +380,7 @@ namespace sunrise {
         delete pipelineCreator;
         delete deferredPass;
         delete renderPassManager;
-
+            
 
         for (auto imageView : swapChainImageViews) {
             vkDestroyImageView(device, imageView, nullptr);

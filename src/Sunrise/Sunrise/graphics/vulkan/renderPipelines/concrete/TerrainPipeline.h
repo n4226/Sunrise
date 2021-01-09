@@ -1,12 +1,16 @@
 #pragma once
 
-#include "../PipelineCreator.h"
+#include "../GraphicsPipeline.h"
 
-class TerrainPipeline: public GraphicsPipeline
-{
-public:
-	using GraphicsPipeline::GraphicsPipeline;
-	void createPipeline() override;
-protected:
-};
 
+namespace sunrise::gfx {
+
+	class TerrainPipeline : public GraphicsPipeline
+	{
+	public:
+		using GraphicsPipeline::GraphicsPipeline;
+		void createPipeline() override;
+	protected:
+	};
+
+}

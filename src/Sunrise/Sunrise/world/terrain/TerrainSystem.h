@@ -8,12 +8,15 @@
 #include "../../scene/Transform.h"
 #include "../../graphics/vulkan/generalAbstractions/VkAbstractions.h"
 
-class Renderer;
-class FloatingOriginSystem;
 
 namespace sunrise {
 
+	class FloatingOriginSystem;
 	class Window;
+
+	namespace gfx {
+		class Renderer;
+	}
 
 	class TerrainSystem : public RenderSystem
 	{
@@ -76,7 +79,7 @@ namespace sunrise {
 
 		//updating descriptors
 
-		void writePendingDrawOobjects(Renderer& renderer);
+		void writePendingDrawOobjects(gfx::Renderer& renderer);
 
 		//async resources
 		marl::Ticket::Queue ticketQueue;

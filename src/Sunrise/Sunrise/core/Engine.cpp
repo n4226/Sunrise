@@ -18,31 +18,67 @@ namespace sunrise {
 	}
 	void Engine::startup()
 	{
+		Instrumentor::Get().BeginSession("Launch", "instruments_Launch.profile");
 		{
-			Log::Init();
+			PROFILE_FUNCTION;
+			try {
+				Log::Init();
 
-			SR_CORE_INFO("Startup");
+				SR_CORE_INFO("Startup");
 
 
-			auto noApp = dynamic_cast<sunrise::NO_APPLICATION*>(app);
+				auto noApp = dynamic_cast<sunrise::NO_APPLICATION*>(app);
 
-			if (noApp != nullptr) {
-				SR_CORE_WARN("initializing in no application mode -- only basic operations will be available");
+
+				if (noApp != nullptr) {
+					SR_CORE_WARN("initializing in no application mode -- only basic operations will be available");
+				}
+				else {
+					app->startup();
+				}
 			}
-			else {
-				app->startup();
+			catch (const std::exception& e) {
+				SR_CORE_CRITICAL("Terminating from unhandled runtime exeption upon startup: {}", e.what());
+				throw e;
 			}
 
 		}
+		Instrumentor::Get().EndSession();
+
 		run();
 	}
 	void Engine::run()
 	{
+		Instrumentor::Get().BeginSession("Run", "instruments_Run.profile");
+		{
+			PROFILE_FUNCTION;
 
+
+			try {
+				auto noApp = dynamic_cast<sunrise::NO_APPLICATION*>(app);
+				if (noApp != nullptr) {
+					SR_CORE_WARN("running in no application mode -- only basic operations will be available");
+				}
+				else {
+					app->run();
+				}
+			}
+			catch (const std::exception& e) {
+				SR_CORE_CRITICAL("Terminating from unhandled runtime exeption durring run loop: {}", e.what());
+				SR_CORE_ERROR("Terminating run loop during frame: {}", app->currentFrameID);
+				//throw e;
+			}
+		}
+		Instrumentor::Get().EndSession();
 	}
 
 	void Engine::shutdown()
 	{
+		Instrumentor::Get().BeginSession("Shutdown", "instruments_Shutdown.profile");
+		{
+			PROFILE_FUNCTION;
 
+		}
+		Instrumentor::Get().EndSession();
 	}
 }

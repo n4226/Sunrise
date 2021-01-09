@@ -22,3 +22,9 @@
 [submodule "vendor/libGuarded"]
 	path = vendor/libGuarded
 	url = https://github.com/copperspice/cs_libguarded.git
+[submodule "vendor/nlohmann"]
+	path = vendor/nlohmann
+	url = https://github.com/nlohmann/json.git
+[submodule "vendor/earcut-hpp"]
+	path = vendor/earcut-hpp
+	url = https://github.com/mapbox/earcut.hpp

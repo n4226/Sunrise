@@ -2,20 +2,27 @@
 #include "TerrainSystem.h"
 #include "../../core/Application.h"
 #include "../../core/Window.h"
+#include "../../graphics/vulkan/generalAbstractions/VkAbstractions.h"
+#include "../../fileFormats/binary/BinaryMesh.h"
+
+#include "../../graphics/vulkan/resources/ResourceTransferTask.h"
 
 #include "../../graphics/vulkan/renderer/Renderer.h"
 
+
 namespace sunrise {
 
+	using namespace gfx;
 
 	TerrainSystem::TerrainSystem(Application& app, WorldScene& scene, glm::dvec3* origin)
 		: tree(math::dEarthRad), app(app), scene(scene), meshLoader(), origin(origin)
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
+		SR_CORE_TRACE("Initializing Terrain System");
 
 			//TODO: fix for multi gpu to use multiple renderers
 
-			meshLoader.renderer = app.renderers[0];
+		meshLoader.renderer = app.renderers[0];
 		meshLoader.terrainSystem = this;
 
 		CreateRenderResources();
@@ -39,11 +46,14 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
+		SR_CORE_TRACE("Creating Terrain System resources");
+
+
 		cmdBufferPools.resize(app.renderers[0]->windows.size());
 		commandBuffers.resize(app.renderers[0]->windows.size());
 
 		for (size_t i = 0; i < app.renderers[0]->windows.size(); i++)
-			VkHelpers::createPoolsAndCommandBufffers
+			vkHelpers::createPoolsAndCommandBufffers
 			(app.renderers[0]->device, cmdBufferPools[i], commandBuffers[i], app.maxSwapChainImages, app.renderers[0]->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
 
 #if RenderMode == RenderModeCPU2
@@ -62,9 +72,9 @@ namespace sunrise {
 
 	void TerrainSystem::update()
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 
-			processTree();
+		processTree();
 	}
 
 	vk::CommandBuffer* TerrainSystem::renderSystem(uint32_t subpass, Window& window)
@@ -118,8 +128,13 @@ namespace sunrise {
 
 		buffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, window.pipelineCreator->pipelineLayout, 0, { renderer->descriptorSets[window.indexInRenderer][window.currentSurfaceIndex] }, {});
 
+		//// temp using cpu buffs  FIX THIS SOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+		//renderer->globalMeshStagingBuffer->bindVerticiesIntoCommandBuffer(*buffer, 0);
+		//renderer->globalMeshBuffer->bindIndiciesIntoCommandBuffer(*buffer);
+
 		renderer->globalMeshBuffer->bindVerticiesIntoCommandBuffer(*buffer, 0);
 		renderer->globalMeshBuffer->bindIndiciesIntoCommandBuffer(*buffer);
+			
 
 		// encode draws
 		{
@@ -129,12 +144,13 @@ namespace sunrise {
 			for (auto it = drawObjects->begin(); it != drawObjects->end(); it++)
 			{
 
-				//// frustrom cull
+				// frustrom cull
 #if RenderMode == RenderModeCPU1
 				if (!renderer->camFrustroms[window.indexInRenderer].IsBoxVisible(it->second.aabbMin, it->second.aabbMax)) {
 					continue;
 				}
 #endif
+
 				auto modelUnSize = sizeof(glm::uint32);
 				//buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, modelUnSize, &it->second.drawDatas[0]);
 				for (size_t i = 0; i < it->second.indexCounts.size(); i++)
@@ -144,7 +160,7 @@ namespace sunrise {
 					//buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eFragment, modelUnSize, sizeof(DrawPushData) - modelUnSize, reinterpret_cast<char*>(&(it->second.drawDatas[i])) + modelUnSize);
 
 					buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(DrawPushData), &it->second.drawDatas[i]);
-					buffer->drawIndexed(indexCount, 1, indexOffset, it->second.vertIndex, 0);
+					//buffer->drawIndexed(indexCount, 1, indexOffset, it->second.vertIndex, 0);
 				}
 			}
 		}
@@ -256,7 +272,8 @@ namespace sunrise {
 
 			//auto ticket = ticketQueue.take();
 
-			marl::schedule([this]() {
+			//TODO - thread this again in marl task this is jsut for testing
+			//marl::schedule([this]() {
 				PROFILE_SCOPE("create draw draw job")
 					//MarlSafeTicketLock lock(ticket);
 
@@ -302,7 +319,7 @@ namespace sunrise {
 					*cmdsValid = false;
 				}
 #endif
-				});
+				//});
 
 		}
 		else {
@@ -337,7 +354,7 @@ namespace sunrise {
 
 	double TerrainSystem::threshold(const TerrainQuadTreeNode* node)
 	{
-		auto nodeRad = Math::llaDistance(node->frame.start, node->frame.getEnd(), tree.radius);
+		auto nodeRad = math::llaDistance(node->frame.start, node->frame.getEnd(), tree.radius);
 		//      return  radius / (node.lodLevel + 1).double * 1;
 		return nodeRad * 1;
 	}
@@ -410,7 +427,7 @@ namespace sunrise {
 					//std::this_thread::sleep_for(1s);
 				}
 			}
-			}, true);
+			}, true,false);
 
 	}
 

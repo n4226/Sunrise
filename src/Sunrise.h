@@ -8,20 +8,29 @@
 #include "Sunrise/Sunrise/core/Application.h"
 
 //EntryPoint
-#include "Sunrise/Sunrise/core/EntryPoint.h"
+//#include "Sunrise/Sunrise/core/EntryPoint.h"
 //
 
 
 ///////////////////////////////////////////////////////////// MATH ////////////////////////////// MATH IS FUN ////////////////////////
 
-#include "Sunrise/Sunrise/math/Box.h"
-#include "Sunrise/Sunrise/math/FrustrumMath.h"
-#include "Sunrise/Sunrise/math/Math.h"
+#include "Sunrise/Sunrise/Math.h"
 
-#include "Sunrise/Sunrise/math/mesh/Mesh.h"
-#include "Sunrise/Sunrise/math/mesh/MeshRendering.h"
-#include "Sunrise/Sunrise/math/mesh/Triangulation.h"
 
-#include "Sunrise/Sunrise/math/paths/Bezier.h"
-#include "Sunrise/Sunrise/math/paths/Path.h"
 
+/////////////////////////////////////////////////////// graphics
+
+#include "Sunrise/Sunrise/graphics/vulkan/generalAbstractions/VkAbstractions.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderer/RenderSystem.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderer/MaterialManager.h"
+
+
+////////////////////////////////////////// Scene
+
+#include "Sunrise/Sunrise/scene/Scene.h"
+#include "Sunrise/Sunrise/scene/Camera.h"
+
+////............................... world
+
+#include "Sunrise/Sunrise/world/WorldScene.h"

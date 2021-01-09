@@ -3,6 +3,7 @@
 #include "../core/Application.h"
 #include "../world/WorldScene.h"
 #include "terrain/TerrainSystem.h"
+#include "../graphics/vulkan/resources/ResourceTransferTask.h"
 
 namespace sunrise {
 

@@ -1,30 +1,34 @@
-#include "pch.h"
+#include "srpch.h"
 #include "FileManager.h"
 
 
-//FileManager filemanager;
+namespace sunrise {
 
-std::string FileManager::getBaseDir()
-{
-	return "c:/code/FSTS-World-Data/";
-}
+	//FileManager filemanager;
 
-std::string FileManager::getTerrainChunkDir()
-{
-	return getBaseDir() + "terrain/chunkMeshes/";
-}
+	std::string FileManager::getBaseDir()
+	{
+		return "c:/code/FSTS-World-Data/";
+	}
 
-std::string FileManager::getTerrainChunkAttributesDir()
-{
-	return getBaseDir() + "terrain/chunkAttributes/";
-}
+	std::string FileManager::getTerrainChunkDir()
+	{
+		return getBaseDir() + "terrain/chunkMeshes/";
+	}
 
-std::string FileManager::getMaterialDir()
-{
-	return getBaseDir() + "materials/";
-}
+	std::string FileManager::getTerrainChunkAttributesDir()
+	{
+		return getBaseDir() + "terrain/chunkAttributes/";
+	}
 
-std::string FileManager::getConfigDir()
-{
-	return getBaseDir() + "config/";
+	std::string FileManager::getMaterialDir()
+	{
+		return getBaseDir() + "materials/";
+	}
+
+	std::string FileManager::getConfigDir()
+	{
+		return getBaseDir() + "config/";
+	}
+
 }

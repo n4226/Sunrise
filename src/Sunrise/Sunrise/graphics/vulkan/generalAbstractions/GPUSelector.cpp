@@ -20,11 +20,15 @@ namespace sunrise::gfx {
 		devices.resize(deviceCount);
 		vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
+
+		SR_CORE_TRACE("Finding right gpu for a window, {} gpus available",deviceCount);
+
 		for (uint32_t i = 0; i < deviceCount; i++)
 		{
 			auto device = vk::PhysicalDevice(devices.at(i));
 
 			if (gpuSutable(device, surface)) {
+				SR_CORE_TRACE("this gpu ({}) is sutable", device);
 				return device;
 			}
 		}
@@ -34,7 +38,9 @@ namespace sunrise::gfx {
 	bool GPUSelector::gpuSutable(const vk::PhysicalDevice device, vk::SurfaceKHR surface)
 	{
 		PROFILE_FUNCTION;
-			VkPhysicalDeviceProperties deviceProperties;
+
+		SR_CORE_TRACE("determining if this gpu ({}) is sutable",device);
+		VkPhysicalDeviceProperties deviceProperties;
 		VkPhysicalDeviceFeatures deviceFeatures;
 		vkGetPhysicalDeviceProperties(device, &deviceProperties);
 		vkGetPhysicalDeviceFeatures(device, &deviceFeatures);

@@ -119,7 +119,7 @@ namespace sunrise {
 			auto segmentPoints = cameraPath.getPointsInSegment(currentSegment);
 
 		if (totalSegmentTime == 0) {
-			auto distance = Math::llaDistance(segmentPoints[0], segmentPoints[2]);
+			auto distance = math::llaDistance(segmentPoints[0], segmentPoints[2]);
 			totalSegmentTime = distance / speed;
 		}
 

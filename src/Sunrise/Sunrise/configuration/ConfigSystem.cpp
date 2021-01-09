@@ -2,8 +2,6 @@
 #include "ConfigSystem.h"
 #include "../fileSystem/FileManager.h"
 
-#include <iomanip>
-
 namespace sunrise {
 
     using namespace nlohmann;

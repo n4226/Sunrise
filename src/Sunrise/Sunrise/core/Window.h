@@ -6,6 +6,7 @@
 #include "../graphics/vulkan/renderPipelines/GraphicsPipeline.h"
 #include "../scene/Camera.h"
 #include "../configuration/ConfigSystem.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/DeferredPassPipeline.h"
 
 
 #include "../graphics/vulkan/generalAbstractions/Image.h"
@@ -13,7 +14,9 @@
 namespace sunrise {
 
 	class WorldScene;
-	class Renderer;
+	namespace gfx {
+		class Renderer;
+	}
 	class Application;
 
 	class SUNRISE_API Window
@@ -36,8 +39,8 @@ namespace sunrise {
 
 			// manager objects
 
-		RenderPassManager* renderPassManager;
-		GraphicsPipeline* pipelineCreator;
+		gfx::RenderPassManager* renderPassManager;
+		gfx::GraphicsPipeline* pipelineCreator;
 
 		//// window spacific - will keep here after refactor
 
@@ -79,7 +82,7 @@ namespace sunrise {
 		//Deferred 
 		//Image* deferred_colorAttachment; - right now befoe adding post processing passes the deferred writes directly to swap chain
 
-		DeferredPass* deferredPass;
+		gfx::DeferredPass* deferredPass;
 
 
 
@@ -103,7 +106,7 @@ namespace sunrise {
 		// refrences =
 
 		vk::Device device;
-		Renderer* renderer;
+		gfx::Renderer* renderer;
 		size_t indexInRenderer;
 
 		Application& app;
