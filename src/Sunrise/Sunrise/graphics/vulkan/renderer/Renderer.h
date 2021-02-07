@@ -29,9 +29,9 @@ namespace sunrise {
 			void renderFrame(Window& window);
 
 			// systems
-			TerrainSystem* terrainSystem;
+			TerrainSystem* terrainSystem = nullptr;
 
-			MaterialManager* materialManager;
+			MaterialManager* materialManager = nullptr;
 
 			// handles
 			vk::Device device;
@@ -49,8 +49,8 @@ namespace sunrise {
 
 			// dindless vars
 
-			VaribleIndexAllocator* gloablVertAllocator;
-			VaribleIndexAllocator* gloablIndAllocator;
+			VaribleIndexAllocator* gloablVertAllocator = nullptr;
+			VaribleIndexAllocator* gloablIndAllocator  = nullptr;
 
 			BindlessMeshBuffer* globalMeshBuffer;
 

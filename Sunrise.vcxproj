@@ -159,6 +159,10 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h" />
     <ClInclude Include="src\Sunrise.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
@@ -219,6 +223,10 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />

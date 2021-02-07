@@ -671,6 +671,8 @@ namespace sunrise::gfx {
 
 		// run terrain system draw
 
+		if (terrainSystem == nullptr) return;
+
 		auto generatedTerrainCmds = terrainSystem->renderSystem(0, window);
 
 
@@ -725,10 +727,12 @@ namespace sunrise::gfx {
 
 			postUniforms.camFloatedGloabelPos = glm::vec4(camera.transform.position, 1);
 			glm::qua<glm::float32> sunRot = glm::angleAxis(glm::radians(45.f), glm::vec3(0, 1, 0));
-			postUniforms.sunDir =
-				glm::angleAxis(glm::radians(45.f + sin(world->timef) * 0.f), glm::vec3(-1, 0, 0)) *
-				glm::vec4(glm::normalize(math::LlatoGeo(world->initialPlayerLLA, glm::dvec3(0), terrainSystem->getRadius())), 1);
-			postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>(-(world->origin)), 1);
+			if (world != nullptr) {
+				postUniforms.sunDir =
+					glm::angleAxis(glm::radians(45.f + sin(world->timef) * 0.f), glm::vec3(-1, 0, 0)) *
+					glm::vec4(glm::normalize(math::LlatoGeo(world->initialPlayerLLA, glm::dvec3(0), terrainSystem->getRadius())), 1);
+				postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>(-(world->origin)), 1);
+			}
 			postUniforms.viewMat = camera.view();
 			postUniforms.projMat = camera.projection(windows[i]->swapchainExtent.width, windows[i]->swapchainExtent.height);
 			postUniforms.invertedViewMat = glm::inverse(camera.view());
