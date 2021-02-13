@@ -65,7 +65,6 @@ namespace sunrise {
 				performTask(tasks, ticket, completionHandler, requiresGfxQueue);
 			else {
 				marl::schedule([tasks, ticket, completionHandler, this, requiresGfxQueue]() { performTask(tasks, ticket, completionHandler, requiresGfxQueue); });
-
 			}
 		}
 
@@ -135,20 +134,24 @@ namespace sunrise {
 
 				if (requiresGfxQueue) {
 					renderer.deviceQueues.graphics.submit(submitInfo, waitFence);
-					renderer.deviceQueues.graphics.waitIdle();
+					//renderer.deviceQueues.graphics.waitIdle();
 				}
 				else {
-					//renderer.deviceQueues.resourceTransfer.submit(submitInfo, waitFence);
+					renderer.deviceQueues.resourceTransfer.submit(submitInfo, waitFence);
 					//renderer.deviceQueues.resourceTransfer.waitIdle();
 					//renderer.device.waitIdle();
+
+
+					//device.waitForFences(waitFence, VK_TRUE, UINT64_MAX);
+					//device.resetFences(waitFence);
 				}
 
 
 				//TODO: find better way than blocking the resource transfer marl queue
 
 
-				//device.waitForFences(waitFence, VK_TRUE, UINT64_MAX);
-				//device.resetFences(waitFence);
+				device.waitForFences(waitFence, VK_TRUE, UINT64_MAX);
+				device.resetFences(waitFence);
 
 				ticket.done();
 			}

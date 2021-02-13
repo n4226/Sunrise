@@ -32,9 +32,25 @@ namespace sunrise {
 		return bitangents.size() * sizeof(glm::vec3);
 	}
 
-	size_t Mesh::indiciesSize()
+	/*size_t Mesh::indiciesSize()
 	{
 		return indicies.size() * sizeof(glm::uint32);
+	}*/
+
+
+	size_t Mesh::indiciesSize(size_t subMesh)
+	{
+		return (indicies[subMesh].size()) * sizeof(glm::uint32);
+	}
+
+	size_t Mesh::AllSubMeshIndiciesSize() {
+		size_t total = 0;
+
+		for (size_t i = 0; i < indicies.size(); i++)
+		{
+			total += indiciesSize(i);
+		}
+		return total;
 	}
 
 	size_t Mesh::vertsOffset()
@@ -69,7 +85,7 @@ namespace sunrise {
 
 	size_t Mesh::fullSize()
 	{
-		return indiciesOffset() + indiciesSize();
+		return indiciesOffset() + AllSubMeshIndiciesSize();
 	}
 
 

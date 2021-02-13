@@ -15,6 +15,7 @@
 #pragma once
 
 #include "srpch.h"
+#include "Sunrise/Sunrise/core/environment.h"
 
 struct ProfileResult
 {
@@ -73,6 +74,7 @@ public:
         m_CurrentSession = nullptr;
         m_ProfileCount = 0;
     }
+
 
     void pendWriteProfile(const ProfileResult& result) {
         auto queue = pendingResults.lock();
@@ -174,3 +176,7 @@ private:
     bool m_Stopped;
 };
 
+////////// VULKAN DEBUG MARKERs
+
+
+///// do here

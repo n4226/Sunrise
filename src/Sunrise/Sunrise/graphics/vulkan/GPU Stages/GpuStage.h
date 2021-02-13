@@ -26,7 +26,7 @@ namespace sunrise::gfx {
 
 	protected:
 
-		friend 
+		
 
 		virtual vk::CommandBuffer* encode() = 0;
 

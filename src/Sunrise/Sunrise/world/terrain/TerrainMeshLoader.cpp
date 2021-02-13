@@ -178,12 +178,12 @@ namespace sunrise {
 				auto mesh = preLoadedMesh.mesh;
 
 			vertCount = mesh->verts.size();
-			indCounts = { mesh->indicies.size() };
+			indCounts = { mesh->indicies[0].size() };
 			totalIndCount = indCounts[0];
 
 			// these indicies are in vert count space - meaning 1 = 1 vert not 1 byte
 			vertIndex = renderer->gloablVertAllocator->alloc(mesh->verts.size());
-			indIndicies = { renderer->gloablIndAllocator->alloc(mesh->indicies.size()) };
+			indIndicies = { renderer->gloablIndAllocator->alloc(totalIndCount) };
 
 			stagingMeshBuff->writeMeshToBuffer(vertIndex, indIndicies[0], mesh, !inJob);
 
@@ -332,6 +332,8 @@ namespace sunrise {
 			}
 		}
 
+		mesh->indicies.push_back( {} );
+
 		for (size_t x = 0; x < resolution; x++)
 		{
 			for (size_t y = 0; y < resolution; y++)
@@ -340,12 +342,12 @@ namespace sunrise {
 
 				auto xSize = resolution;
 
-				mesh->indicies.emplace_back(vert + startVertOfset);
-				mesh->indicies.emplace_back(vert + startVertOfset + xSize + 1);
-				mesh->indicies.emplace_back(vert + startVertOfset + 1);
-				mesh->indicies.emplace_back(vert + startVertOfset + 1);
-				mesh->indicies.emplace_back(vert + startVertOfset + xSize + 1);
-				mesh->indicies.emplace_back(vert + startVertOfset + xSize + 2);
+				mesh->indicies[mesh->indicies.size() - 1].emplace_back(vert + startVertOfset);
+				mesh->indicies[mesh->indicies.size() - 1].emplace_back(vert + startVertOfset + xSize + 1);
+				mesh->indicies[mesh->indicies.size() - 1].emplace_back(vert + startVertOfset + 1);
+				mesh->indicies[mesh->indicies.size() - 1].emplace_back(vert + startVertOfset + 1);
+				mesh->indicies[mesh->indicies.size() - 1].emplace_back(vert + startVertOfset + xSize + 1);
+				mesh->indicies[mesh->indicies.size() - 1].emplace_back(vert + startVertOfset + xSize + 2);
 
 				vert++;
 			}

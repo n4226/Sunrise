@@ -160,7 +160,7 @@ namespace sunrise {
 					//buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eFragment, modelUnSize, sizeof(DrawPushData) - modelUnSize, reinterpret_cast<char*>(&(it->second.drawDatas[i])) + modelUnSize);
 
 					buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(DrawPushData), &it->second.drawDatas[i]);
-					//buffer->drawIndexed(indexCount, 1, indexOffset, it->second.vertIndex, 0);
+					buffer->drawIndexed(indexCount, 1, indexOffset, it->second.vertIndex, 0);
 				}
 			}
 		}
@@ -273,7 +273,7 @@ namespace sunrise {
 			//auto ticket = ticketQueue.take();
 
 			//TODO - thread this again in marl task this is jsut for testing
-			//marl::schedule([this]() {
+			marl::schedule([this]() {
 				PROFILE_SCOPE("create draw draw job")
 					//MarlSafeTicketLock lock(ticket);
 
@@ -319,7 +319,7 @@ namespace sunrise {
 					*cmdsValid = false;
 				}
 #endif
-				//});
+				});
 
 		}
 		else {
@@ -427,7 +427,7 @@ namespace sunrise {
 					//std::this_thread::sleep_for(1s);
 				}
 			}
-			}, true,false);
+			}, false,false);
 
 	}
 

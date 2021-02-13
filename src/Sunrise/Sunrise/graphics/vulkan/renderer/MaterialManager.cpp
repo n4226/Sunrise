@@ -33,12 +33,12 @@ namespace sunrise {
 			loadMat(matRootPath, mat.second.c_str());
 		}
 
-		//loadMat(matRootPath, "grass1");
-		//loadMat(matRootPath, "building1");
+		/*loadmat(matrootpath, "grass1");
+		loadmat(matrootpath, "building1");*/
 
 
-		//TODO:add this back for mip gen
-		/*renderer.resouceTransferer->newTask(pendingTasks, []() {
+		//todo:add this back for mip gen
+		renderer.resouceTransferer->newTask(pendingTasks, []() {
 
 			}, true);
 		pendingTasks.clear();
@@ -47,7 +47,7 @@ namespace sunrise {
 		renderer.resouceTransferer->newTask(pendingGFXTasks, []() {
 
 			}, true, true);
-		pendingGFXTasks.clear();*/
+		pendingGFXTasks.clear();
 
 	}
 

@@ -218,7 +218,7 @@ namespace sunrise {
 
         vk::InstanceCreateInfo info = vk::InstanceCreateInfo();
 
-#if RDX_ENABLE_VK_VALIDATION_LAYERS
+#if SR_ENABLE_VK_VALIDATION_LAYERS
         SR_CORE_INFO("Vulkan Validation Enabled");
 #else
         SR_CORE_WARN("Vulkan Validation Disabled");
@@ -307,13 +307,32 @@ namespace sunrise {
 
         desIndexingFeatures.runtimeDescriptorArray = VK_TRUE;
 
+        bool debugExtAvailable = false;
+
+        uint32_t extensionCount;
+        vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
+
+        std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+        vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, availableExtensions.data());
+        for (auto& ext : availableExtensions)
+        {
+            if (!strcmp(ext.extensionName, VK_EXT_DEBUG_MARKER_EXTENSION_NAME))
+            {
+                debugExtAvailable = true;
+            }
+        }
+
         // devie extensions
-        const std::vector<const char*> extensionNames = {
+        std::vector<const char*> extensionNames = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
 #if !SR_RenderDocCompatible
             VK_NV_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME
 #endif
         };
+
+        if (debugExtAvailable) {
+            extensionNames.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
+        }
 
         SR_CORE_INFO("creating logical device with the following extensions: ");
         
@@ -345,7 +364,9 @@ namespace sunrise {
         // error is on this line below
         
         auto device = physicalDevice.createDevice(vk::DeviceCreateInfo(createInfo), nullptr);
-       
+
+        VkDebug::init(device,this);
+        VkDebug::active = debugExtAvailable;
 
         GPUQueues loc_deviceQueues;
 

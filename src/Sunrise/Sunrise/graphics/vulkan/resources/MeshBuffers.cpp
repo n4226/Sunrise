@@ -35,7 +35,9 @@ namespace sunrise::gfx {
 		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->normalsOffset(), baseMesh->normals.data(), baseMesh->normalsSize());
 		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->tangentsOffset(), baseMesh->tangents.data(), baseMesh->tangentsSize());
 		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->bitangentsOffset(), baseMesh->bitangents.data(), baseMesh->bitangentsSize());
-		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->indiciesOffset(), baseMesh->indicies.data(), baseMesh->indiciesSize());
+
+		//TODO: Support Multi-submesh Meshes of Mesh class -- this might already
+		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->indiciesOffset(), baseMesh->indicies[0].data(), baseMesh->indiciesSize(0));
 
 		if (mapandUnmap)
 			buffer->unmapMemory();
@@ -103,7 +105,8 @@ namespace sunrise::gfx {
 		memcpy(static_cast<char*>(vertBuffer->mappedData) + tangentsOffset() + vertIndex * sizeof(glm::vec3), mesh->tangents.data(), mesh->tangentsSize());
 		memcpy(static_cast<char*>(vertBuffer->mappedData) + bitangentsOffset() + vertIndex * sizeof(glm::vec3), mesh->bitangents.data(), mesh->bitangentsSize());
 
-		memcpy(static_cast<char*>(indexBuffer->mappedData) + indIndex * sizeof(glm::uint32), mesh->indicies.data(), mesh->indiciesSize());
+		//TODO: Support Multi-submesh Meshes of Mesh class -- this might already
+		memcpy(static_cast<char*>(indexBuffer->mappedData) + indIndex * sizeof(glm::uint32), mesh->indicies[0].data(), mesh->indiciesSize(0));
 
 		if (mapandUnmap)
 		{
@@ -129,7 +132,8 @@ namespace sunrise::gfx {
 			location3,
 			location4,
 		};
-		report.indexLocation = { indIndex * sizeof(glm::uint32), mesh->indiciesSize() };
+		//TODO: Support Multi-submesh Meshes of Mesh class
+		report.indexLocation = { indIndex * sizeof(glm::uint32), mesh->indiciesSize(0) };
 		return report;
 	}
 

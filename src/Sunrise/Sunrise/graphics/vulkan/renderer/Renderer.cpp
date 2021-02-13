@@ -38,7 +38,7 @@ namespace sunrise::gfx {
 		PROFILE_FUNCTION
 
 
-			delete materialManager;
+		delete materialManager;
 		delete resouceTransferer;
 
 		delete deferredPassVertBuff;
@@ -646,12 +646,20 @@ namespace sunrise::gfx {
 		//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
 		cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
 
+		VkDebug::beginRegion(cmdBuff, "Gbuffer Pass", glm::vec4(0.7, 0.2, 0.3, 1));
+
 		encodeGBufferPass(window);
+
+		VkDebug::endRegion(cmdBuff);
 
 		cmdBuff.nextSubpass(vk::SubpassContents::eInline);
 
+
+		VkDebug::beginRegion(cmdBuff, "Deferred Pass", glm::vec4(0.4, 0.6, 0.3, 1));
+
 		encodeDeferredPass(window);
 
+		VkDebug::endRegion(cmdBuff);
 
 		// end encoding 
 

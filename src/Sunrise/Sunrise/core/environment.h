@@ -1,15 +1,18 @@
 #include "srpch.h"
 
-
+#include "Sunrise/Sunrise/debuging/VkDebugMarker.h"
 
 #define SR_PROFILING 1
 #define SR_PROFILING_LITE 0
 #define SR_VALIDATION 1
 
-#define SR_MULTI_THREADED_PROFILING 0
+#define SR_MULTI_THREADED_PROFILING 1
 
-#define SR_RenderDocCompatible 1
+#define SR_RenderDocCompatible 0
 
+//#if SR_MULTI_THREADED_PROFILING
+//dddd
+//#endif
 
 #if SR_PROFILING
 #define PROFILE_SCOPE(name) InstrumentationTimer timer##__line__(name);
@@ -29,9 +32,9 @@
 #endif
 
 #if SR_DEBUG && SR_VALIDATION
-#define RDX_ENABLE_VK_VALIDATION_LAYERS true;
+#define SR_ENABLE_VK_VALIDATION_LAYERS true;
 #else
-#define RDX_ENABLE_VK_VALIDATION_LAYERS false;
+#define SR_ENABLE_VK_VALIDATION_LAYERS false;
 #endif
 
 
@@ -48,7 +51,7 @@
 #define RenderModeCPU2 1
 #define RenderModeGPU  2 
 
-#define RenderMode RenderModeCPU1
+#define RenderMode RenderModeCPU2
 
 
 
@@ -82,3 +85,10 @@
 
 //XCOPY "$(SolutionDir)MeshGenerator\terrain" "$(TargetDir)\terrain\" /S /Y
 //XCOPY "$(SolutionDir)MeshGenerator\terrain" "$(ProjectDir)\terrain\" /S /Y
+
+// vulkan debugging
+//TODO: ddd
+//#if SR_ENABLE_VK_VALIDATION_LAYERS
+//#define vkMarker
+//#else
+//#endif

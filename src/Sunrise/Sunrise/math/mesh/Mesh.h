@@ -32,7 +32,9 @@ namespace sunrise {
 		size_t       normalsSize();
 		size_t      tangentsSize();
 		size_t    bitangentsSize();
-		size_t      indiciesSize();
+		//size_t      indiciesSize();
+		size_t indiciesSize(size_t subMesh);
+		size_t AllSubMeshIndiciesSize();
 
 		size_t       vertsOffset();
 		size_t         uvsOffset();

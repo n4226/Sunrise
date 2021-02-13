@@ -164,6 +164,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h" />
     <ClInclude Include="src\Sunrise.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h" />
@@ -221,6 +222,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.h" />
     <ClInclude Include="src\srpch.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
@@ -248,6 +250,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\vmaSettings.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\ComputePipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\GraphicsPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\DeferredPassPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.cpp" />
@@ -282,6 +285,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="src\srpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

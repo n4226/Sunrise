@@ -17,8 +17,8 @@ namespace sunrise {
 
 		void movePlayerAlongCamPath();
 
-
-		const double speed = 100; // in meters / second
+		//TODO: don't think this is correct
+		const double speed = 300; // in meters / second
 
 		size_t currentSegment = 0;
 		double currentSegmentTime = 0;
