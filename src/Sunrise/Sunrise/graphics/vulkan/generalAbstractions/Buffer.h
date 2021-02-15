@@ -25,6 +25,16 @@ namespace sunrise::gfx {
 		vk::BufferUsageFlags usage;
 		vk::SharingMode sharingMode;
 		std::vector<uint32_t> queueFamilieIndicies;
+		uint32_t memoryTypeBits = UINT32_MAX;
+	};
+
+	//TODO: impolement native buffer and mem managment support
+	struct NativeBufferCreationOptions {
+		/*ResourceStorageType storage;
+		vk::BufferUsageFlags usage;
+		vk::SharingMode sharingMode;
+		std::vector<uint32_t> queueFamilieIndicies;*/
+		vk::MemoryRequirements2 memRequirments;
 	};
 
 	class SUNRISE_API Buffer
@@ -32,6 +42,7 @@ namespace sunrise::gfx {
 	public:
 		Buffer(const Buffer& othter) = delete;
 		Buffer(vk::Device device, VmaAllocator allocator, VkDeviceSize size, BufferCreationOptions options);
+		//Buffer(vk::Device device, NativeBufferCreationOptions options);
 
 		/// <summary>
 		/// a staging buffer is created, the thread is blocked while the data is sent to the actual gpu private buffer, than the new [gpu private buffer is returned.

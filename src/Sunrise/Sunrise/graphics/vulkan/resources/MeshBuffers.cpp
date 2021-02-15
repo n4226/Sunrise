@@ -200,6 +200,30 @@ namespace sunrise::gfx {
 			});
 	}
 
+	std::array<vk::IndirectCommandsStreamNV, 5>* BindlessMeshBuffer::bindVerticiesIntoIndirectCommandsNV(vk::GeneratedCommandsInfoNV& commandsInfo)
+	{
+		
+		auto* streams = new std::array<vk::IndirectCommandsStreamNV, 5>{};
+
+		(*streams)[0].buffer = vertBuffer->vkItem;
+		(*streams)[1].buffer = vertBuffer->vkItem;
+		(*streams)[2].buffer = vertBuffer->vkItem;
+		(*streams)[3].buffer = vertBuffer->vkItem;
+		(*streams)[4].buffer = vertBuffer->vkItem;
+
+
+		(*streams)[0].offset = vertsOffset();
+		(*streams)[1].offset = uvsOffset();
+		(*streams)[2].offset = normalsOffset();
+		(*streams)[3].offset = tangentsOffset();
+		(*streams)[4].offset = bitangentsOffset();
+
+		commandsInfo.streamCount = streams->size();
+		commandsInfo.pStreams = streams->data();
+
+		return streams;
+	}
+
 	void BindlessMeshBuffer::bindIndiciesIntoCommandBuffer(vk::CommandBuffer commandBuffer)
 	{
 		commandBuffer.bindIndexBuffer(indexBuffer->vkItem, 0, vk::IndexType::eUint32);

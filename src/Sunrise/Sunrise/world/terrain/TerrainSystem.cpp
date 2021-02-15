@@ -9,6 +9,7 @@
 
 #include "../../graphics/vulkan/renderer/Renderer.h"
 
+#include "../../graphics/vulkan/renderPipelines/concrete/gpuDriven/GPUGenCommandsPipeline.h"
 
 namespace sunrise {
 
@@ -151,6 +152,12 @@ namespace sunrise {
 		// execute those commands
 
 		//buffer->executeGeneratedCommandsNV(optimized, );
+		size_t drawCount;
+		{ //TODO: find a way to do this without locking to allow for multi
+			auto drawObjects = this->drawObjects.lock();
+			drawCount = drawObjects->size();
+		}
+		window.gpuGenPipe->exicuteIndirectCommands(*buffer, drawCount,renderer->globalMeshBuffer);
 
 #pragma endregion
 #else

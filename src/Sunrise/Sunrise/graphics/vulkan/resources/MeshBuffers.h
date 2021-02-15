@@ -62,6 +62,11 @@ namespace sunrise::gfx {
 		WriteTransactionReceipt genrateWriteReceipt(VkDeviceAddress vertIndex, VkDeviceAddress indIndex, BinaryMeshSeirilizer* mesh);
 
 		void bindVerticiesIntoCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t baseBinding);
+		/// <summary>
+		/// </summary>
+		/// <param name="commandsInfo"></param>
+		/// <returns>a pointer to the streams that should be deleted when the vkGeneratedCommandsInfoNV struct is no longer neaded</returns>
+		std::array<vk::IndirectCommandsStreamNV, 5>* bindVerticiesIntoIndirectCommandsNV(vk::GeneratedCommandsInfoNV& commandsInfo);
 		void bindIndiciesIntoCommandBuffer(vk::CommandBuffer commandBuffer);
 
 		const VkDeviceSize vCount;

@@ -31,7 +31,7 @@ namespace sunrise::gfx {
 		allocInfo.flags = 0;//VMA_ALLOCATION_CREATE_MAPPED_BIT;
 		allocInfo.preferredFlags = 0;
 		allocInfo.requiredFlags = 0;
-		allocInfo.memoryTypeBits = UINT32_MAX;
+		allocInfo.memoryTypeBits = options.memoryTypeBits;
 		allocInfo.pool = nullptr;
 		allocInfo.pUserData = nullptr;
 		allocInfo.usage = VmaMemoryUsage(options.storage);
