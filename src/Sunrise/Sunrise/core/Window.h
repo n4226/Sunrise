@@ -16,6 +16,7 @@ namespace sunrise {
 	class WorldScene;
 	namespace gfx {
 		class Renderer;
+		class GPUGenCommandsPipeline;
 	}
 	class Application;
 
@@ -83,7 +84,7 @@ namespace sunrise {
 		//Image* deferred_colorAttachment; - right now befoe adding post processing passes the deferred writes directly to swap chain
 
 		gfx::DeferredPass* deferredPass;
-
+		gfx::GPUGenCommandsPipeline* gpuGenPipe;
 
 
 		vk::SurfaceKHR surface;

@@ -3,6 +3,7 @@
 #include "srpch.h"
 
 #include "Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Buffer.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderPipelines/GraphicsPipeline.h"
 
 namespace sunrise {
 
@@ -18,6 +19,8 @@ namespace sunrise {
 				VkIndirectCommandsLayoutNV commandsLayout;
 
 				Buffer* commandsBuffer;
+
+				void exicuteIndirectCommands();
 
 		};
 

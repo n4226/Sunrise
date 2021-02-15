@@ -134,7 +134,27 @@ namespace sunrise {
 
 		renderer->globalMeshBuffer->bindVerticiesIntoCommandBuffer(*buffer, 0);
 		renderer->globalMeshBuffer->bindIndiciesIntoCommandBuffer(*buffer);
-			
+		
+
+#if RenderMode == RenderModeGPU
+#pragma region GPU Driven Encoding
+		//TODO: for now gpu driven pipe only works with one monitor across one gpu
+		// execute compute pass to genrerate commands 
+
+
+		// optinally olptimise commands 
+
+		auto optimized = VK_FALSE;
+
+
+
+		// execute those commands
+
+		//buffer->executeGeneratedCommandsNV(optimized, );
+
+#pragma endregion
+#else
+#pragma region CPU Driven Encoding
 
 		// encode draws
 		{
@@ -164,6 +184,8 @@ namespace sunrise {
 				}
 			}
 		}
+#pragma endregion
+#endif
 		buffer->end();
 
 		return buffer;

@@ -6,6 +6,7 @@
 #include "../graphics/vulkan/generalAbstractions/GPUSelector.h"
 #include "../graphics/vulkan/renderPipelines/concrete/TerrainPipeline.h"
 #include "../graphics/vulkan/renderPipelines/concrete/DeferredPassPipeline.h"
+#include "../graphics/vulkan/renderPipelines/concrete/gpuDriven/GPUGenCommandsPipeline.h"
 
 
 namespace sunrise {
@@ -49,6 +50,8 @@ namespace sunrise {
 
         deferredPass->createPipeline();
 
+        gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
+
         createFramebuffers();
 
         createSemaphores();
@@ -79,6 +82,7 @@ namespace sunrise {
         deferredPass = new DeferredPass(device, swapchainExtent, *renderPassManager);
 
         deferredPass->createPipeline();
+        gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
 
         createFrameBufferImages();
         createFramebuffers();
