@@ -248,6 +248,7 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h" />
     <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -407,5 +408,6 @@
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.cpp" />
   </ItemGroup>
 </Project>
