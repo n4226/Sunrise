@@ -1,6 +1,7 @@
 #pragma once
 
 #include "srpch.h"
+#include "../generalAbstractions/VkAbstractions.h"
 
 namespace sunrise::gfx {
 

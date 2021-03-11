@@ -82,7 +82,7 @@ namespace sunrise::gfx {
 
             // mat textures
             VkDescriptorBindingFlags(
-                //vk::DescriptorBindingFlagBits::eUpdateAfterBind is not availabel on 1080 tifor uniform buffers
+                //vk::DescriptorBindingFlagBits::eUpdateAfterBind is not availabel on 1080 ti for uniform buffers
                 vk::DescriptorBindingFlagBits::eVariableDescriptorCount | vk::DescriptorBindingFlagBits::ePartiallyBound | vk::DescriptorBindingFlagBits::eUpdateUnusedWhilePending
             )
         };

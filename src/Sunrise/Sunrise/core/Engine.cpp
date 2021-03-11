@@ -70,6 +70,8 @@ namespace sunrise {
 			}
 		}
 		Instrumentor::Get().EndSession();
+
+		shutdown();
 	}
 
 	void Engine::shutdown()
@@ -77,6 +79,21 @@ namespace sunrise {
 		Instrumentor::Get().BeginSession("Shutdown", "instruments_Shutdown.profile");
 		{
 			PROFILE_FUNCTION;
+
+			try {
+				auto noApp = dynamic_cast<sunrise::NO_APPLICATION*>(app);
+				if (noApp != nullptr) {
+					SR_CORE_WARN("shutting down in no application mode -- only basic operations will be available");
+				}
+				else {
+					app->shutdown();
+				}
+			}
+			catch (const std::exception& e) {
+				SR_CORE_CRITICAL("Terminating from unhandled runtime exeption durring sutdown loop: {}", e.what());
+				SR_CORE_ERROR("Terminating shutdown during frame: {}", app->currentFrameID);
+				//throw e;
+			}
 
 		}
 		Instrumentor::Get().EndSession();

@@ -5,6 +5,9 @@
 
 #include "MaterialManager.h"
 #include "Sunrise/Sunrise/world/terrain/TerrainSystem.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
+
+
 
 namespace sunrise::gfx {
 
@@ -646,21 +649,29 @@ namespace sunrise::gfx {
 		//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
 		cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
 
-		VkDebug::beginRegion(cmdBuff, "Gbuffer Pass", glm::vec4(0.7, 0.2, 0.3, 1));
+		if (terrainSystem != nullptr) {
 
-		encodeGBufferPass(window);
+			VkDebug::beginRegion(cmdBuff, "Gbuffer Pass", glm::vec4(0.7, 0.2, 0.3, 1));
 
-		VkDebug::endRegion(cmdBuff);
+			encodeGBufferPass(window);
 
-		cmdBuff.nextSubpass(vk::SubpassContents::eInline);
+			VkDebug::endRegion(cmdBuff);
+
+			cmdBuff.nextSubpass(vk::SubpassContents::eInline);
 
 
-		VkDebug::beginRegion(cmdBuff, "Deferred Pass", glm::vec4(0.4, 0.6, 0.3, 1));
+			VkDebug::beginRegion(cmdBuff, "Deferred Pass", glm::vec4(0.4, 0.6, 0.3, 1));
 
-		encodeDeferredPass(window);
+			encodeDeferredPass(window);
 
-		VkDebug::endRegion(cmdBuff);
+			VkDebug::endRegion(cmdBuff);
 
+		}
+		else {
+			auto coord = app.loadedScenes[0]->coordinator;
+
+			coord->encodePassesForFrame(this, cmdBuff, app.currentFrameID, window);
+		}
 		// end encoding 
 
 		cmdBuff.endRenderPass();

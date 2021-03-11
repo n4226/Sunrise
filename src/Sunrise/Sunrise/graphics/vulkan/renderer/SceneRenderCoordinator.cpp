@@ -79,7 +79,7 @@ namespace sunrise::gfx {
 		stagesNodeQueue.push_back(firstNode);
 
 		while (!stagesNodeQueue.empty()) {
-			auto node = stagesNodeQueue[stagesNodeQueue.size()];
+			auto node = stagesNodeQueue[stagesNodeQueue.size() - 1];
 			stagesNodeQueue.pop_back();
 			if (visited.count(node) == 0) {
 				visited.insert(node);
@@ -93,7 +93,7 @@ namespace sunrise::gfx {
 		}
 		std::reverse(stagesInOrder.begin(), stagesInOrder.end());
 
-		SR_CORE_TRACE("{}", stagesInOrder);
+		SR_CORE_TRACE("{}", stagesInOrder.size());
 
 
 		for (auto stage : stagesInOrder) {

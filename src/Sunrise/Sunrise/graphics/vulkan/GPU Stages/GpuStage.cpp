@@ -1,10 +1,20 @@
 #include "srpch.h"
 #include "GpuStage.h"
 
-sunrise::gfx::GPUStage::GPUStage()
-{
-}
+namespace sunrise::gfx {
 
-sunrise::gfx::GPUStage::~GPUStage()
-{
+	GPUStage::GPUStage(Application& app,std::string&& name)
+		: app(app),
+#if SR_LOGGING
+		name(name)
+#endif
+	{
+
+	}
+
+	GPUStage::~GPUStage()
+	{
+
+	}
+
 }

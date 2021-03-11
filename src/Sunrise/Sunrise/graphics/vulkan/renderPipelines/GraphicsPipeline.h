@@ -25,7 +25,7 @@ namespace sunrise::gfx {
 
 		RenderPassManager& renderPassManager;
 
-		virtual void createPipeline() = 0;
+		virtual void createPipeline();
 
 		static vk::PipelineShaderStageCreateInfo createShaderStageInfo(vk::Device device, const std::vector<char>& code, vk::ShaderStageFlagBits stage);
 
@@ -41,6 +41,49 @@ namespace sunrise::gfx {
 		vk::Extent2D swapChainExtent;
 
 		friend ComputePipeline;
+	};
+
+  /*
+            Required inputs:
+
+                descriptos set layout bindings
+                discriptor set layouts
+
+                options {
+                    shader files and uses
+                    
+                    mesh binding and attribute descriptions
+
+                    depth options -- most simplified out for now
+
+                    push constants enabled, size, and stages
+
+
+
+                }
+        */
+
+	struct GraphicsPipelineOptions {
+		// descriptor stuff	
+		
+
+		struct ShaderStageOptions {
+			std::string shaderPath;
+			vk::ShaderStageFlagBits shaderStage;
+		};
+
+		std::vector<ShaderStageOptions> shaderStages;
+
+		std::vector<VkVertexInputBindingDescription> bindingDescriptions;
+		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+
+		bool enablePushConstants = false;
+		VkDeviceSize pushConstantSize = 0;
+		vk::StencilFaceFlags pushConstantStages;
+
+
+
+
 	};
 
 }

@@ -8,3 +8,4 @@
 #include "Image.h"
 #include "Sampler.h"
 #include "ResourceHeap.h"
+#include "Descriptors.h"

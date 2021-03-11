@@ -24,6 +24,9 @@
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h"
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/RenderSystem.h"
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/MaterialManager.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
+#include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPURenderStage.h"
+#include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUComputeStage.h"
 
 
 ////////////////////////////////////////// Scene

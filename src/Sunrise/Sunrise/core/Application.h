@@ -17,6 +17,10 @@ namespace sunrise {
 		void run();
 		virtual void shutdown();
 
+		/// <summary>
+		/// Warning: This is called before the engine is completely initilized. Do not reference any engine provided functions or varibles as their behavure is undefined. 
+		/// </summary>
+		/// <returns></returns>
 		virtual const char* getName() = 0;
 
 

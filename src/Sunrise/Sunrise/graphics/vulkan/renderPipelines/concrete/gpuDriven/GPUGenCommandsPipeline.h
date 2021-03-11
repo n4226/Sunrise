@@ -12,7 +12,7 @@ namespace sunrise {
 
 	namespace gfx {
 
-		class GPUGenCommandsPipeline {
+		class SUNRISE_API GPUGenCommandsPipeline {
 			public:
 				GPUGenCommandsPipeline(Application& app, vk::Device device, GraphicsPipeline& terrainPipeline);
 
@@ -23,10 +23,21 @@ namespace sunrise {
 
 				void exicuteIndirectCommands(vk::CommandBuffer cmdBuff,uint32_t drawCount, BindlessMeshBuffer* meshBuff);
 		private: 
+
+			// setup functions
+			void setup();
+
+			void createCommandsLayout();
+			void getMemRequirements();
+
 			vk::DispatchLoaderDynamic dldid;
 			vk::Device device;
 			Application& app;
 			GraphicsPipeline& terrainPipeline;
+
+			// function pointers
+			PFN_vkCreateIndirectCommandsLayoutNV pfn_vkCreateIndirectCommandsLayoutNV;
+			PFN_vkGetGeneratedCommandsMemoryRequirementsNV pfn_vkGetGeneratedCommandsMemoryRequirementsNV;
 		};
 
 	}

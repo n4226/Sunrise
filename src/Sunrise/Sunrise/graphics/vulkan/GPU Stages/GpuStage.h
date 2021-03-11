@@ -21,7 +21,8 @@ namespace sunrise {
 		{
 		public:
 
-			GPUStage();
+			GPUStage(Application& app,std::string&& name);
+
 			virtual ~GPUStage();
 
 
@@ -34,7 +35,13 @@ namespace sunrise {
 			/// <returns></returns>
 			virtual vk::CommandBuffer* encode(uint32_t subpass, Window& window) = 0;
 
-		protected:
+#if SR_LOGGING
+			std::string name;
+#endif
+
+		//protected:
+
+			Application& app;
 
 		};
 

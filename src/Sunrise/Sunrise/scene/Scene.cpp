@@ -1,17 +1,26 @@
 #include "srpch.h"
 #include "Scene.h"
 
+#include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
 
 namespace sunrise {
 
 	Scene::Scene(Application* app)
-		: app(*app)
+		: app(*app), inControlOfCoordinatorLifecycle(true)
+	{
+		coordinator = new gfx::SceneRenderCoordinator(this);
+	}
+
+	Scene::Scene(Application* app, gfx::SceneRenderCoordinator* coordinator)
+		: app(*app), coordinator(coordinator)
 	{
 
 	}
 
 	Scene::~Scene()
 	{
+		if (inControlOfCoordinatorLifecycle)
+			delete coordinator;
 	}
 
 	void Scene::update()

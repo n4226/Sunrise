@@ -16,7 +16,7 @@ namespace sunrise {
 		std::vector<gfx::Image*> aoImages;
 	};
 
-	class MaterialManager
+	class SUNRISE_API MaterialManager
 	{
 	public:
 		MaterialManager(gfx::Renderer& renderer);

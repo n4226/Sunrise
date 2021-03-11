@@ -31,6 +31,9 @@
     <Filter Include="Sunrise\Sunrise\graphics\vulkan">
       <UniqueIdentifier>{0640EF1A-7223-FE5A-7B26-2C97E788C4AB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\vulkan\GPU Stages">
+      <UniqueIdentifier>{88C99BE1-7431-62AF-DD9C-76C5C923799B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sunrise\Sunrise\graphics\vulkan\generalAbstractions">
       <UniqueIdentifier>{00A0E6A2-6CB1-8E49-F502-218961131883}</UniqueIdentifier>
     </Filter>
@@ -39,6 +42,9 @@
     </Filter>
     <Filter Include="Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete">
       <UniqueIdentifier>{80E222E4-6CB7-6A97-9566-AA93819A78AE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven">
+      <UniqueIdentifier>{0351164B-EF3C-AEBA-58B3-6D0D44BE4EEB}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sunrise\Sunrise\graphics\vulkan\renderer">
       <UniqueIdentifier>{8C861C93-7803-10D6-A180-10EA8D5CAC69}</UniqueIdentifier>
@@ -103,6 +109,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\debuging\Instrumentor.h">
       <Filter>Sunrise\Sunrise\debuging</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h">
+      <Filter>Sunrise\Sunrise\debuging</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.h">
       <Filter>Sunrise\Sunrise\fileFormats\binary</Filter>
     </ClInclude>
@@ -111,6 +120,18 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileManager.h">
       <Filter>Sunrise\Sunrise\fileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
@@ -160,6 +181,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClInclude>
@@ -167,6 +191,9 @@
       <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.h">
@@ -242,13 +269,7 @@
       <Filter>Sunrise\Sunrise\world\terrain</Filter>
     </ClInclude>
     <ClInclude Include="src\srpch.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Descriptors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -266,6 +287,9 @@
     <ClCompile Include="src\Sunrise\Sunrise\core\Window.cpp">
       <Filter>Sunrise\Sunrise\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp">
+      <Filter>Sunrise\Sunrise\debuging</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.cpp">
       <Filter>Sunrise\Sunrise\fileFormats\binary</Filter>
     </ClCompile>
@@ -274,6 +298,18 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileManager.cpp">
       <Filter>Sunrise\Sunrise\fileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
@@ -320,6 +356,9 @@
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClCompile>
@@ -327,6 +366,9 @@
       <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.cpp">
@@ -402,12 +444,6 @@
       <Filter>Sunrise\Sunrise\world\terrain</Filter>
     </ClCompile>
     <ClCompile Include="src\srpch.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Descriptors.cpp" />
   </ItemGroup>
 </Project>

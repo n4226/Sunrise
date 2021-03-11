@@ -130,6 +130,7 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
+        SR_CORE_INFO("Shutdown");
 	}
 
 	void Application::loadScene(Scene* scene, void* animationProperties)
@@ -420,6 +421,7 @@ namespace sunrise {
     {
     }
 
+    
     const char* NO_APPLICATION::getName()
     {
         return nullptr;

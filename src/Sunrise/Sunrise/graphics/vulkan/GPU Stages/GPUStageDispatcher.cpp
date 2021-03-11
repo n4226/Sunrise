@@ -40,7 +40,7 @@ namespace sunrise::gfx {
 
 	void GPUStageDispatcher::unregisterAllStages()
 	{
-		individualEncodeDependencies = {};
+		individualRunDependencies = {};
 	}
 
 }
