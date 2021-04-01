@@ -102,6 +102,7 @@ namespace sunrise::gfx {
 
         // programmable stages 
 
+        SR_CORE_TRACE("going to load shader files");
         auto vertShaderCode = readFile("shaders/terrain.vert.spv");
         auto fragShaderCode = readFile("shaders/terrain.frag.spv");
 

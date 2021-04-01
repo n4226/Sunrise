@@ -14,7 +14,8 @@ project "Sunrise"
 	files {
 		"src/**.h",
 		"src/**.cpp",
-		
+		"src/**.vert",
+		"src/**.frag"
 	}
 
 	libdirs {
@@ -27,7 +28,8 @@ project "Sunrise"
 	}
 
 	links {
-		"mango",
+		--TODO add back mango
+		--"mango",
 		"vulkan-1",
 		"marl",
 	}

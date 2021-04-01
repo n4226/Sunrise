@@ -5,7 +5,7 @@
 namespace sunrise::gfx {
 
 
-    ComputePipeline::ComputePipeline(vk::Device device, std::vector<vk::DescriptorSetLayout>& descriptorSetLayouts, const std::string& shaderFilePath)
+    ComputePipeline::ComputePipeline(vk::Device device, std::vector<vk::DescriptorSetLayout>&& descriptorSetLayouts, const std::string& shaderFilePath)
     {
 
         VkPipelineShaderStageCreateInfo shaderStage =

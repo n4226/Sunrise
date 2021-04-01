@@ -28,6 +28,9 @@
     <Filter Include="Sunrise\Sunrise\graphics">
       <UniqueIdentifier>{2625D1FC-124A-207D-3B95-050D27191F9B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sunrise\Sunrise\graphics\shaders">
+      <UniqueIdentifier>{1FA8CA72-0BF9-B5B4-345D-A476200D491E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sunrise\Sunrise\graphics\vulkan">
       <UniqueIdentifier>{0640EF1A-7223-FE5A-7B26-2C97E788C4AB}</UniqueIdentifier>
     </Filter>
@@ -133,6 +136,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
     </ClInclude>
@@ -143,6 +149,9 @@
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.h">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Descriptors.h">
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.h">
@@ -269,7 +278,6 @@
       <Filter>Sunrise\Sunrise\world\terrain</Filter>
     </ClInclude>
     <ClInclude Include="src\srpch.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Descriptors.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -311,6 +319,9 @@
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan</Filter>
     </ClCompile>
@@ -318,6 +329,9 @@
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.cpp">
+      <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Descriptors.cpp">
       <Filter>Sunrise\Sunrise\graphics\vulkan\generalAbstractions</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\GPUSelector.cpp">
@@ -444,6 +458,25 @@
       <Filter>Sunrise\Sunrise\world\terrain</Filter>
     </ClCompile>
     <ClCompile Include="src\srpch.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Descriptors.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Sunrise\Sunrise\graphics\shaders\GBuffer.frag">
+      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
+    </None>
+    <None Include="src\Sunrise\Sunrise\graphics\shaders\GBuffer.vert">
+      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
+    </None>
+    <None Include="src\Sunrise\Sunrise\graphics\shaders\terrain.frag">
+      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
+    </None>
+    <None Include="src\Sunrise\Sunrise\graphics\shaders\terrain.vert">
+      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
+    </None>
+    <None Include="src\Sunrise\Sunrise\graphics\shaders\triangle.frag">
+      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
+    </None>
+    <None Include="src\Sunrise\Sunrise\graphics\shaders\triangle.vert">
+      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

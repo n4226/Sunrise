@@ -5,6 +5,7 @@
 #include "Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Buffer.h"
 #include "Sunrise/Sunrise/graphics/vulkan/resources/MeshBuffers.h"
 #include "Sunrise/Sunrise/graphics/vulkan/renderPipelines/GraphicsPipeline.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderPipelines/ComputePipeline.h"
 
 namespace sunrise {
 
@@ -12,7 +13,7 @@ namespace sunrise {
 
 	namespace gfx {
 
-		class SUNRISE_API GPUGenCommandsPipeline {
+		class SUNRISE_API GPUGenCommandsPipeline: ComputePipeline {
 			public:
 				GPUGenCommandsPipeline(Application& app, vk::Device device, GraphicsPipeline& terrainPipeline);
 

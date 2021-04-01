@@ -10,7 +10,7 @@ namespace sunrise::gfx {
 	{
 
 	public:
-		ComputePipeline(vk::Device device, std::vector<vk::DescriptorSetLayout>& descriptorSetLayouts, const std::string& shaderFilePath);
+		ComputePipeline(vk::Device device, std::vector<vk::DescriptorSetLayout>&& descriptorSetLayouts, const std::string& shaderFilePath);
 
 
 		//std::vector<vk::DescriptorSetLayout> descriptorSetLayouts;

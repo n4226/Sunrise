@@ -14,8 +14,12 @@
 namespace sunrise::gfx {
 
 	GPUGenCommandsPipeline::GPUGenCommandsPipeline(Application& app, vk::Device device, GraphicsPipeline& terrainPipeline)
-		: app(app), terrainPipeline(terrainPipeline)
+		: app(app), terrainPipeline(terrainPipeline),
+		ComputePipeline::ComputePipeline(device, { DescriptorSetLayout::Create({ {} }, device) }, "shaders/gpuGenCommands.comp.spv")
 	{
+		//std::vector<vk::DescriptorSetLayout> layouts = ;
+
+
 		vk::DynamicLoader dl;
 
 		// This dispatch class will fetch function pointers for the passed device if possible, else for the passed instance
@@ -26,6 +30,8 @@ namespace sunrise::gfx {
 		pfn_vkCreateIndirectCommandsLayoutNV = (PFN_vkCreateIndirectCommandsLayoutNV)dldid.vkGetDeviceProcAddr(device, "vkCreateIndirectCommandsLayoutNV");
 		pfn_vkGetGeneratedCommandsMemoryRequirementsNV = (PFN_vkGetGeneratedCommandsMemoryRequirementsNV)dldid.vkGetDeviceProcAddr(device, "vkGetGeneratedCommandsMemoryRequirementsNV");
 		
+		
+
 		setup();
 	}
 

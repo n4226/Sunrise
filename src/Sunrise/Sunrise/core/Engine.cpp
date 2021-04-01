@@ -18,6 +18,7 @@ namespace sunrise {
 	}
 	void Engine::startup()
 	{
+		auto terminate = false;
 		Instrumentor::Get().BeginSession("Launch", "instruments_Launch.profile");
 		{
 			PROFILE_FUNCTION;
@@ -39,13 +40,15 @@ namespace sunrise {
 			}
 			catch (const std::exception& e) {
 				SR_CORE_CRITICAL("Terminating from unhandled runtime exeption upon startup: {}", e.what());
-				throw e;
+				//throw e;
+				terminate = true;
 			}
 
 		}
 		Instrumentor::Get().EndSession();
 
-		run();
+		if (!terminate)
+			run();
 	}
 	void Engine::run()
 	{

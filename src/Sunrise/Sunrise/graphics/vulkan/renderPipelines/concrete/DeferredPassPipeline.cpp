@@ -89,6 +89,7 @@ namespace sunrise::gfx {
 
         // programmable stages 
 
+        SR_CORE_INFO("going to load shader files");
         auto vertShaderCode = readFile("shaders/GBuffer.vert.spv");
         auto fragShaderCode = readFile("shaders/GBuffer.frag.spv");
 

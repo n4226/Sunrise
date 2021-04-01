@@ -68,7 +68,11 @@ namespace sunrise::gfx {
 		/// <returns></returns>
 		static std::vector<DescriptorSetLayoutBinding> createWholeSet(
 			std::vector<shell>&& bindings
-		);
+		) {
+			//TODO: 
+			//std::vector< DescriptorSetLayoutBinding> result = {bindings.size()};
+			return {};
+		}
 
 		~DescriptorSetLayoutBinding();
 
@@ -88,7 +92,46 @@ namespace sunrise::gfx {
 			std::vector<DescriptorSetLayoutBinding>&& setLayoutBindings;
 		};
 
-		static vk::DescriptorSetLayout Create(CreateOptions options, vk::Device device);
+		static vk::DescriptorSetLayout Create(CreateOptions options, vk::Device device) {
+			auto bindings = std::vector<VkDescriptorSetLayoutBinding>(options.setLayoutBindings.size());
+			auto bindingFlags = std::vector<VkDescriptorBindingFlags>(options.setLayoutBindings.size());
+			VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo;
+
+			bool needsFlags = false;
+
+			for (size_t i = 0; i < options.setLayoutBindings.size(); i++)
+			{
+				auto& binding = options.setLayoutBindings[i];
+				bindings[i] = binding.vkItem;
+				if (binding.flags != nullptr) {
+					needsFlags = true;
+					bindingFlags[i] = *binding.flags;
+				}
+				else if (needsFlags)
+					bindingFlags[i] = {};
+			}
+
+			VkDescriptorSetLayoutCreateInfo layoutInfo{};
+			layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+			layoutInfo.bindingCount = bindings.size();
+			layoutInfo.pBindings = bindings.data();
+
+			if (needsFlags) {
+				bindingFlagsInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
+				bindingFlagsInfo.pNext = nullptr;
+				bindingFlagsInfo.bindingCount = bindingFlags.size();
+				bindingFlagsInfo.pBindingFlags = bindingFlags.data();
+
+				layoutInfo.pNext = &bindingFlagsInfo;
+			}
+			else {
+				layoutInfo.pNext = nullptr;
+			}
+
+			// create layout
+			return device.createDescriptorSetLayout(layoutInfo);
+		}
+
 
 		//vk::DescriptorSetLayout vkItem;
 	};
