@@ -138,7 +138,7 @@ namespace sunrise {
 
 		void createSemaphores();
 
-
+		GLFWmonitor* getMonitorFromNativeName(std::string& const name);
 	};
 
 }

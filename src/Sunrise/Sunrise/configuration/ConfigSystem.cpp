@@ -2,8 +2,13 @@
 #include "ConfigSystem.h"
 #include "../fileSystem/FileManager.h"
 
-namespace sunrise {
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+
+namespace sunrise {
+    
     using namespace nlohmann;
 
     //const std::string configDir = R"(./config/)";
@@ -62,10 +67,63 @@ namespace sunrise {
         config->windows.resize(1);
 
         config->windows[0].mode = ConfigSystem::Config::Window::WindowMode::windowed;
-        config->windows[0].monitor = 0;
+        config->windows[0].monitor = "";
         config->windows[0].size = glm::ivec2(1920, 1080);
 
 
+
+    }
+
+    void ConfigSystem::writeHelpDoc()
+    {
+        auto filePath = std::string("config/") + "readme.md";
+        
+        if (FileManager::exists(filePath))
+            return;
+
+        SR_CORE_INFO("Writting config help file");
+
+
+        constexpr auto readmeConstContents = 
+R"V0G0N(
+# Surnise Config Documentation
+
+## Intro
+
+The sunrise engine uses user modifiable config files with several file extensions which indicate what the file is ment to do and if it is ment to be modified
+
+## Graphics Settings
+
+## Window Settings
+```json
+    {
+        "HELLO" : "5"
+    }
+```
+### Your Monitors
+
+**NOTE**: To update this list delete this file and it will be recreated with the new monitor infomation
+
+---
+)V0G0N";
+
+        std::string monitorNames = "";
+
+        int monitorsCount = 0;
+        auto monitors = glfwGetMonitors(&monitorsCount);
+
+        for (size_t i = 0; i < monitorsCount; i++)
+        {
+            std::string line;
+
+            line += "- ";
+            line += glfwGetWin32Monitor(monitors[i]);
+            line += "\n";
+
+            monitorNames += line;
+        }
+
+        FileManager::saveStringToFile(readmeConstContents + monitorNames, filePath);
 
     }
 

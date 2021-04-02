@@ -50,8 +50,6 @@ namespace sunrise {
             scheduler->bind();
         }
 
-        SR_CORE_TRACE("Initializing Configuration system");
-        configSystem.readFromDisk();
         {
             SR_CORE_TRACE("Initializing GLFW");
 
@@ -59,11 +57,16 @@ namespace sunrise {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
         }
+   
         SR_CORE_TRACE("Initializing VK Instance");
         createInstance();
-
+    
+        SR_CORE_TRACE("Initializing Configuration system");
+        configSystem.readFromDisk();
+        configSystem.writeHelpDoc();
 
         auto cfgWindows = configSystem.global().windows;
+
 
         SR_CORE_INFO("Creating {} windows",cfgWindows.size());
 
@@ -148,12 +151,14 @@ namespace sunrise {
             runLoopIteration();
         }
 
+        SR_CORE_INFO("Shutdown Requested");
+
         windows[0]->device.waitIdle();
     }
 
     bool Application::shouldLoop() {
-        PROFILE_FUNCTION
-            return !glfwWindowShouldClose(windows[0]->window);
+        PROFILE_FUNCTION;
+        return !glfwWindowShouldClose(windows[0]->window);
     }
 
     void Application::runLoopIteration()

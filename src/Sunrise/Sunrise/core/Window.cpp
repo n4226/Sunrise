@@ -9,6 +9,9 @@
 #include "../graphics/vulkan/renderPipelines/concrete/gpuDriven/GPUGenCommandsPipeline.h"
 
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+
 namespace sunrise {
 
     using namespace gfx;
@@ -300,6 +303,22 @@ namespace sunrise {
         }
     }
 
+    GLFWmonitor* Window::getMonitorFromNativeName(std::string& const name)
+    {
+        int monitorsCount = 0;
+        auto monitors = glfwGetMonitors(&monitorsCount);
+
+        for (size_t i = 0; i < monitorsCount; i++)
+        {
+            //SR_CORE_INFO("comparing monitor {} to {}", glfwGetWin32Monitor(monitors[i]), name.c_str());
+            if (strcmp(glfwGetWin32Monitor(monitors[i]), name.c_str()) == 0) {
+                return monitors[i];
+            }
+        }
+        SR_CORE_WARN("Could not find requested monitor ({}) for window {} so chosing primary monitor", name, globalIndex);
+        return glfwGetPrimaryMonitor();
+    }
+
     void Window::createSurface()
     {
         PROFILE_FUNCTION
@@ -323,7 +342,10 @@ namespace sunrise {
 
         auto windowConfig = configSystem.global().windows[globalIndex];
 
-        auto monitor = glfwGetPrimaryMonitor();
+        auto monitor = getMonitorFromNativeName(windowConfig.monitor);
+        SR_CORE_INFO("creating window {} on monitor {}", globalIndex, glfwGetWin32Monitor(monitor));
+
+
 
         makeWindwWithMode(windowConfig, monitor);
 
@@ -335,6 +357,11 @@ namespace sunrise {
     void Window::makeWindwWithMode(ConfigSystem::Config::Window& winConfig, GLFWmonitor* monitor)
     {
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+        // see this for why this is turned off https://github.com/glfw/glfw/issues/447
+        // this is dissabeld for to stop full screen (posibly boarderless) windows in a multimonitor enviroment from minimising when the mouse is clicked on another monitor
+        glfwWindowHint(GLFW_AUTO_ICONIFY, GL_FALSE);
+
 
         if (winConfig.size.x == 0 || winConfig.mode != ConfigSystem::Config::Window::WindowMode::windowed) {
             winConfig.size.x = mode->width;

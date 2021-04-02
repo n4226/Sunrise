@@ -19,7 +19,7 @@ namespace sunrise {
 					windowed, FullscreenBorderless, Fullscreen
 				};
 
-				int monitor;
+				std::string monitor;
 				WindowMode mode;
 				glm::ivec2 size;
 			};
@@ -39,6 +39,8 @@ namespace sunrise {
 		void readFromDisk();
 		void writeToDisk();
 		void resetToDefault();
+
+		void writeHelpDoc();
 
 	private:
 		Config* config;

@@ -14,8 +14,6 @@ project "Sunrise"
 	files {
 		"src/**.h",
 		"src/**.cpp",
-		"src/**.vert",
-		"src/**.frag"
 	}
 
 	libdirs {

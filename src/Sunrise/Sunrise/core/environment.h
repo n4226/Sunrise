@@ -60,8 +60,7 @@
 #define RenderModeCPU2 1
 #define RenderModeGPU  2 
 
-#define RenderMode RenderModeGPU
-
+#define RenderMode RenderModeCPU2
 
 
 
