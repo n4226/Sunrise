@@ -160,6 +160,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Sunrise.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h" />
@@ -268,6 +269,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\FrustrumMath.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\Math.cpp" />
@@ -292,14 +294,6 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="src\srpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\GBuffer.frag" />
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\GBuffer.vert" />
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\terrain.frag" />
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\terrain.vert" />
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\triangle.frag" />
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\triangle.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

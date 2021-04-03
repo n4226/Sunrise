@@ -10,17 +10,17 @@ namespace sunrise::gfx {
 	public:
 
 		RenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat);
-		~RenderPassManager();
+		virtual ~RenderPassManager();
 
 
 		VkRenderPass renderPass;
 
-		static const size_t subPassCount = 2;
+		virtual size_t subPassCount();
 		static const size_t gbufferAttachmentCount = 3;
 
-	private:
+		virtual void createMainRenderPass();
 
-		void createMainRenderPass();
+	protected:
 
 		//GBufferFormats
 

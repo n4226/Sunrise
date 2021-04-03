@@ -5,6 +5,7 @@
 #include "../configuration/ConfigSystem.h"
 #include "Window.h"
 #include "../graphics/vulkan/renderer/Renderer.h"
+#include "../graphics/vulkan/renderer/SceneRenderCoordinator.h"
 
 namespace sunrise {
 
@@ -116,7 +117,9 @@ namespace sunrise {
 
 
         SR_CORE_TRACE("Initializing Scene");
-        loadedScenes[0]->load();
+
+        Scene* firstScene = loadedScenes[0];
+        loadScene(firstScene,nullptr);
 
         SR_CORE_INFO("Initialization Complete!");
 	}
@@ -138,6 +141,9 @@ namespace sunrise {
 
 	void Application::loadScene(Scene* scene, void* animationProperties)
 	{
+        SR_CORE_INFO("Loading scene at addr: {}", reinterpret_cast<void*>(scene));
+        scene->load();
+        scene->coordinator->createPasses();
 
 	}
 

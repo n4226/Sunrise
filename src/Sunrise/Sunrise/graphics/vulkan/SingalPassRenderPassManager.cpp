@@ -1,40 +1,40 @@
 #include "srpch.h"
-#include "RenderPassManager.h"
+#include "SingalPassRenderPassManager.h"
 
 namespace sunrise::gfx {
 
-	RenderPassManager::RenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat)
+	/*SingalPassRenderPassManager::SingalPassRenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat)
 		: albedoFormat(albedoFormat), normalFormat(normalFormat), aoFormat(aoFormat),
 		swapChainImageFormat(swapChainImageFormat), depthBufferFormat(depthBufferFormat)
 	{
 		this->swapChainImageFormat = swapChainImageFormat;
 		this->device = device;
-		// Must be manually called by owner of the object
-		//createMainRenderPass();
+		createMainRenderPass();
+	}*/
+
+	SingalPassRenderPassManager::SingalPassRenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat)
+		: RenderPassManager(device,albedoFormat,normalFormat,aoFormat,swapChainImageFormat,depthBufferFormat)
+	{
 	}
 
-	RenderPassManager::~RenderPassManager()
+	SingalPassRenderPassManager::~SingalPassRenderPassManager()
 	{
 		device.destroyRenderPass(renderPass);
 	}
 
-	size_t RenderPassManager::subPassCount()
+	size_t SingalPassRenderPassManager::subPassCount()
 	{
-		return 2;
+		return 1;
 	}
 
-	void RenderPassManager::createMainRenderPass()
+	void SingalPassRenderPassManager::createMainRenderPass()
 	{
 
 		/* Sub Passes
 
-			index compute pre pass = compute pre pass - if gpu
+			just 1
 
-			index gbuffer = gbuffer pas - 1 if gpu-driven else 0
-
-			lihting pass
-
-			post passes - indicies + lightingh pass indicy
+			
 
 		*/
 
@@ -43,6 +43,8 @@ namespace sunrise::gfx {
 
 
 		/* Attachment indicies
+
+			TODO: Add ability to custimize the attatchments used in a scene render coordinator in a nice declarative way
 
 			Mark: for now using multiple subpasses but in the futuree might have to change this since they do not allow for the modification of neighboring pixels
 
@@ -195,58 +197,58 @@ namespace sunrise::gfx {
 
 		}
 
-		//Deferred
+		//Deferred -- left over from original render pass manager
 
-		VkSubpassDescription deferred{};
-		{
-			// this passes output tex
-			VkAttachmentReference colorAttachmentRef{};
-			colorAttachmentRef.attachment = 4;
-			// vulkan will transfer image to this layou at start of subpass
-			colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+		//VkSubpassDescription deferred{};
+		//{
+		//	// this passes output tex
+		//	VkAttachmentReference colorAttachmentRef{};
+		//	colorAttachmentRef.attachment = 4;
+		//	// vulkan will transfer image to this layou at start of subpass
+		//	colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-			// read only input textures
-			VkAttachmentReference gbuffer_albdo_metallic_AttachmentRef{};
-			gbuffer_albdo_metallic_AttachmentRef.attachment = 0;
-			// vulkan will transfer image to this layout at start of subpass
-			gbuffer_albdo_metallic_AttachmentRef.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		//	// read only input textures
+		//	VkAttachmentReference gbuffer_albdo_metallic_AttachmentRef{};
+		//	gbuffer_albdo_metallic_AttachmentRef.attachment = 0;
+		//	// vulkan will transfer image to this layout at start of subpass
+		//	gbuffer_albdo_metallic_AttachmentRef.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-			VkAttachmentReference gbuffer_normal_roughness_AttachmentRef{};
-			gbuffer_normal_roughness_AttachmentRef.attachment = 1;
-			// vulkan will transfer image to this layout at start of subpass
-			gbuffer_normal_roughness_AttachmentRef.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		//	VkAttachmentReference gbuffer_normal_roughness_AttachmentRef{};
+		//	gbuffer_normal_roughness_AttachmentRef.attachment = 1;
+		//	// vulkan will transfer image to this layout at start of subpass
+		//	gbuffer_normal_roughness_AttachmentRef.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-			VkAttachmentReference gbuffer_ao_AttachmentRef{};
-			gbuffer_ao_AttachmentRef.attachment = 2;
-			// vulkan will transfer image to this layout at start of subpass
-			gbuffer_ao_AttachmentRef.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		//	VkAttachmentReference gbuffer_ao_AttachmentRef{};
+		//	gbuffer_ao_AttachmentRef.attachment = 2;
+		//	// vulkan will transfer image to this layout at start of subpass
+		//	gbuffer_ao_AttachmentRef.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-			VkAttachmentReference gbuffer_depth_AttachmentRef{};
-			gbuffer_depth_AttachmentRef.attachment = 3;
-			// vulkan will transfer image to this layout at start of subpass
-			gbuffer_depth_AttachmentRef.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		//	VkAttachmentReference gbuffer_depth_AttachmentRef{};
+		//	gbuffer_depth_AttachmentRef.attachment = 3;
+		//	// vulkan will transfer image to this layout at start of subpass
+		//	gbuffer_depth_AttachmentRef.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-			std::array<VkAttachmentReference, 4> inputAttachments = {
-				gbuffer_albdo_metallic_AttachmentRef, gbuffer_normal_roughness_AttachmentRef, gbuffer_ao_AttachmentRef, gbuffer_depth_AttachmentRef
-			};
-
-
-			// flags are whre can enable per view attributes for multi view one gpu rendereing in the future
-			deferred.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-
-			deferred.inputAttachmentCount = inputAttachments.size();
-			deferred.pInputAttachments = inputAttachments.data();
-
-			deferred.colorAttachmentCount = 1;
-			deferred.pColorAttachments = &colorAttachmentRef;
-			deferred.pDepthStencilAttachment = nullptr;
-
-		}
+		//	std::array<VkAttachmentReference, 4> inputAttachments = {
+		//		gbuffer_albdo_metallic_AttachmentRef, gbuffer_normal_roughness_AttachmentRef, gbuffer_ao_AttachmentRef, gbuffer_depth_AttachmentRef
+		//	};
 
 
+		//	// flags are whre can enable per view attributes for multi view one gpu rendereing in the future
+		//	deferred.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 
-		std::array<VkSubpassDescription, 2> subpasses = {
-			gbuffer, deferred
+		//	deferred.inputAttachmentCount = inputAttachments.size();
+		//	deferred.pInputAttachments = inputAttachments.data();
+
+		//	deferred.colorAttachmentCount = 1;
+		//	deferred.pColorAttachments = &colorAttachmentRef;
+		//	deferred.pDepthStencilAttachment = nullptr;
+
+		//}
+
+
+
+		std::array<VkSubpassDescription, 1> subpasses = {
+			gbuffer//, deferred
 		};
 
 #pragma endregion
@@ -256,6 +258,7 @@ namespace sunrise::gfx {
 		// dependancies for the main (0 th) pass
 
 
+		// this is for ? (posibly image layout transiton)
 		VkSubpassDependency externalGBufferDependency{};
 		externalGBufferDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
 		externalGBufferDependency.dstSubpass = 0;
@@ -282,8 +285,8 @@ namespace sunrise::gfx {
 
 
 
-		std::array<VkSubpassDependency, 2> dependencies = {
-			externalGBufferDependency, DeferredDependencyOnGBuffer
+		std::array<VkSubpassDependency, 1> dependencies = {
+			externalGBufferDependency//, DeferredDependencyOnGBuffer
 		};
 
 

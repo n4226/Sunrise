@@ -203,7 +203,7 @@ namespace sunrise::gfx {
         colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
         colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
         colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;*/
-
+            
 
         VkPipelineColorBlendStateCreateInfo colorBlending{};
         colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
@@ -259,7 +259,7 @@ namespace sunrise::gfx {
         pipelineInfo.layout = pipelineLayout;
 
         pipelineInfo.renderPass = renderPassManager.renderPass;
-        pipelineInfo.subpass = 1;
+        pipelineInfo.subpass = glm::min(static_cast<size_t>(1),renderPassManager.subPassCount() - 1);
 
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
         pipelineInfo.basePipelineIndex = -1; // Optional

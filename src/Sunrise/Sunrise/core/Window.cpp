@@ -7,7 +7,8 @@
 #include "../graphics/vulkan/renderPipelines/concrete/TerrainPipeline.h"
 #include "../graphics/vulkan/renderPipelines/concrete/DeferredPassPipeline.h"
 #include "../graphics/vulkan/renderPipelines/concrete/gpuDriven/GPUGenCommandsPipeline.h"
-
+#include "../graphics/vulkan/SingalPassRenderPassManager.h"
+#include "../world/WorldScene.h"
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
@@ -41,7 +42,13 @@ namespace sunrise {
 
         // make graphics pipeline 
 
-        renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+
+        WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
+        if (world != nullptr)
+            renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+        else
+            renderPassManager = new SingalPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+        renderPassManager->createMainRenderPass();
         pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
         pipelineCreator->createPipeline();
@@ -77,7 +84,13 @@ namespace sunrise {
         createSwapchain();
         createSwapchainImageViews();
 
-        renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+        WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
+        if (world != nullptr)
+            renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+        else
+            renderPassManager = new SingalPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+        renderPassManager->createMainRenderPass();
+
         pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
         pipelineCreator->createPipeline();

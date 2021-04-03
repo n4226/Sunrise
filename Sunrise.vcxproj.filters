@@ -28,9 +28,6 @@
     <Filter Include="Sunrise\Sunrise\graphics">
       <UniqueIdentifier>{2625D1FC-124A-207D-3B95-050D27191F9B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sunrise\Sunrise\graphics\shaders">
-      <UniqueIdentifier>{1FA8CA72-0BF9-B5B4-345D-A476200D491E}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sunrise\Sunrise\graphics\vulkan">
       <UniqueIdentifier>{0640EF1A-7223-FE5A-7B26-2C97E788C4AB}</UniqueIdentifier>
     </Filter>
@@ -278,6 +275,7 @@
       <Filter>Sunrise\Sunrise\world\terrain</Filter>
     </ClInclude>
     <ClInclude Include="src\srpch.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -458,25 +456,6 @@
       <Filter>Sunrise\Sunrise\world\terrain</Filter>
     </ClCompile>
     <ClCompile Include="src\srpch.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\GBuffer.frag">
-      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
-    </None>
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\GBuffer.vert">
-      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
-    </None>
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\terrain.frag">
-      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
-    </None>
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\terrain.vert">
-      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
-    </None>
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\triangle.frag">
-      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
-    </None>
-    <None Include="src\Sunrise\Sunrise\graphics\shaders\triangle.vert">
-      <Filter>Sunrise\Sunrise\graphics\shaders</Filter>
-    </None>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.cpp" />
   </ItemGroup>
 </Project>
