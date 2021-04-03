@@ -11,9 +11,16 @@ project "Sunrise"
 	pchheader "srpch.h"
 	pchsource "src/srpch.cpp"
 
+	imguiFiles = {
+		"vendor/imgui/*.cpp","vendor/imgui/backends/imgui_impl_vulkan.cpp", "vendor/imgui/backends/imgui_impl_vulkan.cpp"
+	}
+
 	files {
 		"src/**.h",
 		"src/**.cpp",
+		"vendor/imgui/*.cpp",
+		"vendor/imgui/backends/imgui_impl_vulkan.cpp",
+		"vendor/imgui/backends/imgui_impl_glfw.cpp"
 	}
 
 	libdirs {
@@ -47,6 +54,9 @@ project "Sunrise"
 		"vendor/rapidjson/include",
 		"vendor/libguarded/src",
 		"vendor/nlohmann/include",
+		"vendor/date/include",
+		"vendor/entt/single_include",
+		"vendor/imgui/",
 	}	
 
 	postbuildcommands {
@@ -81,13 +91,14 @@ project "Sunrise"
 
 	filter "configurations:Release"
 		defines "SR_RELEASE"
+		--runtime "Debug"
 		runtime "Release"
-		optimize "on"
+		optimize "on"	
 
 	filter "configurations:Dist"
 		defines "SR_DIST"
 		runtime "Release"
 		optimize "on"
 
-	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp' }
+	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp or files:vendor/imgui/**.cpp' }
 		flags {"NoPCH"}

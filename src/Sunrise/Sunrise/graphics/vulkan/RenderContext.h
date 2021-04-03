@@ -46,7 +46,7 @@ namespace sunrise {
 
 			virtual void createInstance() = 0;
 			 
-			virtual void createRenderer(int deviceIndex) = 0;
+			virtual bool createRenderer(int deviceIndex) = 0;
 			virtual int createDevice(int window) = 0;
 			virtual void createAllocator(int deviceIndex) = 0;
 			 

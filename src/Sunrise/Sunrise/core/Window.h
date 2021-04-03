@@ -138,6 +138,10 @@ namespace sunrise {
 
 		void createSemaphores();
 
+		void Window::SetupImgui();
+
+		VkDescriptorPool imguiDescriptorQueue;
+
 		GLFWmonitor* getMonitorFromNativeName(std::string& const name);
 	};
 

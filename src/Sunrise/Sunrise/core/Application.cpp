@@ -90,13 +90,15 @@ namespace sunrise {
 
             auto deviceIndex = createDevice(windows.size() - 1);
 
-            createRenderer(deviceIndex);
+            auto existed = createRenderer(deviceIndex);
 
             window->device = devices[deviceIndex];
             window->renderer = renderers[deviceIndex];
             window->finishInit();
 
-            if (deviceIndex == devices.size() - 1 && deviceIndex != 0) {
+            // add window to existing render 
+            //TODOL this will need to be updated for multi gpu
+            if (existed) {
                 window->indexInRenderer = renderers[deviceIndex]->windows.size();
                 renderers[deviceIndex]->windows.push_back(window);
 
@@ -164,7 +166,12 @@ namespace sunrise {
 
     bool Application::shouldLoop() {
         PROFILE_FUNCTION;
-        return !glfwWindowShouldClose(windows[0]->window);
+        for (size_t i = 0; i < windows.size(); i++)
+        {
+            if (glfwWindowShouldClose(windows[i]->window))
+                return false;
+        }
+        return true;
     }
 
     void Application::runLoopIteration()
@@ -261,10 +268,13 @@ namespace sunrise {
         allocators.push_back(allocator);
     }
 
-    void Application::createRenderer(int deviceIndex)
+    bool Application::createRenderer(int deviceIndex)
     {
+        if (deviceIndex < renderers.size()) {
+            SR_CORE_TRACE("not creating Renderer for device {} becuase it already eists", deviceIndex);
+            return true;
+        }
         SR_CORE_TRACE("Creating Renderer for device {}", deviceIndex);
-        if (deviceIndex < renderers.size()) return;
         auto index = devices.size() - 1;
 
         // TODO: fix this because all windows are being added to all devices
@@ -274,6 +284,7 @@ namespace sunrise {
 
         renderers.push_back(renderer);
 
+        return false;
     }
 
     int Application::createDevice(int window)

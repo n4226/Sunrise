@@ -1,6 +1,15 @@
 #include "srpch.h"
 #include "FileManager.h"
 
+//for getting working dir
+#ifdef SR_PLATFORM_WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
+//
 
 namespace sunrise {
 
@@ -37,7 +46,15 @@ namespace sunrise {
 		return getBaseDir() + "config/";
 	}
 
-	bool FileManager::exists(std::string& const path)
+	std::string FileManager::wokringDir()
+	{
+		char buff[FILENAME_MAX]; //create string buffer to hold path
+		GetCurrentDir(buff, FILENAME_MAX);
+		std::string current_working_dir(buff);
+		return current_working_dir;
+	}
+
+	bool FileManager::exists(const std::string& path)
 	{
 		return std::filesystem::exists(path);
 	}

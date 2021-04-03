@@ -32,7 +32,7 @@ namespace sunrise {
 		Application& app;
 
 		gfx::SceneRenderCoordinator* coordinator;
-	protected:
+	protected:	
 		bool inControlOfCoordinatorLifecycle = false;
 	};
 

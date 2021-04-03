@@ -13,6 +13,9 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
+#include "backends/imgui_impl_vulkan.h"
+#include "backends/imgui_impl_glfw.h"
+
 namespace sunrise {
 
     using namespace gfx;
@@ -65,6 +68,75 @@ namespace sunrise {
         createFramebuffers();
 
         createSemaphores();
+        SetupImgui();
+
+    }
+
+    void Window::SetupImgui()
+    {
+
+        // Setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+        // Setup Dear ImGui style
+        ImGui::StyleColorsDark();
+        //ImGui::StyleColorsClassic();
+        
+
+
+        // Create imgui Descriptor Pool
+        {
+            VkDescriptorPoolSize pool_sizes[] =
+            {
+                { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+            };
+            VkDescriptorPoolCreateInfo pool_info = {};
+            pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+            pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+            pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
+            pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
+            pool_info.pPoolSizes = pool_sizes;
+            auto err = vkCreateDescriptorPool(device, &pool_info, nullptr, &imguiDescriptorQueue);
+            //(err);
+        }
+
+        // Setup Platform/Renderer bindings
+        ImGui_ImplGlfw_InitForVulkan(window, true);
+        ImGui_ImplVulkan_InitInfo init_info = {};
+        init_info.Instance = app.instance;
+        init_info.PhysicalDevice = renderer->physicalDevice;
+        init_info.Device = renderer->device;
+        init_info.QueueFamily = renderer->queueFamilyIndices.graphicsFamily.value();
+        init_info.Queue = renderer->deviceQueues.graphics;
+        init_info.PipelineCache = nullptr;
+        init_info.DescriptorPool = imguiDescriptorQueue;
+        init_info.Allocator = nullptr;
+        init_info.Subpass = 1;
+        //TODO set this to an actual value
+        init_info.MinImageCount = 2;
+        init_info.ImageCount = swapChainImages.size();
+        init_info.CheckVkResultFn = nullptr;
+        // for now going to try to use the standard world renderpass
+        ImGui_ImplVulkan_Init(&init_info, renderPassManager->renderPass);
+
+        io.Fonts->AddFontDefault();
+        // not sure if this is supposed to be called explicitily but error if not
+        io.Fonts->Build();
+
     }
 
     void Window::recreateSwapchain()
@@ -110,6 +182,9 @@ namespace sunrise {
 
         //TODO buffers might need to be recreated
         //createCommandBuffers();
+
+        //update IMGUI
+        ImGui_ImplVulkan_SetMinImageCount(2);
 
     }
 
@@ -369,6 +444,7 @@ namespace sunrise {
 
     void Window::makeWindwWithMode(ConfigSystem::Config::Window& winConfig, GLFWmonitor* monitor)
     {
+        auto windowName = "name";
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
         // see this for why this is turned off https://github.com/glfw/glfw/issues/447
@@ -384,7 +460,17 @@ namespace sunrise {
         switch (winConfig.mode)
         {
         case ConfigSystem::Config::Window::WindowMode::windowed:
-            window = glfwCreateWindow(winConfig.size.x, winConfig.size.y, "GPUObjectsV6", nullptr, nullptr);
+            window = glfwCreateWindow(winConfig.size.x, winConfig.size.y, windowName, nullptr, nullptr);
+
+            // position the window on the correct monitor
+
+            int monitor_xpos, monitor_ypos;
+            glfwGetMonitorPos(monitor, &monitor_xpos, &monitor_ypos);
+
+            glfwSetWindowPos(window, 
+                monitor_xpos + mode->width * winConfig.monitorLocalPostion.x - winConfig.size.x / 2,
+                monitor_ypos + mode->height * winConfig.monitorLocalPostion.y - winConfig.size.y / 2);
+
             break;
         case ConfigSystem::Config::Window::WindowMode::FullscreenBorderless:
 
@@ -394,10 +480,11 @@ namespace sunrise {
             glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
 
-            window = glfwCreateWindow(mode->width, mode->height, "GPUObjectsV6", monitor, NULL);
+            window = glfwCreateWindow(mode->width, mode->height, windowName, monitor, NULL);
 
+            break;
         case ConfigSystem::Config::Window::WindowMode::Fullscreen:
-            window = glfwCreateWindow(winConfig.size.x, winConfig.size.y, "GPUObjectsV6", monitor, nullptr);
+            window = glfwCreateWindow(winConfig.size.x, winConfig.size.y, windowName, monitor, nullptr);
             break;
         default:
             break;

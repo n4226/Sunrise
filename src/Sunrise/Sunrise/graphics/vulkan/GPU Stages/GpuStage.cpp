@@ -4,9 +4,9 @@
 namespace sunrise::gfx {
 
 	GPUStage::GPUStage(Application& app,std::string&& name)
-		: app(app),
+		: app(app)
 #if SR_LOGGING
-		name(name)
+		,name(name)
 #endif
 	{
 

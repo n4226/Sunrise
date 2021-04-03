@@ -20,7 +20,8 @@ namespace sunrise {
 		//TODO: don't think this is correct
 		const double speed = 300; // in meters / second
 
-		size_t currentSegment = 0;
+		//TODO: reset this back to 0
+		size_t currentSegment = 2;
 		double currentSegmentTime = 0;
 		double totalSegmentTime = 0;
 

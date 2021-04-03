@@ -22,7 +22,9 @@ namespace sunrise::gfx {
 	{
 		return 2;
 	}
-
+#if SR_RELEASE || SR_DIST
+#pragma optimize( "", off )
+#endif
 	void RenderPassManager::createMainRenderPass()
 	{
 
@@ -303,5 +305,8 @@ namespace sunrise::gfx {
 		renderPass = device.createRenderPass(renderPassInfo);
 
 	}
+#if SR_RELEASE || SR_DIST
+#pragma optimize( "", on ) 
+#endif
 
 }

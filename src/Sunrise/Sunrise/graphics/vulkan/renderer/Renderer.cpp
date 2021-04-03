@@ -8,6 +8,8 @@
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
 
 
+#include "backends/imgui_impl_vulkan.h"
+#include "backends/imgui_impl_glfw.h"
 
 namespace sunrise::gfx {
 
@@ -666,6 +668,17 @@ namespace sunrise::gfx {
 
 			VkDebug::endRegion(cmdBuff);
 
+
+
+			VkDebug::beginRegion(cmdBuff, "IMGUI Render", glm::vec4(0.4, 0.6, 0.3, 1));
+
+			ImGui_ImplVulkan_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+			ImGui::ShowDemoWindow();
+			ImGui::Render();
+
+			VkDebug::endRegion(cmdBuff);
 		}
 		else {
 			auto coord = app.loadedScenes[0]->coordinator;

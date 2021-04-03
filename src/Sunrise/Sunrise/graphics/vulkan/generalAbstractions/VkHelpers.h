@@ -23,6 +23,8 @@ namespace sunrise::gfx {
 
 		SUNRISE_API vk::ImageView createImageView(vk::Device device, VkImage image, ImageViewCreationOptions options);
 
+
+		// add easy gpu synch between commands and for memory here 
 	};
 
 }

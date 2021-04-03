@@ -20,7 +20,9 @@ namespace sunrise {
 		static std::string getConfigDir();
 
 
-		static bool exists(std::string& const path);
+		static std::string wokringDir();
+
+		static bool exists(const std::string& path);
 
 		/// <summary>
 		/// DO NOT USE FOR PERFORMANCE SENSATIVE TASKS

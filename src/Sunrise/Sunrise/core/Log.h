@@ -10,6 +10,12 @@
 #include <spdlog/fmt/ostr.h>
 #pragma warning(pop)
 
+/* Some spdlog errrors I have come accross
+
+	   _Check_C_return(_Mtx_lock(_Mymtx())); -- acces violation --- see this issue: https://github.com/gabime/spdlog/issues/633 
+		tried uncommenting out disable #define SPDLOG_NO_THREAD_ID which is close to what was suggested becuase exact define did not exist in file anymore
+*/
+
 namespace sunrise {
 
 	class SUNRISE_API Log

@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -106,7 +106,7 @@ IF EXIST ..\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -135,7 +135,7 @@ IF EXIST ..\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I .
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -159,8 +159,9 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.h" />
     <ClInclude Include="src\Sunrise.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h" />
@@ -180,8 +181,10 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\ImguiRenderPassManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Descriptors.h" />
@@ -221,6 +224,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\Sunrise\Sunrise\world\CameraSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.h" />
@@ -229,6 +233,8 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
@@ -243,7 +249,9 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ImguiRenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Buffer.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\Descriptors.cpp" />
@@ -269,7 +277,6 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\FrustrumMath.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\Math.cpp" />
@@ -286,6 +293,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="src\Sunrise\Sunrise\world\CameraSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.cpp" />
@@ -293,6 +301,27 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.cpp" />
     <ClCompile Include="src\srpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\backends\imgui_impl_vulkan.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

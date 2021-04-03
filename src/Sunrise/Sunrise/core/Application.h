@@ -41,7 +41,7 @@ namespace sunrise {
 
 		void createInstance() override;
 
-		void createRenderer(int deviceIndex) override;
+		bool createRenderer(int deviceIndex) override;
 		int createDevice(int window) override;
 		void createAllocator(int deviceIndex) override;
 

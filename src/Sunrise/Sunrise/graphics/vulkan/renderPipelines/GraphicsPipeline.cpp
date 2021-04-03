@@ -1,6 +1,8 @@
 #include "srpch.h"
 #include "GraphicsPipeline.h"
 
+#include "Sunrise/Sunrise/fileSystem/FileManager.h"
+
 namespace sunrise::gfx {
 
 
@@ -289,6 +291,14 @@ namespace sunrise::gfx {
 
     std::vector<char> GraphicsPipeline::readFile(const std::string& filename)
     {
+
+#if SR_ENABLE_PRECONDITION_CHECKS
+        if (!FileManager::exists(filename)) {
+            SR_CORE_ERROR("Going to open a shader file which does not exist: {}",filename);
+            SR_CORE_INFO("this might be beacuse the working directory is incorect. It currently is: {}", FileManager::wokringDir());
+        }
+#endif
+
         std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
         if (!file.is_open()) {

@@ -86,6 +86,7 @@ namespace sunrise {
 
 		auto renderer = app.renderers[0];
 
+		//TODO for cpu2 reencode commands in a sppereate thread to stop hitching
 		// if CPU mode 2 than only re encode commands for this surface's command buffer when changes occor otherwise just return the cmd buff for hte current surface
 #if RenderMode == RenderModeCPU2
 		{
@@ -165,7 +166,7 @@ namespace sunrise {
 
 		// encode draws
 		{
-
+			PROFILE_SCOPE("encode draws");
 			auto drawObjects = this->drawObjects.lock();
 			//printf("number of draws = %d \n", drawObjects->size());
 			for (auto it = drawObjects->begin(); it != drawObjects->end(); it++)

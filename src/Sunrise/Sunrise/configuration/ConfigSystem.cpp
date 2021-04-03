@@ -69,6 +69,7 @@ namespace sunrise {
         config->windows[0].mode = ConfigSystem::Config::Window::WindowMode::windowed;
         config->windows[0].monitor = "";
         config->windows[0].size = glm::ivec2(1920, 1080);
+        config->windows[0].size = glm::vec2(0.5, 0.5);
 
 
 
@@ -158,6 +159,9 @@ The sunrise engine uses user modifiable config files with several file extension
 
             jwindows[i]["size"]["x"] = windows[i].size.x;
             jwindows[i]["size"]["y"] = windows[i].size.y;
+
+            jwindows[i]["monitorLocalPostion"]["x"] = windows[i].monitorLocalPostion.x;
+            jwindows[i]["monitorLocalPostion"]["y"] = windows[i].monitorLocalPostion.y;
         }
         j["windows"] = jwindows;
 
@@ -204,6 +208,9 @@ The sunrise engine uses user modifiable config files with several file extension
 
             config->windows[i].size.x = jwins[i]["size"]["x"];
             config->windows[i].size.y = jwins[i]["size"]["y"];
+
+            config->windows[i].monitorLocalPostion.x = jwins[i]["monitorLocalPostion"]["x"];
+            config->windows[i].monitorLocalPostion.y = jwins[i]["monitorLocalPostion"]["y"];
         }
 
 

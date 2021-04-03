@@ -37,6 +37,7 @@
 #include "cs_shared_guarded.h"
 #include "cs_rcu_guarded.h"
 
+#include "../vendor/imgui/imgui.h"
 
 // stl
 #include <iostream>
