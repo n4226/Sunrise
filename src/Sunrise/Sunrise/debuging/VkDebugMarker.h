@@ -8,6 +8,7 @@ namespace sunrise {
 
 	namespace gfx {
 
+		//TODO: make this work with multi gpu
 		class VkDebug
 		{
 		public:

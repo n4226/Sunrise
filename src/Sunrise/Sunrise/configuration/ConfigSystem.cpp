@@ -68,6 +68,7 @@ namespace sunrise {
 
         config->windows[0].mode = ConfigSystem::Config::Window::WindowMode::windowed;
         config->windows[0].monitor = "";
+        config->windows[0].group = 0;
         config->windows[0].size = glm::ivec2(1920, 1080);
         config->windows[0].size = glm::vec2(0.5, 0.5);
 
@@ -139,6 +140,7 @@ The sunrise engine uses user modifiable config files with several file extension
         for (size_t i = 0; i < windows.size(); i++)
         {
             jwindows[i]["monitor"] = windows[i].monitor;
+            jwindows[i]["group"] = windows[i].group;
             switch (windows[i].mode)
             {
             case ConfigSystem::Config::Window::WindowMode::windowed:
@@ -196,6 +198,7 @@ The sunrise engine uses user modifiable config files with several file extension
         for (size_t i = 0; i < jwins.size(); i++)
         {
             config->windows[i].monitor = jwins[i]["monitor"];
+            config->windows[i].group = jwins[i]["group"];
 
             std::string windowMode = jwins[i]["mode"];
 

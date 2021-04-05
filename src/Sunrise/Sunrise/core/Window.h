@@ -20,14 +20,49 @@ namespace sunrise {
 	}
 	class Application;
 
+	/// <summary>
+	/// This class represents a window
+	/// 
+	/// can either be a physical window or a virtual window
+	/// a physical window represents an acuall window presented on a monitor for the user to see
+	/// a virtual window reprents all physical windows in the same group on the same gpu
+	/// 
+	/// all windows in a virtual window must be on the same gpu
+	/// 
+	/// the virtual window allows for Multi Viewport Rendering so if a graphics card does not support it
+	/// than their can not be andy virtual windows for winodws on that gpu
+	/// 
+	/// windows in a virtual window may be on different monitors
+	/// 
+	/// virtual windows do still have a global index into application arrays that phyisical winodws do but content is just duplicated from its alaised windiws addreses
+	/// 
+	/// it can be ditermaned weather a window is virtual or not by querring its isVirtual() method
+	/// 
+	/// for virtual windows:
+	/// 
+	///		very sub window has a: window, surface, swapchain, swapchain image views, swapchain images
+	/// 
+	/// each sub window will have its own swpachain and assicited images and the final pass images which will be multi layer will have to be coppied into each window swapchain at the end of the render pass
+	/// 
+	///		pipelines and renderpassmanager are created for virtual window but pointers are given to subwindows
+	/// 
+	/// for extreme performance make windows components for an entity component system
+	/// 
+	/// 
+	/// MVR put on hold here is current progress:
+	///		
+	///		virtual windows are being created and subwindows are being put in currently at the part where renderer descriptors have to be fixed to deal with input attatchments for gbuffer and defered stage to work with multiple layers
+	/// 
+	/// </summary>
 	class SUNRISE_API Window
 	{
 	public:
 
-		Window(Application* app, size_t globalIndex);
+		Window(Application* app, size_t globalIndex,bool isPrimary,bool isVirtual);
 		~Window();
 
 		void createWindowAndSurface();
+		void destroyWindowAndSurface();
 		void finishInit();
 
 		/// <summary>
@@ -109,17 +144,34 @@ namespace sunrise {
 		vk::Device device;
 		gfx::Renderer* renderer;
 		size_t indexInRenderer;
+		size_t allIndexInRenderer;
+		size_t physicalIndexInRenderer;
 
 		Application& app;
 
+		bool isVirtual();
+		bool isPrimary();
+
+		bool _owned = false;
+
+		void addSubWindow(Window* subWindow);
+
+		bool shouldClose();
 
 	private:
+
+		bool _virtual;
+		bool _primary = false;
+
+		/// <summary>
+		/// only valid for virtual windows
+		/// </summary>
+		std::vector<Window*> subWindows;
 
 		void cleanupSwapchain();
 
 		void runWindowLoop();
 
-		void destroyWindow();
 
 		void createWindow();
 
@@ -143,6 +195,11 @@ namespace sunrise {
 		VkDescriptorPool imguiDescriptorQueue;
 
 		GLFWmonitor* getMonitorFromNativeName(std::string& const name);
+
+
+		void destroyWindow();
+		void destroySurface();
+
 	};
 
 }

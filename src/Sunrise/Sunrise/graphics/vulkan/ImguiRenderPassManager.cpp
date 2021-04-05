@@ -13,7 +13,7 @@ namespace sunrise::gfx {
 		device.destroyRenderPass(renderPass);
 	}
 
-	size_t ImguiRenderPassManager::subPassCount()
+	size_t ImguiRenderPassManager::getSubPassCount()
 	{
 		return 2;
 	}

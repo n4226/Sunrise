@@ -8,6 +8,10 @@ namespace sunrise {
 
 	namespace gfx {
 
+		struct DeviceInfo {
+			bool supportsMultiViewport;
+		};
+
 		class Renderer;
 
 		class SUNRISE_API RenderContext
@@ -21,6 +25,7 @@ namespace sunrise {
 
 			// - one per each device - shared indicies
 			std::vector<vk::Device         >          devices;
+			std::vector<DeviceInfo*        >          deviceInfos;
 			std::vector<vk::PhysicalDevice >          physicalDevices;
 			std::vector<Renderer*          >          renderers;
 			std::vector<VmaAllocator       >          allocators;
@@ -42,6 +47,12 @@ namespace sunrise {
 				#if SR_ENABLE_VK_VALIDATION_LAYERS
 				"VK_LAYER_KHRONOS_validation"
 				#endif
+			};
+
+			std::vector<const char*> extraInstanceLayers = {
+#if SR_ENABLE_VK_VALIDATION_LAYERS
+				VK_EXT_DEBUG_REPORT_EXTENSION_NAME
+#endif
 			};
 
 			virtual void createInstance() = 0;

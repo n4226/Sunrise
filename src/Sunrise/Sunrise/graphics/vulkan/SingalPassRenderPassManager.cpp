@@ -22,7 +22,7 @@ namespace sunrise::gfx {
 		device.destroyRenderPass(renderPass);
 	}
 
-	size_t SingalPassRenderPassManager::subPassCount()
+	size_t SingalPassRenderPassManager::getSubPassCount()
 	{
 		return 1;
 	}

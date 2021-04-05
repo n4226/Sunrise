@@ -20,8 +20,8 @@ namespace sunrise {
 
     using namespace gfx;
 
-    Window::Window(Application* app, size_t globalIndex)
-        : app(*app), globalIndex(globalIndex)
+    Window::Window(Application* app, size_t globalIndex, bool isPrimary,bool isVirtual)
+        : app(*app), globalIndex(globalIndex), _virtual(isVirtual), _primary(isPrimary)
     {
 
     }
@@ -29,17 +29,39 @@ namespace sunrise {
     void Window::createWindowAndSurface() {
         PROFILE_FUNCTION;
 
-        createWindow();
+        if (!_virtual) {
+            createWindow();
 
 
-        createSurface();
+            createSurface();
+        }
+    }
+
+    void Window::destroyWindowAndSurface()
+    {
+        destroySurface();
+        destroyWindow();
     }
 
     void Window::finishInit()
     {
-        createSwapchain();
+        if (_virtual) {
+            for (auto window : subWindows) {
 
-        createSwapchainImageViews();
+                window->createSwapchain();
+                window->createSwapchainImageViews();
+            }
+
+            swapchainExtent = subWindows[0]->swapchainExtent;
+            swapchainImageFormat = subWindows[0]->swapchainImageFormat;
+
+        }
+        else {
+            createSwapchain();
+            createSwapchainImageViews();
+
+        }
+
 
         createFrameBufferImages();
 
@@ -51,6 +73,12 @@ namespace sunrise {
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
         else
             renderPassManager = new SingalPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+        
+        if (_virtual) {
+            renderPassManager->multiViewport = true;
+            renderPassManager->multiViewCount = subWindows.size();
+        }
+
         renderPassManager->createMainRenderPass();
         pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
@@ -68,7 +96,18 @@ namespace sunrise {
         createFramebuffers();
 
         createSemaphores();
-        SetupImgui();
+        if (!_virtual)
+            SetupImgui();
+        else {
+            // give pointers of grphics pipelines and renderpass to subwindows
+            for (size_t i = 0; i < subWindows.size(); i++)
+            {
+                subWindows[i]->pipelineCreator = pipelineCreator;
+                subWindows[i]->renderPassManager = renderPassManager;
+                subWindows[i]->deferredPass = deferredPass;
+                subWindows[i]->gpuGenPipe = gpuGenPipe;
+            }
+        }
 
     }
 
@@ -153,6 +192,8 @@ namespace sunrise {
 
         cleanupSwapchain();
 
+        if (_virtual)
+            SR_ASSERT(0 && "resize of virtual windows not implimented yet");
         createSwapchain();
         createSwapchainImageViews();
 
@@ -161,6 +202,12 @@ namespace sunrise {
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
         else
             renderPassManager = new SingalPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+      
+        if (_virtual) {
+            renderPassManager->multiViewport = true;
+            renderPassManager->multiViewCount = subWindows.size();
+        }
+
         renderPassManager->createMainRenderPass();
 
         pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
@@ -205,7 +252,7 @@ namespace sunrise {
         }
 
 
-        assert(renderer->queueFamilyIndices.graphicsFamily == renderer->queueFamilyIndices.presentFamily);
+        SR_ASSERT(renderer->queueFamilyIndices.graphicsFamily == renderer->queueFamilyIndices.presentFamily);
 
         /* vk::SwapchainCreateInfoKHR swapInfo = vk::SwapchainCreateInfoKHR(
              vk::SwapchainCreateFlagsKHR{}, surface, imageCount,
@@ -225,6 +272,7 @@ namespace sunrise {
         createInfo.imageColorSpace = surfaceFormat.colorSpace;
         createInfo.imageExtent = extent;
         createInfo.imageArrayLayers = 1;
+
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
         // this is what needs to change if allowing suport for different presentation and drawing queues
@@ -241,6 +289,8 @@ namespace sunrise {
 
         createInfo.oldSwapchain = VK_NULL_HANDLE;
 
+
+        SR_CORE_INFO("creating swapchain");
         swapChain = device.createSwapchainKHR(vk::SwapchainCreateInfoKHR(createInfo), nullptr);
 
         vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
@@ -274,7 +324,10 @@ namespace sunrise {
             createInfo.subresourceRange.baseMipLevel = 0;
             createInfo.subresourceRange.levelCount = 1;
             createInfo.subresourceRange.baseArrayLayer = 0;
-            createInfo.subresourceRange.layerCount = 1;
+            if (_virtual)
+                createInfo.subresourceRange.layerCount = subWindows.size();
+            else
+                createInfo.subresourceRange.layerCount = 1;
 
             swapChainImageViews[i] = device.createImageView({ createInfo });
         }
@@ -302,6 +355,9 @@ namespace sunrise {
         createOptions.layout = vk::ImageLayout::eUndefined;
         createOptions.tilling = vk::ImageTiling::eOptimal;
 
+        createOptions.layers = 1;
+        if (_virtual)
+           createOptions.layers = subWindows.size();
 
         createOptions.format = vk::Format(albedoFormat);
 
@@ -331,7 +387,7 @@ namespace sunrise {
             depthOptions.layout = vk::ImageLayout::eUndefined;
             depthOptions.tilling = vk::ImageTiling::eOptimal;
 
-
+            depthOptions.layers = createOptions.layers;
 
             depthOptions.format = vk::Format(depthBufferFormat);
 
@@ -495,6 +551,35 @@ namespace sunrise {
 
 
 
+    bool Window::isVirtual()
+    {
+        return _virtual;
+    }
+
+    bool Window::isPrimary()
+    {
+        return _primary;
+    }
+
+    void Window::addSubWindow(Window* subWindow)
+    {
+        SR_ASSERT(_virtual);
+
+        subWindows.push_back(subWindow);
+    }
+
+    bool Window::shouldClose()
+    {
+        if (!_virtual) {
+            if (!_owned && glfwWindowShouldClose(window))
+                return true;
+        }
+        else {
+            return false;
+        }
+        return false;
+    }
+
     void Window::cleanupSwapchain()
     {
 
@@ -543,9 +628,7 @@ namespace sunrise {
 
         device.destroy();
 
-        app.instance.destroySurfaceKHR(surface);
-        app.instance.destroy();
-
+        destroySurface();
         destroyWindow();
     }
 
@@ -567,7 +650,7 @@ namespace sunrise {
     {
         PROFILE_FUNCTION
 
-            vkWaitForFences(device, 1, &inFlightFences[app.currentFrame], VK_TRUE, UINT64_MAX);
+        vkWaitForFences(device, 1, &inFlightFences[app.currentFrame], VK_TRUE, UINT64_MAX);
 
         auto index = device.acquireNextImageKHR(swapChain, UINT64_MAX, imageAvailableSemaphores[app.currentFrame], nullptr);
         //cout << "current index = " << index.value << endl;
@@ -629,10 +712,18 @@ namespace sunrise {
 
     void Window::destroyWindow()
     {
-        PROFILE_FUNCTION
-            glfwDestroyWindow(window);
+        PROFILE_FUNCTION;
 
-        glfwTerminate();
+        glfwDestroyWindow(window);
     }
+
+
+    void Window::destroySurface()
+    {
+        PROFILE_FUNCTION;
+
+        app.instance.destroySurfaceKHR(surface);
+    }
+
 
 }

@@ -1,7 +1,27 @@
-
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_KHR_vulkan_glsl : enable
+#extension GL_GOOGLE_include_directive : enable
+
+
+//#include "headers/lighting/atmScat.h"
+#include "headers/lighting/pbr.h"
+
+
+layout(binding = 4) uniform UniformBufferObject {
+// global uniforms
+    mat4 viewProjection;
+
+    // post uniforms
+    mat4 invertedViewMat;
+    mat4 viewMat;
+    mat4 projMat;
+
+    vec4 earthCenter;
+    vec4 sunDir;
+    vec4 camFloatedGloabelPos;
+    ivec2 renderTargetSize;
+} ubo;
 
 
 
@@ -12,18 +32,6 @@
 // nvidea : ///
 
 //
-
-#define PI 3.1415926535897932384626433832795
-#define PI_2 1.57079632679489661923
-#define PI_4 0.785398163397448309616
-
-
-#define FLT_MAX 3.402823466e+38
-#define FLT_MIN 1.175494351e-38
-#define DBL_MAX 1.7976931348623158e+308
-#define DBL_MIN 2.2250738585072014e-308
-
-const float kInfinity = FLT_MAX;
 
 
 /////// default constants
@@ -54,25 +62,6 @@ const float kInfinity = FLT_MAX;
 //#define betaM vec3(21e-6f)
 
 
-
-layout(binding = 4) uniform UniformBufferObject {
-// global uniforms
-    mat4 viewProjection;
-
-    // post uniforms
-    mat4 invertedViewMat;
-    mat4 viewMat;
-    mat4 projMat;
-
-    vec4 earthCenter;
-    vec4 sunDir;
-    vec4 camFloatedGloabelPos;
-    ivec2 renderTargetSize;
-} ubo;
-
-
-
-
 bool solveQuadratic(float a, float b, float c, out float x1, out float x2)
 {
     if (b == 0) {
@@ -83,46 +72,46 @@ bool solveQuadratic(float a, float b, float c, out float x1, out float x2)
         return true;
     }
     float discr = b * b - 4 * a * c;
-    
+
     if (discr < 0) return false;
-    
+
     float q = (b < 0.f) ? -0.5f * (b - sqrt(discr)) : -0.5f * (b + sqrt(discr));
     x1 = q / a;
     x2 = c / q;
-    
+
     return true;
 }
 
 
 
-bool raySphereIntersect(vec3 orig, vec3 dir, float radius, out float t0,out float t1)
+bool raySphereIntersect(vec3 orig, vec3 dir, float radius, out float t0, out float t1)
 {
     // They ray dir is normalized so A = 1
     float A = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
     float B = 2 * (dir.x * orig.x + dir.y * orig.y + dir.z * orig.z);
     float C = orig.x * orig.x + orig.y * orig.y + orig.z * orig.z - radius * radius;
-    
+
     if (!solveQuadratic(A, B, C, t0, t1)) {
         return false;
     }
-    
+
     if (t0 > t1) {
         float temp = t0;
         t0 = t1;
         t1 = temp;
     }
-    
+
     return true;
 }
 
 
 
 vec3 computeIncidentLight(
-                        vec3 orig,
-                        vec3 dir,
-                        float tmin,
-                        float tmax,
-                        vec3 sunDirection)
+    vec3 orig,
+    vec3 dir,
+    float tmin,
+    float tmax,
+    vec3 sunDirection)
 {
     float t0, t1;
     if (!raySphereIntersect(orig, dir, atmosphereRadius, t0, t1) || t1 < 0) return vec3(0);
@@ -213,47 +202,64 @@ vec3 computeIncidentLight(
 
 
 vec3 calculatePostAtmosphereicScatering(
-                                          ivec2 textureSize,
-                                          vec2 textPosition,
-                                          vec3 camPos, // without floating origin  // world // in geo coordinates
-                                          mat4x4 ViewMatrix,
-                                          vec3 sunDirection
+    ivec2 textureSize,
+    vec2 textPosition,  // x and y of this fragment in the texture
+    vec3 camPos, // without floating origin  // world // in geo coordinates
+    mat4x4 ViewMatrix,
+    vec3 sunDirection
 ) {
 
     // calculate origin(pos) and direction(dir)
 
     vec3 orig = camPos;
-    
-//#warning remmber that this fov and other camera info is not checked in any way to e what is on the CPU so be carful
 
-// swift way
+    //#warning remmber that this fov and other camera info is not checked in any way to e what is on the CPU so be carful
 
-//    float aspectRatio = textureSize.x / float(textureSize.y);
-//    float fov = 60;
-//    float angle = tan(fov * PI / 180 * 0.5f);
-//    
-//    //
-//    float rayx = (2 * textPosition.x - 1) * aspectRatio * angle;
-//    float rayy = (1 - textPosition.y * 2) * angle;
-//    
-//    vec3 dir = vec3(rayx, rayy, -1);
-//    //    dir = normalize(dir);
-//    dir = normalize((mat4(ViewMatrix) * vec4(dir,0)).xyz);
-//
+    // swift way
+
+    //    float aspectRatio = textureSize.x / float(textureSize.y);
+    //    float fov = 60;
+    //    float angle = tan(fov * PI / 180 * 0.5f);
+    //    
+    //    //
+    //    float rayx = (2 * textPosition.x - 1) * aspectRatio * angle;
+    //    float rayy = (1 - textPosition.y * 2) * angle;
+    //    
+    //    vec3 dir = vec3(rayx, rayy, -1);
+    //    //    dir = normalize(dir);
+    //    dir = normalize((mat4(ViewMatrix) * vec4(dir,0)).xyz);
+    //
 
 
     vec4 reverseVec;
 
-    /* inverse perspective projection */
-    reverseVec = vec4(textPosition.xy * 2 - 1, 0.0, 1.0);
-    reverseVec = inverse(ubo.projMat) * reverseVec;
+    //TODO: this whole file is a complete mess but it apears to be less lickely for the sky to fall
 
-    /* inverse modelview, without translation */
-    reverseVec.w = 0.0;
-    reverseVec = ubo.invertedViewMat * reverseVec;
-  
+    /* inverse perspective projection */
+
+    // in [-1,1] for x and y
+    vec2 normalizedUvs = textPosition.xy * 2 - 1;
+
+    // see: https://veldrid.dev/articles/backend-differences.html
+    // Vulkan: [-1,1][-1,1][0,1] NOTE: Vulkan's clip space Y axis is inverted compared to other API's.
+
+    // the view direction in NDC space ([-1.1], [-1,1], [0,1] -z (0z is near plane))
+    vec3 viewDirNDC = normalize(vec3(normalizedUvs,1));
+
+    vec3 viewDirEye = (inverse(ubo.projMat) * vec4(viewDirNDC,1)).xyz;
+    // view direection in world space
+    vec3 viewDerWorld = (ubo.invertedViewMat * vec4(viewDirEye,0)).xyz;
+
+//
+//    reverseVec = vec4(normalizedUvs, 0.0, 1.0);
+//    reverseVec = inverse(ubo.projMat) * reverseVec;
+//
+//    /* inverse modelview, without translation */
+//    reverseVec.w = 0.0;
+//    reverseVec = ubo.invertedViewMat * reverseVec;
+//
     /* send */
-    vec3 dir = vec3(reverseVec);
+    vec3 dir = viewDerWorld;//vec3(reverseVec);
 
 
     // 
@@ -261,63 +267,18 @@ vec3 calculatePostAtmosphereicScatering(
     float t0, t1, tMax = kInfinity;
     // if the view ray intersects earth set the max to be the distance/time till the surface
     if (raySphereIntersect(orig, dir, earthRadius, t0, t1) && t1 > 0) {
-            tMax = max(0, t0);
+        tMax = max(0, t0);
     }
 
-    return computeIncidentLight(orig,dir,0,tMax,sunDirection);
+    return computeIncidentLight(orig, dir, 0, tMax, sunDirection);
 
     //return dir;//vec3(0,0,0.8) * (textPosition.x * 1);
 
 }
 
 
-// PBR MATH
 
 
-
-float DistributionGGX(vec3 N, vec3 H, float a)
-{
-    float a2     = a*a;
-    float NdotH  = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
-	
-    float nom    = a2;
-    float denom  = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom        = PI * denom * denom;
-	
-    return nom / denom;
-}
-
-float GeometrySchlickGGX(float NdotV, float k)
-{
-    float nom   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
-	
-    return nom / denom;
-}
-  
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float k)
-{
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotL = max(dot(N, L), 0.0);
-    float ggx1 = GeometrySchlickGGX(NdotV, k);
-    float ggx2 = GeometrySchlickGGX(NdotL, k);
-	
-    return ggx1 * ggx2;
-}
-
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
-{
-    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
-}
-
-//vec3 calculateLighting(
-//                      vec2 texCoards,
-//                      float depth,
-//                      SampledPBRMaterial mat,
-//                        ) {
-//        
-//}
 
 
 // end Lighting math
@@ -352,6 +313,7 @@ void main() {
     //albedo_metallic.xyz = vec3(depth);
 
 
+    //TODO: remove this to render the actual scene
     if (normal_sroughness.w == 0) {
         albedo_metallic.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy * 0.5 + 0.5,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
         albedo_metallic.w = 1;

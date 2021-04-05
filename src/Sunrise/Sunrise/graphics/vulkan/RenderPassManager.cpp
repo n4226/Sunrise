@@ -18,7 +18,7 @@ namespace sunrise::gfx {
 		device.destroyRenderPass(renderPass);
 	}
 
-	size_t RenderPassManager::subPassCount()
+	size_t RenderPassManager::getSubPassCount()
 	{
 		return 2;
 	}
@@ -282,16 +282,51 @@ namespace sunrise::gfx {
 		//TODO: add dpeth buffer as input attatchment to deferred pass  | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 		DeferredDependencyOnGBuffer.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
-
+		// each view does not depend on other views so multiple views can be proccesed in parallel
+		if (multiViewport)
+			DeferredDependencyOnGBuffer.dependencyFlags = VkDependencyFlagBits::VK_DEPENDENCY_VIEW_LOCAL_BIT;
 
 		std::array<VkSubpassDependency, 2> dependencies = {
 			externalGBufferDependency, DeferredDependencyOnGBuffer
 		};
 
 
+		VkRenderPassMultiviewCreateInfo multiViewInfo{};
+		if (multiViewport) { // multi view setup
+			// see vulkan docs: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkRenderPassMultiviewCreateInfo.html
+			// Some implementations may not support multiview in conjunction with geometry shaders or tessellation shaders.
+
+			multiViewInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_MULTIVIEW_CREATE_INFO;
+			multiViewInfo.pNext = nullptr;
+			multiViewInfo.subpassCount = subPassCount;
+			
+			std::array<uint32_t, subPassCount> viewMasks;
+
+			for (size_t i = 0; i < subPassCount; i++)
+			{
+				viewMasks[i] = 2^(multiViewCount)-1;
+			}
+
+			multiViewInfo.pViewMasks = viewMasks.data();
+			
+			// " It  viewMasks; ount is zero, each dependency’s view offset is treated as zero. "
+			// these are the offsets of the dpendencies for ech view but since each "layer" only depends on the same layer in the previus pass these should be left zero
+			multiViewInfo.dependencyCount = 0;
+			multiViewInfo.pViewOffsets = nullptr;
+
+			/*TODO: allow for windows tro be rendnered:
+				all individually without mvr
+				multiple groups of mvr views (where each mvr group is a window class which is a fake window)
+				one mvr view group
+			*/
+
+
+
+		}
+
+
+
 		// render pass
-
-
 
 		VkRenderPassCreateInfo renderPassInfo{};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
@@ -301,6 +336,9 @@ namespace sunrise::gfx {
 		renderPassInfo.pSubpasses = subpasses.data();
 		renderPassInfo.dependencyCount = dependencies.size();
 		renderPassInfo.pDependencies = dependencies.data();
+
+		if (multiViewport)
+			renderPassInfo.pNext = &multiViewInfo;
 
 		renderPass = device.createRenderPass(renderPassInfo);
 

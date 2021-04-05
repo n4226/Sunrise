@@ -15,7 +15,7 @@ namespace sunrise::gfx {
 
 		//VkRenderPass renderPass;
 
-		size_t subPassCount() override;
+		size_t getSubPassCount() override;
 		static const size_t gbufferAttachmentCount = 3;
 
 	private:

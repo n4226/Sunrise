@@ -21,7 +21,7 @@ namespace sunrise::gfx {
 		}
 		else imageInfo.mipLevels = 1;
 
-		imageInfo.arrayLayers = 1;
+		imageInfo.arrayLayers = options.layers;
 
 		imageInfo.format = options.format;
 

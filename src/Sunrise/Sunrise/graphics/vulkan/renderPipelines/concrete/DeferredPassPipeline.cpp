@@ -259,7 +259,7 @@ namespace sunrise::gfx {
         pipelineInfo.layout = pipelineLayout;
 
         pipelineInfo.renderPass = renderPassManager.renderPass;
-        pipelineInfo.subpass = glm::min(static_cast<size_t>(1),renderPassManager.subPassCount() - 1);
+        pipelineInfo.subpass = glm::min(static_cast<size_t>(1),renderPassManager.getSubPassCount() - 1);
 
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
         pipelineInfo.basePipelineIndex = -1; // Optional

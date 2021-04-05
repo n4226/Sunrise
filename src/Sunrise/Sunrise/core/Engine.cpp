@@ -25,7 +25,7 @@ namespace sunrise {
 			try {
 				Log::Init();
 
-				SR_CORE_INFO("Startup");
+				//SR_CORE_INFO("Startup");
 
 
 				auto noApp = dynamic_cast<sunrise::NO_APPLICATION*>(app);

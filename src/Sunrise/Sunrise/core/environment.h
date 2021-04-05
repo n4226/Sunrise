@@ -87,7 +87,7 @@
 /// normally 10,000
 #define FLOATING_ORIGIN_SNAP_DISTANCE 100'000
 
-
+#define SR_ASSERT(value) assert(value)
 
 // used to be in post build stage
 

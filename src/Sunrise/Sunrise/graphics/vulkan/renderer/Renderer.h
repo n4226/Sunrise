@@ -41,6 +41,17 @@ namespace sunrise {
 			QueueFamilyIndices& queueFamilyIndices;
 
 			std::vector<Window*> windows;
+			/// <summary>
+			/// includes _owned windows
+			/// Order is not garnteed to be the same as windows
+			/// </summary>
+			std::vector<Window*> allWindows;
+
+			/// <summary>
+			/// just windows that are !_virtual
+			/// Order is not garnteed to be the same as windows
+			/// </summary>
+			std::vector<Window*> physicalWindows;
 
 
 
@@ -79,9 +90,13 @@ namespace sunrise {
 			Buffer* globalMaterialUniformBuffer;
 
 
-			void windowSizeChanged(size_t windowIndex);
+			void windowSizeChanged(size_t allWindowIndex);
 
 			ResourceTransferer* resouceTransferer;
+
+			// deivce spacific features
+
+			bool supportsMultiViewport = false;
 
 		private:
 

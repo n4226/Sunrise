@@ -15,10 +15,16 @@ namespace sunrise::gfx {
 
 		VkRenderPass renderPass;
 
-		virtual size_t subPassCount();
+		virtual size_t getSubPassCount();
 		static const size_t gbufferAttachmentCount = 3;
 
 		virtual void createMainRenderPass();
+
+		//TODO: make better api for multiviewport
+		bool multiViewport = false;
+		size_t multiViewCount = 1;
+
+		static constexpr size_t subPassCount = 2;
 
 	protected:
 

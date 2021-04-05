@@ -18,18 +18,20 @@ namespace sunrise::gfx {
 	{
 		PROFILE_FUNCTION;
 
+
+		resouceTransferer = new ResourceTransferer(device, *this);
+		//TODO: for multi gpu this should not be owned by a rednerer bu the application
+		materialManager = new MaterialManager(*this);
+	}
+
+	void Renderer::createAllResources()
+	{
 		for (size_t i = 0; i < windows.size(); i++)
 		{
 			windows[i]->indexInRenderer = i;
 			camFrustroms.emplace_back(windows[i]->camera.view());
 		}
 
-		resouceTransferer = new ResourceTransferer(device, *this);
-		materialManager = new MaterialManager(*this);
-	}
-
-	void Renderer::createAllResources()
-	{
 		createRenderResources();
 		createUniformsAndDescriptors();
 
@@ -87,8 +89,9 @@ namespace sunrise::gfx {
 		device.destroyDescriptorPool(descriptorPool);
 	}
 
-	void Renderer::windowSizeChanged(size_t windowIndex)
+	void Renderer::windowSizeChanged(size_t allWindowIndex)
 	{
+		//TODO: save performance by only reseting the descriptors for the resized window
 		resetDescriptorPools();
 		allocateDescriptors();
 
@@ -236,8 +239,8 @@ namespace sunrise::gfx {
 			poolInfo.poolSizeCount = poolSizes.size();
 			poolInfo.pPoolSizes = poolSizes.data();
 
-			poolInfo.maxSets = static_cast<uint32_t>(app.maxSwapChainImages * windows.size());
-
+			// there should be a set per swap image per physical window
+			poolInfo.maxSets = static_cast<uint32_t>(app.maxSwapChainImages * physicalWindows.size());
 			descriptorPool = device.createDescriptorPool({ poolInfo });
 
 		}
@@ -262,7 +265,7 @@ namespace sunrise::gfx {
 			poolInfo.poolSizeCount = poolSizes.size();
 			poolInfo.pPoolSizes = poolSizes.data();
 
-			poolInfo.maxSets = app.maxSwapChainImages * windows.size();
+			poolInfo.maxSets = app.maxSwapChainImages * physicalWindows.size();
 
 			deferredDescriptorPool = device.createDescriptorPool({ poolInfo });
 
@@ -277,10 +280,10 @@ namespace sunrise::gfx {
 	void Renderer::allocateDescriptors()
 	{
 		{
-			descriptorSets.resize(windows.size());
+			descriptorSets.resize(physicalWindows.size());
 
-			for (size_t i = 0; i < windows.size(); i++) {
-				std::vector<vk::DescriptorSetLayout> layouts(app.maxSwapChainImages, windows[i]->pipelineCreator->descriptorSetLayouts[0]);
+			for (size_t i = 0; i < physicalWindows.size(); i++) {
+				std::vector<vk::DescriptorSetLayout> layouts(app.maxSwapChainImages, physicalWindows[i]->pipelineCreator->descriptorSetLayouts[0]);
 				vk::DescriptorSetAllocateInfo allocInfo{};
 				allocInfo.descriptorPool = descriptorPool;
 				allocInfo.descriptorSetCount = static_cast<uint32_t>(layouts.size());
@@ -296,9 +299,9 @@ namespace sunrise::gfx {
 
 
 		{
-			deferredDescriptorSets.resize(windows.size());
-			for (size_t i = 0; i < windows.size(); i++) {
-				std::vector<vk::DescriptorSetLayout> layouts(app.maxSwapChainImages, windows[i]->deferredPass->descriptorSetLayouts[0]);
+			deferredDescriptorSets.resize(physicalWindows.size());
+			for (size_t i = 0; i < physicalWindows.size(); i++) {
+				std::vector<vk::DescriptorSetLayout> layouts(app.maxSwapChainImages, physicalWindows[i]->deferredPass->descriptorSetLayouts[0]);
 				vk::DescriptorSetAllocateInfo allocInfo{};
 				allocInfo.descriptorPool = deferredDescriptorPool;
 				allocInfo.descriptorSetCount = app.maxSwapChainImages;
@@ -341,7 +344,7 @@ namespace sunrise::gfx {
 
 		BufferCreationOptions uniformOptions = { ResourceStorageType::cpuToGpu,{vk::BufferUsageFlagBits::eUniformBuffer}, vk::SharingMode::eExclusive };
 
-		uniformBuffers.resize(windows.size());
+		uniformBuffers.resize(physicalWindows.size());
 
 
 		for (size_t i = 0; i < uniformBuffers.size(); i++) {
@@ -355,8 +358,8 @@ namespace sunrise::gfx {
 
 
 
-		for (size_t i = 0; i < windows.size(); i++)
-			updateLoadTimeDescriptors(*windows[i]);
+		for (size_t i = 0; i < physicalWindows.size(); i++)
+			updateLoadTimeDescriptors(*physicalWindows[i]);
 
 	}
 
@@ -532,9 +535,6 @@ namespace sunrise::gfx {
 			deferredInputDescriptorWrite[3].pTexelBufferView = nullptr; // Optional
 
 			vkUpdateDescriptorSets(device, static_cast<uint32_t>(deferredInputDescriptorWrite.size()), deferredInputDescriptorWrite.data(), 0, nullptr);
-
-
-
 		}
 	}
 
@@ -757,6 +757,7 @@ namespace sunrise::gfx {
 
 			WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
 
+			// in floated origin (after float)
 			postUniforms.camFloatedGloabelPos = glm::vec4(camera.transform.position, 1);
 			glm::qua<glm::float32> sunRot = glm::angleAxis(glm::radians(45.f), glm::vec3(0, 1, 0));
 			if (world != nullptr) {

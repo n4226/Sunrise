@@ -21,6 +21,7 @@ namespace sunrise::gfx {
 
 		bool mipmaps = false;
 
+		uint32_t layers = 1;
 	};
 
 	struct SUNRISE_API ImageViewCreationOptions {

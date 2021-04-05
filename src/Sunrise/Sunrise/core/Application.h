@@ -39,6 +39,8 @@ namespace sunrise {
 
 	protected:
 
+		void createWindows();
+
 		void createInstance() override;
 
 		bool createRenderer(int deviceIndex) override;
@@ -48,6 +50,19 @@ namespace sunrise {
 		void runLoop() override;
 		bool shouldLoop() override;
 		void runLoopIteration() override;
+
+		static VkBool32 debugCallbackFunc(
+			VkDebugReportFlagsEXT                       flags,
+			VkDebugReportObjectTypeEXT                  objectType,
+			uint64_t                                    object,
+			size_t                                      location,
+			int32_t                                     messageCode,
+			const char* pLayerPrefix,
+			const char* pMessage,
+			void* pUserData);
+
+
+		VkDebugReportCallbackEXT debugObject;
 
 	};
 

@@ -162,6 +162,10 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.h" />
     <ClInclude Include="src\Sunrise.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\pbr.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h" />

@@ -21,6 +21,7 @@ namespace sunrise {
 
 				std::string monitor;
 				WindowMode mode;
+				size_t group;
 				glm::ivec2 size;
 				glm::vec2 monitorLocalPostion; // in screen space coords 0,0 top left of screen and 1,1 bottom right
 			};
