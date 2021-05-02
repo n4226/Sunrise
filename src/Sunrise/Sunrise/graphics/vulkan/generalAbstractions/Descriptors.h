@@ -11,22 +11,17 @@ namespace sunrise::gfx {
 
 		1. define a layout
 			- define the types descriptor sets and bindings you will and configuration
+			 
 
-		2. create the 
+		2. create the pool which can instanciate layouts
+
+		descriptor parts:
+
+		DescriptorSetLayoutBinding - definition of the type of a binding in a set layout and which stages it will be used in
+		DescriptorSetLayout - a collection of DescriptorSetLayoutBindings that define one type of descreiptor set that can be initilized by a descriptorSetPool
 	
 	*/
 
-
-	struct SUNRISE_API DescriptorSet {
-	
-
-	};
-
-
-	struct SUNRISE_API DescriptorBinding {
-
-	};
-	
 	/// <summary>
 	/// a wrapper of VkDescriptorSetLayoutBinding
 	/// </summary>
@@ -63,22 +58,27 @@ namespace sunrise::gfx {
 
 
 		/// <summary>
-		/// a simple way to create all the set layout bindings at once
+		/// a simple way to create all the set layout bindings for one set layout at once
+		/// this array can ve fed into the constructor for DescriptorSetLayout to create a layout
 		/// </summary>
 		/// <returns></returns>
 		static std::vector<DescriptorSetLayoutBinding> createWholeSet(
 			std::vector<shell>&& bindings
-		) {
-			//TODO: 
-			//std::vector< DescriptorSetLayoutBinding> result = {bindings.size()};
-			return {};
-		}
+		);
+
 
 		~DescriptorSetLayoutBinding();
 
 		VkDescriptorSetLayoutBinding vkItem{};
 
 		VkDescriptorBindingFlags* flags = nullptr;
+		
+		/// <summary>
+		/// do not use
+		/// </summary>
+		DescriptorSetLayoutBinding() = default;
+	protected:
+		//friend static std::vector<DescriptorSetLayoutBinding> createWholeSet();
 	};
 
 	
@@ -141,6 +141,17 @@ namespace sunrise::gfx {
 
 	};
 
+
+
+	struct SUNRISE_API DescriptorSet {
+
+
+	};
+
+
+	struct SUNRISE_API DescriptorBinding {
+
+	};
 
 
 }

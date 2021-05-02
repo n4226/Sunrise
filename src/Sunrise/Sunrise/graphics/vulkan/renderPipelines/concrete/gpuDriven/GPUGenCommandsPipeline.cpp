@@ -15,7 +15,7 @@ namespace sunrise::gfx {
 
 	GPUGenCommandsPipeline::GPUGenCommandsPipeline(Application& app, vk::Device device, GraphicsPipeline& terrainPipeline)
 		: app(app), terrainPipeline(terrainPipeline),
-		ComputePipeline::ComputePipeline(device, { DescriptorSetLayout::Create({ {} }, device) }, "shaders/gpuGenCommands.comp.spv")
+		ComputePipeline::ComputePipeline(device, createDesLayouts(device), "shaders/gpuGenCommands.comp.spv")
 	{
 		//std::vector<vk::DescriptorSetLayout> layouts = ;
 
@@ -57,9 +57,13 @@ namespace sunrise::gfx {
 
 		//TODO: this is until i get a allow the kernal to cull and change the number of objects to draw
 		info.sequencesCount = drawCount;
+
+		// the buffer to execute from, if isPreprocessed is true than they will not be proccesed again but simply executed. 
+		//  if isPreprocessed is false than they will be pre proccesed before execuited 
 		info.preprocessBuffer = commandsBuffer->vkItem;
 		info.preprocessOffset = 0;
 		info.preprocessSize = commandsBuffer->size;
+
 		info.sequencesCountBuffer = static_cast<VkBuffer>(VK_NULL_HANDLE);
 		info.sequencesCountOffset = 0;
 		info.sequencesIndexBuffer = static_cast<VkBuffer>(VK_NULL_HANDLE);
@@ -89,6 +93,7 @@ namespace sunrise::gfx {
 	{
 		std::array<vk::IndirectCommandsLayoutTokenNV, 4> tokenLayouts{};
 		//VkIndirectCommandsLayoutTokenNV
+		// define stream here
 		tokenLayouts[0].tokenType = vk::IndirectCommandsTokenTypeNV::eDrawIndexed;
 		tokenLayouts[0].stream = 0;
 		tokenLayouts[0].offset = 0;
@@ -122,8 +127,23 @@ namespace sunrise::gfx {
 		info.pNext = nullptr;
 		info.pipelineBindPoint = vk::PipelineBindPoint::eGraphics;
 
-		// will be providoing a custom subset
-		info.flags = vk::IndirectCommandsLayoutUsageFlagBitsNV::eIndexedSequences;
+
+
+
+		// will be providoing a custom subset see below
+		// also see docs: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkIndirectCommandsLayoutUsageFlagBitsNV.html
+		//VK_INDIRECT_COMMANDS_LAYOUT_USAGE_INDEXED_SEQUENCES_BIT_NV specifies that the input data for the sequences is not implicitly indexed from 0..sequencesUsed but a user provided VkBuffer encoding the index is provided.
+
+		// i can use this feature to frustrum cull objects in the gpu shader by removing the indicies from a seperate buffer but than adding them back when the objects com back into view instead of reencoding the command
+		// also every camera can just have its own buffer which says which indicies to draw for that monitor and the actuall comands can just be encoded once until terrain changes
+
+		// this can be done by having 2 compute shaders,
+		//		one which will encode all the commands which can be exicuted on a async compute queue when chunks change (very simular to the way cpu2 pipe works but when it will reencode on a seperate thread. also this approch can have frustrum culling)
+		//		and another which selectevly puts those comands into the indicies buffer to do culling 
+		//		we will have to see if this is more efficent with testing
+
+		// the eIndexedSequences allows implimentation to draw the calls in a non linear order
+		info.flags = vk::IndirectCommandsLayoutUsageFlagBitsNV::eIndexedSequences;//vk::IndirectCommandsLayoutUsageFlagBitsNV::eIndexedSequences;
 		info.setTokens(tokenLayouts);
 
 
@@ -172,6 +192,19 @@ namespace sunrise::gfx {
 		{ ResourceStorageType::gpu, { vk::BufferUsageFlagBits::eIndirectBuffer }, vk::SharingMode::eExclusive, {} };
 		options.memoryTypeBits = result.memoryRequirements.memoryTypeBits;
 		commandsBuffer = new Buffer(device, app.allocators[0], result.memoryRequirements.size, options);
+	}
+
+	std::vector<vk::DescriptorSetLayout> GPUGenCommandsPipeline::createDesLayouts(vk::Device device)
+	{
+		return { 
+			// layout 1
+			DescriptorSetLayout::Create({DescriptorSetLayoutBinding::createWholeSet({
+				// binding 1 - the main command stream
+				{vk::DescriptorType::eStorageBuffer, vk::ShaderStageFlagBits::eCompute},
+				// binding 2 =- nothing yet
+				//{}, 
+			})}, device)
+		};
 	}
 
 }

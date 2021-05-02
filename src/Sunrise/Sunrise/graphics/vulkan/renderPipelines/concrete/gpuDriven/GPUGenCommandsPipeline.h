@@ -39,6 +39,11 @@ namespace sunrise {
 			// function pointers
 			PFN_vkCreateIndirectCommandsLayoutNV pfn_vkCreateIndirectCommandsLayoutNV;
 			PFN_vkGetGeneratedCommandsMemoryRequirementsNV pfn_vkGetGeneratedCommandsMemoryRequirementsNV;
+
+			// descrptors
+
+			static std::vector<vk::DescriptorSetLayout> createDesLayouts(vk::Device device);
+
 		};
 
 	}

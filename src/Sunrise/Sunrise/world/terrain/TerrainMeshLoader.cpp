@@ -20,6 +20,7 @@ namespace sunrise {
 		TreeNodeDrawResaourceToCoppy meshStore;
 
 		auto file = Terrain_Chunk_Mesh_Dir + node->frame.toString() + ".bmesh";
+		//TODO: fix this added the false to force no device chunks
 		if (std::filesystem::exists(file)) {
 			PROFILE_SCOPE("loading mesh from file")
 
@@ -224,10 +225,13 @@ namespace sunrise {
 		for (size_t i = 0; i < indCounts.size(); i++)
 		{
 			//TODO: i don't like all this in the loop do something better for performance
-			uint32_t matIndex = 0;
+			// 1 here means all unatributed chunks will default to grass, 0 would be ocean
+			uint32_t matIndex = 1;
 			if (preLoadedMesh.binMeshAttributes != nullptr && preLoadedMesh.binMeshAttributes->subMeshMats.size() > i) {
 				matIndex = preLoadedMesh.binMeshAttributes->subMeshMats[i];
 			}
+
+			
 
 			drawData.drawDatas[i].modelIndex = static_cast<glm::uint32>(modelIndex / modelAllocSize);
 			drawData.drawDatas[i].matIndex = matIndex;
