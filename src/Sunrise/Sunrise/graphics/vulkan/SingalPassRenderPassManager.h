@@ -5,12 +5,12 @@
 
 namespace sunrise::gfx {
 
-	class SingalPassRenderPassManager: public RenderPassManager
+	class GPUPassRenderPassManager: public RenderPassManager
 	{
 	public:
 		//using RenderPassManager::RenderPassManager;
-		SingalPassRenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat);
-		~SingalPassRenderPassManager();
+		GPUPassRenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat);
+		~GPUPassRenderPassManager();
 
 
 		//VkRenderPass renderPass;

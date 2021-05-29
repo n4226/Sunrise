@@ -13,6 +13,7 @@ namespace sunrise {
 
 	namespace gfx {
 		class Renderer;
+		class VirtualGraphicsPipeline;
 
 		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher
 		{
@@ -28,7 +29,7 @@ namespace sunrise {
 			virtual void createPasses();
 
 			/// <summary>
-			///  righ now this will only encode on one queue
+			///  right now this will only encode on one queue
 			/// </summary>
 			/// <param name="renderer"></param>
 			/// <param name="firstLevelCMDBuffer"></param>
@@ -38,6 +39,20 @@ namespace sunrise {
 
 			Scene* const scene;
 			Application& app;
+
+			/// <summary>
+			/// Registers the pipeline definition to be instantiuated by all windows rendering the scene
+			/// currently only pipelines registered before the createPasses funciton exits are garenteed to be instantiated by all windows.
+			/// </summary>
+			/// <param name="virtualPipe"></param>
+			void registerPipeline(VirtualGraphicsPipeline* virtualPipe);
+
+		protected:
+			friend Window;
+			friend Application;
+			std::vector<VirtualGraphicsPipeline*> registeredPipes;
+
+			void loadOrGetRegisteredPipesInAllWindows();
 		private:
 
 			GPUStage* lastStage;
@@ -47,3 +62,4 @@ namespace sunrise {
 
 	}
 }
+

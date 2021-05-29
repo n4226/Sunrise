@@ -63,8 +63,7 @@ namespace sunrise {
 
 
             world->playerTrans.position = glm::vec3(0);
-            printf("snapped floating origin\n");
-
+            SR_CORE_TRACE("snapped floating origin");
         }
     }
 

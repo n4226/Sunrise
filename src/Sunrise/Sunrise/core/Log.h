@@ -16,6 +16,31 @@
 		tried uncommenting out disable #define SPDLOG_NO_THREAD_ID which is close to what was suggested becuase exact define did not exist in file anymore
 */
 
+
+/* these changes had to be removed from the spdlog submodule in the tweakme file: \Sunrise\vendor\spdlog\include\spdlog\tweakme.h
+
+both of these two defines were uncommented but now had to be re commented to removel ocal changes from submodule
+
+///////////////////////////////////////////////////////////////////////////////
+// Uncomment if thread id logging is not needed (i.e. no %t in the log pattern).
+// This will prevent spdlog from querying the thread id on each log call.
+//
+// WARNING: If the log pattern contains thread id (i.e, %t) while this flag is
+// on, zero will be logged as thread id.
+//
+#define SPDLOG_NO_THREAD_ID
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// Uncomment to prevent spdlog from using thread local storage.
+//
+// WARNING: if your program forks, UNCOMMENT this flag to prevent undefined
+// thread ids in the children logs.
+//
+#define SPDLOG_NO_TLS
+
+*/
+
 namespace sunrise {
 
 	class SUNRISE_API Log

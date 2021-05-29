@@ -72,7 +72,7 @@ namespace sunrise {
         if (world != nullptr)
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
         else
-            renderPassManager = new SingalPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+            renderPassManager = new GPUPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
         
         if (_virtual) {
             renderPassManager->multiViewport = true;
@@ -80,23 +80,26 @@ namespace sunrise {
         }
 
         renderPassManager->createMainRenderPass();
-        pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
-        pipelineCreator->createPipeline();
+        if (world != nullptr) {
+            pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
-        //TODO: find better way to abstract use of multiple windows with different shaders 
-        // create deferred pipeline
+            pipelineCreator->createPipeline();
 
-        deferredPass = new DeferredPass(device, { swapchainExtent }, *renderPassManager);
+            //TODO: find better way to abstract use of multiple windows with different shaders 
+        
+            // create deferred pipeline
 
-        deferredPass->createPipeline();
+            deferredPass = new DeferredPass(device, { swapchainExtent }, *renderPassManager);
 
-        gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
+            deferredPass->createPipeline();
 
+            gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
+        }
         createFramebuffers();
 
         createSemaphores();
-        if (!_virtual)
+        if (!_virtual && world != nullptr)
             SetupImgui();
         else {
             // give pointers of grphics pipelines and renderpass to subwindows
@@ -201,7 +204,7 @@ namespace sunrise {
         if (world != nullptr)
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
         else
-            renderPassManager = new SingalPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+            renderPassManager = new GPUPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
       
         if (_virtual) {
             renderPassManager->multiViewport = true;
@@ -210,14 +213,16 @@ namespace sunrise {
 
         renderPassManager->createMainRenderPass();
 
-        pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
+        if (world != nullptr) {
+            pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
-        pipelineCreator->createPipeline();
+            pipelineCreator->createPipeline();
 
-        deferredPass = new DeferredPass(device, swapchainExtent, *renderPassManager);
+            deferredPass = new DeferredPass(device, swapchainExtent, *renderPassManager);
 
-        deferredPass->createPipeline();
-        gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
+            deferredPass->createPipeline();
+            gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
+        }
 
         createFrameBufferImages();
         createFramebuffers();

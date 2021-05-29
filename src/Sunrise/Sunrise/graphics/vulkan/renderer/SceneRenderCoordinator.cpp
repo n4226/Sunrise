@@ -2,8 +2,11 @@
 #include "SceneRenderCoordinator.h"
 
 #include "Sunrise/Sunrise/core/Application.h"
+#include "Sunrise/Sunrise/core/Window.h"
 #include "Sunrise/Sunrise/scene/Scene.h"
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GpuStage.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderPipelines/GraphicsPipeline.h"
 
 namespace sunrise::gfx {
 
@@ -113,6 +116,24 @@ namespace sunrise::gfx {
 		}
 
 
+	}
+
+	void SceneRenderCoordinator::registerPipeline(VirtualGraphicsPipeline* virtualPipe)
+	{
+		registeredPipes.push_back(virtualPipe);
+	}
+
+	void SceneRenderCoordinator::loadOrGetRegisteredPipesInAllWindows()
+	{
+		//// loop through all top level windows: virtual or onowned
+		//for (auto window : app.renderers[0]->windows) {
+		//	//TODO: check if window already has same virtual pipeLoaded
+		//	for (auto pipe : registeredPipes) {
+		//		//TODO: cash pipelines through vulkan and or seperatly to prevent rebuilding as much
+		//		//auto concretePipe = new GraphicsPipeline(window->device, window->swapchainExtent, *window->renderPassManager, pipe->definition);
+		//		//window->loadedPipes.push_back(concretePipe);
+		//	}
+		//}
 	}
 
 

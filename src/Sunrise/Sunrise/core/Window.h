@@ -40,7 +40,7 @@ namespace sunrise {
 	/// 
 	/// for virtual windows:
 	/// 
-	///		very sub window has a: window, surface, swapchain, swapchain image views, swapchain images
+	///		every sub window has a: window, surface, swapchain, swapchain image views, swapchain images
 	/// 
 	/// each sub window will have its own swpachain and assicited images and the final pass images which will be multi layer will have to be coppied into each window swapchain at the end of the render pass
 	/// 
@@ -121,6 +121,7 @@ namespace sunrise {
 		gfx::DeferredPass* deferredPass;
 		gfx::GPUGenCommandsPipeline* gpuGenPipe;
 
+		//std::vector<gfx::GraphicsPipeline*> loadedPipes = {};
 
 		vk::SurfaceKHR surface;
 

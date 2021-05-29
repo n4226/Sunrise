@@ -12,22 +12,23 @@ namespace sunrise::gfx {
 		createMainRenderPass();
 	}*/
 
-	SingalPassRenderPassManager::SingalPassRenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat)
+	GPUPassRenderPassManager::GPUPassRenderPassManager(vk::Device device, VkFormat albedoFormat, VkFormat normalFormat, VkFormat aoFormat, VkFormat swapChainImageFormat, VkFormat depthBufferFormat)
 		: RenderPassManager(device,albedoFormat,normalFormat,aoFormat,swapChainImageFormat,depthBufferFormat)
 	{
+
 	}
 
-	SingalPassRenderPassManager::~SingalPassRenderPassManager()
+	GPUPassRenderPassManager::~GPUPassRenderPassManager()
 	{
 		device.destroyRenderPass(renderPass);
 	}
 
-	size_t SingalPassRenderPassManager::getSubPassCount()
+	size_t GPUPassRenderPassManager::getSubPassCount()
 	{
 		return 1;
 	}
 
-	void SingalPassRenderPassManager::createMainRenderPass()
+	void GPUPassRenderPassManager::createMainRenderPass()
 	{
 
 		/* Sub Passes

@@ -308,7 +308,8 @@ namespace sunrise {
         SR_CORE_INFO("Loading scene at addr: {}", reinterpret_cast<void*>(scene));
         scene->load();
         scene->coordinator->createPasses();
-
+        // load all coordinator registered pipeliens if not already
+        scene->coordinator->loadOrGetRegisteredPipesInAllWindows();
 	}
 
 
