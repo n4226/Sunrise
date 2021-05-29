@@ -80,8 +80,8 @@ namespace sunrise::gfx {
 		GPUStage* firstNode = lastStage;
 
 		stagesNodeQueue.push_back(firstNode);
-
-		while (!stagesNodeQueue.empty()) {
+		// dont rememb er how this is supposed to work so overidding this for now --- this was the active code
+		/*while (!stagesNodeQueue.empty()) {
 			auto node = stagesNodeQueue[stagesNodeQueue.size() - 1];
 			stagesNodeQueue.pop_back();
 			if (visited.count(node) == 0) {
@@ -94,7 +94,19 @@ namespace sunrise::gfx {
 				}
 			}
 		}
-		std::reverse(stagesInOrder.begin(), stagesInOrder.end());
+		std::reverse(stagesInOrder.begin(), stagesInOrder.end());*/
+		
+		//todo: fixthis
+		std::vector<GPUStage*> keys;
+		keys.reserve(individualRunDependencies.size());
+		//std::vector<Val> vals;
+		//vals.reserve(map.size());
+
+		for (auto kv : individualRunDependencies) {
+			keys.push_back(kv.first);
+			//vals.push_back(kv.second);
+		}
+		stagesInOrder.push_back(keys[0]);
 
 		SR_CORE_TRACE("{}", stagesInOrder.size());
 
@@ -125,15 +137,15 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::loadOrGetRegisteredPipesInAllWindows()
 	{
-		//// loop through all top level windows: virtual or onowned
-		//for (auto window : app.renderers[0]->windows) {
-		//	//TODO: check if window already has same virtual pipeLoaded
-		//	for (auto pipe : registeredPipes) {
-		//		//TODO: cash pipelines through vulkan and or seperatly to prevent rebuilding as much
-		//		//auto concretePipe = new GraphicsPipeline(window->device, window->swapchainExtent, *window->renderPassManager, pipe->definition);
-		//		//window->loadedPipes.push_back(concretePipe);
-		//	}
-		//}
+		// loop through all top level windows: virtual or onowned
+		for (auto window : app.renderers[0]->windows) {
+			//TODO: check if window already has same virtual pipeLoaded
+			for (auto pipe : registeredPipes) {
+				//TODO: cash pipelines through vulkan and or seperatly to prevent rebuilding as much
+				auto concretePipe = new GraphicsPipeline(window->device, window->swapchainExtent, *window->renderPassManager, pipe->definition);
+				window->loadedPipes.push_back(concretePipe);
+			}
+		}
 	}
 
 

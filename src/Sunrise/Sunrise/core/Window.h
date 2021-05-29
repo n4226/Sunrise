@@ -121,7 +121,7 @@ namespace sunrise {
 		gfx::DeferredPass* deferredPass;
 		gfx::GPUGenCommandsPipeline* gpuGenPipe;
 
-		//std::vector<gfx::GraphicsPipeline*> loadedPipes = {};
+		std::vector<gfx::GraphicsPipeline*> loadedPipes = {};
 
 		vk::SurfaceKHR surface;
 

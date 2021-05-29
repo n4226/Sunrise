@@ -55,7 +55,7 @@ namespace sunrise {
 			void loadOrGetRegisteredPipesInAllWindows();
 		private:
 
-			GPUStage* lastStage;
+			GPUStage* lastStage = nullptr;
 
 		};
 

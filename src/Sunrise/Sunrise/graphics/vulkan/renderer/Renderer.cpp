@@ -33,11 +33,11 @@ namespace sunrise::gfx {
 		}
 
 		createRenderResources();
-		createUniformsAndDescriptors();
+		//createUniformsAndDescriptors();
 
 		createDynamicRenderCommands();
 
-		materialManager->loadStatic();
+		
 	}
 
 	Renderer::~Renderer()
@@ -279,6 +279,10 @@ namespace sunrise::gfx {
 
 	void Renderer::allocateDescriptors()
 	{
+
+		// for each loaded pipe in each physical window, allocate descriptors
+		// see jira page on descition of how to deal with descriptors in the archetecture
+		/*
 		{
 			descriptorSets.resize(physicalWindows.size());
 
@@ -313,7 +317,7 @@ namespace sunrise::gfx {
 
 				vkAllocateDescriptorSets(device, &c_allocInfo, deferredDescriptorSets[i].data());
 			}
-		}
+		}*/
 	}
 
 	void Renderer::resetDescriptorPools()
@@ -599,7 +603,8 @@ namespace sunrise::gfx {
 
 			//updateRunTimeDescriptors(window);
 
-		updateCameraUniformBuffer(window);
+		// this is nolonger the renderer's responcability
+		//updateCameraUniformBuffer(window);
 
 #pragma region CreateRootCMDBuffer
 
