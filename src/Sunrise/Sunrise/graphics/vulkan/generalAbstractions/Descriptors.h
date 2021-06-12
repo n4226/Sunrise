@@ -10,7 +10,7 @@ namespace sunrise::gfx {
 		Using Descritpors
 
 		1. define a layout
-			- define the types descriptor sets and bindings you will and configuration
+			- define the types of descriptor sets and bindings you will use and configuration
 			 
 
 		2. create the pool which can instanciate layouts

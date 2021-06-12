@@ -159,13 +159,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.h" />
     <ClInclude Include="src\Sunrise.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\pbr.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h" />
@@ -177,9 +171,15 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\Sunrise\Sunrise\core\environment.h" />
     <ClInclude Include="src\Sunrise\Sunrise\debuging\Instrumentor.h" />
     <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileManager.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\pbr.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h" />
@@ -237,14 +237,14 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Log.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Window.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileManager.cpp" />

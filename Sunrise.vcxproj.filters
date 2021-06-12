@@ -31,6 +31,15 @@
     <Filter Include="src\Sunrise\Sunrise\graphics">
       <UniqueIdentifier>{1D364845-09F1-37F1-B2A8-B03B9E428281}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\graphics\shaders">
+      <UniqueIdentifier>{16C0626D-02A7-2465-ABF7-8A8297BD9DCB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sunrise\Sunrise\graphics\shaders\headers">
+      <UniqueIdentifier>{E11C409F-CD2F-40F8-7619-1DE5620BDD45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting">
+      <UniqueIdentifier>{A6598915-1276-7B06-DB4D-E8734729E5C7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\graphics\vulkan">
       <UniqueIdentifier>{1DB55868-896E-C312-12CE-DDEC7E867982}</UniqueIdentifier>
     </Filter>
@@ -129,6 +138,12 @@
     <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h">
       <Filter>src\Sunrise\Sunrise\debuging</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.h">
+      <Filter>src\Sunrise\Sunrise\fileFormats\binary</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.h">
+      <Filter>src\Sunrise\Sunrise\fileFormats\binary</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.h">
       <Filter>src\Sunrise\Sunrise\fileFormats\binary</Filter>
     </ClInclude>
@@ -137,6 +152,18 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileManager.h">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h">
+      <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h">
+      <Filter>src\Sunrise\Sunrise\graphics\shaders\headers\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\pbr.h">
+      <Filter>src\Sunrise\Sunrise\graphics\shaders\headers\lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h">
+      <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
@@ -303,12 +330,6 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\pbr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -328,6 +349,12 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp">
       <Filter>src\Sunrise\Sunrise\debuging</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.cpp">
+      <Filter>src\Sunrise\Sunrise\fileFormats\binary</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.cpp">
+      <Filter>src\Sunrise\Sunrise\fileFormats\binary</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.cpp">
       <Filter>src\Sunrise\Sunrise\fileFormats\binary</Filter>
@@ -521,7 +548,5 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.cpp" />
   </ItemGroup>
 </Project>

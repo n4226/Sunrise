@@ -108,7 +108,7 @@ namespace sunrise::gfx {
 		}
 		stagesInOrder.push_back(keys[0]);
 
-		SR_CORE_TRACE("{}", stagesInOrder.size());
+		//SR_CORE_TRACE("{}", stagesInOrder.size());
 
 
 		for (auto stage : stagesInOrder) {
@@ -143,7 +143,7 @@ namespace sunrise::gfx {
 			for (auto pipe : registeredPipes) {
 				//TODO: cash pipelines through vulkan and or seperatly to prevent rebuilding as much
 				auto concretePipe = new GraphicsPipeline(window->device, window->swapchainExtent, *window->renderPassManager, pipe->definition);
-				window->loadedPipes.push_back(concretePipe);
+				window->loadedPipes[pipe] = concretePipe;
 			}
 		}
 	}

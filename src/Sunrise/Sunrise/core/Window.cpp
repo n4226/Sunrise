@@ -96,8 +96,8 @@ namespace sunrise {
 
             gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
 
-            loadedPipes.push_back(pipelineCreator);
-            loadedPipes.push_back(deferredPass);
+            worldLoadedPipes.push_back(pipelineCreator);
+            worldLoadedPipes.push_back(deferredPass);
         }
         createFramebuffers();
 

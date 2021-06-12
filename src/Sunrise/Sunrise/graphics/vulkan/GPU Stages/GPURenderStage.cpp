@@ -62,4 +62,13 @@ namespace sunrise::gfx {
 		return buffer;
 	}
 
+	void GPURenderStage::setPipeline(sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline)
+	{
+		auto rawPipe = window.loadedPipes[pipeline];
+
+		buffer.bindPipeline(vk::PipelineBindPoint::eGraphics, rawPipe->vkItem);
+	}
+
+	
+
 }

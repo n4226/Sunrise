@@ -2,6 +2,7 @@
 
 #include "srpch.h"
 #include "GpuStage.h"
+#include "../renderPipelines/GraphicsPipeline.h"
 
 namespace sunrise::gfx {
 
@@ -33,6 +34,8 @@ namespace sunrise::gfx {
 		/// <param name="window"></param>
 		/// <returns></returns>
 		vk::CommandBuffer* selectAndSetupCommandBuff(uint32_t subpass, sunrise::Window& window);
+
+		void setPipeline(sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline);
 
 
 		// Inherited via GPUStage
