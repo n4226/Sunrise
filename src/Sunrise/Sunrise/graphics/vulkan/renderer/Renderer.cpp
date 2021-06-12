@@ -460,7 +460,7 @@ namespace sunrise::gfx {
 
 			device.updateDescriptorSets({ globalUniformDescriptorWrite, modelUniformsDescriptorWrite, matUniformsDescriptorWrite, post_globalUniformDescriptorWrite }, {});
 
-			// differed
+			// deferred
 
 
 

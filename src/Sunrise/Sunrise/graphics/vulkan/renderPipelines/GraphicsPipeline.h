@@ -38,6 +38,7 @@ namespace sunrise::gfx {
 
 		std::vector<ShaderStageOptions> shaderStages;
 
+		//vertex input stream deffinition
 		std::vector<VkVertexInputBindingDescription> bindingDescriptions;
 		std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
 

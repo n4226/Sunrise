@@ -423,7 +423,7 @@ namespace sunrise {
                 //Deferred
                 swapChainImageViews[i],
             };
-
+             
             vk::FramebufferCreateInfo framebufferInfo{};
             framebufferInfo.renderPass = renderPassManager->renderPass;
             framebufferInfo.attachmentCount = attachments.size();
