@@ -330,7 +330,7 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="MeshPrimatives.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\mesh\MeshPrimatives.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.h" />
   </ItemGroup>
   <ItemGroup>
@@ -550,7 +550,7 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="MeshPrimatives.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\mesh\MeshPrimatives.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.cpp" />
   </ItemGroup>
 </Project>

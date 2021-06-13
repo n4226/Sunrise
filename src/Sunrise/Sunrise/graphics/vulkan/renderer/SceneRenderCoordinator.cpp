@@ -135,7 +135,7 @@ namespace sunrise::gfx {
 		registeredPipes.push_back(virtualPipe);
 	}
 
-	ComposableRenderPass::CreateOptions SceneRenderCoordinator::renderpassConfig()
+	ComposableRenderPass::CreateOptions SceneRenderCoordinator::renderpassConfig(vk::Format swapChainFormat)
 	{
 		//This will not create a valid render pass
 		return ComposableRenderPass::CreateOptions();
@@ -156,12 +156,24 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::createRenderpasses()
 	{
-		sceneRenderpass = new ComposableRenderPass(app.renderers[0], renderpassConfig());
+
+		vk::Format swapChainFormat = vk::Format::eUndefined;
+
+		//TODO check if windows array is jsut unowned windows
+		for (auto win : app.renderers[0]->windows) {
+			vk::Format winFormat = static_cast<vk::Format>(win->swapchainImageFormat);
+			SR_ASSERT(!(swapChainFormat != vk::Format::eUndefined && winFormat != swapChainFormat));
+			swapChainFormat = winFormat;
+		}
+
+		auto config = renderpassConfig(swapChainFormat);
+		SR_ASSERT(config.attatchments.size() > 0);
+		sceneRenderpass = new ComposableRenderPass(app.renderers[0],std::move(config));
 
 		// set renderpass pointer on all windows even owned ones
-
-		//TODO see last comment
-
+		for (auto win : app.renderers[0]->allWindows) {
+			win->renderPassManager = sceneRenderpass;
+		}
 	}
 
 

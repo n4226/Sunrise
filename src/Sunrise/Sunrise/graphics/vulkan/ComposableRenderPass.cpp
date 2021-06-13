@@ -14,6 +14,7 @@ namespace sunrise::gfx {
 		options(std::move(options))
 	{
 		createMainRenderPass();
+		createWindowSpacificResources();
 	}
 
 	ComposableRenderPass::~ComposableRenderPass()
@@ -75,20 +76,29 @@ namespace sunrise::gfx {
 			images[window]->push_back(attatchImage);
 		}
 
+		if (vattachments.size() == 1) {
+			images[window] = new std::vector<Image*>();
+		}
+
+
+		window->swapChainFramebuffers.resize(window->swapChainImageViews.size());
 		for (size_t i = 0; i < window->swapChainImageViews.size(); i++) {
 			// see renderpass.cpp for info on order of attachments
 			std::vector<vk::ImageView> attachments = {};
-			attachments.resize(vattachments.size());
+			attachments.reserve(vattachments.size());
 
 			auto winAttachments = images[window];
-
-			for (size_t a = 0; a < winAttachments->size(); a++)
+			
+			// this is so that the indixies line up between local images and swap chain images stored in windows themselvs
+			bool passedSwapImage = false;
+			for (size_t a = 0; a < vattachments.size(); a++)
 			{
 				if (a == options.presentedAttachment) {
 					attachments.push_back(window->swapChainImageViews[i]);
+					passedSwapImage = true;
 				}
 				else {
-					attachments.push_back((*winAttachments)[a]->view);
+					attachments.push_back((*winAttachments)[passedSwapImage ? i - 1 : i]->view);
 				}
 			}
 
@@ -120,8 +130,8 @@ namespace sunrise::gfx {
 			auto heapVatt = new CreateOptions::VAttatchment(vatt);
 			vattachments.push_back(heapVatt);
 
-			auto des = descriptonFromVatt(&vatt);
-			auto ref = referenceFromVatt(&vatt);
+			auto des = descriptonFromVatt(heapVatt);
+			auto ref = referenceFromVatt(heapVatt);
 
 			attachments.push_back(des);
 			if (vatt.type == CreateOptions::AttatchmentType::Color) {
@@ -215,8 +225,13 @@ namespace sunrise::gfx {
 
 		if (multiViewport)
 			renderPassInfo.pNext = &multiViewInfo;
-
+		
 		renderPass = device.createRenderPass(renderPassInfo);
+	}
+
+	size_t ComposableRenderPass::getTotalAttatchmentCount()
+	{
+		return options.attatchments.size();
 	}
 
 	size_t ComposableRenderPass::getSubPassCount()

@@ -30,7 +30,7 @@ namespace sunrise {
 
 				struct VAttatchment {
 
-					AttatchmentType type;
+					AttatchmentType type = AttatchmentType::Color;
 
 					vk::AttachmentDescriptionFlags    flags = {};
 					vk::Format                        format;
@@ -39,13 +39,15 @@ namespace sunrise {
 					vk::AttachmentStoreOp             storeOp = vk::AttachmentStoreOp::eStore;
 					vk::AttachmentLoadOp              stencilLoadOp = vk::AttachmentLoadOp::eDontCare;
 					vk::AttachmentStoreOp             stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
-					/// layout the image is in before render pass beggins
+					/// layout the image is in before render pass beggins, layoiut undifined here means it can be anything
 					vk::ImageLayout                   initialLayout;
 					/// layout to transition image to at start of renderPass (subpass but there is only one for now)
 					vk::ImageLayout                   transitionalToAtStartLayout;
 					vk::ImageLayout                   finalLayout;
 
 					vk::ImageUsageFlags usage = vk::ImageUsageFlagBits::eColorAttachment;
+
+					//todo add ability to custimise clear value
 				};
 
 
@@ -55,6 +57,8 @@ namespace sunrise {
 				/// default is -1 which is none
 				/// </summary>
 				signed int presentedAttachment = -1;
+
+	
 			};
 
 
@@ -66,10 +70,12 @@ namespace sunrise {
 			ComposableRenderPass(Renderer* renderer, CreateOptions&& options);
 
 			virtual void createMainRenderPass() override;
+			virtual size_t getTotalAttatchmentCount() override;
 			virtual size_t getSubPassCount() override;
 
 			//TODO: do proper delete of reasources
 			~ComposableRenderPass();
+
 
 		private:
 

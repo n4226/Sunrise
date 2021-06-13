@@ -48,24 +48,25 @@ namespace sunrise {
 			/// <param name="virtualPipe"></param>
 			void registerPipeline(VirtualGraphicsPipeline* virtualPipe);
 
+			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
+			ComposableRenderPass* sceneRenderpass;
 		protected:
 			friend Window;
 			friend Application;
 			std::vector<VirtualGraphicsPipeline*> registeredPipes;
 
 			/// <summary>
-			/// this is guaranteed to be called before the createPasses funciton is called 
+			/// his is guaranteed to be called before the createPasses funciton is called 
 			/// </summary>
-			/// <param name="renderPassOptions"></param>
-			virtual ComposableRenderPass::CreateOptions renderpassConfig();
+			/// <param name="swapChainFormat">the format the display(s) are expecting, with multiuple windows if formats are different value is undifined</param>
+			/// <returns></returns>
+			virtual ComposableRenderPass::CreateOptions renderpassConfig(vk::Format swapChainFormat);
 
 
 			void loadOrGetRegisteredPipesInAllWindows();
 
 			void createRenderpasses();
 
-			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
-			ComposableRenderPass* sceneRenderpass;
 
 		private:
 

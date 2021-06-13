@@ -73,16 +73,15 @@ namespace sunrise {
         {
             createFrameBufferImages();
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-        }
-        else
-            renderPassManager = new GPUPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-        
-        if (_virtual) {
-            renderPassManager->multiViewport = true;
-            renderPassManager->multiViewCount = subWindows.size();
-        }
+            if (_virtual) {
+                renderPassManager->multiViewport = true;
+                renderPassManager->multiViewCount = subWindows.size();
+            }
 
-        renderPassManager->createMainRenderPass();
+            renderPassManager->createMainRenderPass();
+        }
+        
+        
 
         if (world != nullptr) {
             pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
@@ -101,13 +100,15 @@ namespace sunrise {
 
             worldLoadedPipes.push_back(pipelineCreator);
             worldLoadedPipes.push_back(deferredPass);
+
+            createFramebuffers();
         }
-        createFramebuffers();
 
         createSemaphores();
+
         if (!_virtual && world != nullptr)
             SetupImgui();
-        else {
+        else if (world != nullptr) {
             // give pointers of grphics pipelines and renderpass to subwindows
             for (size_t i = 0; i < subWindows.size(); i++)
             {
@@ -207,18 +208,19 @@ namespace sunrise {
         createSwapchainImageViews();
 
         WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
-        if (world != nullptr)
+        if (world != nullptr) {
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-        else
-            renderPassManager = new GPUPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-      
-        if (_virtual) {
-            renderPassManager->multiViewport = true;
-            renderPassManager->multiViewCount = subWindows.size();
+
+            if (_virtual) {
+                renderPassManager->multiViewport = true;
+                renderPassManager->multiViewCount = subWindows.size();
+            }
+
+            renderPassManager->createMainRenderPass();
+
         }
-
-        renderPassManager->createMainRenderPass();
-
+        
+      
         if (world != nullptr) {
             pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
@@ -466,8 +468,11 @@ namespace sunrise {
         int monitorsCount = 0;
         auto monitors = glfwGetMonitors(&monitorsCount);
 
+        SR_CORE_TRACE("Available Monitors:");
+
         for (size_t i = 0; i < monitorsCount; i++)
         {
+            SR_CORE_TRACE("{}", glfwGetWin32Monitor(monitors[i]));
             //SR_CORE_INFO("comparing monitor {} to {}", glfwGetWin32Monitor(monitors[i]), name.c_str());
             if (strcmp(glfwGetWin32Monitor(monitors[i]), name.c_str()) == 0) {
                 return monitors[i];

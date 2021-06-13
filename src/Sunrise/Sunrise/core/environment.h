@@ -75,6 +75,7 @@
 #define VK_SUBPASS_INDEX_COMPUTE_PREPASS 0
 #define VK_SUBPASS_INDEX_GBUFFER 1
 #define VK_SUBPASS_INDEX_LIGHTING 2
+#define VK_GPUDriven 1
 #endif
 
 // constants 

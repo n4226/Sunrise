@@ -622,6 +622,7 @@ namespace sunrise::gfx {
 		cmdBuff.begin(beginInfo);
 
 
+#pragma endregion
 		// begin a render pass
 
 		vk::RenderPassBeginInfo renderPassInfo{};
@@ -630,33 +631,32 @@ namespace sunrise::gfx {
 
 		renderPassInfo.renderArea = vk::Rect2D({ 0, 0 }, window.swapchainExtent);
 
-
-		//VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-		const std::array<float, 4> clearComponents = { 0.0f, 0.0f, 0.2f, 0.0f };
-
-		//TODO -----------------(3,"fix load ops of textures to remove unnecicary clearing") --------------------------------------------------------------------------------------------
-		std::array<vk::ClearValue, 5> clearColors = {
-			//Gbuffer images which are cleared now but that is temporary
-			vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			//GBuff Depth Tex - cleared
-			vk::ClearValue(vk::ClearDepthStencilValue({1.f,0})),
-
-			//SwapCHainOutput
-			vk::ClearValue(vk::ClearColorValue(clearComponents)),
-		};
-
-		renderPassInfo.setClearValues(clearColors);
-
-		VkRenderPassBeginInfo info = renderPassInfo;
-
-#pragma endregion
-
-		//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
-		cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
-
 		if (terrainSystem != nullptr) {
+
+			//VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+			const std::array<float, 4> clearComponents = { 0.0f, 0.0f, 0.2f, 0.0f };
+
+			//TODO -----------------(3,"fix load ops of textures to remove unnecicary clearing") --------------------------------------------------------------------------------------------
+			std::array<vk::ClearValue, 5> clearColors = {
+				//Gbuffer images which are cleared now but that is temporary
+				vk::ClearValue(vk::ClearColorValue(clearComponents)),
+				vk::ClearValue(vk::ClearColorValue(clearComponents)),
+				vk::ClearValue(vk::ClearColorValue(clearComponents)),
+				//GBuff Depth Tex - cleared
+				vk::ClearValue(vk::ClearDepthStencilValue({1.f,0})),
+
+				//SwapCHainOutput
+				vk::ClearValue(vk::ClearColorValue(clearComponents)),
+			};
+
+			renderPassInfo.setClearValues(clearColors);
+
+			VkRenderPassBeginInfo info = renderPassInfo;
+
+
+			//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
+			cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
+
 
 			VkDebug::beginRegion(cmdBuff, "Gbuffer Pass", glm::vec4(0.7, 0.2, 0.3, 1));
 
@@ -687,6 +687,36 @@ namespace sunrise::gfx {
 		}
 		else {
 			auto coord = app.loadedScenes[0]->coordinator;
+
+			//VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+			const std::array<float, 4> clearComponents = { 0.0f, 0.0f, 0.2f, 1.0f };
+
+			//TODO -----------------(3,"fix load ops of textures to remove unnecicary clearing") --------------------------------------------------------------------------------------------
+			//std::array<vk::ClearValue, 5> clearColors = {
+			//	//Gbuffer images which are cleared now but that is temporary
+			//	vk::ClearValue(vk::ClearColorValue(clearComponents)),
+			//	vk::ClearValue(vk::ClearColorValue(clearComponents)),
+			//	vk::ClearValue(vk::ClearColorValue(clearComponents)),
+			//	//GBuff Depth Tex - cleared
+			//	vk::ClearValue(vk::ClearDepthStencilValue({1.f,0})),
+
+			//	//SwapCHainOutput
+			//	vk::ClearValue(vk::ClearColorValue(clearComponents)),
+			//};
+
+			//TODO: make this compatable with depth buffers
+			std::vector<vk::ClearValue> clearColors(coord->sceneRenderpass->getTotalAttatchmentCount(),
+				vk::ClearValue(vk::ClearColorValue(clearComponents)));
+
+			renderPassInfo.setClearValues(clearColors);
+
+			VkRenderPassBeginInfo info = renderPassInfo;
+
+
+			//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
+			cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
+
+
 
 			coord->encodePassesForFrame(this, cmdBuff, app.currentFrameID, window);
 		}

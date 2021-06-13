@@ -160,7 +160,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.h" />
-    <ClInclude Include="MeshPrimatives.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\math\mesh\MeshPrimatives.h" />
     <ClInclude Include="src\Sunrise.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
@@ -240,7 +240,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.cpp" />
-    <ClCompile Include="MeshPrimatives.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\math\mesh\MeshPrimatives.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
