@@ -27,6 +27,9 @@ namespace sunrise {
 
 
 
+			//called once 
+			virtual void setup() = 0;
+
 			//TODO: right now all stages encode into secondar command buffs but this could change
 
 			/// <summary>
@@ -42,6 +45,11 @@ namespace sunrise {
 		//protected:
 
 			Application& app;
+
+		protected:
+			friend GPUStageDispatcher;
+
+			bool _setup = false;
 
 		};
 

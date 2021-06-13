@@ -32,7 +32,6 @@ namespace sunrise::gfx {
 			vkHelpers::createPoolsAndCommandBufffers
 			(app.renderers[0]->device, cmdBufferPools[i], commandBuffers[i], app.maxSwapChainImages, app.renderers[0]->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
 
-
 	}
 
 

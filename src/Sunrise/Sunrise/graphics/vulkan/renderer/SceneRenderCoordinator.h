@@ -16,6 +16,10 @@ namespace sunrise {
 		class Renderer;
 		class VirtualGraphicsPipeline;
 
+		//TODO: figure out how CRV and Gpu-Stages will work with multi gpu
+		/// <summary>
+		/// 
+		/// </summary>
 		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher
 		{
 		public:

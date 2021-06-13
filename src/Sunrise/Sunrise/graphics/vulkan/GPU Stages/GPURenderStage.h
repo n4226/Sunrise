@@ -41,7 +41,7 @@ namespace sunrise::gfx {
 		// Inherited via GPUStage
 		// 
 		//called once 
-		virtual void setup() = 0;
+		virtual void setup() override = 0;
 		// called every frame
 		virtual vk::CommandBuffer* encode(uint32_t subpass, sunrise::Window& window) override = 0;
 

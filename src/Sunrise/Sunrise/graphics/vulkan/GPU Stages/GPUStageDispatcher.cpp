@@ -1,5 +1,6 @@
 #include "srpch.h"
 #include "GPUStageDispatcher.h"
+#include "GpuStage.h"
 
 namespace sunrise::gfx {
 
@@ -18,6 +19,11 @@ namespace sunrise::gfx {
 		assert(individualRunDependencies.count(stage) == 0);
 		assert(individualRunDependencyOptoins.count(stage) == 0);
 #endif
+
+		if (!stage->_setup) {
+			stage->setup();
+			stage->_setup = true;
+		}
 
 		individualRunDependencies[stage] = std::move(runDependencies);
 		individualRunDependencyOptoins[stage] = std::move(runDependencyOptions);
