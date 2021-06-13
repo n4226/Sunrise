@@ -153,6 +153,7 @@ namespace sunrise {
 
 		bool isVirtual();
 		bool isPrimary();
+		bool isOwned();
 
 		bool _owned = false;
 

@@ -104,6 +104,7 @@ namespace sunrise {
 
         SR_CORE_TRACE("Initializing Scene");
 
+        //TODO this does not support multiple scenes yet
         Scene* firstScene = loadedScenes[0];
         loadScene(firstScene,nullptr);
 
@@ -308,6 +309,10 @@ namespace sunrise {
         SR_CORE_INFO("Loading scene at addr: {}", reinterpret_cast<void*>(scene));
         scene->load();
         scene->coordinator->createPasses();
+
+        // create render pass(es)
+        scene->coordinator->createRenderpasses();
+
         // load all coordinator registered pipeliens if not already
         scene->coordinator->loadOrGetRegisteredPipesInAllWindows();
 	}

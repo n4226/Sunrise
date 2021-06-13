@@ -20,7 +20,7 @@ namespace sunrise::gfx {
 
 
 		resouceTransferer = new ResourceTransferer(device, *this);
-		//TODO: for multi gpu this should not be owned by a rednerer bu the application
+		//TODO: for multi gpu this maybe should not be owned by a rednerer but the application
 		materialManager = new MaterialManager(*this);
 	}
 

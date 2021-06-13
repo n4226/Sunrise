@@ -4,6 +4,7 @@
 #include "Renderer.h"
 
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUStageDispatcher.h"
+#include "Sunrise/Sunrise/graphics/vulkan/ComposableRenderPass.h"
 
 namespace sunrise {
 
@@ -52,7 +53,20 @@ namespace sunrise {
 			friend Application;
 			std::vector<VirtualGraphicsPipeline*> registeredPipes;
 
+			/// <summary>
+			/// this is guaranteed to be called before the createPasses funciton is called 
+			/// </summary>
+			/// <param name="renderPassOptions"></param>
+			virtual ComposableRenderPass::CreateOptions renderpassConfig();
+
+
 			void loadOrGetRegisteredPipesInAllWindows();
+
+			void createRenderpasses();
+
+			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
+			ComposableRenderPass* sceneRenderpass;
+
 		private:
 
 			GPUStage* lastStage = nullptr;

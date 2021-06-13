@@ -62,15 +62,18 @@ namespace sunrise {
 
         }
 
-
-        createFrameBufferImages();
-
-        // make graphics pipeline 
-
-
+        // temporary for splititng between legacy world system and neo CRP (composable rener pass) system
         WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
+
+
+        // make graphics pipeline
+
+
         if (world != nullptr)
+        {
+            createFrameBufferImages();
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+        }
         else
             renderPassManager = new GPUPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
         
@@ -407,10 +410,13 @@ namespace sunrise {
 
     }
 
+    //TODO remove
     void Window::createFramebuffers()
     {
-        PROFILE_FUNCTION
-            swapChainFramebuffers.resize(swapChainImageViews.size());
+        return;
+
+        PROFILE_FUNCTION;
+        swapChainFramebuffers.resize(swapChainImageViews.size());
 
         for (size_t i = 0; i < swapChainImageViews.size(); i++) {
             // see renderpass.cpp for info on order of attachments
@@ -567,6 +573,11 @@ namespace sunrise {
     bool Window::isPrimary()
     {
         return _primary;
+    }
+
+    bool Window::isOwned()
+    {
+        return _owned;
     }
 
     void Window::addSubWindow(Window* subWindow)

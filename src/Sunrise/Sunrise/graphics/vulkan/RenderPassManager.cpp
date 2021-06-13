@@ -22,6 +22,7 @@ namespace sunrise::gfx {
 	{
 		return 2;
 	}
+// dont know why i did this ??
 #if SR_RELEASE || SR_DIST
 #pragma optimize( "", off )
 #endif

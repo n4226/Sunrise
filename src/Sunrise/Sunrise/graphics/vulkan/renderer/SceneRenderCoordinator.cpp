@@ -135,6 +135,12 @@ namespace sunrise::gfx {
 		registeredPipes.push_back(virtualPipe);
 	}
 
+	ComposableRenderPass::CreateOptions SceneRenderCoordinator::renderpassConfig()
+	{
+		//This will not create a valid render pass
+		return ComposableRenderPass::CreateOptions();
+	}
+
 	void SceneRenderCoordinator::loadOrGetRegisteredPipesInAllWindows()
 	{
 		// loop through all top level windows: virtual or onowned
@@ -146,6 +152,16 @@ namespace sunrise::gfx {
 				window->loadedPipes[pipe] = concretePipe;
 			}
 		}
+	}
+
+	void SceneRenderCoordinator::createRenderpasses()
+	{
+		sceneRenderpass = new ComposableRenderPass(app.renderers[0], renderpassConfig());
+
+		// set renderpass pointer on all windows even owned ones
+
+		//TODO see last comment
+
 	}
 
 
