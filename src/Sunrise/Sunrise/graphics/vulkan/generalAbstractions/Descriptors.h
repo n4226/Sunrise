@@ -15,11 +15,15 @@ namespace sunrise::gfx {
 
 		2. create the pool which can instanciate layouts
 
+		3.
+
 		descriptor parts:
 
 		DescriptorSetLayoutBinding - definition of the type of a binding in a set layout and which stages it will be used in
 		DescriptorSetLayout - a collection of DescriptorSetLayoutBindings that define one type of descreiptor set that can be initilized by a descriptorSetPool
 	
+		for more info see vulkan docs
+
 	*/
 
 	/// <summary>
@@ -89,10 +93,10 @@ namespace sunrise::gfx {
 	/// </summary>
 	namespace DescriptorSetLayout {
 		struct CreateOptions {
-			std::vector<DescriptorSetLayoutBinding>&& setLayoutBindings;
+			std::vector<DescriptorSetLayoutBinding> setLayoutBindings;
 		};
 
-		static vk::DescriptorSetLayout Create(CreateOptions options, vk::Device device) {
+		static vk::DescriptorSetLayout Create(CreateOptions&& options, vk::Device device) {
 			auto bindings = std::vector<VkDescriptorSetLayoutBinding>(options.setLayoutBindings.size());
 			auto bindingFlags = std::vector<VkDescriptorBindingFlags>(options.setLayoutBindings.size());
 			VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo;
@@ -136,23 +140,147 @@ namespace sunrise::gfx {
 		//vk::DescriptorSetLayout vkItem;
 	};
 
-
+	
+	/// <summary>
+	/// wrapper of vk::DescriptorPool
+	/// </summary>
 	class SUNRISE_API DescriptorPool {
+	public:
+
+		struct CreateOptions {
+
+			struct DescriptorTypeAllocOptions {
+
+				vk::DescriptorType type;
+				// the total max number of this descriptor allocated - if the pool allocates 2 sets and each one has 2 of this descriptor than thes would have to be 4 in order to allocate both sets
+				// not sure if this means array count - I don't think it is
+				size_t maxNum;
+			};
+
+			/// <summary>
+			/// the maximum number of total sets that can be allocated
+			/// </summary>
+			size_t maxSets;
+
+			/// <summary>
+			/// the max number of each type of descriptor binding this set can store.
+			/// </summary>
+			std::vector<DescriptorTypeAllocOptions> typeSizes;
+
+			/// <summary>
+			/// see: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/VkDescriptorPoolCreateFlagBits.html
+			/// </summary>
+			vk::DescriptorPoolCreateFlags flags = {};
+		};
+
+		DescriptorPool(vk::Device device, CreateOptions&& options);
+
+		vk::DescriptorPool vkItem;
+
+		// api
+
+		/// <summary>
+		/// resets all descriptor sets allocated by this set. those said sets are implicitly freed
+		/// </summary>
+		void reset();
+
+		/// <summary>
+		/// frees all given sets
+		/// Asertion: all sets must have been created form this pool
+		/// </summary>
+		/// <param name="sets"></param>
+		void free(std::vector<DescriptorSet>&& sets);
+
+		// see: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkAllocateDescriptorSets.html
+		// if allocation is not valid because pool is full or full of a type, this will fail. 
+		// also can fail within limits due to fragmentaion of internal storage 
+
+		/// <summary>
+		/// allocates one descriptor set for each layout in the input array of layouts
+		/// </summary>
+		/// <param name="layouts"></param>
+		std::vector<DescriptorSet> allocate(std::vector<vk::DescriptorSetLayout>&& layouts);
+
+		// api for spacific sets
+		
+		struct UpdateOperation {
+			
+			enum class Type {
+				write, copy
+			};
+
+			typedef vk::DescriptorBufferInfo DescriptorBufferRef;
+
+			typedef vk::DescriptorImageInfo DescriptorImageRef;
+
+
+			//TODO: not functiuonal yet
+			struct DescriptorTexalRef {
+
+			};
+
+
+			Type type;
+
+
+			// includes set ptr
+			// for update ops this is the binding to update and srcBiding can be ignored
+			//DescriptorBinding dstBinding;
+			size_t dstStartArrayElement;
+			/// <summary>
+			/// for array this is number of elements to update starting at the dstStartArrayElement. 
+			/// this is also the number of image, buffer, or texel buffer views 
+			/// </summary>
+			size_t discriptorCountToUpdate;
+
+
+			//write spacific
+			// this can be found from the dst binding object
+			//vk::DescriptorType type;
+
+			std::variant<std::monostate, DescriptorBufferRef, DescriptorImageRef, DescriptorTexalRef>reference;
+
+			//copy spacific
+			//DescriptorBinding srcBinding;
+			size_t srcStartArrayElement;
+
+		};
+
+
+		void update(std::vector<UpdateOperation>&& ops);
+
+	private:
+
+		vk::Device device;
+
 
 	};
 
 
+	/// <summary>
+	/// created by Descriptor pool
+	/// </summary>
+	typedef vk::DescriptorSet DescriptorSet;
+	//struct SUNRISE_API DescriptorSet {
 
-	struct SUNRISE_API DescriptorSet {
+	//private:
+	//	friend DescriptorPool;
+
+	//	vk::DescriptorSet vkItem;
+
+	//	DescriptorSet(vk::DescriptorSet vkItem);
+
+	//public:
+
+	//	void bindInto();
+
+	//};
 
 
+	struct DescriptorBinding {
+		//DescriptorSet set;
+		//size_t inex;
 	};
-
-
-	struct SUNRISE_API DescriptorBinding {
-
-	};
-
 
 }
 

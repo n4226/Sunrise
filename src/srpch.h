@@ -54,6 +54,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <variant>
+
 #include <assert.h>
 #include <numeric>
 
