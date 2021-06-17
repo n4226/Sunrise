@@ -101,3 +101,9 @@
 //#define vkMarker
 //#else
 //#endif
+
+/*
+
+Good git restore explanation: (this is seperate I will find a place to put this shortly)
+https://stackoverflow.com/questions/58003030/what-is-the-git-restore-command-and-what-is-the-difference-between-git-restor
+*/

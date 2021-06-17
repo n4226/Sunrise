@@ -175,13 +175,17 @@ namespace sunrise::gfx {
 	//NOTE: this should be very efficent as it is in main render path
 	void DescriptorPool::update(std::vector<UpdateOperation>&& ops)
 	{
+		std::vector<vk::WriteDescriptorSet> writes;
+		std::vector<vk::CopyDescriptorSet> copies;
+
+		writes.reserve(ops.size());
+		copies.reserve(ops.size());
 
 		for (auto& op : ops) {
-			vk::WriteDescriptorSet writeUpdate{};
-			vk::CopyDescriptorSet copyUpdate{};
 
 			if (op.type == UpdateOperation::Type::write) {
 
+				vk::WriteDescriptorSet writeUpdate{};
 
 
 				writeUpdate.dstSet = op.dstBinding.set->vkItem;
@@ -217,10 +221,11 @@ namespace sunrise::gfx {
 					break;
 				}
 
-
+				writes.push_back(writeUpdate);
 			}
 			else {
 
+				vk::CopyDescriptorSet copyUpdate{};
 
 				copyUpdate.dstSet = op.dstBinding.set->vkItem;
 				copyUpdate.dstBinding = op.dstBinding.index;
@@ -232,9 +237,13 @@ namespace sunrise::gfx {
 
 				copyUpdate.descriptorCount = op.discriptorCountToUpdate;
 
+				copies.push_back(copyUpdate);
 			}
+
+
 		}
 
+		device.updateDescriptorSets(writes, copies);
 	}
 
 
