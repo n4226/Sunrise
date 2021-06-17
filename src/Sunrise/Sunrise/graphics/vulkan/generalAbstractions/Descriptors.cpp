@@ -3,6 +3,9 @@
 
 namespace sunrise::gfx {
 
+	//global storage
+	std::unordered_map<vk::DescriptorSetLayout, std::vector<DescriptorSetLayoutBinding>*> layoutData;
+
 	DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(uint32_t bindingIndex, vk::DescriptorType descriptorType, vk::ShaderStageFlags stagesUsedIn)
 		: DescriptorSetLayoutBinding(bindingIndex, descriptorType, 1, stagesUsedIn, nullptr, {})
 	{
@@ -35,7 +38,7 @@ namespace sunrise::gfx {
 	/// </summary>
 	/// <returns></returns>
 
-	inline std::vector<DescriptorSetLayoutBinding> DescriptorSetLayoutBinding::createWholeSet(std::vector<shell>&& bindings) {
+	inline std::vector<DescriptorSetLayoutBinding> DescriptorSetLayoutBinding::createWholeSet(std::vector<Shell>&& bindings) {
 
 		std::vector<DescriptorSetLayoutBinding> result(bindings.size());
 
@@ -53,6 +56,57 @@ namespace sunrise::gfx {
 	}
 
 
+	vk::DescriptorSetLayout DescriptorSetLayout::Create(CreateOptions&& options, vk::Device device)
+	{
+		auto bindings = std::vector<VkDescriptorSetLayoutBinding>(options.setLayoutBindings.size());
+		auto bindingFlags = std::vector<VkDescriptorBindingFlags>(options.setLayoutBindings.size());
+		VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo;
+
+		bool needsFlags = false;
+
+		for (size_t i = 0; i < options.setLayoutBindings.size(); i++)
+		{
+			auto& binding = options.setLayoutBindings[i];
+			bindings[i] = binding.vkItem;
+			if (binding.flags != nullptr) {
+				needsFlags = true;
+				bindingFlags[i] = *binding.flags;
+			}
+			else if (needsFlags)
+				bindingFlags[i] = {};
+		}
+
+		VkDescriptorSetLayoutCreateInfo layoutInfo{};
+		layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		layoutInfo.bindingCount = bindings.size();
+		layoutInfo.pBindings = bindings.data();
+
+		if (needsFlags) {
+			bindingFlagsInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
+			bindingFlagsInfo.pNext = nullptr;
+			bindingFlagsInfo.bindingCount = bindingFlags.size();
+			bindingFlagsInfo.pBindingFlags = bindingFlags.data();
+
+			layoutInfo.pNext = &bindingFlagsInfo;
+		}
+		else {
+			layoutInfo.pNext = nullptr;
+		}
+
+		// create layout
+		auto layout = device.createDescriptorSetLayout(layoutInfo);
+		layoutData[layout] = new std::vector<DescriptorSetLayoutBinding>(options.setLayoutBindings);
+
+		return layout;
+	}
+
+	void DescriptorSetLayout::Destroy(vk::DescriptorSetLayout layout, vk::Device device)
+	{
+		delete layoutData[layout];
+		layoutData.erase(layout);
+
+		device.destroyDescriptorSetLayout(layout);
+	}
 
 	DescriptorPool::DescriptorPool(vk::Device device,CreateOptions&& options)
 		: device(device)
@@ -85,14 +139,21 @@ namespace sunrise::gfx {
 		device.resetDescriptorPool(vkItem);
 	}
 
-	void DescriptorPool::free(std::vector<DescriptorSet>&& sets)
+	void DescriptorPool::free(std::vector<DescriptorSet*>&& sets)
 	{
-		device.freeDescriptorSets(vkItem, sets);
+		std::vector<vk::DescriptorSet> rawSets{};
+		rawSets.reserve(sets.size());
+
+		for (auto set : sets) {
+			rawSets.push_back(set->vkItem);
+		}
+
+		device.freeDescriptorSets(vkItem, rawSets);
 	}
 
-	std::vector<DescriptorSet> DescriptorPool::allocate(std::vector<vk::DescriptorSetLayout>&& layouts)
+	std::vector<DescriptorSet*> DescriptorPool::allocate(std::vector<vk::DescriptorSetLayout>&& layouts)
 	{
-		//std::vector<DescriptorSet*> sets;
+		std::vector<DescriptorSet*> sets;
 
 		vk::DescriptorSetAllocateInfo allocInfo;
 
@@ -100,40 +161,91 @@ namespace sunrise::gfx {
 		allocInfo.descriptorSetCount = static_cast<uint32_t>(layouts.size());
 		allocInfo.pSetLayouts = layouts.data();
 
-		return device.allocateDescriptorSets(allocInfo);
+		//TODO: assuming one to one relationship betwseen layout array and returned sets in terms of index - docs are not clear about this
+		auto rawSets = device.allocateDescriptorSets(allocInfo);
+
+		sets.reserve(rawSets.size());
+		for (size_t i = 0; i < rawSets.size(); i++) {
+			sets.push_back(new DescriptorSet(rawSets[i],layoutData[layouts[i]]));
+		}
+
+		return sets;
 	}
 
 	//NOTE: this should be very efficent as it is in main render path
 	void DescriptorPool::update(std::vector<UpdateOperation>&& ops)
 	{
 
-		//for (auto op : ops) {
+		for (auto& op : ops) {
+			vk::WriteDescriptorSet writeUpdate{};
+			vk::CopyDescriptorSet copyUpdate{};
 
-		//	if (op.type == UpdateOperation::Type::write) {
+			if (op.type == UpdateOperation::Type::write) {
 
 
 
-		//		VkWriteDescriptorSet writeUpdate{};
-		//		writeUpdate.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-		//		writeUpdate.dstSet = op.dstBinding.set;
-		//		writeUpdate.dstBinding = op.dstBinding.inex;
-		//		writeUpdate.dstArrayElement = op.dstStartArrayElement;
+				writeUpdate.dstSet = op.dstBinding.set->vkItem;
+				writeUpdate.dstBinding = op.dstBinding.index;
+				writeUpdate.dstArrayElement = op.dstStartArrayElement;
 
-		//		writeUpdate.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		//		writeUpdate.descriptorCount = 1;
 
-		//		writeUpdate.pBufferInfo = &globalUniformBufferInfo;
-		//		writeUpdate.pImageInfo = nullptr; // Optional
-		//		writeUpdate.pTexelBufferView = nullptr; // Optional
+				auto layoutbindingOptions = (*op.dstBinding.set->layout)[op.dstBinding.index];
 
-		//	}
-		//	else {
+				writeUpdate.descriptorType = vk::DescriptorType(layoutbindingOptions.vkItem.descriptorType);
+				writeUpdate.descriptorCount = op.discriptorCountToUpdate;
 
-		//	}
-		//}
+				switch (op.reference.index())
+				{
+				case 1:
+
+					writeUpdate.pBufferInfo = &std::get<UpdateOperation::DescriptorBufferRef>(op.reference);
+					break;
+				case 2:
+					writeUpdate.pImageInfo = &std::get<UpdateOperation::DescriptorImageRef>(op.reference); 
+					break;
+				case 3:
+					//TODO case 3 not implimented yet
+					//writeUpdate.pTexelBufferView = nullptr; 
+					break;
+
+				default:
+					// error
+					SR_CORE_ERROR("attempting to update a descriptor but no ref provided");
+					//todo throw error here
+					SR_CORE_ERROR("add throw error here");
+
+					break;
+				}
+
+
+			}
+			else {
+
+
+				copyUpdate.dstSet = op.dstBinding.set->vkItem;
+				copyUpdate.dstBinding = op.dstBinding.index;
+				copyUpdate.dstArrayElement = op.dstStartArrayElement;
+
+				copyUpdate.srcSet = op.srcBinding.set->vkItem;
+				copyUpdate.srcBinding = op.srcBinding.index;
+				copyUpdate.srcArrayElement = op.srcStartArrayElement;
+
+				copyUpdate.descriptorCount = op.discriptorCountToUpdate;
+
+			}
+		}
+
+	}
+
+
+
+	DescriptorSet::DescriptorSet(vk::DescriptorSet vkItem, std::vector<DescriptorSetLayoutBinding>* layout)
+		: vkItem(vkItem), layout(layout)
+	{
 
 	}
 
 
 
 }
+

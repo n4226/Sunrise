@@ -24,6 +24,10 @@ namespace sunrise::gfx {
 	
 		for more info see vulkan docs
 
+		TODO: A note about performance: right now structs like descriptor set layout, descriptor set etc wrap the vk objects which is 
+		not got for performance since it requires looping to create and remove them. in the future the pointer could be used as a key in a map
+		this would require creatoin and deletion methods to pass through this system so not doing this now but should in the future.
+
 	*/
 
 	/// <summary>
@@ -31,7 +35,7 @@ namespace sunrise::gfx {
 	/// </summary>
 	struct SUNRISE_API DescriptorSetLayoutBinding {
 
-		struct shell {
+		struct Shell {
 			vk::DescriptorType descriptorType;
 			vk::ShaderStageFlags stagesUsedIn;
 			uint32_t numberOfDescriptorsInArray = 1;
@@ -67,7 +71,7 @@ namespace sunrise::gfx {
 		/// </summary>
 		/// <returns></returns>
 		static std::vector<DescriptorSetLayoutBinding> createWholeSet(
-			std::vector<shell>&& bindings
+			std::vector<Shell>&& bindings
 		);
 
 
@@ -76,7 +80,7 @@ namespace sunrise::gfx {
 		VkDescriptorSetLayoutBinding vkItem{};
 
 		VkDescriptorBindingFlags* flags = nullptr;
-		
+
 		/// <summary>
 		/// do not use
 		/// </summary>
@@ -92,55 +96,59 @@ namespace sunrise::gfx {
 	/// make one for each type of descripor set your would like to create
 	/// </summary>
 	namespace DescriptorSetLayout {
+
+		/*class HiddenParams {
+		private:
+			friend DescriptorPool;
+			friend vk::DescriptorSetLayout Create(CreateOptions&& options, vk::Device device);
+
+			static std::unordered_map<vk::DescriptorSetLayout, std::vector<DescriptorSetLayoutBinding>*> layoutInfo;
+		};*/
+
 		struct CreateOptions {
 			std::vector<DescriptorSetLayoutBinding> setLayoutBindings;
 		};
 
-		static vk::DescriptorSetLayout Create(CreateOptions&& options, vk::Device device) {
-			auto bindings = std::vector<VkDescriptorSetLayoutBinding>(options.setLayoutBindings.size());
-			auto bindingFlags = std::vector<VkDescriptorBindingFlags>(options.setLayoutBindings.size());
-			VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo;
-
-			bool needsFlags = false;
-
-			for (size_t i = 0; i < options.setLayoutBindings.size(); i++)
-			{
-				auto& binding = options.setLayoutBindings[i];
-				bindings[i] = binding.vkItem;
-				if (binding.flags != nullptr) {
-					needsFlags = true;
-					bindingFlags[i] = *binding.flags;
-				}
-				else if (needsFlags)
-					bindingFlags[i] = {};
-			}
-
-			VkDescriptorSetLayoutCreateInfo layoutInfo{};
-			layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-			layoutInfo.bindingCount = bindings.size();
-			layoutInfo.pBindings = bindings.data();
-
-			if (needsFlags) {
-				bindingFlagsInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
-				bindingFlagsInfo.pNext = nullptr;
-				bindingFlagsInfo.bindingCount = bindingFlags.size();
-				bindingFlagsInfo.pBindingFlags = bindingFlags.data();
-
-				layoutInfo.pNext = &bindingFlagsInfo;
-			}
-			else {
-				layoutInfo.pNext = nullptr;
-			}
-
-			// create layout
-			return device.createDescriptorSetLayout(layoutInfo);
-		}
-
+		vk::DescriptorSetLayout Create(CreateOptions&& options, vk::Device device);
+		
+		/// <summary>
+		/// must have been created with the associated create method
+		/// </summary>
+		/// <param name=""></param>
+		void Destroy(vk::DescriptorSetLayout layout, vk::Device device);
 
 		//vk::DescriptorSetLayout vkItem;
 	};
 
-	
+	class DescriptorPool;
+
+	/// <summary>
+	/// created by Descriptor pool
+	/// </summary>
+	//typedef vk::DescriptorSet DescriptorSet;
+	struct SUNRISE_API DescriptorSet {
+
+	private:
+		friend DescriptorPool;
+
+		vk::DescriptorSet vkItem;
+		
+		std::vector<DescriptorSetLayoutBinding>* layout;
+
+		DescriptorSet(vk::DescriptorSet vkItem, std::vector<DescriptorSetLayoutBinding>* layout);
+
+	public:
+
+		//void bindInto();
+
+	};
+
+
+	struct DescriptorBinding {
+		DescriptorSet* set;
+		size_t index;
+	};
+
 	/// <summary>
 	/// wrapper of vk::DescriptorPool
 	/// </summary>
@@ -189,7 +197,8 @@ namespace sunrise::gfx {
 		/// Asertion: all sets must have been created form this pool
 		/// </summary>
 		/// <param name="sets"></param>
-		void free(std::vector<DescriptorSet>&& sets);
+		// note about error for me tommorow - might have to do with vulkan.hpp vk::descriptor set - it might be templated for descriptor type of something. check if other uses of descroptors use c equivilent and if this theory is correct
+		void free(std::vector<DescriptorSet*>&& sets);
 
 		// see: https://www.khronos.org/registry/vulkan/specs/1.2-extensions/man/html/vkAllocateDescriptorSets.html
 		// if allocation is not valid because pool is full or full of a type, this will fail. 
@@ -199,7 +208,7 @@ namespace sunrise::gfx {
 		/// allocates one descriptor set for each layout in the input array of layouts
 		/// </summary>
 		/// <param name="layouts"></param>
-		std::vector<DescriptorSet> allocate(std::vector<vk::DescriptorSetLayout>&& layouts);
+		std::vector<DescriptorSet*> allocate(std::vector<vk::DescriptorSetLayout>&& layouts);
 
 		// api for spacific sets
 		
@@ -225,7 +234,7 @@ namespace sunrise::gfx {
 
 			// includes set ptr
 			// for update ops this is the binding to update and srcBiding can be ignored
-			//DescriptorBinding dstBinding;
+			DescriptorBinding dstBinding;
 			size_t dstStartArrayElement;
 			/// <summary>
 			/// for array this is number of elements to update starting at the dstStartArrayElement. 
@@ -236,12 +245,12 @@ namespace sunrise::gfx {
 
 			//write spacific
 			// this can be found from the dst binding object
-			//vk::DescriptorType type;
+			////vk::DescriptorType type;
 
 			std::variant<std::monostate, DescriptorBufferRef, DescriptorImageRef, DescriptorTexalRef>reference;
 
 			//copy spacific
-			//DescriptorBinding srcBinding;
+			DescriptorBinding srcBinding;
 			size_t srcStartArrayElement;
 
 		};
@@ -256,31 +265,6 @@ namespace sunrise::gfx {
 
 	};
 
-
-	/// <summary>
-	/// created by Descriptor pool
-	/// </summary>
-	typedef vk::DescriptorSet DescriptorSet;
-	//struct SUNRISE_API DescriptorSet {
-
-	//private:
-	//	friend DescriptorPool;
-
-	//	vk::DescriptorSet vkItem;
-
-	//	DescriptorSet(vk::DescriptorSet vkItem);
-
-	//public:
-
-	//	void bindInto();
-
-	//};
-
-
-	struct DescriptorBinding {
-		//DescriptorSet set;
-		//size_t inex;
-	};
 
 }
 
