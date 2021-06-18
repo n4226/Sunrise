@@ -45,4 +45,25 @@ namespace sunrise {
         return square;
     }
 
+
+
+    Basic2DMesh SUNRISE_API MeshPrimatives::Basic2D::screenQuad()
+    {
+        Basic2DMesh mesh{};
+
+        mesh.verts = {
+            glm::vec2(-1,-1),
+            glm::vec2(1,-1),
+            glm::vec2(-1,1),
+            glm::vec2(1,1),
+        };
+
+        mesh.indicies = {
+            0,1,2,
+            2,1,3,
+        };
+
+        return mesh;
+    }
+
 }

@@ -23,7 +23,13 @@ namespace sunrise {
 		void shutdown();
 
 		Application* app;
+		
 
+	private:
+
+		friend Application;
+
+		libguarded::plain_guarded<bool,std::mutex> shouldQuit;
 	};
 
 	extern SUNRISE_API Engine* engine;

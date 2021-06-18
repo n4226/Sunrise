@@ -37,6 +37,9 @@ namespace sunrise {
 
 		marl::Scheduler* scheduler;
 
+
+		void quit();
+
 	protected:
 
 		void createWindows();

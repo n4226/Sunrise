@@ -9,6 +9,10 @@ namespace sunrise {
 
 		Mesh SUNRISE_API square();
 
+		namespace Basic2D {
+			Basic2DMesh SUNRISE_API screenQuad();
+		}
+
 	}
 
 }

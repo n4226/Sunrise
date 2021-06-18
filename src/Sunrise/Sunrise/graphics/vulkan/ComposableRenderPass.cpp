@@ -17,8 +17,17 @@ namespace sunrise::gfx {
 		createWindowSpacificResources();
 	}
 
+	Image* ComposableRenderPass::getImage(size_t index, Window* window)
+	{
+		SR_ASSERT(index != options.presentedAttachment);
+		auto image = (*images[window])[(index > options.presentedAttachment) ? index - 1 : index];
+
+		return image;
+	}
+
 	ComposableRenderPass::~ComposableRenderPass()
 	{
+		//TODO: important to handle dismantlement
 	}
 
 	void ComposableRenderPass::createWindowSpacificResources()

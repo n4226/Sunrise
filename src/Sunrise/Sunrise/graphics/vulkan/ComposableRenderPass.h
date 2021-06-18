@@ -8,6 +8,7 @@ namespace sunrise {
 	namespace gfx {
 		class Renderer;
 		class Image;
+		class Renderer;
 
 		/// <summary>
 		/// Made to work in conjunction with GPU-Stages 
@@ -47,7 +48,10 @@ namespace sunrise {
 
 					vk::ImageUsageFlags usage = vk::ImageUsageFlagBits::eColorAttachment;
 
-					//todo add ability to custimise clear value
+					/// <summary>
+					/// only visable if load op is set to clear
+					/// </summary>
+					std::array<float, 4> clearColor = { 0.0f, 0.0f, 0.2f, 1.0f };
 				};
 
 
@@ -73,11 +77,22 @@ namespace sunrise {
 			virtual size_t getTotalAttatchmentCount() override;
 			virtual size_t getSubPassCount() override;
 
+			/// <summary>
+			/// returns the concreete image for a window of a "virtual" attachment index
+			/// index must not be the index of the swapchain drawable as the render pass does not own those images.
+			/// </summary>
+			/// <param name="index"></param>
+			/// <param name="window"></param>
+			/// <returns></returns>
+			Image* getImage(size_t index, Window* window);
+
 			//TODO: do proper delete of reasources
 			~ComposableRenderPass();
 
 
 		private:
+
+			friend Renderer;
 
 			void createWindowSpacificResources();
 			void createWindowImagesAndFrameBuffer(Window* window);

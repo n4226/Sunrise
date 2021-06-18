@@ -117,13 +117,18 @@ namespace sunrise::gfx {
 
 
 
-			//TODO: fix that the subpass is always 0 - oractually maybe not if the engine just does not use rnederpasses --
+			//TODO: fix that the subpass is always 0 - or actually maybe not if the engine just does not use rnederpasses --
 			//this system will replace that --
 			//this is ok since right now mobile and or TBDR gpus ate not something that will be targeted
 			//they should probably be supported in the future especially becuase of apple silicon if that is ever a target platform
 			auto buff = stage->encode(0,window);
 
+
+			VkDebug::beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
+
 			firstLevelCMDBuffer.executeCommands(*buff);
+
+			VkDebug::endRegion(firstLevelCMDBuffer);
 
 		}
 

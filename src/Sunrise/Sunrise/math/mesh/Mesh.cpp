@@ -156,4 +156,32 @@ namespace sunrise {
 			mesh.indicies[subMesh][t * 3 + 2] = indicies(t, 2) + baseVert;
 		}
 	}
+	std::array<VkVertexInputBindingDescription, 1> Basic2DMesh::getBindingDescription()
+	{
+		return { makeVertBinding(0, sizeof(glm::vec2)) };
+	}
+	std::array<VkVertexInputAttributeDescription, 1> Basic2DMesh::getAttributeDescriptions()
+	{
+		return { makeVertAttribute(0, 0, VertexAttributeFormat::vec2, 0) };
+	}
+	size_t Basic2DMesh::vertsSize()
+	{
+		return verts.size() * sizeof(glm::vec2);
+	}
+	size_t Basic2DMesh::indiciesSize()
+	{
+		return indicies.size() * sizeof(glm::uint32);
+	}
+	size_t Basic2DMesh::vertsOffset()
+	{
+		return 0;
+	}
+	size_t Basic2DMesh::indiciesOffset()
+	{
+		return verts.size();
+	}
+	size_t Basic2DMesh::fullSize()
+	{
+		return indiciesOffset() + indiciesSize();
+	}
 }

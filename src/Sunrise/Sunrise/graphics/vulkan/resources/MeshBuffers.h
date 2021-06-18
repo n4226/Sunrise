@@ -32,6 +32,28 @@ namespace sunrise::gfx {
 	private:
 	};
 
+	/// <summary>
+	/// with the current implimentation, all vertex attributes and indicies are stored in a single buffer.
+	/// </summary>
+	class SUNRISE_API Basic2DMeshBuffer {
+	public:
+		Basic2DMeshBuffer(vk::Device device, VmaAllocator allocator, BufferCreationOptions options, Basic2DMesh* mesh);
+		~Basic2DMeshBuffer();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="mapandUnmap">if true will call map and unmap before and after writing</param>
+		void writeMeshToBuffer(bool mapandUnmap);
+		void bindVerticiesIntoCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t baseBinding);
+		void bindIndiciesIntoCommandBuffer(vk::CommandBuffer commandBuffer);
+
+		Buffer* buffer;
+		Basic2DMesh* baseMesh;
+
+	private:
+	};
+
 
 	class SUNRISE_API BindlessMeshBuffer {
 	public:

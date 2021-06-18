@@ -561,7 +561,7 @@ namespace sunrise::gfx {
 
 
     VirtualGraphicsPipeline::VirtualGraphicsPipeline(GraphicsPipelineOptions&& definition)
-        : definition(definition)
+        : definition(std::move(definition))
     {
     }
 }

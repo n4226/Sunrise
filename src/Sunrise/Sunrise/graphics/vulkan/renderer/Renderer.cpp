@@ -688,25 +688,15 @@ namespace sunrise::gfx {
 		else {
 			auto coord = app.loadedScenes[0]->coordinator;
 
-			//VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-			const std::array<float, 4> clearComponents = { 0.0f, 0.0f, 0.2f, 1.0f };
-
-			//TODO -----------------(3,"fix load ops of textures to remove unnecicary clearing") --------------------------------------------------------------------------------------------
-			//std::array<vk::ClearValue, 5> clearColors = {
-			//	//Gbuffer images which are cleared now but that is temporary
-			//	vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			//	vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			//	vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			//	//GBuff Depth Tex - cleared
-			//	vk::ClearValue(vk::ClearDepthStencilValue({1.f,0})),
-
-			//	//SwapCHainOutput
-			//	vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			//};
 
 			//TODO: make this compatable with depth buffers
-			std::vector<vk::ClearValue> clearColors(coord->sceneRenderpass->getTotalAttatchmentCount(),
-				vk::ClearValue(vk::ClearColorValue(clearComponents)));
+			std::vector<vk::ClearValue> clearColors{};
+			clearColors.resize(coord->sceneRenderpass->getTotalAttatchmentCount());
+
+			for (size_t i = 0; i < coord->sceneRenderpass->getTotalAttatchmentCount(); i++)
+			{
+				clearColors[i] = vk::ClearValue(vk::ClearColorValue(coord->sceneRenderpass->options.attatchments[i].clearColor));
+			}
 
 			renderPassInfo.setClearValues(clearColors);
 

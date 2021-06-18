@@ -334,6 +334,13 @@ namespace sunrise {
 
     bool Application::shouldLoop() {
         PROFILE_FUNCTION;
+
+        auto val = engine->shouldQuit.try_lock();
+
+        if (val != nullptr && *val) {
+            return false;
+        }
+
         for (size_t i = 0; i < windows.size(); i++)
         {
             // abstract this to a window spacific function
@@ -620,7 +627,11 @@ namespace sunrise {
         return false;
     }
 
-
+    void Application::quit()
+    {
+        auto handle = engine->shouldQuit.lock();
+        *handle = true;
+    }
 
 
 

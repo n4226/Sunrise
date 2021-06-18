@@ -16,6 +16,7 @@ namespace sunrise::gfx {
 	void GPUStageDispatcher::registerStage(GPUStage* stage, std::vector<GPUStage*>&& runDependencies, std::vector<DependencyOptions>&& runDependencyOptions, std::vector<GPUStage*>&& encodeDependencies)
 	{
 #if SR_ENABLE_PRECONDITION_CHECKS
+		// this is to make sure a stage is not registered more than once
 		assert(individualRunDependencies.count(stage) == 0);
 		assert(individualRunDependencyOptoins.count(stage) == 0);
 #endif
