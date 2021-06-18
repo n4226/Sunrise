@@ -71,6 +71,7 @@ namespace sunrise::gfx {
 			createOptions.usage = vatt->usage;
 			createOptions.format = vatt->format;
 
+
 			auto aspect = vk::ImageAspectFlagBits::eColor;
 
 			if (vatt->type == CreateOptions::AttatchmentType::Depth)
@@ -78,6 +79,11 @@ namespace sunrise::gfx {
 
 			auto attatchImage = new Image(device, renderer->allocator, { window->swapchainExtent.width,window->swapchainExtent.height,1 }, createOptions, aspect);
 
+#if SR_VK_OBJECT_NAMES
+			const char* name = vatt->name.append("_%d", window->globalIndex).c_str();
+
+			VkDebug::nameObject(device, reinterpret_cast<size_t>(attatchImage->vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
+#endif
 			if (images.find(window) == images.end()) {
 				images[window] = new std::vector<Image*>();
 				images.reserve(vattachments.size());
@@ -103,11 +109,20 @@ namespace sunrise::gfx {
 			for (size_t a = 0; a < vattachments.size(); a++)
 			{
 				if (a == options.presentedAttachment) {
-					attachments.push_back(window->swapChainImageViews[i]);
+					
+					auto imageView = window->swapChainImageViews[i];
+
+#if SR_VK_OBJECT_NAMES
+					const char* name = vattachments[a]->name.append("_%d", window->globalIndex).append("_%d",i).c_str();
+
+					VkDebug::nameObject(device, reinterpret_cast<size_t>(VkImageView(imageView)), imageView.debugReportObjectType, name);
+#endif
+
+					attachments.push_back(imageView);
 					passedSwapImage = true;
 				}
 				else {
-					attachments.push_back((*winAttachments)[passedSwapImage ? i - 1 : i]->view);
+					attachments.push_back((*winAttachments)[passedSwapImage ? a - 1 : a]->view);
 				}
 			}
 
@@ -253,6 +268,9 @@ namespace sunrise::gfx {
 	vk::AttachmentDescription ComposableRenderPass::descriptonFromVatt(CreateOptions::VAttatchment* vatt)
 	{
 		vk::AttachmentDescription description{};
+		
+		description.flags = vatt->attachmentFlags;
+		
 		description.format = vatt->format;
 		description.samples = vatt->samples;
 

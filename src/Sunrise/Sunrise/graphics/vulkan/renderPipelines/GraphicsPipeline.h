@@ -2,10 +2,14 @@
 
 #include "srpch.h"
 #include "../RenderPassManager.h"
+#include "../generalAbstractions/Descriptors.h"
+
 //#include <GLFW/glfw3.h>
 //#include "../../dataObjects/Mesh.h"
 
 namespace sunrise::gfx {
+
+	class SceneRenderCoordinator;
 
 	/*
 		  Required inputs:
@@ -29,7 +33,10 @@ namespace sunrise::gfx {
 	struct GraphicsPipelineOptions {
 		// descriptor stuff	
 
-		std::vector<vk::DescriptorSetLayout> descriptorSetLayouts;
+		/// <summary>
+		/// virtual layouts which will be instantiated for each device or pipeline tbd
+		/// </summary>
+		std::vector<DescriptorSetLayout::CreateOptions> descriptorSetLayouts;
 
 		struct ShaderStageOptions {
 			std::string shaderPath;
@@ -105,7 +112,14 @@ namespace sunrise::gfx {
 
 	class SUNRISE_API VirtualGraphicsPipeline {
 	public:
-		VirtualGraphicsPipeline(GraphicsPipelineOptions&& definition);
+		VirtualGraphicsPipeline();
+
+		void create();
+
+	protected:
+		friend SceneRenderCoordinator;
+
+		virtual GraphicsPipelineOptions makeDeff();
 
 		GraphicsPipelineOptions definition;
 		std::vector<GraphicsPipeline*> instances = {};

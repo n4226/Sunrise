@@ -56,7 +56,11 @@ namespace sunrise::gfx {
 	}
 
 
-	vk::DescriptorSetLayout DescriptorSetLayout::Create(CreateOptions&& options, vk::Device device)
+	//vk::DescriptorSetLayout DescriptorSetLayout::Create(CreateOptions options, vk::Device device) {
+	//	return Create(std::move(options), device);
+	//}
+
+	vk::DescriptorSetLayout DescriptorSetLayout::Create(CreateOptions options, vk::Device device)
 	{
 		auto bindings = std::vector<VkDescriptorSetLayoutBinding>(options.setLayoutBindings.size());
 		auto bindingFlags = std::vector<VkDescriptorBindingFlags>(options.setLayoutBindings.size());
@@ -172,6 +176,27 @@ namespace sunrise::gfx {
 		return sets;
 	}
 
+	std::vector<DescriptorSet*> DescriptorPool::allocate(std::vector<vk::DescriptorSetLayout> layouts)
+	{
+		std::vector<DescriptorSet*> sets;
+
+		vk::DescriptorSetAllocateInfo allocInfo;
+
+		allocInfo.descriptorPool = vkItem;
+		allocInfo.descriptorSetCount = static_cast<uint32_t>(layouts.size());
+		allocInfo.pSetLayouts = layouts.data();
+
+		//TODO: assuming one to one relationship betwseen layout array and returned sets in terms of index - docs are not clear about this
+		auto rawSets = device.allocateDescriptorSets(allocInfo);
+
+		sets.reserve(rawSets.size());
+		for (size_t i = 0; i < rawSets.size(); i++) {
+			sets.push_back(new DescriptorSet(rawSets[i], layoutData[layouts[i]]));
+		}
+
+		return sets;
+	}
+
 	//NOTE: this should be very efficent as it is in main render path
 	void DescriptorPool::update(std::vector<UpdateOperation>&& ops)
 	{
@@ -252,6 +277,11 @@ namespace sunrise::gfx {
 		: vkItem(vkItem), layout(layout)
 	{
 
+	}
+
+	DescriptorBinding DescriptorSet::makeBinding(size_t index)
+	{
+		return { this, index };
 	}
 
 

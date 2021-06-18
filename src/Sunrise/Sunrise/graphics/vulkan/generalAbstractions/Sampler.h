@@ -39,6 +39,7 @@ namespace sunrise::gfx {
 
 
 		Sampler(vk::Device device, CreateOptions& options);
+		Sampler(vk::Device device, CreateOptions&& options);
 		~Sampler();
 
 		vk::Sampler vkItem;

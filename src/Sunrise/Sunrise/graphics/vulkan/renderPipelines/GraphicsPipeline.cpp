@@ -28,7 +28,7 @@ namespace sunrise::gfx {
         device.destroyPipeline(vkItem);
 
         for (vk::DescriptorSetLayout& layout : descriptorSetLayouts) {
-            device.destroyDescriptorSetLayout(layout);
+            DescriptorSetLayout::Destroy(layout,device);
         }
     }
 
@@ -55,7 +55,11 @@ namespace sunrise::gfx {
       */
 
 
-        descriptorSetLayouts = options.descriptorSetLayouts;
+        descriptorSetLayouts.resize(options.descriptorSetLayouts.size());
+
+        std::transform(options.descriptorSetLayouts.begin(), options.descriptorSetLayouts.end(), descriptorSetLayouts.begin(), [this](auto& item) {
+            return DescriptorSetLayout::Create(item, device);
+        });
 
         // programmable stages 
 
@@ -560,8 +564,18 @@ namespace sunrise::gfx {
     }
 
 
-    VirtualGraphicsPipeline::VirtualGraphicsPipeline(GraphicsPipelineOptions&& definition)
-        : definition(std::move(definition))
+    VirtualGraphicsPipeline::VirtualGraphicsPipeline()
     {
+        definition = makeDeff();
+    }
+
+    void VirtualGraphicsPipeline::create()
+    {
+        definition = makeDeff();
+    }
+
+    GraphicsPipelineOptions VirtualGraphicsPipeline::makeDeff()
+    {
+        return GraphicsPipelineOptions();
     }
 }

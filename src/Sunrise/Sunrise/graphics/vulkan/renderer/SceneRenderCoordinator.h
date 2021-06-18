@@ -18,6 +18,31 @@ namespace sunrise {
 
 		//TODO: figure out how CRV and Gpu-Stages will work with multi gpu
 		/// <summary>
+		/// make sure that calls inside stages encoding functions are syubncronizsed for objects which require that since calls can be parallelized
+		/// 
+		/// 
+		/// TODO: compute not supported yet
+		/// TODO: multi gpu not implemented work will need to be done
+		/// TODO: encoding of stages with proper syncronosation for many passes not fully implrmented 
+		/// - this can be done with events for more control and less stopping of gpu execution
+		/// 
+		/// Proper Use:
+		/// 
+		/// 1. create a subclass of this class
+		/// 
+		/// 2. overide createPasses():
+		///	2.1. call registerPipeline(VirtualGraphicsPipeline* virtualPipe) for each pipeline that will be used
+		/// 2.2. call registerStage(GPUStage* stage ...) for each stage
+		/// 2.3. call setLastPass(GPUStage* lastStage) for the pass which should be the last to execute before the presentation to the screen
+		/// 
+		/// 
+		/// 
+		/// might have to use multiple render passes for passes to work right - good site about vk render passes: https://stackoverflow.com/questions/48300046/why-do-we-need-multiple-render-passes-and-subpasses
+		/// 
+		/// 
+		/// new GPU-Stage system idea:
+		/// 
+		/// 
 		/// 
 		/// </summary>
 		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher
@@ -48,12 +73,22 @@ namespace sunrise {
 			/// <summary>
 			/// Registers the pipeline definition to be instantiuated by all windows rendering the scene
 			/// currently only pipelines registered before the createPasses funciton exits are garenteed to be instantiated by all windows.
+			/// must only be called once for a given pipeline
 			/// </summary>
 			/// <param name="virtualPipe"></param>
 			void registerPipeline(VirtualGraphicsPipeline* virtualPipe);
 
+			/// <summary>
+			/// must be called once before before the createPasses funciton exits
+			/// if called multiple times results are undefined
+			/// </summary>
+			/// <param name="lastStage"></param>
+			void setLastPass(GPUStage* lastStage);
+
 			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
 			ComposableRenderPass* sceneRenderpass;
+
+
 		protected:
 			friend Window;
 			friend Application;

@@ -29,6 +29,7 @@ namespace sunrise {
 
 			//called once 
 			virtual void setup() = 0;
+			virtual void cleanup() = 0;
 
 			//TODO: right now all stages encode into secondar command buffs but this could change
 

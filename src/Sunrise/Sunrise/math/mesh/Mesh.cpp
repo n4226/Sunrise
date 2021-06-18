@@ -178,7 +178,7 @@ namespace sunrise {
 	}
 	size_t Basic2DMesh::indiciesOffset()
 	{
-		return verts.size();
+		return vertsSize();
 	}
 	size_t Basic2DMesh::fullSize()
 	{

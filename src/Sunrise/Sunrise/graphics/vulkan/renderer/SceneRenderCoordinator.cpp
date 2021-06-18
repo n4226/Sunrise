@@ -44,7 +44,13 @@ namespace sunrise::gfx {
 			call each encode mthod 
 			excute indirect commands of the returned buffer
 
+
+
+		https://visualgo.net/en/dfsbfs
+		not as good as first website i had for graphs
 		*/
+
+		
 
 		//TODO: calculate this upfront for performance
 
@@ -77,11 +83,18 @@ namespace sunrise::gfx {
 		//	}
 		//}
 
+#if SR_ENABLE_PRECONDITION_CHECKS
+		//making sure last stage is properly registered
+		SR_ASSERT(individualRunDependencies.find(lastStage) != individualRunDependencies.end());
+#endif
+
 		GPUStage* firstNode = lastStage;
 
+		//todo set first node correctly
 		stagesNodeQueue.push_back(firstNode);
+		stagesInOrder.push_back(firstNode);
 		// dont rememb er how this is supposed to work so overidding this for now --- this was the active code
-		/*while (!stagesNodeQueue.empty()) {
+		while (!stagesNodeQueue.empty()) {
 			auto node = stagesNodeQueue[stagesNodeQueue.size() - 1];
 			stagesNodeQueue.pop_back();
 			if (visited.count(node) == 0) {
@@ -89,29 +102,36 @@ namespace sunrise::gfx {
 				stagesNodeQueue.push_back(node);
 
 				for (auto dependency : individualRunDependencies[node]) {
-					if (visited.count(node) == 0)
+					if (visited.count(dependency) == 0) {
 						stagesNodeQueue.push_back(dependency);
+						stagesInOrder.push_back(dependency);
+					}
 				}
 			}
 		}
-		std::reverse(stagesInOrder.begin(), stagesInOrder.end());*/
+		std::reverse(stagesInOrder.begin(), stagesInOrder.end());
 		
 		//todo: fixthis
-		std::vector<GPUStage*> keys;
-		keys.reserve(individualRunDependencies.size());
-		//std::vector<Val> vals;
-		//vals.reserve(map.size());
+		//std::vector<GPUStage*> keys;
+		//keys.reserve(individualRunDependencies.size());
+		////std::vector<Val> vals;
+		////vals.reserve(map.size());
 
-		for (auto kv : individualRunDependencies) {
-			keys.push_back(kv.first);
-			//vals.push_back(kv.second);
-		}
-		stagesInOrder.push_back(keys[0]);
+		//for (auto kv : individualRunDependencies) {
+		//	keys.push_back(kv.first);
+		//	//vals.push_back(kv.second);
+		//}
+		//stagesInOrder.push_back(keys[0]);
 
 		//SR_CORE_TRACE("{}", stagesInOrder.size());
 
 
 		for (auto stage : stagesInOrder) {
+
+#if SR_ENABLE_PRECONDITION_CHECKS
+			//making sure each stage is properly registered
+			SR_ASSERT(individualRunDependencies.find(stage) != individualRunDependencies.end());
+#endif
 
 			// perform synchronozation
 
@@ -137,7 +157,13 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::registerPipeline(VirtualGraphicsPipeline* virtualPipe)
 	{
+		virtualPipe->create();
 		registeredPipes.push_back(virtualPipe);
+	}
+
+	void SceneRenderCoordinator::setLastPass(GPUStage* lastStage)
+	{
+		this->lastStage = lastStage;
 	}
 
 	ComposableRenderPass::CreateOptions SceneRenderCoordinator::renderpassConfig(vk::Format swapChainFormat)

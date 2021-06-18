@@ -36,12 +36,14 @@ namespace sunrise::gfx {
 		vk::CommandBuffer* selectAndSetupCommandBuff(uint32_t subpass, sunrise::Window& window);
 
 		void setPipeline(sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline);
+		GraphicsPipeline* getConcretePipeline(sunrise::Window& window, VirtualGraphicsPipeline* pipeline);
 
 
 		// Inherited via GPUStage
 		// 
 		//called once 
 		virtual void setup() override = 0;
+		virtual void cleanup() override = 0;
 		// called every frame
 		virtual vk::CommandBuffer* encode(uint32_t subpass, sunrise::Window& window) override = 0;
 

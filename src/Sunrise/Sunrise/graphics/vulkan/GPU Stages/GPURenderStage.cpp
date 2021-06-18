@@ -42,6 +42,7 @@ namespace sunrise::gfx {
 
 		auto renderer = app.renderers[0];
 
+		//TODO write down why i am using a comand buffer and pool per serface if they are reset each frame - think it has to do with inflight frames
 		renderer->device.resetCommandPool(cmdBufferPools[window.indexInRenderer][bufferIndex], {});
 
 		vk::CommandBuffer* buffer = &commandBuffers[window.indexInRenderer][bufferIndex];
@@ -66,6 +67,11 @@ namespace sunrise::gfx {
 		auto rawPipe = window.loadedPipes[pipeline];
 
 		buffer.bindPipeline(vk::PipelineBindPoint::eGraphics, rawPipe->vkItem);
+	}
+
+	GraphicsPipeline* GPURenderStage::getConcretePipeline(sunrise::Window& window, VirtualGraphicsPipeline* pipeline)
+	{
+		return window.loadedPipes[pipeline];
 	}
 
 	

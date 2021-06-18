@@ -28,6 +28,11 @@ namespace sunrise::gfx {
 		not got for performance since it requires looping to create and remove them. in the future the pointer could be used as a key in a map
 		this would require creatoin and deletion methods to pass through this system so not doing this now but should in the future.
 
+		as for image:
+
+		// be weary of combined image samplers
+		//https://www.reddit.com/r/vulkan/comments/4gvmus/best_way_for_textures_in_shaders/ - helpful
+
 	*/
 
 	/// <summary>
@@ -109,7 +114,7 @@ namespace sunrise::gfx {
 			std::vector<DescriptorSetLayoutBinding> setLayoutBindings;
 		};
 
-		vk::DescriptorSetLayout Create(CreateOptions&& options, vk::Device device);
+		vk::DescriptorSetLayout Create(CreateOptions options, vk::Device device);
 		
 		/// <summary>
 		/// must have been created with the associated create method
@@ -121,6 +126,7 @@ namespace sunrise::gfx {
 	};
 
 	class DescriptorPool;
+	class DescriptorBinding;
 
 	/// <summary>
 	/// created by Descriptor pool
@@ -131,13 +137,15 @@ namespace sunrise::gfx {
 	private:
 		friend DescriptorPool;
 
-		vk::DescriptorSet vkItem;
 		
 		std::vector<DescriptorSetLayoutBinding>* layout;
 
 		DescriptorSet(vk::DescriptorSet vkItem, std::vector<DescriptorSetLayoutBinding>* layout);
 
 	public:
+
+		vk::DescriptorSet vkItem;
+		DescriptorBinding makeBinding(size_t index);
 
 		//void bindInto();
 
@@ -209,6 +217,7 @@ namespace sunrise::gfx {
 		/// </summary>
 		/// <param name="layouts"></param>
 		std::vector<DescriptorSet*> allocate(std::vector<vk::DescriptorSetLayout>&& layouts);
+		std::vector<DescriptorSet*> allocate(std::vector<vk::DescriptorSetLayout> layouts);
 
 		// api for spacific sets
 		
@@ -220,6 +229,13 @@ namespace sunrise::gfx {
 
 			typedef vk::DescriptorBufferInfo DescriptorBufferRef;
 
+			/*
+				typedef struct VkDescriptorImageInfo {
+					VkSampler        sampler;
+					VkImageView      imageView;
+					VkImageLayout    imageLayout;
+				} VkDescriptorImageInfo;
+			*/
 			typedef vk::DescriptorImageInfo DescriptorImageRef;
 
 
@@ -247,11 +263,13 @@ namespace sunrise::gfx {
 			// this can be found from the dst binding object
 			////vk::DescriptorType type;
 
-			std::variant<std::monostate, DescriptorBufferRef, DescriptorImageRef, DescriptorTexalRef>reference;
+			typedef std::variant<std::monostate, DescriptorBufferRef, DescriptorImageRef, DescriptorTexalRef> ReferenceType;
+			
+			ReferenceType reference;
 
 			//copy spacific
-			DescriptorBinding srcBinding;
-			size_t srcStartArrayElement;
+			DescriptorBinding srcBinding{};
+			size_t srcStartArrayElement = 0;
 
 		};
 

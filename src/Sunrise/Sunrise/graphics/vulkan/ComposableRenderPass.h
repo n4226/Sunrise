@@ -18,6 +18,8 @@ namespace sunrise {
 		/// 
 		/// TODO: add ability to specifuy and custimize image and image view creation with things like aliesing
 		/// TODO: does not support multi viewport rendering yet
+		/// 
+		/// helpful pages: https://www.saschawillems.de/blog/2018/07/19/vulkan-input-attachments-and-sub-passes/
 		/// </summary>
 		class SUNRISE_API ComposableRenderPass : public RenderPassManager
 		{
@@ -33,7 +35,7 @@ namespace sunrise {
 
 					AttatchmentType type = AttatchmentType::Color;
 
-					vk::AttachmentDescriptionFlags    flags = {};
+					vk::AttachmentDescriptionFlags    attachmentFlags = {};
 					vk::Format                        format;
 					vk::SampleCountFlagBits           samples = vk::SampleCountFlagBits::e1;
 					vk::AttachmentLoadOp              loadOp;
@@ -52,6 +54,9 @@ namespace sunrise {
 					/// only visable if load op is set to clear
 					/// </summary>
 					std::array<float, 4> clearColor = { 0.0f, 0.0f, 0.2f, 1.0f };
+
+					//debug options
+					std::string name = "";
 				};
 
 
