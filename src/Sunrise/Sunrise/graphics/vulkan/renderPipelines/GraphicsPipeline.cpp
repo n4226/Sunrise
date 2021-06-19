@@ -529,7 +529,7 @@ namespace sunrise::gfx {
 #if SR_ENABLE_PRECONDITION_CHECKS
         if (!FileManager::exists(filename)) {
             SR_CORE_ERROR("Going to open a shader file which does not exist: {}",filename);
-            SR_CORE_INFO("this might be beacuse the working directory is incorect. It currently is: {}", FileManager::wokringDir());
+            SR_CORE_INFO("this might be beacuse the working directory is incorect. It currently is: {}", FileManager::appWokringDir());
         }
 #endif
 

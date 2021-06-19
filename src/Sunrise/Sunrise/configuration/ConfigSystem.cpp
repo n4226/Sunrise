@@ -24,7 +24,7 @@ namespace sunrise {
 
     void ConfigSystem::readFromDisk()
     {
-        auto filePath = FileManager::getConfigDir() + "global.config";
+        auto filePath = FileManager::engineConfigDir() + "global.config";
 
         std::ifstream f(filePath);
         if (f.good()) {
@@ -43,7 +43,7 @@ namespace sunrise {
 
     void ConfigSystem::writeToDisk()
     {
-        auto filePath = FileManager::getConfigDir() + "global.config";
+        auto filePath = FileManager::engineConfigDir() + "global.config";
 
         auto data = config->toJson();
 

@@ -29,6 +29,8 @@ namespace sunrise {
 		spdlog::register_logger(s_CoreLogger);
 		s_CoreLogger->set_level(spdlog::level::trace);
 		s_CoreLogger->flush_on(spdlog::level::trace);
+		
+		SR_ASSERT(engine->app->getName() != nullptr);
 
 		s_ClientLogger = std::make_shared<spdlog::logger>(engine->app->getName(), begin(logSinks), end(logSinks));
 		spdlog::register_logger(s_ClientLogger);

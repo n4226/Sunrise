@@ -15,7 +15,7 @@ namespace sunrise {
 	{
 		// get  and encode mesh
 		//TODO store this in a better place
-		const auto Terrain_Chunk_Mesh_Dir = FileManager::getTerrainChunkDir();//R"(terrain/chunkMeshes/)";
+		const auto Terrain_Chunk_Mesh_Dir = FileManager::engineTerrainChunkDir();//R"(terrain/chunkMeshes/)";
 
 		TreeNodeDrawResaourceToCoppy meshStore;
 
@@ -31,7 +31,7 @@ namespace sunrise {
 			{
 				PROFILE_SCOPE("loading attributes from file")
 
-					auto attributeFile = FileManager::getTerrainChunkAttributesDir() + node->frame.toString() + ".bmattr";
+					auto attributeFile = FileManager::engineTerrainChunkAttributesDir() + node->frame.toString() + ".bmattr";
 
 				if (std::filesystem::exists(attributeFile)) {
 					auto att = new BinaryMeshAttrributes(attributeFile);

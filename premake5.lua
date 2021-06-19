@@ -63,8 +63,8 @@ project "Sunrise"
 	
 		-- temp for FSTS
 
-		("{COPY} ../bin/" .. outputdir .. "/Sunrise/Sunrise.dLL ../bin/" .. outputdir .. "/FlightSimTerrainSystem/"),
-		("{COPY} ../bin/" .. outputdir .. "/Sunrise/Sunrise.pdb ../bin/" .. outputdir .. "/FlightSimTerrainSystem/"),
+		("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.dLL %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.pdb %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
 
 		-- shaders again temp
 		-- C:/code/visual studio/FSTS/Sunrise/src/Sunrise/Sunrise/graphics/shaders

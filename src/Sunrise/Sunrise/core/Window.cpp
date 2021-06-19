@@ -456,15 +456,20 @@ namespace sunrise {
     {
         int monitorsCount = 0;
         auto monitors = glfwGetMonitors(&monitorsCount);
-
+        SR_CORE_INFO("Picking monitor for window {}",globalIndex);
         for (size_t i = 0; i < monitorsCount; i++)
         {
-            //SR_CORE_INFO("comparing monitor {} to {}", glfwGetWin32Monitor(monitors[i]), name.c_str());
+            SR_CORE_TRACE("comparing monitor {} to {}", glfwGetWin32Monitor(monitors[i]), name.c_str());
             if (strcmp(glfwGetWin32Monitor(monitors[i]), name.c_str()) == 0) {
                 return monitors[i];
             }
         }
         SR_CORE_WARN("Could not find requested monitor ({}) for window {} so chosing primary monitor", name, globalIndex);
+
+#if SR_DEBUG
+        //TODO return secondary monitor monitor when debugging to prevent screen lockups on crash or breakpoint;
+#endif
+
         return glfwGetPrimaryMonitor();
     }
 

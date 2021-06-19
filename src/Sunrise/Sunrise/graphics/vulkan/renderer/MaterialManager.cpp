@@ -22,7 +22,7 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
-		auto matRootPath = FileManager::getMaterialDir() + "staticAlloc/";
+		auto matRootPath = FileManager::engineMaterialDir() + "staticAlloc/";
 
 		// load each static material from disk into buffers then copy to images using resource transfer manager
 

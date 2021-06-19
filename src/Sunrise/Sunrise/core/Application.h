@@ -14,7 +14,11 @@ namespace sunrise {
 		virtual ~Application();
 
 		virtual void startup();
-		void run();
+
+		/// <summary>
+		/// should only be overiden for applicatons without windows
+		/// </summary>
+		virtual void run();
 		virtual void shutdown();
 
 		/// <summary>
@@ -38,6 +42,8 @@ namespace sunrise {
 		marl::Scheduler* scheduler;
 
 	protected:
+		
+		virtual bool wantsWindows();
 
 		void createWindows();
 

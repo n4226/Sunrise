@@ -3,6 +3,8 @@
 #include "../scene/Scene.h"
 
 #include "../configuration/ConfigSystem.h"
+#include "../fileSystem/FileManager.h"
+#include "../fileSystem/FileSystem.h"
 #include "Window.h"
 #include "../graphics/vulkan/renderer/Renderer.h"
 #include "../graphics/vulkan/renderer/SceneRenderCoordinator.h"
@@ -52,16 +54,28 @@ namespace sunrise {
         }
 
         {
+            SR_CORE_TRACE("Initializing File System");
+
+            FileSystem::initilize();
+
+        }
+
+        if (!wantsWindows()) return;
+
+        {
             SR_CORE_TRACE("Initializing GLFW");
 
             glfwInit();
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
         }
+
    
         SR_CORE_TRACE("Initializing VK Instance");
         createInstance();
     
+
+
         SR_CORE_TRACE("Initializing Configuration system");
         configSystem.readFromDisk();
         configSystem.writeHelpDoc();
@@ -95,6 +109,7 @@ namespace sunrise {
 
         createWindows();
 
+        if (loadedScenes.size() > 0)
         for (size_t i = 0; i < renderers.size(); i++) {
             SR_CORE_TRACE("Creating Renderer Resources for renderer {}", i);
             renderers[i]->createAllResources();
@@ -109,6 +124,11 @@ namespace sunrise {
 
         SR_CORE_INFO("Initialization Complete!");
 	}
+
+    bool Application::wantsWindows()
+    {
+        return true;
+    }
 
     void Application::createWindows()
     {
@@ -276,6 +296,9 @@ namespace sunrise {
 		PROFILE_FUNCTION;
 
         SR_CORE_INFO("Running");
+        
+        if (!wantsWindows()) return;
+
         runLoop();
 	}
 
@@ -284,6 +307,8 @@ namespace sunrise {
 		PROFILE_FUNCTION;
 
         SR_CORE_INFO("Shutdown");
+
+        if (!wantsWindows()) return;
 
         //TODO: fix this. see line below
         SR_CORE_ERROR("deallocation of application objects (windows, renderers, devices, etc) not performed");
@@ -350,6 +375,8 @@ namespace sunrise {
         }
         //return;
         //drawView();
+
+        if (!wantsWindows()) return;
 
         // update scene
         loadedScenes[0]->update();
@@ -530,7 +557,8 @@ namespace sunrise {
         // devie extensions
         std::vector<const char*> extensionNames = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-#if !SR_RenderDocCompatible
+            //todo fix this
+#if RenderMode == RenderModeGPU
             VK_NV_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME
 #endif
         };
@@ -646,7 +674,7 @@ namespace sunrise {
     
     const char* NO_APPLICATION::getName()
     {
-        return nullptr;
+        return "NO APPLICATION";
     }
 
 }

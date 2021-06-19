@@ -18,40 +18,46 @@ namespace sunrise {
 
 	//FileManager filemanager;
 
-	std::string FileManager::getBaseDir()
+	std::string FileManager::baseEngineResourceDir()
 	{
 		if (_baseDir == "")
-			fetchBaseDir();
+			fetchBaseEngineResourceDir();
 
 		return _baseDir;
 	}
 
-	std::string FileManager::getTerrainChunkDir()
+	std::string FileManager::engineTerrainChunkDir()
 	{
-		return getBaseDir() + "terrain/chunkMeshes/";
+		return baseEngineResourceDir() + "terrain/chunkMeshes/";
 	}
 
-	std::string FileManager::getTerrainChunkAttributesDir()
+	std::string FileManager::engineTerrainChunkAttributesDir()
 	{
-		return getBaseDir() + "terrain/chunkAttributes/";
+		return baseEngineResourceDir() + "terrain/chunkAttributes/";
 	}
 
-	std::string FileManager::getMaterialDir()
+	std::string FileManager::engineMaterialDir()
 	{
-		return getBaseDir() + "materials/";
+		return baseEngineResourceDir() + "materials/";
 	}
 
-	std::string FileManager::getConfigDir()
+	std::string FileManager::engineConfigDir()
 	{
-		return getBaseDir() + "config/";
+		return baseEngineResourceDir() + "config/";
 	}
 
-	std::string FileManager::wokringDir()
+	std::string FileManager::appWokringDir()
 	{
 		char buff[FILENAME_MAX]; //create string buffer to hold path
 		GetCurrentDir(buff, FILENAME_MAX);
 		std::string current_working_dir(buff);
 		return current_working_dir;
+	}
+
+
+	std::string FileManager::appConfigDir()
+	{
+		return "config/";
 	}
 
 	bool FileManager::exists(const std::string& path)
@@ -78,9 +84,9 @@ namespace sunrise {
 	}
 
 
-	void FileManager::fetchBaseDir()
+	void FileManager::fetchBaseEngineResourceDir()
 	{
-		std::string sunriseDirFolder = "config/directory.sunrise";
+		std::string sunriseDirFolder = appConfigDir() + "directory.sunrise";
 		try {
 			auto str = loadStringfromFile(sunriseDirFolder);
 			_baseDir = std::move(str);

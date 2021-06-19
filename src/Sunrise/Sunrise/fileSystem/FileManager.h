@@ -11,16 +11,19 @@ namespace sunrise {
 	public:
 		// directories
 
-		static std::string getBaseDir();
+		// app config directories
+		static std::string appWokringDir();
+		static std::string appConfigDir();
 
-		static std::string getTerrainChunkDir();
-		static std::string getTerrainChunkAttributesDir();
-		static std::string getMaterialDir();
-		//TODO: add application spacific config dirs
-		static std::string getConfigDir();
+		// engine directories
+		static std::string baseEngineResourceDir();
+
+		static std::string engineTerrainChunkDir();
+		static std::string engineTerrainChunkAttributesDir();
+		static std::string engineMaterialDir();
+		static std::string engineConfigDir();
 
 
-		static std::string wokringDir();
 
 		static bool exists(const std::string& path);
 
@@ -58,7 +61,7 @@ namespace sunrise {
 
 		FileManager();
 
-		static void fetchBaseDir();
+		static void fetchBaseEngineResourceDir();
 
 		static std::string _baseDir;
 	};
