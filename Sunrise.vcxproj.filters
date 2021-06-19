@@ -76,6 +76,9 @@
     <Filter Include="src\Sunrise\Sunrise\memory">
       <UniqueIdentifier>{050AA544-F119-5115-5AD3-B533460240AE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\miscellaneousHelpers">
+      <UniqueIdentifier>{B3589BF9-9FD5-8E3C-C852-8F50B42E2BD0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\scene">
       <UniqueIdentifier>{1A608F40-8622-C3CA-CFD2-51573BD49BA8}</UniqueIdentifier>
     </Filter>
@@ -294,6 +297,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.h">
       <Filter>src\Sunrise\Sunrise\memory</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.h">
+      <Filter>src\Sunrise\Sunrise\miscellaneousHelpers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
     </ClInclude>
@@ -493,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.cpp">
       <Filter>src\Sunrise\Sunrise\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.cpp">
+      <Filter>src\Sunrise\Sunrise\miscellaneousHelpers</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp">
       <Filter>src\Sunrise\Sunrise\scene</Filter>

@@ -223,6 +223,7 @@ IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /
     <ClInclude Include="src\Sunrise\Sunrise\memory.h" />
     <ClInclude Include="src\Sunrise\Sunrise\memory\IndexAllocator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Scene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h" />
@@ -293,6 +294,7 @@ IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /
     <ClCompile Include="src\Sunrise\Sunrise\math\paths\Path.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\memory\IndexAllocator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Scene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp" />

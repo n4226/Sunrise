@@ -12,7 +12,7 @@ namespace sunrise::math {
 		Box();
 		Box(glm::dvec2 start, glm::dvec2 size);
 
-		glm::dvec2 start, size = glm::dvec3(0);
+		glm::dvec2 start, size = glm::dvec2(0);
 
 		glm::dvec2 getEnd() const;
 		glm::dvec2 getCenter() const;

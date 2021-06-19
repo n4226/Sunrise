@@ -17,6 +17,10 @@
 #include "Sunrise/Sunrise/Math.h"
 
 
+///////////////////////////// Files and System
+
+#include "Sunrise/Sunrise/fileSystem/FileManager.h"
+#include "Sunrise/Sunrise/fileSystem/FileSystem.h"
 
 /////////////////////////////////////////////////////// graphics
 
@@ -37,3 +41,7 @@
 ////............................... world
 
 #include "Sunrise/Sunrise/world/WorldScene.h"
+
+
+///////////////////////////////////////// Helpers
+#include "Sunrise/Sunrise/miscellaneousHelpers/miscellaneousHelpers.h"
