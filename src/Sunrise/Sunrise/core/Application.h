@@ -49,9 +49,9 @@ namespace sunrise {
 
 		void createInstance() override;
 
-		bool createRenderer(int deviceIndex) override;
-		int createDevice(int window) override;
-		void createAllocator(int deviceIndex) override;
+		bool createRenderer(size_t deviceIndex) override;
+		size_t createDevice(size_t window) override;
+		void createAllocator(size_t deviceIndex) override;
 
 		void runLoop() override;
 		bool shouldLoop() override;

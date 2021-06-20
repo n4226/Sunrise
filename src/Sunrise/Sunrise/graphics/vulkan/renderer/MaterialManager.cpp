@@ -216,7 +216,9 @@ namespace sunrise {
 
 		options.enableAnisotropy = true;
 
-		options.maxLod = image->mipLevels, uint32_t(1);
+		//todo no idea what this line was supposet to be, old version comeneted below line
+		options.maxLod = image->mipLevels;
+		//options.maxLod = image->mipLevels, uint32_t(1);
 
 		samplers.push_back(new Sampler(renderer.device, options));
 

@@ -65,7 +65,7 @@ namespace sunrise {
 
 			cmdBuffsUpToDate[i].resize(app.maxSwapChainImages);
 
-			for (auto sval : cmdBuffsUpToDate[i])
+			for (auto& sval : cmdBuffsUpToDate[i])
 				sval = true;
 		}
 #endif
@@ -80,9 +80,9 @@ namespace sunrise {
 
 	vk::CommandBuffer* TerrainSystem::renderSystem(uint32_t subpass, Window& window)
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 
-			uint32_t bufferIndex = window.currentSurfaceIndex;
+		uint32_t bufferIndex = window.currentSurfaceIndex;
 
 		auto renderer = app.renderers[0];
 
@@ -95,7 +95,7 @@ namespace sunrise {
 
 			if (*cmdsValid == false) {
 				for (size_t i = 0; i < cmdBuffsUpToDate.size(); i++) {
-					for (auto sval : cmdBuffsUpToDate[i])
+					for (auto& sval : cmdBuffsUpToDate[i])
 						sval = false;
 				}
 				*cmdsValid = true;

@@ -222,6 +222,7 @@ namespace sunrise::math::mesh {
 		auto outPolygon = new std::vector<std::vector<glm::dvec2>>();
 
 		if (intR[0].is_unbounded()) {
+			delete outPolygon;
 			throw std::runtime_error("not supported yet");
 		}
 

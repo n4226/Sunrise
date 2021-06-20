@@ -1,5 +1,8 @@
 #pragma once
 
+///////// for PVS Studio
+
+//V_EXCLUDE_PATH *\vendor\*
 
 // For applications
 

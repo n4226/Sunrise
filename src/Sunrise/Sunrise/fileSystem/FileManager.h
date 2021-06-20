@@ -6,7 +6,7 @@
 
 namespace sunrise {
 
-	class FileManager
+	class SUNRISE_API FileManager
 	{
 	public:
 		// directories

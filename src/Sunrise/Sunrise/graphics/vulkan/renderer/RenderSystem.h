@@ -9,6 +9,7 @@ namespace sunrise {
 	class System {
 	public:
 		//System(WorldScene* world);
+		virtual ~System() = default;
 
 		WorldScene* world = nullptr;
 

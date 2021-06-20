@@ -31,7 +31,7 @@ namespace sunrise {
 
 		if (freeSpaces.empty())
 		{
-			std::runtime_error("allocation empty");
+			throw std::runtime_error("allocation empty");
 			return 0;
 		}
 

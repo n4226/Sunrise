@@ -17,6 +17,8 @@ int main(int arc, char** argv) {
 	sunrise::engine->startup();
 
 	delete sunrise::engine;
+
+	return 0;
 }
 
 #endif 
