@@ -47,6 +47,8 @@
 #define SR_ENABLE_PRECONDITION_CHECKS 0
 #endif
 
+// for windows rutime stuff e.g static or dynamiclyh link to c++ runtime:
+// good reasource for that: https://stackoverflow.com/questions/3007312/resolving-lnk4098-defaultlib-msvcrt-conflicts-with
 
 // testing environment
 

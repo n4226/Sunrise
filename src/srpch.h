@@ -69,6 +69,9 @@
 
 #ifdef SR_PLATFORM_WINDOWS
 #define NOMINMAX
+
+// stops windows.h including winsock.h - see: https://stackoverflow.com/questions/1372480/c-redefinition-header-files-winsock2-h
+#define _WINSOCKAPI_   
 #include <windows.h>
 #endif
 
