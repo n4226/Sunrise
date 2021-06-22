@@ -43,14 +43,14 @@ namespace sunrise {
 			};
 
 			struct ImageLayoutTransitionTask {
-				vk::ImageLayout oldLayout;
-				vk::ImageLayout newLayout;
+				vk::ImageLayout oldLayout{};
+				vk::ImageLayout newLayout{};
 				//vk::AccessFlags srcAccessMask;
 				//vk::AccessFlags dstAccessMask;
 				uint32_t baseMipLevel = 0;
 				uint32_t mipLevelCount = 1;
 				VkImage image;
-				vk::ImageAspectFlags imageAspectMask;
+				vk::ImageAspectFlags imageAspectMask = {};
 			};
 
 			struct BufferToImageCopyWithTransitionTask

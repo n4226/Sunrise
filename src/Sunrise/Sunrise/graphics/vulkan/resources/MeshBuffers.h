@@ -12,10 +12,12 @@ namespace sunrise::gfx {
 
 	/// <summary>
 	/// with the current implimentation, all vertex attributes and indicies are stored in a single buffer.
+	/// does not own thel ifecycle of its mesh
 	/// </summary>
 	class SUNRISE_API MeshBuffer {
 	public:
 		MeshBuffer(vk::Device device, VmaAllocator allocator, BufferCreationOptions options, Mesh* mesh);
+		MeshBuffer(const MeshBuffer& other) = delete;
 		~MeshBuffer();
 
 		/// <summary>
@@ -49,6 +51,7 @@ namespace sunrise::gfx {
 		};
 
 		BindlessMeshBuffer(vk::Device device, VmaAllocator allocator, BufferCreationOptions options, VkDeviceSize vCount, VkDeviceSize indexCount);
+		BindlessMeshBuffer(const BindlessMeshBuffer& other) = delete;
 		~BindlessMeshBuffer();
 
 		/// <summary>
