@@ -159,6 +159,10 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Node.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.h" />
     <ClInclude Include="src\Sunrise.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
@@ -237,8 +241,13 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.h" />
     <ClInclude Include="src\srpch.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Stage.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Node.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
@@ -310,6 +319,7 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="src\srpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Stage.cpp" />
     <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -331,6 +341,9 @@ IF EXIST ..\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I ..\b
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Sunrise\Sunrise\dependencyManagment\Notes.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -310,11 +310,11 @@ namespace sunrise {
         scene->load();
         scene->coordinator->createPasses();
 
-        // create render pass(es)
-        scene->coordinator->createRenderpasses();
+        scene->coordinator->buildGraph();
 
         // load all coordinator registered pipeliens if not already
         scene->coordinator->loadOrGetRegisteredPipesInAllWindows();
+
 	}
 
 

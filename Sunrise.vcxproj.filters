@@ -336,6 +336,11 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Stage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Node.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -560,5 +565,13 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Stage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Node.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Sunrise\Sunrise\dependencyManagment\Notes.md" />
   </ItemGroup>
 </Project>

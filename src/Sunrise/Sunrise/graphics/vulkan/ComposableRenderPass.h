@@ -44,8 +44,10 @@ namespace sunrise {
 					vk::AttachmentStoreOp             stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
 					/// layout the image is in before render pass beggins, layoiut undifined here means it can be anything
 					vk::ImageLayout                   initialLayout;
-					/// layout to transition image to at start of renderPass (subpass but there is only one for now)
+					/// layout to transition image to at start of the frame rendering 
+						//-- if this is marked undefined than the image will not exist until a later render pass (if that is the implementation chosen)
 					vk::ImageLayout                   transitionalToAtStartLayout;
+					/// layout to transition image to at end of the frame rendering
 					vk::ImageLayout                   finalLayout;
 
 					vk::ImageUsageFlags usage = vk::ImageUsageFlagBits::eColorAttachment;

@@ -37,3 +37,7 @@
 ////............................... world
 
 #include "Sunrise/Sunrise/world/WorldScene.h"
+
+/////////////////////////////////////////////////////////////////// Dependency System
+
+#include "Sunrise/Sunrise/dependencyManagment/Dispatcher.h"

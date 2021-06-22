@@ -40,9 +40,12 @@ namespace sunrise {
 		/// might have to use multiple render passes for passes to work right - good site about vk render passes: https://stackoverflow.com/questions/48300046/why-do-we-need-multiple-render-passes-and-subpasses
 		/// 
 		/// 
-		/// new GPU-Stage system idea:
 		/// 
 		/// 
+		/// //new GPU-Stage system idea:
+		/// 
+		/// TODO: syncronosation see below:
+		/// TODO: because there might/will be multiple render passes, much like the sugestion in Metal, we could start frame running witnout aquisiiton of swap chain image since it is only needed at the very end of the frame 
 		/// 
 		/// </summary>
 		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher
@@ -86,8 +89,17 @@ namespace sunrise {
 			void setLastPass(GPUStage* lastStage);
 
 			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
-			ComposableRenderPass* sceneRenderpass;
+			std::vector<ComposableRenderPass*> sceneRenderpasses;
 
+			ComposableRenderPass::CreateOptions renderPassOptions;
+
+			/// <summary>
+			/// a wrap of the CRP method to return the correct image for each stage;
+			/// </summary>
+			/// <param name="index"></param>
+			/// <param name="window"></param>
+			/// <returns></returns>
+			Image* getImage(size_t index, Window* window);
 
 		protected:
 			friend Window;
@@ -95,21 +107,32 @@ namespace sunrise {
 			std::vector<VirtualGraphicsPipeline*> registeredPipes;
 
 			/// <summary>
-			/// his is guaranteed to be called before the createPasses funciton is called 
+			/// his is guaranteed to be called after the createPasses funciton is called 
 			/// </summary>
 			/// <param name="swapChainFormat">the format the display(s) are expecting, with multiuple windows if formats are different value is undifined</param>
 			/// <returns></returns>
 			virtual ComposableRenderPass::CreateOptions renderpassConfig(vk::Format swapChainFormat);
 
-
-			void loadOrGetRegisteredPipesInAllWindows();
-
-			void createRenderpasses();
-
+			/// <summary>
+			/// 
+			/// </summary>
+			void buildGraph();
 
 		private:
 
+			void loadOrGetRegisteredPipesInAllWindows();
+
+			/// <summary>
+			/// called by buildGraph()
+			/// </summary>
+			void createRenderpasses();
+
 			GPUStage* lastStage = nullptr;
+
+			/// <summary>
+			/// once graph is built, this is the stages to execute in the proper order;
+			/// </summary>
+			std::vector<GPUStage*> stagesInOrder = {};
 
 		};
 

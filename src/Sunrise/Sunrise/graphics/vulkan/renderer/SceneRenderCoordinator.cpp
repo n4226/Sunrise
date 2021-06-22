@@ -50,82 +50,6 @@ namespace sunrise::gfx {
 		not as good as first website i had for graphs
 		*/
 
-		
-
-		//TODO: calculate this upfront for performance
-
-		//std::unordered_set<GPUStage*> stages = {};
-
-		/*for (auto& s : individualRunDependencies) {
-
-			if (stages.count(s.first) == 0) {
-				if (s.second.size() == 0)
-					stages.insert(s.first);
-				else {
-					bool good = false;
-					for (auto& dep : s.second) {
-						
-					}
-				}
-			}
-
-		}*/
-
-		// Breath First Search of all dependancies
-
-		std::vector<GPUStage*> stagesInOrder = {};
-		std::vector<GPUStage*> stagesNodeQueue = {};
-		std::unordered_set<GPUStage*> visited = {};
-
-		//for (auto node : individualRunDependencies) {
-		//	if (node.second.size() == 0) {
-		//		stagesInOrder.push_back(node);
-		//	}
-		//}
-
-#if SR_ENABLE_PRECONDITION_CHECKS
-		//making sure last stage is properly registered
-		SR_ASSERT(individualRunDependencies.find(lastStage) != individualRunDependencies.end());
-#endif
-
-		GPUStage* firstNode = lastStage;
-
-		//todo set first node correctly
-		stagesNodeQueue.push_back(firstNode);
-		stagesInOrder.push_back(firstNode);
-		// dont rememb er how this is supposed to work so overidding this for now --- this was the active code
-		while (!stagesNodeQueue.empty()) {
-			auto node = stagesNodeQueue[stagesNodeQueue.size() - 1];
-			stagesNodeQueue.pop_back();
-			if (visited.count(node) == 0) {
-				visited.insert(node);
-				stagesNodeQueue.push_back(node);
-
-				for (auto dependency : individualRunDependencies[node]) {
-					if (visited.count(dependency) == 0) {
-						stagesNodeQueue.push_back(dependency);
-						stagesInOrder.push_back(dependency);
-					}
-				}
-			}
-		}
-		std::reverse(stagesInOrder.begin(), stagesInOrder.end());
-		
-		//todo: fixthis
-		//std::vector<GPUStage*> keys;
-		//keys.reserve(individualRunDependencies.size());
-		////std::vector<Val> vals;
-		////vals.reserve(map.size());
-
-		//for (auto kv : individualRunDependencies) {
-		//	keys.push_back(kv.first);
-		//	//vals.push_back(kv.second);
-		//}
-		//stagesInOrder.push_back(keys[0]);
-
-		//SR_CORE_TRACE("{}", stagesInOrder.size());
-
-
 		for (auto stage : stagesInOrder) {
 
 #if SR_ENABLE_PRECONDITION_CHECKS
@@ -172,6 +96,132 @@ namespace sunrise::gfx {
 		return ComposableRenderPass::CreateOptions();
 	}
 
+	void SceneRenderCoordinator::buildGraph()
+	{
+		/* Steps
+
+		TODO: add mutli queue support
+		TODO: move encodeing order arrond or posbly use gpu events as synchronosation to keep gpu feed while waiting for dependancies
+
+		traverse dependancies into a lenear list to encode --- right now all of the encoding will be single threaded
+
+
+
+		https://visualgo.net/en/dfsbfs
+		not as good as first website i had for graphs
+		*/
+
+
+		//TODO: calculate this upfront for performance
+
+		//std::unordered_set<GPUStage*> stages = {};
+
+		/*for (auto& s : individualRunDependencies) {
+
+			if (stages.count(s.first) == 0) {
+				if (s.second.size() == 0)
+					stages.insert(s.first);
+				else {
+					bool good = false;
+					for (auto& dep : s.second) {
+
+					}
+				}
+			}
+
+		}*/
+
+		// Breath First Search of all dependancies
+
+		
+		std::vector<GPUStage*> stagesNodeQueue = {};
+		std::unordered_set<GPUStage*> visited = {};
+
+		//for (auto node : individualRunDependencies) {
+		//	if (node.second.size() == 0) {
+		//		stagesInOrder.push_back(node);
+		//	}
+		//}
+
+#if SR_ENABLE_PRECONDITION_CHECKS
+		//making sure last stage is properly registered
+		SR_ASSERT(individualRunDependencies.find(lastStage) != individualRunDependencies.end());
+#endif
+
+		GPUStage* firstNode = lastStage;
+
+		//todo set first node correctly
+		stagesNodeQueue.push_back(firstNode);
+		stagesInOrder.push_back(firstNode);
+		// dont rememb er how this is supposed to work so overidding this for now --- this was the active code
+		while (!stagesNodeQueue.empty()) {
+			auto node = stagesNodeQueue[stagesNodeQueue.size() - 1];
+			stagesNodeQueue.pop_back();
+			if (visited.count(node) == 0) {
+				visited.insert(node);
+				stagesNodeQueue.push_back(node);
+
+				for (auto dependency : individualRunDependencies[node]) {
+					if (visited.count(dependency) == 0) {
+						stagesNodeQueue.push_back(dependency);
+						stagesInOrder.push_back(dependency);
+					}
+				}
+			}
+		}
+		std::reverse(stagesInOrder.begin(), stagesInOrder.end());
+
+		//todo: fixthis
+		//std::vector<GPUStage*> keys;
+		//keys.reserve(individualRunDependencies.size());
+		////std::vector<Val> vals;
+		////vals.reserve(map.size());
+
+		//for (auto kv : individualRunDependencies) {
+		//	keys.push_back(kv.first);
+		//	//vals.push_back(kv.second);
+		//}
+		//stagesInOrder.push_back(keys[0]);
+
+		//SR_CORE_TRACE("{}", stagesInOrder.size());
+
+#if SR_ENABLE_PRECONDITION_CHECKS
+		for (auto stage : stagesInOrder) {
+
+			//making sure each stage is properly registered
+			SR_ASSERT(individualRunDependencies.find(stage) != individualRunDependencies.end());
+		}
+#endif
+
+		// see if complex renderpass creation is required
+		if (multipleRenderPasses) {
+
+			size_t passes = 1;
+
+			for (auto stage : stagesInOrder) {
+
+				if (individualRunDependencyOptoins.count(stage) > 0) {
+					auto& options = individualRunDependencyOptoins[stage];
+
+					for (auto& p : options) {
+						//TODO right now only checking for colorAttachment to and from eShaderReadOnlyOptimal layouts
+						if (p.newLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
+							passes += 1;
+						}
+					
+					}
+
+				}
+
+			}
+		}
+
+		// create render pass(es)
+		scene->coordinator->createRenderpasses();
+
+		graphBuilt = true;
+	}
+
 	void SceneRenderCoordinator::loadOrGetRegisteredPipesInAllWindows()
 	{
 		// loop through all top level windows: virtual or onowned
@@ -199,7 +249,9 @@ namespace sunrise::gfx {
 
 		auto config = renderpassConfig(swapChainFormat);
 		SR_ASSERT(config.attatchments.size() > 0);
+		renderPassOptions = config;
 		sceneRenderpass = new ComposableRenderPass(app.renderers[0],std::move(config));
+
 
 		// set renderpass pointer on all windows even owned ones
 		for (auto win : app.renderers[0]->allWindows) {
