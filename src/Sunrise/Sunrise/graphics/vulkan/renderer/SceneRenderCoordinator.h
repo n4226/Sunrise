@@ -135,7 +135,7 @@ namespace sunrise {
 
 			// during frame encoding:
 
-			void startNewPass();
+			void startNewPass(int64_t pass, Window& window, vk::CommandBuffer firstLevelCMDBuffer);
 
 
 

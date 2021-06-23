@@ -9,7 +9,7 @@ namespace sunrise::gfx {
 		: renderer(renderer), frameOptions(wholeOptions), holderOptions(spacificOptions)
 	{
 		createPasses(wholeOptions, spacificOptions);
-
+		createWindowSpacificResources();
 	}
 
 
@@ -45,13 +45,16 @@ namespace sunrise::gfx {
 			// add empty vector to be filled with the global indicies for the attachments of this pass
 			passAttachGlobalIndicies.push_back({});
 
-
-			SR_ASSERT(spacificOptions.passStartLayout[i].size() == wholeOptions.attatchments.size());
-
+#if SR_ENABLE_PRECONDITION_CHECKS
+			if (i > 0) 
+			// checking that a layout for all atributes was specified in the dependancy
+				SR_ASSERT(spacificOptions.passStartLayout[i - 1].size() == wholeOptions.attatchments.size());
+#endif
 			// change options for spacific render pass
 			for (size_t attach = 0; attach < wholeOptions.attatchments.size(); attach++)
 			{
-				if (spacificOptions.passStartLayout[i][attach] == vk::ImageLayout::eUndefined) {
+				if ((i == 0 && wholeOptions.attatchments[attach].transitionalToAtStartLayout == vk::ImageLayout::eUndefined)
+					|| (i > 0 && spacificOptions.passStartLayout[i - 1][attach] == vk::ImageLayout::eUndefined)) {
 					// this attachment is not used in this pass
 					continue;
 				}
@@ -68,9 +71,13 @@ namespace sunrise::gfx {
 					attachOptions.initialLayout = passOptions[passOptions.size() - 1].attatchments[attach].finalLayout;
 				}
 				// the start layout (the layout to transtion to at the beginnign of the renderpass) should be what the dependancy needs
-				attachOptions.transitionalToAtStartLayout = spacificOptions.passStartLayout[i][attach];
+				// or the initial one specified if it is the first pass
+				if (i > 0)
+					attachOptions.transitionalToAtStartLayout = spacificOptions.passStartLayout[i - 1][attach];
+				else
+					attachOptions.transitionalToAtStartLayout = wholeOptions.attatchments[attach].transitionalToAtStartLayout;
 
-				if (i == wholeOptions.attatchments.size() - 1) { // if the last pass
+				if (i == spacificOptions.passes - 1) { // if the last pass
 																 // the final layout (the layout to transtion to at the end of the renderpass) should be the original final user defined layout
 					attachOptions.finalLayout = wholeOptions.attatchments[attach].finalLayout;
 				}

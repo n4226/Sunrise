@@ -294,31 +294,7 @@ namespace sunrise::gfx {
 				// enter new render pass if and only if new pass is a different render pass
 				//TODO the currentPass >= 0  is sort of already gaurentied so coujld be removed for performance
 				if (currentPass < 0 || currentPass >= 0 && sceneRenderpassHolders[0]->arePassesDifferentRenderPasses(currentPass, stagePass)) {
-					startNewPass(); {
-						currentPass++;
-						auto passInfo = sceneRenderpassHolders[0]->renderPass(currentPass);
-
-
-						vk::RenderPassBeginInfo renderPassInfo{};
-
-						renderPassInfo.renderArea = vk::Rect2D({ 0, 0 }, window.swapchainExtent);
-
-						renderPassInfo.renderPass = passInfo.first->renderPass;
-						renderPassInfo.framebuffer = sceneRenderpassHolders[0]->getFrameBuffer(currentPass,&window,window.currentSurfaceIndex);
-
-						//TODO: make this compatable with depth buffers
-						std::vector<vk::ClearValue> clearColors{};
-						clearColors.resize(passInfo.first->getTotalAttatchmentCount());
-
-						for (size_t i = 0; i < clearColors.size(); i++)
-						{
-							clearColors[i] = vk::ClearValue(vk::ClearColorValue(passInfo.first->options.attatchments[i].clearColor));
-						}
-
-						renderPassInfo.setClearValues(clearColors);
-
-						firstLevelCMDBuffer.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
-					}
+					startNewPass(++currentPass,window,firstLevelCMDBuffer); 
 				}
 
 
@@ -344,8 +320,30 @@ namespace sunrise::gfx {
 
 	}
 
-	void SceneRenderCoordinator::startNewPass()
+	void SceneRenderCoordinator::startNewPass(int64_t pass, Window& window, vk::CommandBuffer firstLevelCMDBuffer)
 	{
+		auto passInfo = sceneRenderpassHolders[0]->renderPass(pass);
+
+
+		vk::RenderPassBeginInfo renderPassInfo{};
+
+		renderPassInfo.renderArea = vk::Rect2D({ 0, 0 }, window.swapchainExtent);
+
+		renderPassInfo.renderPass = passInfo.first->renderPass;
+		renderPassInfo.framebuffer = sceneRenderpassHolders[0]->getFrameBuffer(pass, &window, window.currentSurfaceIndex);
+
+		//TODO: make this compatable with depth buffers
+		std::vector<vk::ClearValue> clearColors{};
+		clearColors.resize(passInfo.first->getTotalAttatchmentCount());
+
+		for (size_t i = 0; i < clearColors.size(); i++)
+		{
+			clearColors[i] = vk::ClearValue(vk::ClearColorValue(passInfo.first->options.attatchments[i].clearColor));
+		}
+
+		renderPassInfo.setClearValues(clearColors);
+
+		firstLevelCMDBuffer.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
 	}
 
 
