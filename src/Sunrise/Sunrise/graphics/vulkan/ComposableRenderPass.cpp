@@ -7,11 +7,11 @@
 namespace sunrise::gfx {
 
 
-	ComposableRenderPass::ComposableRenderPass(Renderer* renderer, CreateOptions&& options)
+	ComposableRenderPass::ComposableRenderPass(Renderer* renderer,const CreateOptions& options)
 		: RenderPassManager(renderer->device,
 			VK_FORMAT_UNDEFINED, VK_FORMAT_UNDEFINED, VK_FORMAT_UNDEFINED, VK_FORMAT_UNDEFINED, VK_FORMAT_UNDEFINED), 
 		renderer(renderer),
-		options(std::move(options))
+		options(options)
 	{
 		createMainRenderPass();
 		createWindowSpacificResources();
@@ -30,113 +30,9 @@ namespace sunrise::gfx {
 		//TODO: important to handle dismantlement
 	}
 
-	void ComposableRenderPass::createWindowSpacificResources()
-	{
-		//TODO only works for one renderer/gpu
-
-		// for each unowned window create instances of all attatchments exept the one which will be presented as that is created by the swapchain
-		for (auto win : renderer->allWindows) {
-			if (!win->isOwned()) {
-				//createWindowRenderPass(win);
-
-				createWindowImagesAndFrameBuffer(win);
-
-			}
-		}
-	}
 
 
-	void ComposableRenderPass::createWindowImagesAndFrameBuffer(Window* window)
-	{
-		// create framebuffer images
 
-		ImageCreationOptions createOptions{};
-
-		createOptions.sharingMode = vk::SharingMode::eExclusive;
-		createOptions.storage = ResourceStorageType::gpu;
-
-		createOptions.type = vk::ImageType::e2D;
-		createOptions.layout = vk::ImageLayout::eUndefined;
-		createOptions.tilling = vk::ImageTiling::eOptimal;
-
-		createOptions.layers = 1;
-		if (multiViewport)
-			createOptions.layers = multiViewCount;
-
-		for (size_t i = 0; i < vattachments.size(); i++)
-		{
-			if (i == options.presentedAttachment) { continue; }
-			auto vatt = vattachments[i];
-
-			createOptions.usage = vatt->usage;
-			createOptions.format = vatt->format;
-
-
-			auto aspect = vk::ImageAspectFlagBits::eColor;
-
-			if (vatt->type == CreateOptions::AttatchmentType::Depth)
-				aspect = vk::ImageAspectFlagBits::eDepth;
-
-			auto attatchImage = new Image(device, renderer->allocator, { window->swapchainExtent.width,window->swapchainExtent.height,1 }, createOptions, aspect);
-
-#if SR_VK_OBJECT_NAMES
-			const char* name = vatt->name.append("_%d", window->globalIndex).c_str();
-
-			VkDebug::nameObject(device, reinterpret_cast<size_t>(attatchImage->vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
-#endif
-			if (images.find(window) == images.end()) {
-				images[window] = new std::vector<Image*>();
-				images.reserve(vattachments.size());
-			}
-			images[window]->push_back(attatchImage);
-		}
-
-		if (vattachments.size() == 1) {
-			images[window] = new std::vector<Image*>();
-		}
-
-
-		window->swapChainFramebuffers.resize(window->swapChainImageViews.size());
-		for (size_t i = 0; i < window->swapChainImageViews.size(); i++) {
-			// see renderpass.cpp for info on order of attachments
-			std::vector<vk::ImageView> attachments = {};
-			attachments.reserve(vattachments.size());
-
-			auto winAttachments = images[window];
-			
-			// this is so that the indixies line up between local images and swap chain images stored in windows themselvs
-			bool passedSwapImage = false;
-			for (size_t a = 0; a < vattachments.size(); a++)
-			{
-				if (a == options.presentedAttachment) {
-					
-					auto imageView = window->swapChainImageViews[i];
-
-#if SR_VK_OBJECT_NAMES
-					const char* name = vattachments[a]->name.append("_%d", window->globalIndex).append("_%d",i).c_str();
-
-					VkDebug::nameObject(device, reinterpret_cast<size_t>(VkImageView(imageView)), imageView.debugReportObjectType, name);
-#endif
-
-					attachments.push_back(imageView);
-					passedSwapImage = true;
-				}
-				else {
-					attachments.push_back((*winAttachments)[passedSwapImage ? a - 1 : a]->view);
-				}
-			}
-
-			vk::FramebufferCreateInfo framebufferInfo{};
-			framebufferInfo.renderPass = renderPass;
-			framebufferInfo.attachmentCount = attachments.size();
-			framebufferInfo.pAttachments = attachments.data();
-			framebufferInfo.width =  window->swapchainExtent.width;
-			framebufferInfo.height = window->swapchainExtent.height;
-			framebufferInfo.layers = 1;
-
-			window->swapChainFramebuffers[i] = device.createFramebuffer(framebufferInfo);
-		}
-	}
 
 	//TODO look at othe render pass manager where optimizitions were turned off just for the creation functoin like this one. I beilive this was becasuze it stopped soroking on release or dist buids
 	void ComposableRenderPass::createMainRenderPass()
@@ -190,6 +86,7 @@ namespace sunrise::gfx {
 
 		// create render pass
 
+		//TODO make sure this is correct for mulitple render passes in CRPHolder
 		// this exdternal dependancy is so that writing to attatchments in the render pass is not done until the image is given from the presentation engine
 		VkSubpassDependency externalGBufferDependency{};
 		externalGBufferDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
