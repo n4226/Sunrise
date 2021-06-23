@@ -86,38 +86,22 @@ namespace sunrise {
 			virtual size_t getTotalAttatchmentCount() override;
 			virtual size_t getSubPassCount() override;
 
-			/// <summary>
-			/// returns the concreete image for a window of a "virtual" attachment index
-			/// index must not be the index of the swapchain drawable as the render pass does not own those images.
-			/// </summary>
-			/// <param name="index"></param>
-			/// <param name="window"></param>
-			/// <returns></returns>
-			Image* getImage(size_t index, Window* window);
 
 			//TODO: do proper delete of reasources
 			~ComposableRenderPass();
 
 
+			const CreateOptions options;
 		private:
 
 			friend Renderer;
 
-			void createWindowSpacificResources();
-			void createWindowImagesAndFrameBuffer(Window* window);
-
 			Renderer* renderer;
-			CreateOptions options;
 
 			//remember many private properties of superclass are undefined as they are not used in this subclass
 
 			// index in this array is an attachment's vulkan attatchment index
 			std::vector<CreateOptions::VAttatchment*> vattachments;
-
-			// keys are unowned windows, every unowned window has its own swap chain and hense swap chain images and image views as well as concreate images for all other attatchemnts
-			// the swap chain images and image views are still sotred in the window all other attatchments are stored here
-			// in the future shared attatchment images bewtween multiple unowned winodows might be added - see todo at top of class about image creation
-			std::unordered_map<Window*, std::vector<gfx::Image*>*> images;
 
 			vk::AttachmentDescription descriptonFromVatt(CreateOptions::VAttatchment* vatt);
 

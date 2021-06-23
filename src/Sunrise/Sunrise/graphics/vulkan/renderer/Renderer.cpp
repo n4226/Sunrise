@@ -626,12 +626,12 @@ namespace sunrise::gfx {
 		// begin a render pass
 
 		vk::RenderPassBeginInfo renderPassInfo{};
-		renderPassInfo.renderPass = window.renderPassManager->renderPass;
-		renderPassInfo.framebuffer = window.swapChainFramebuffers[window.currentSurfaceIndex];
 
 		renderPassInfo.renderArea = vk::Rect2D({ 0, 0 }, window.swapchainExtent);
 
 		if (terrainSystem != nullptr) {
+			renderPassInfo.renderPass = window.renderPassManager->renderPass;
+			renderPassInfo.framebuffer = window.swapChainFramebuffers[window.currentSurfaceIndex];
 
 			//VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
 			const std::array<float, 4> clearComponents = { 0.0f, 0.0f, 0.2f, 0.0f };
@@ -688,24 +688,25 @@ namespace sunrise::gfx {
 		else {
 			auto coord = app.loadedScenes[0]->coordinator;
 
+			//renderPassInfo.renderPass = window.renderPassManager->renderPass;
+			//renderPassInfo.framebuffer = window.swapChainFramebuffers[window.currentSurfaceIndex];
 
-			//TODO: make this compatable with depth buffers
-			std::vector<vk::ClearValue> clearColors{};
-			clearColors.resize(coord->sceneRenderpass->getTotalAttatchmentCount());
+			////TODO: make this compatable with depth buffers
+			//std::vector<vk::ClearValue> clearColors{};
+			//clearColors.resize(coord->sceneRenderpass->getTotalAttatchmentCount());
 
-			for (size_t i = 0; i < coord->sceneRenderpass->getTotalAttatchmentCount(); i++)
-			{
-				clearColors[i] = vk::ClearValue(vk::ClearColorValue(coord->sceneRenderpass->options.attatchments[i].clearColor));
-			}
+			//for (size_t i = 0; i < coord->sceneRenderpass->getTotalAttatchmentCount(); i++)
+			//{
+			//	clearColors[i] = vk::ClearValue(vk::ClearColorValue(coord->sceneRenderpass->options.attatchments[i].clearColor));
+			//}
 
-			renderPassInfo.setClearValues(clearColors);
+			//renderPassInfo.setClearValues(clearColors);
 
-			VkRenderPassBeginInfo info = renderPassInfo;
+			//VkRenderPassBeginInfo info = renderPassInfo;
 
 
-			//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
-			cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
-
+			////vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
+			//cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
 
 
 			coord->encodePassesForFrame(this, cmdBuff, app.currentFrameID, window);

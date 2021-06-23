@@ -4,7 +4,7 @@
 #include "Renderer.h"
 
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUStageDispatcher.h"
-#include "Sunrise/Sunrise/graphics/vulkan/ComposableRenderPass.h"
+#include "Sunrise/Sunrise/graphics/vulkan/CRPHolder.h"
 
 namespace sunrise {
 
@@ -39,8 +39,10 @@ namespace sunrise {
 		/// 
 		/// might have to use multiple render passes for passes to work right - good site about vk render passes: https://stackoverflow.com/questions/48300046/why-do-we-need-multiple-render-passes-and-subpasses
 		/// 
+		/// //TODO: LIMITATIONS: only supports spacific image layout transtions currently see build graph comments
 		/// 
-		/// 
+		/// when defining a stage dependancy option which will cause a new pass to be needed, the layout of all used attachments must be set
+		///  or they will be unavailable in the pass
 		/// 
 		/// //new GPU-Stage system idea:
 		/// 
@@ -89,22 +91,17 @@ namespace sunrise {
 			void setLastPass(GPUStage* lastStage);
 
 			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
-			std::vector<ComposableRenderPass*> sceneRenderpasses;
+			std::vector<CRPHolder*> sceneRenderpassHolders;
 
-			ComposableRenderPass::CreateOptions renderPassOptions;
-
-			/// <summary>
-			/// a wrap of the CRP method to return the correct image for each stage;
-			/// </summary>
-			/// <param name="index"></param>
-			/// <param name="window"></param>
-			/// <returns></returns>
-			Image* getImage(size_t index, Window* window);
+			ComposableRenderPass::CreateOptions wholeFrameRenderPassOptions;
 
 		protected:
 			friend Window;
 			friend Application;
 			std::vector<VirtualGraphicsPipeline*> registeredPipes;
+			ComposableRenderPass::CreateOptions __tempWholeFrameRenderPassOptions;
+
+			
 
 			/// <summary>
 			/// his is guaranteed to be called after the createPasses funciton is called 
@@ -125,7 +122,7 @@ namespace sunrise {
 			/// <summary>
 			/// called by buildGraph()
 			/// </summary>
-			void createRenderpasses();
+			void createRenderpasses(const CRPHolder::HolderOptions& holderOptions);
 
 			GPUStage* lastStage = nullptr;
 
@@ -133,6 +130,14 @@ namespace sunrise {
 			/// once graph is built, this is the stages to execute in the proper order;
 			/// </summary>
 			std::vector<GPUStage*> stagesInOrder = {};
+
+			std::unordered_map<GPUStage*,size_t> passForStage = {};
+
+			// during frame encoding:
+
+			void startNewPass();
+
+
 
 		};
 

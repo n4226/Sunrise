@@ -6,83 +6,114 @@
 
 namespace sunrise::gfx {
 	inline CRPHolder::CRPHolder(const ComposableRenderPass::CreateOptions& wholeOptions, const HolderOptions& spacificOptions, Renderer* renderer)
-		: renderer(renderer), frameOptions(wholeOptions)
+		: renderer(renderer), frameOptions(wholeOptions), holderOptions(spacificOptions)
 	{
+		createPasses(wholeOptions, spacificOptions);
+
+	}
+
+
+	/// <summary>
+	/// returns the CRP and the supbass within it to use for a "logical pass"
+	/// </summary>
+	/// <param name="pass"></param>
+	/// <returns>the CRP object and the pass within it</returns>
+
+	inline std::pair<ComposableRenderPass*, size_t> CRPHolder::renderPass(size_t pass) {
+		SR_ASSERT(pass < renderpasses.size());
+		return std::make_pair(renderpasses[pass], 0);
+	}
+
+	void CRPHolder::createPasses(const sunrise::gfx::ComposableRenderPass::CreateOptions& wholeOptions, const sunrise::gfx::CRPHolder::HolderOptions& spacificOptions)
+	{
+		SR_ASSERT(wholeOptions.presentedAttachment >= 0);
 
 		/* tasks:
 
 		for each pass create a new render pass passing in modified options
 
 		*/
-		auto options = wholeOptions;
 
-		// copy shananagins is need for passes which dont need all attachments
-		bool copyNeeded = false;
-		// array of indexes needed to be left out of copy
-		std::vector<size_t> copyWithoutIndexes;
-		ComposableRenderPass::CreateOptions localCopy{};
-
-
+		//WARNING - this function is a mess
 		for (size_t i = 0; i < spacificOptions.passes; i++)
 		{
-			SR_ASSERT(spacificOptions.passStartLayout[i].size() == options.attatchments.size());
+			ComposableRenderPass::CreateOptions thisPassOptions{};
+
+			// in passes, none of the attachments are the swap chain image 
+			// UNLESS THAT atachment is present in the pass
+			thisPassOptions.presentedAttachment = -1;
+			// add empty vector to be filled with the global indicies for the attachments of this pass
+			passAttachGlobalIndicies.push_back({});
+
+
+			SR_ASSERT(spacificOptions.passStartLayout[i].size() == wholeOptions.attatchments.size());
 
 			// change options for spacific render pass
-			for (size_t attach = 0; attach < options.attatchments.size(); attach++)
+			for (size_t attach = 0; attach < wholeOptions.attatchments.size(); attach++)
 			{
 				if (spacificOptions.passStartLayout[i][attach] == vk::ImageLayout::eUndefined) {
 					// this attachment is not used in this pass
-					copyNeeded = true;
-					copyWithoutIndexes.push_back(attach);
 					continue;
+				}
+
+				auto attachOptions = wholeOptions.attatchments[attach];
+
+				// if this attachment will be the swapImage mark it as so
+				if (attach == wholeOptions.presentedAttachment) {
+					thisPassOptions.presentedAttachment = thisPassOptions.attatchments.size();
 				}
 
 				if (i > 0) {
 					// the initial layout (the layout befoer the render pass begins) shoulod be the final layout of the last pass
-					options.attatchments[attach].initialLayout = options.attatchments[attach].finalLayout;
+					attachOptions.initialLayout = passOptions[passOptions.size() - 1].attatchments[attach].finalLayout;
 				}
 				// the start layout (the layout to transtion to at the beginnign of the renderpass) should be what the dependancy needs
-				options.attatchments[attach].transitionalToAtStartLayout = spacificOptions.passStartLayout[i][attach];
+				attachOptions.transitionalToAtStartLayout = spacificOptions.passStartLayout[i][attach];
 
-				if (i == options.attatchments.size() - 1) { // if the last pass
-															// the final layout (the layout to transtion to at the end of the renderpass) should be the original final user defined layout
-					options.attatchments[attach].finalLayout = wholeOptions.attatchments[attach].finalLayout;
+				if (i == wholeOptions.attatchments.size() - 1) { // if the last pass
+																 // the final layout (the layout to transtion to at the end of the renderpass) should be the original final user defined layout
+					attachOptions.finalLayout = wholeOptions.attatchments[attach].finalLayout;
 				}
 				else {
-					// the final layout (the layout to transtion to at the end of the renderpass) should be what it transition to at the beggingin ofthe frame
+					// the NOT final layout 
+					// (the layout to transtion to at the end of this renderpass but there is another render pass after) 
+					// should be what it transition to at the beggingin of this pass
 					//becuase the layout transition to the next pass will happen at the beggignin of the next pass
-					options.attatchments[attach].finalLayout = options.attatchments[attach].transitionalToAtStartLayout;
+					attachOptions.finalLayout = attachOptions.transitionalToAtStartLayout;
 				}
+				thisPassOptions.attatchments.push_back(attachOptions);
+				passAttachGlobalIndicies[passAttachGlobalIndicies.size() - 1].push_back(attach);
 			}
 
-			ComposableRenderPass* pass;
-
-			if (copyNeeded) {
-				localCopy.presentedAttachment = options.presentedAttachment;
-
-				for (size_t newA = 0; newA < options.attatchments.size(); newA++)
-				{
-					bool copyAttach = true;
-					for (auto index : copyWithoutIndexes) {
-						if (newA == index)
-							copyAttach = false;
-					}
-					if (copyAttach)
-						localCopy.attatchments.push_back(options.attatchments[newA]);
-				}
-				pass = new ComposableRenderPass(renderer,localCopy);
-
-				localCopy = {};
-				copyWithoutIndexes = {};
-				copyNeeded = false;
-			}
-			else
-				pass = new ComposableRenderPass(renderer, options);
+			auto pass = new ComposableRenderPass(renderer, thisPassOptions);
 
 			renderpasses.push_back(pass);
+			//TODO: make sure move constructore actualy exists for the create options class
+			passOptions.push_back(std::move(thisPassOptions));
 		}
-
 	}
+
+
+	/// <summary>
+	/// returns the concreete image for a window of a "virtual" attachment index
+	/// index must not be the index of the swapchain drawable as the render pass does not own those images.
+	/// </summary>
+	/// <param name="index"></param>
+	/// <param name="window"></param>
+	/// <returns></returns>
+
+	inline Image* CRPHolder::getImage(size_t globalIndex, Window* window)
+	{
+		SR_ASSERT(globalIndex != frameOptions.presentedAttachment);
+		auto image = images[window][(globalIndex > frameOptions.presentedAttachment) ? globalIndex - 1 : globalIndex];
+
+		return image;
+	}
+
+	inline vk::Framebuffer CRPHolder::getFrameBuffer(size_t pass, Window* window, size_t surfaceIndex) {
+		return frameBuffers[pass][window][surfaceIndex];
+	}
+
 	void CRPHolder::createWindowSpacificResources()
 	{
 		//TODO only works for one renderer/gpu
@@ -101,109 +132,134 @@ namespace sunrise::gfx {
 
 	void CRPHolder::createWindowImagesAndFrameBuffer(Window* window)
 	{
+
+		//TODO: ut oh ??? do you need a copy of each image per swapchain image ? - i think so
 		// create framebuffer images
+		{ 
+			ImageCreationOptions createOptions{};
 
-		ImageCreationOptions createOptions{};
+			createOptions.sharingMode = vk::SharingMode::eExclusive;
+			createOptions.storage = ResourceStorageType::gpu;
 
-		createOptions.sharingMode = vk::SharingMode::eExclusive;
-		createOptions.storage = ResourceStorageType::gpu;
+			createOptions.type = vk::ImageType::e2D;
+			createOptions.layout = vk::ImageLayout::eUndefined;
+			createOptions.tilling = vk::ImageTiling::eOptimal;
 
-		createOptions.type = vk::ImageType::e2D;
-		createOptions.layout = vk::ImageLayout::eUndefined;
-		createOptions.tilling = vk::ImageTiling::eOptimal;
+			createOptions.layers = 1;
+			if (multiViewport)
+				createOptions.layers = multiViewCount;
 
-		createOptions.layers = 1;
-		if (multiViewport)
-			createOptions.layers = multiViewCount;
+			// for each virtual attachment (in the first pass) create all images exept the one for the swapchain
+			for (size_t i = 0; i < frameOptions.attatchments.size(); i++)
+			{
+				// skip the swap image
+				if (i == frameOptions.presentedAttachment) { continue; }
 
-		// for each virtual attachment (in the first pass) create all images exept the one for the swapchain
-		for (size_t i = 0; i < vattachments[0].size(); i++)
-		{
-			// skip the swap image
-			if (i == options.presentedAttachment) { continue; }
-			//for now can use only vatts from first pass as all fields used in this func are the same for all passes
-			auto vatt = vattachments[0][i];
-			createOptions.usage = vatt->usage;
-			createOptions.format = vatt->format;
+				auto& vatt = frameOptions.attatchments[i];
+				createOptions.usage = vatt.usage;
+				createOptions.format = vatt.format;
 
 
-			auto aspect = vk::ImageAspectFlagBits::eColor;
+				auto aspect = vk::ImageAspectFlagBits::eColor;
 
-			if (vatt->type == ComposableRenderPass::CreateOptions::AttatchmentType::Depth)
-				aspect = vk::ImageAspectFlagBits::eDepth;
+				if (vatt.type == ComposableRenderPass::CreateOptions::AttatchmentType::Depth)
+					aspect = vk::ImageAspectFlagBits::eDepth;
 
-			auto attatchImage = new Image(renderer->device, renderer->allocator, { window->swapchainExtent.width,window->swapchainExtent.height,1 }, createOptions, aspect);
+				auto attatchImage = new Image(renderer->device, renderer->allocator, { window->swapchainExtent.width,window->swapchainExtent.height,1 }, createOptions, aspect);
 
 #if SR_VK_OBJECT_NAMES
-			const char* name = vatt->name.append("_%d", window->globalIndex).c_str();
+				const char* name = vatt.name.append("_%d", window->globalIndex).c_str();
 
-			VkDebug::nameObject(renderer->device, reinterpret_cast<size_t>(attatchImage->vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
+				VkDebug::nameObject(renderer->device, reinterpret_cast<size_t>(attatchImage->vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
 #endif
-			//if no array object for this window than make an empty one
-			if (images.find(window) == images.end()) {
-				images[window] = std::vector<Image*>();
-				images.reserve(vattachments.size());
+				//if no array object for this window than make an empty one
+				if (images.find(window) == images.end()) {
+					images[window] = std::vector<Image*>();
+					images.reserve(frameOptions.attatchments.size());
+				}
+				images[window].push_back(attatchImage);
 			}
-			images[window].push_back(attatchImage);
-		}
 
-		// if the only attachment is the swap image and hense no empty array was created in the loop create one here
-		if (vattachments.size() == 1) {
-			images[window] = std::vector<Image*>();
+			// if the only attachment is the swap image and hense no empty array was created in the loop create one here
+			if (frameOptions.attatchments.size() == 1) {
+				images[window] = std::vector<Image*>();
+			}
 		}
 
 		// make all frame buffers:
 		{
-
-			for (size_t pass = 0; pass < option; pass++)
-			{
-
+			if (frameBuffers.size() == 0) {
+				frameBuffers.resize(passOptions.size());
 			}
 
 
-			// the window->swapChainFramebuffers just has references to the same frame buffers in the last passes frame buffers of this class
-			window->swapChainFramebuffers.resize(window->swapChainImageViews.size());
-			for (size_t i = 0; i < window->swapChainImageViews.size(); i++) { // i is the swap chain image index
-				// see renderpass.cpp for info on order of attachments
-				std::vector<vk::ImageView> attachments = {};
-				attachments.reserve(vattachments.size());
+			// make a frame buffer for each pass and if its the last pass add a ref to the window class
+			for (size_t pass = 0; pass < passOptions.size(); pass++)
+			{
+				// the window->swapChainFramebuffers just has references to the same frame buffers in the last passes frame buffers of this class
+				window->swapChainFramebuffers.resize(window->swapChainImageViews.size());
 
-				auto& winAttachments = images[window];
 
-				// this is so that the indixies line up between local images and swap chain images stored in windows themselvs
-				bool passedSwapImage = false;
-				for (size_t a = 0; a < vattachments.size(); a++)
-				{
-					if (a == options.presentedAttachment) {
+				// swapImage is the swap chain image index
+				for (size_t swapImage = 0; swapImage < window->swapChainImageViews.size(); swapImage++) { 
+					// see renderpass.cpp for info on order of attachments
+					std::vector<vk::ImageView> attachments = {};
+					attachments.reserve(passOptions[pass].attatchments.size());
 
-						auto imageView = window->swapChainImageViews[i];
+					auto& winAttachments = images[window];
+
+					// this is so that the indixies line up between local images and swap chain images stored in windows themselvs
+					bool passedSwapImage = false;
+					// a = pass local attach index
+					for (size_t a = 0; a < passOptions[pass].attatchments.size(); a++) 
+					{
+						auto gloablAttachIndex = passAttachGlobalIndicies[pass][a];
+						if (gloablAttachIndex == frameOptions.presentedAttachment) {
+
+							auto imageView = window->swapChainImageViews[swapImage];
 
 #if SR_VK_OBJECT_NAMES
-						const char* name = vattachments[a]->name.append("_%d", window->globalIndex).append("_%d", i).c_str();
-
-						VkDebug::nameObject(device, reinterpret_cast<size_t>(VkImageView(imageView)), imageView.debugReportObjectType, name);
+							// if pass that will be presented
+							if (pass == passOptions.size() - 1) {
+								const char* name = frameOptions.attatchments[gloablAttachIndex].name.append("_%d", window->globalIndex).append("_%d", swapImage).c_str();
+								VkDebug::nameObject(renderer->device, reinterpret_cast<size_t>(VkImageView(imageView)), imageView.debugReportObjectType, name);
+							}
 #endif
 
-						attachments.push_back(imageView);
-						passedSwapImage = true;
+							attachments.push_back(imageView);
+							passedSwapImage = true;
+						}
+						else {
+							attachments.push_back(winAttachments[passedSwapImage ? gloablAttachIndex - 1 : gloablAttachIndex]->view);
+						}
 					}
-					else {
-						attachments.push_back(winAttachments[passedSwapImage ? a - 1 : a]->view);
+
+					// make frame buffer for this swap chain view
+
+					vk::FramebufferCreateInfo framebufferInfo{};
+					framebufferInfo.renderPass = renderpasses[pass]->renderPass;
+					framebufferInfo.attachmentCount = attachments.size();
+					framebufferInfo.pAttachments = attachments.data();
+					framebufferInfo.width = window->swapchainExtent.width;
+					framebufferInfo.height = window->swapchainExtent.height;
+					//todo: change for multi viewport rendering
+					framebufferInfo.layers = 1;
+
+					auto frameBuffer = renderer->device.createFramebuffer(framebufferInfo);
+
+					if (pass == passOptions.size())
+						window->swapChainFramebuffers[swapImage] = frameBuffer;
+
+					//TODO: count is less eficient than could be for this
+					if (frameBuffers[pass].count(window) == 0) {
+						frameBuffers[pass][window] = {};
 					}
+
+					frameBuffers[pass][window].push_back(frameBuffer);
 				}
 
-				// make frame buffer for this swap chain view
-
-				vk::FramebufferCreateInfo framebufferInfo{};
-				framebufferInfo.renderPass = renderPass;
-				framebufferInfo.attachmentCount = attachments.size();
-				framebufferInfo.pAttachments = attachments.data();
-				framebufferInfo.width = window->swapchainExtent.width;
-				framebufferInfo.height = window->swapchainExtent.height;
-				framebufferInfo.layers = 1;
-
-				window->swapChainFramebuffers[i] = device.createFramebuffer(framebufferInfo);
 			}
+			
 		}
 	}
 

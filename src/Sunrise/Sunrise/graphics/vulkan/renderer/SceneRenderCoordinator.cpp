@@ -28,57 +28,6 @@ namespace sunrise::gfx {
 	}
 
 
-	void SceneRenderCoordinator::encodePassesForFrame(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
-	{
-		/* Steps 
-		
-		TODO: most important figure out how this will interact with and relate to render passes
-		TODO: add mutli queue support
-		TODO: move encodeing order arrond or posbly use gpu events as synchronosation to keep gpu feed while waiting for dependancies
-
-		traverse dependancies into a lenear list to encode --- right now all of the encoding will be single threaded 
-
-		loop through that vector
-
-			perform any necacry synchronosation for dependencies
-			call each encode mthod 
-			excute indirect commands of the returned buffer
-
-
-
-		https://visualgo.net/en/dfsbfs
-		not as good as first website i had for graphs
-		*/
-
-		for (auto stage : stagesInOrder) {
-
-#if SR_ENABLE_PRECONDITION_CHECKS
-			//making sure each stage is properly registered
-			SR_ASSERT(individualRunDependencies.find(stage) != individualRunDependencies.end());
-#endif
-
-			// perform synchronozation
-
-
-
-			//TODO: fix that the subpass is always 0 - or actually maybe not if the engine just does not use rnederpasses --
-			//this system will replace that --
-			//this is ok since right now mobile and or TBDR gpus ate not something that will be targeted
-			//they should probably be supported in the future especially becuase of apple silicon if that is ever a target platform
-			auto buff = stage->encode(0,window);
-
-
-			VkDebug::beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
-
-			firstLevelCMDBuffer.executeCommands(*buff);
-
-			VkDebug::endRegion(firstLevelCMDBuffer);
-
-		}
-
-
-	}
-
 	void SceneRenderCoordinator::registerPipeline(VirtualGraphicsPipeline* virtualPipe)
 	{
 		virtualPipe->create();
@@ -193,20 +142,69 @@ namespace sunrise::gfx {
 		}
 #endif
 
+		// create atachment options
+		{
+			vk::Format swapChainFormat = vk::Format::eUndefined;
+
+			//TODO check if windows array is jsut unowned windows
+			for (auto win : app.renderers[0]->windows) {
+				vk::Format winFormat = static_cast<vk::Format>(win->swapchainImageFormat);
+				SR_ASSERT(!(swapChainFormat != vk::Format::eUndefined && winFormat != swapChainFormat));
+				swapChainFormat = winFormat;
+			}
+
+			auto config = renderpassConfig(swapChainFormat);
+			SR_ASSERT(config.attatchments.size() > 0);
+			wholeFrameRenderPassOptions = config;
+			__tempWholeFrameRenderPassOptions = std::move(config);
+		}
+
+
+		CRPHolder::HolderOptions holderOptions{};
 		// see if complex renderpass creation is required
 		if (multipleRenderPasses) {
 
-			size_t passes = 1;
+			holderOptions.passes = 1;
 
-			for (auto stage : stagesInOrder) {
-
+			for (size_t stageIndex = 0; stageIndex < stagesInOrder.size(); stageIndex++)
+			{
+				auto stage = stagesInOrder[stageIndex];
 				if (individualRunDependencyOptoins.count(stage) > 0) {
 					auto& options = individualRunDependencyOptoins[stage];
+					
+					
 
 					for (auto& p : options) {
+						bool addedPassForOption = false;
+
+						SR_ASSERT(p.newLayout == vk::ImageLayout::eShaderReadOnlyOptimal
+							|| p.newLayout == vk::ImageLayout::eUndefined);
 						//TODO right now only checking for colorAttachment to and from eShaderReadOnlyOptimal layouts
 						if (p.newLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
-							passes += 1;
+							// the resource index of the dependancy option must be valid
+							SR_ASSERT(p.resourceIndex < wholeFrameRenderPassOptions.attatchments.size());
+
+							// the first stage can not have a layout transtion as 
+							// this should be defined in the attachment configuration in the renderpassConfig() function
+							SR_ASSERT(stage != stagesInOrder[0]);
+
+							if (!addedPassForOption) {
+								// its ok to do stageIndex - 1 becuase asserted two lines up that its not the first stage
+								passForStage[stagesInOrder[stageIndex - 1]] = holderOptions.passes - 1;
+								holderOptions.passes += 1;
+								addedPassForOption = true;
+							}
+
+							// create empty transitions for all assets 
+							if (holderOptions.passStartLayout.size() < holderOptions.passes - 1) {
+								holderOptions.passStartLayout.push_back({});
+								holderOptions.passStartLayout[holderOptions.passStartLayout.size() - 1].resize(wholeFrameRenderPassOptions.attatchments.size());
+								for (auto& layout : holderOptions.passStartLayout[holderOptions.passStartLayout.size() - 1]) {
+									layout = vk::ImageLayout::eUndefined;
+								}
+							}
+							
+							holderOptions.passStartLayout[holderOptions.passStartLayout.size() - 1][p.resourceIndex] = p.newLayout;
 						}
 					
 					}
@@ -215,9 +213,12 @@ namespace sunrise::gfx {
 
 			}
 		}
-
+		else {
+			holderOptions.passes = 1;
+			holderOptions.passStartLayout = {};
+		}
 		// create render pass(es)
-		scene->coordinator->createRenderpasses();
+		scene->coordinator->createRenderpasses(holderOptions);
 
 		graphBuilt = true;
 	}
@@ -235,28 +236,116 @@ namespace sunrise::gfx {
 		}
 	}
 
-	void SceneRenderCoordinator::createRenderpasses()
+	void SceneRenderCoordinator::createRenderpasses(const CRPHolder::HolderOptions& holderOptions)
 	{
 
-		vk::Format swapChainFormat = vk::Format::eUndefined;
-
-		//TODO check if windows array is jsut unowned windows
-		for (auto win : app.renderers[0]->windows) {
-			vk::Format winFormat = static_cast<vk::Format>(win->swapchainImageFormat);
-			SR_ASSERT(!(swapChainFormat != vk::Format::eUndefined && winFormat != swapChainFormat));
-			swapChainFormat = winFormat;
-		}
-
-		auto config = renderpassConfig(swapChainFormat);
-		SR_ASSERT(config.attatchments.size() > 0);
-		renderPassOptions = config;
-		sceneRenderpass = new ComposableRenderPass(app.renderers[0],std::move(config));
+		sceneRenderpassHolders.push_back(new CRPHolder(std::move(__tempWholeFrameRenderPassOptions), holderOptions, app.renderers[0]));
 
 
 		// set renderpass pointer on all windows even owned ones
 		for (auto win : app.renderers[0]->allWindows) {
-			win->renderPassManager = sceneRenderpass;
+			win->renderPassManager = sceneRenderpassHolders[0]->renderPass(sceneRenderpassHolders[0]->passCount() - 1).first;
 		}
+	}
+
+
+
+	void SceneRenderCoordinator::encodePassesForFrame(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
+	{
+		/* Steps
+
+		TODO: add mutli queue support
+		TODO: move encodeing order arrond or posbly use gpu events as synchronosation to keep gpu feed while waiting for dependancies
+
+
+		traverse dependancies into a lenear list to encode --- right now all of the encoding will be single threaded
+
+		loop through that vector
+
+			enter new render pass and or stop old one if necacary
+			perform any necacry synchronosation for dependencies
+			call each encode mthod
+			excute indirect commands of the returned buffer
+
+
+
+		https://visualgo.net/en/dfsbfs
+		not as good as first website i had for graphs
+		*/
+
+		int64_t currentPass = -1;
+
+		for (auto stage : stagesInOrder) {
+
+#if SR_ENABLE_PRECONDITION_CHECKS
+			//making sure each stage is properly registered
+			SR_ASSERT(individualRunDependencies.find(stage) != individualRunDependencies.end());
+#endif
+
+			int64_t stagePass = passForStage[stage];
+
+			// enter new render pass and or stop old one if necacary
+
+			if (currentPass < stagePass) {
+				//check if in a pass -- if so leave it
+				
+
+
+				// enter new render pass if and only if new pass is a different render pass
+				//TODO the currentPass >= 0  is sort of already gaurentied so coujld be removed for performance
+				if (currentPass < 0 || currentPass >= 0 && sceneRenderpassHolders[0]->arePassesDifferentRenderPasses(currentPass, stagePass)) {
+					startNewPass(); {
+						currentPass++;
+						auto passInfo = sceneRenderpassHolders[0]->renderPass(currentPass);
+
+
+						vk::RenderPassBeginInfo renderPassInfo{};
+
+						renderPassInfo.renderArea = vk::Rect2D({ 0, 0 }, window.swapchainExtent);
+
+						renderPassInfo.renderPass = passInfo.first->renderPass;
+						renderPassInfo.framebuffer = sceneRenderpassHolders[0]->getFrameBuffer(currentPass,&window,window.currentSurfaceIndex);
+
+						//TODO: make this compatable with depth buffers
+						std::vector<vk::ClearValue> clearColors{};
+						clearColors.resize(passInfo.first->getTotalAttatchmentCount());
+
+						for (size_t i = 0; i < clearColors.size(); i++)
+						{
+							clearColors[i] = vk::ClearValue(vk::ClearColorValue(passInfo.first->options.attatchments[i].clearColor));
+						}
+
+						renderPassInfo.setClearValues(clearColors);
+
+						firstLevelCMDBuffer.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
+					}
+				}
+
+
+			}
+			else {
+				// perform synchronozation - onluy if not new pass because swithing passes implicitly adds synchronozation
+				
+			}
+
+
+			auto passInfo = sceneRenderpassHolders[0]->renderPass(currentPass);
+			
+			auto buff = stage->encode(passInfo.second, window);
+
+			VkDebug::beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
+
+			firstLevelCMDBuffer.executeCommands(*buff);
+
+			VkDebug::endRegion(firstLevelCMDBuffer);
+
+		}
+
+
+	}
+
+	void SceneRenderCoordinator::startNewPass()
+	{
 	}
 
 
