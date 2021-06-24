@@ -4,7 +4,7 @@
 
 namespace sunrise {
 
-	class BinaryMeshAttrributes
+	class SUNRISE_API BinaryMeshAttrributes
 	{
 
 	private:

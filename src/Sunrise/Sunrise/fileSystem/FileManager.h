@@ -6,7 +6,7 @@
 
 namespace sunrise {
 
-	class FileManager
+	class SUNRISE_API FileManager
 	{
 	public:
 		// directories
@@ -26,6 +26,7 @@ namespace sunrise {
 
 
 		static bool exists(const std::string& path);
+		static bool createIntermediateDirs(const std::string& path);
 
 		/// <summary>
 		/// DO NOT USE FOR PERFORMANCE SENSATIVE TASKS

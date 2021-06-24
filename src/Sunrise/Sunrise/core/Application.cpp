@@ -43,7 +43,7 @@ namespace sunrise {
         {// Configure Marl
             SR_CORE_TRACE("Initializing Marl");
 
-            PROFILE_SCOPE("Configutre Marl");
+            PROFILE_SCOPE("Configure Marl");
             auto confic = marl::Scheduler::Config();
 
             confic.setWorkerThreadCount(std::thread::hardware_concurrency() - 1);
@@ -460,7 +460,7 @@ namespace sunrise {
     }
 
 
-    void Application::createAllocator(int deviceIndex)
+    void Application::createAllocator(size_t deviceIndex)
     {
         VmaAllocatorCreateInfo allocatorInfo = {};
         allocatorInfo.vulkanApiVersion = VK_API_VERSION_1_2;
@@ -474,7 +474,7 @@ namespace sunrise {
         allocators.push_back(allocator);
     }
 
-    bool Application::createRenderer(int deviceIndex)
+    bool Application::createRenderer(size_t deviceIndex)
     {
         if (deviceIndex < renderers.size()) {
             SR_CORE_TRACE("not creating Renderer for device {} becuase it already eists", deviceIndex);
@@ -494,7 +494,7 @@ namespace sunrise {
         return false;
     }
 
-    int Application::createDevice(int window)
+    size_t Application::createDevice(size_t window)
     {
         SR_CORE_TRACE("Creating device for window {}",window);
 

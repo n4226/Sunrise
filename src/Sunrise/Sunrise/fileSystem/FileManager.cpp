@@ -65,8 +65,14 @@ namespace sunrise {
 		return std::filesystem::exists(path);
 	}
 
+	bool FileManager::createIntermediateDirs(const std::string& path)
+	{
+		return std::filesystem::create_directories(std::filesystem::path(path).parent_path());
+	}
+
 	void FileManager::saveStringToFile(std::string contents, std::string& const path)
 	{
+		createIntermediateDirs(path);
 		std::ofstream out(path);
 		out << contents;
 		out.close();

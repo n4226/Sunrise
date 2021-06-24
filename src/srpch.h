@@ -68,6 +68,7 @@
 
 #include <filesystem>
 
+#include <random>
 
 #ifdef SR_PLATFORM_WINDOWS
 #define NOMINMAX

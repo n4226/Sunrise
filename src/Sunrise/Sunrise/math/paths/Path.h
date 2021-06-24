@@ -182,6 +182,7 @@ namespace sunrise::math {
 	{
 		for (size_t i = updatedAnchorIndex - 3; i < updatedAnchorIndex + 3; i += 3)
 		{
+			// TODO: i can't be negative so this might be wrong for implimentation and might be causing erorrs
 			if (closed || (i >= 0 && i < points.size()))
 				autoSetAnchorControlPoints(i);
 		}
@@ -195,6 +196,7 @@ namespace sunrise::math {
 		p dir(0);
 		std::array<p, 2> neighborDistances;
 
+		// TODO: i can't be negative so this might be wrong for implimentation and might be causing erorrs
 		if (closed || anchorIndex - 3 >= 0) {
 			auto offset = points[loopIndex(anchorIndex - 3)] - anchorPos;
 			dir += glm::normalize(offset);

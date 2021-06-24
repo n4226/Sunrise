@@ -397,3 +397,7 @@ healthchecksdb
 *.vcproj
 *.vcproj.filters
 
+*.PVS-Studio.*
+
+
+

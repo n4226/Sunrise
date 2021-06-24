@@ -75,7 +75,7 @@ namespace sunrise::gfx {
 
 		GraphicsPipeline(vk::Device device, vk::Extent2D swapChainExtent, RenderPassManager& renderPassManager);
 		GraphicsPipeline(vk::Device device, vk::Extent2D swapChainExtent, RenderPassManager& renderPassManager, GraphicsPipelineOptions& options);
-		~GraphicsPipeline();
+		virtual ~GraphicsPipeline();
 
 		/*GraphicsPipeline& GraphicsPipeline::operator=(const GraphicsPipeline&) {
 			return *this;
