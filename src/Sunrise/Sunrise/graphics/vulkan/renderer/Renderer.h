@@ -21,7 +21,8 @@ namespace sunrise {
 		{
 		public:
 
-			Renderer(Application& app, vk::Device device, vk::PhysicalDevice physicalDevice, VmaAllocator allocator, std::vector<Window*> windows, GPUQueues& deviceQueues, QueueFamilyIndices& queueFamilyIndices);
+			Renderer(Application& app, vk::Device device, vk::PhysicalDevice physicalDevice,
+				VmaAllocator allocator, std::vector<Window*> windows, GPUQueues& deviceQueues, QueueFamilyIndices& queueFamilyIndices, VkDebug debugObject);
 			void createAllResources();
 			~Renderer();
 
@@ -97,6 +98,8 @@ namespace sunrise {
 			// deivce spacific features
 
 			bool supportsMultiViewport = false;
+
+			VkDebug debugObject;
 
 		private:
 

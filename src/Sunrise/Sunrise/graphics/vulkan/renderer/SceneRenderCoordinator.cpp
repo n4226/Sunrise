@@ -334,11 +334,11 @@ namespace sunrise::gfx {
 			
 			auto buff = stage->encode(this, currentPass, window);
 
-			VkDebug::beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
+			renderer->debugObject.beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
 
 			firstLevelCMDBuffer.executeCommands(*buff);
 
-			VkDebug::endRegion(firstLevelCMDBuffer);
+			renderer->debugObject.endRegion(firstLevelCMDBuffer);
 
 		}
 

@@ -3,19 +3,14 @@
 
 #include "Sunrise/Sunrise/core/Application.h"
 
+#include "GFSDK_Aftermath.h"
+#include "GFSDK_Aftermath_GpuCrashDump.h"
+
 namespace sunrise::gfx {
-
-	bool VkDebug::active;
-
-
-	PFN_vkDebugMarkerSetObjectNameEXT VkDebug::pfnDebugMarkerSetObjectName;
-	PFN_vkCmdDebugMarkerBeginEXT      VkDebug::pfnCmdDebugMarkerBegin;
-	PFN_vkCmdDebugMarkerEndEXT        VkDebug::pfnCmdDebugMarkerEnd;
-	PFN_vkCmdDebugMarkerInsertEXT     VkDebug::pfnCmdDebugMarkerInsert;
 
 	// implementatino heavly inspired by atrticle at: https://www.saschawillems.de/blog/2016/05/28/tutorial-on-using-vulkans-vk_ext_debug_marker-with-renderdoc/
 
-	void VkDebug::init(vk::Device device,Application* app)
+	VkDebug::VkDebug(vk::Device device,Application* app)
 	{
 		vk::DynamicLoader dl;
 		// This dispatch class will fetch function pointers for the passed device if possible, else for the passed instance
@@ -72,5 +67,34 @@ namespace sunrise::gfx {
 			pfnCmdDebugMarkerEnd(static_cast<VkCommandBuffer>(cmdBuff));
 		}
 	}
+
+
+	// Static callback wrapper for OnCrashDump
+	void VkDebug::GpuCrashDumpCallback(
+		const void* pGpuCrashDump,
+		const uint32_t gpuCrashDumpSize,
+		void* pUserData)
+	{
+		VkDebug* pGpuCrashTracker = reinterpret_cast<VkDebug*>(pUserData);
+		pGpuCrashTracker->OnCrashDump(pGpuCrashDump, gpuCrashDumpSize);
+	}
+
+	// Handler for GPU crash dump callbacks from Nsight Aftermath
+	void VkDebug::OnCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize)
+	{
+
+		
+	}
+
+
+	void VkDebug::initAftermath()
+	{
+		GFSDK_Aftermath_EnableGpuCrashDumps(
+			GFSDK_Aftermath_Version_API,
+			GFSDK_Aftermath_GpuCrashDumpWatchedApiFlags_Vulkan, 0, , 0, 0, this);
+	}
+
+
+
 
 }

@@ -13,8 +13,10 @@
 
 namespace sunrise::gfx {
 
-	Renderer::Renderer(Application& app, vk::Device device, vk::PhysicalDevice physicalDevice, VmaAllocator allocator, std::vector<Window*> windows, GPUQueues& deviceQueues, QueueFamilyIndices& queueFamilyIndices)
-		: app(app), device(device), physicalDevice(physicalDevice), allocator(allocator), windows(windows), deviceQueues(deviceQueues), queueFamilyIndices(queueFamilyIndices)
+	Renderer::Renderer(Application& app, vk::Device device, vk::PhysicalDevice physicalDevice,
+		VmaAllocator allocator, std::vector<Window*> windows, GPUQueues& deviceQueues, QueueFamilyIndices& queueFamilyIndices, VkDebug debugObject)
+		: app(app), device(device), physicalDevice(physicalDevice),
+		allocator(allocator), windows(windows), deviceQueues(deviceQueues), queueFamilyIndices(queueFamilyIndices), debugObject(debugObject)
 	{
 		PROFILE_FUNCTION;
 
@@ -658,24 +660,24 @@ namespace sunrise::gfx {
 			cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
 
 
-			VkDebug::beginRegion(cmdBuff, "Gbuffer Pass", glm::vec4(0.7, 0.2, 0.3, 1));
+			debugObject.beginRegion(cmdBuff, "Gbuffer Pass", glm::vec4(0.7, 0.2, 0.3, 1));
 
 			encodeGBufferPass(window);
 
-			VkDebug::endRegion(cmdBuff);
+			debugObject.endRegion(cmdBuff);
 
 			cmdBuff.nextSubpass(vk::SubpassContents::eInline);
 
 
-			VkDebug::beginRegion(cmdBuff, "Deferred Pass", glm::vec4(0.4, 0.6, 0.3, 1));
+			debugObject.beginRegion(cmdBuff, "Deferred Pass", glm::vec4(0.4, 0.6, 0.3, 1));
 
 			encodeDeferredPass(window);
 
-			VkDebug::endRegion(cmdBuff);
+			debugObject.endRegion(cmdBuff);
 
 
 
-			VkDebug::beginRegion(cmdBuff, "IMGUI Render", glm::vec4(0.4, 0.6, 0.3, 1));
+			debugObject.beginRegion(cmdBuff, "IMGUI Render", glm::vec4(0.4, 0.6, 0.3, 1));
 
 			ImGui_ImplVulkan_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
@@ -683,7 +685,7 @@ namespace sunrise::gfx {
 			ImGui::ShowDemoWindow();
 			ImGui::Render();
 
-			VkDebug::endRegion(cmdBuff);
+			debugObject.endRegion(cmdBuff);
 		}
 		else {
 			auto coord = app.loadedScenes[0]->coordinator;

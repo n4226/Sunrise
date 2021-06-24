@@ -12,23 +12,36 @@ namespace sunrise {
 		class VkDebug
 		{
 		public:
+			VkDebug(vk::Device device, Application* app);
 
-			static void init(vk::Device device, Application* app);
-
-			static void nameObject(vk::Device device, size_t handle, vk::DebugReportObjectTypeEXT objectType, const char* name);
+			// debug report api
+			void nameObject(vk::Device device, size_t handle, vk::DebugReportObjectTypeEXT objectType, const char* name);
 			//static void tagObject(size_t handle, char* name);
 
-			static void insertMarker(vk::CommandBuffer cmdBuff, const char* name, glm::vec4 color);
-			static void beginRegion(vk::CommandBuffer cmdBuff, const char* name, glm::vec4 color);
-			static void endRegion(vk::CommandBuffer cmdBuff);
+			void insertMarker(vk::CommandBuffer cmdBuff, const char* name, glm::vec4 color);
+			void beginRegion(vk::CommandBuffer cmdBuff, const char* name, glm::vec4 color);
+			void endRegion(vk::CommandBuffer cmdBuff);
+			bool debugActive;
+			// end debug report api
 
-			static bool active;
+			//aftermath api
+			void initAftermath();
+
 		private:
 
-			static PFN_vkDebugMarkerSetObjectNameEXT pfnDebugMarkerSetObjectName;
-			static PFN_vkCmdDebugMarkerBeginEXT pfnCmdDebugMarkerBegin;
-			static PFN_vkCmdDebugMarkerEndEXT pfnCmdDebugMarkerEnd;
-			static PFN_vkCmdDebugMarkerInsertEXT pfnCmdDebugMarkerInsert;
+
+			PFN_vkDebugMarkerSetObjectNameEXT pfnDebugMarkerSetObjectName;
+			PFN_vkCmdDebugMarkerBeginEXT pfnCmdDebugMarkerBegin;
+			PFN_vkCmdDebugMarkerEndEXT pfnCmdDebugMarkerEnd;
+			PFN_vkCmdDebugMarkerInsertEXT pfnCmdDebugMarkerInsert;
+
+			// aftermath
+
+			static void VkDebug::GpuCrashDumpCallback(
+				const void* pGpuCrashDump,
+				const uint32_t gpuCrashDumpSize,
+				void* pUserData);
+			void VkDebug::OnCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize);
 		};
 
 	}

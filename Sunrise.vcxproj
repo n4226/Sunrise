@@ -55,22 +55,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\bin\Debug-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Debug-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Debug-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\bin\Release-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Release-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Release-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\bin\Dist-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Dist-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Dist-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -91,13 +91,13 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vulkan-1.lib;marl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\..\bin\Debug-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
+      <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\bin\Debug-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64\SunriseWorldMeshGen &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64\SunriseWorldMeshGen &gt; nul)
-IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64\SunriseWorldMeshGen &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64\SunriseWorldMeshGen &gt; nul)</Command>
+      <Command>IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64 &gt; nul)
+IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64 &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -106,7 +106,7 @@ IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q 
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -120,13 +120,13 @@ IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q 
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>vulkan-1.lib;marl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\..\bin\Release-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
+      <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\bin\Release-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64\SunriseWorldMeshGen &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64\SunriseWorldMeshGen &gt; nul)
-IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64\SunriseWorldMeshGen &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64\SunriseWorldMeshGen &gt; nul)</Command>
+      <Command>IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64 &gt; nul)
+IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64 &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -135,7 +135,7 @@ IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -149,20 +149,16 @@ IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>vulkan-1.lib;marl.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\..\bin\Dist-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
+      <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\bin\Dist-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64\SunriseWorldMeshGen &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64\SunriseWorldMeshGen &gt; nul)
-IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64\SunriseWorldMeshGen &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64\SunriseWorldMeshGen &gt; nul)</Command>
+      <Command>IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64 &gt; nul)
+IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64 &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64 &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Node.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.h" />
     <ClInclude Include="src\Sunrise.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
@@ -175,6 +171,9 @@ IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /
     <ClInclude Include="src\Sunrise\Sunrise\core\environment.h" />
     <ClInclude Include="src\Sunrise\Sunrise\debuging\Instrumentor.h" />
     <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Node.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Stage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.h" />
@@ -185,7 +184,9 @@ IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\pbr.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h" />
@@ -243,26 +244,26 @@ IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.h" />
     <ClInclude Include="src\srpch.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Stage.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Node.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Log.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Window.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Node.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Stage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryFileType.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMesh.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileSystem.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
@@ -323,7 +324,6 @@ IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /
     <ClCompile Include="src\srpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Stage.cpp" />
     <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -345,9 +345,6 @@ IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="src\Sunrise\Sunrise\dependencyManagment\Notes.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

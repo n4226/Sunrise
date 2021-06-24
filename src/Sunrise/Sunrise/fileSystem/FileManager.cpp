@@ -72,6 +72,13 @@ namespace sunrise {
 		out.close();
 	}
 
+	void FileManager::saveBinaryToFile(void* data, size_t length, const std::string& path)
+	{
+		std::ofstream out(path, std::ios::out | std::ios::binary);
+		out.write(static_cast<const char*>(data), length);
+		out.close();
+	}
+
 	//TODO: make this faster
 	std::string FileManager::loadStringfromFile(std::string& const path)
 	{

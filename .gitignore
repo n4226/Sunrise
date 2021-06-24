@@ -394,6 +394,6 @@ ASALocalRun/
 healthchecksdb
 
 
-
-
+*.vcproj
+*.vcproj.filters
 

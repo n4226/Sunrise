@@ -19,6 +19,9 @@
     <Filter Include="src\Sunrise\Sunrise\debuging">
       <UniqueIdentifier>{D1B97C9A-BD74-6C46-662C-E59052C6B6D6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\dependencyManagment">
+      <UniqueIdentifier>{23A04991-8F2F-0B7C-982B-EC93043A4688}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\fileFormats">
       <UniqueIdentifier>{68F68DC4-D4D9-9C04-DDDC-CA40493F6355}</UniqueIdentifier>
     </Filter>
@@ -141,6 +144,15 @@
     <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h">
       <Filter>src\Sunrise\Sunrise\debuging</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.h">
+      <Filter>src\Sunrise\Sunrise\dependencyManagment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Node.h">
+      <Filter>src\Sunrise\Sunrise\dependencyManagment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Stage.h">
+      <Filter>src\Sunrise\Sunrise\dependencyManagment</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.h">
       <Filter>src\Sunrise\Sunrise\fileFormats\binary</Filter>
     </ClInclude>
@@ -156,12 +168,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileManager.h">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileSystem.h">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
     </ClInclude>
-=======
->>>>>>> GPUStages
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h">
       <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
     </ClInclude>
@@ -174,12 +183,15 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h">
       <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan</Filter>
     </ClInclude>
->>>>>>> GPUStages
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
     </ClInclude>
@@ -351,14 +363,6 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Stage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Node.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.h" />
->>>>>>> GPUStages
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -379,6 +383,15 @@
     <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp">
       <Filter>src\Sunrise\Sunrise\debuging</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.cpp">
+      <Filter>src\Sunrise\Sunrise\dependencyManagment</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Node.cpp">
+      <Filter>src\Sunrise\Sunrise\dependencyManagment</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Stage.cpp">
+      <Filter>src\Sunrise\Sunrise\dependencyManagment</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\Bimage.cpp">
       <Filter>src\Sunrise\Sunrise\fileFormats\binary</Filter>
     </ClCompile>
@@ -394,13 +407,17 @@
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileManager.cpp">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileSystem.cpp">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
-=======
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan</Filter>
->>>>>>> GPUStages
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
@@ -591,16 +608,5 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
-<<<<<<< HEAD
-=======
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Stage.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Node.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="src\Sunrise\Sunrise\dependencyManagment\Notes.md" />
->>>>>>> GPUStages
   </ItemGroup>
 </Project>

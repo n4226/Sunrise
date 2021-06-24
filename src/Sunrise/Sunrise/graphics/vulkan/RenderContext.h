@@ -28,6 +28,7 @@ namespace sunrise {
 			std::vector<DeviceInfo*        >          deviceInfos;
 			std::vector<vk::PhysicalDevice >          physicalDevices;
 			std::vector<Renderer*          >          renderers;
+			std::vector<VkDebug            >          debugObjects;
 			std::vector<VmaAllocator       >          allocators;
 			std::vector<GPUQueues          >          deviceQueues;
 			std::vector<QueueFamilyIndices >          queueFamilyIndices;

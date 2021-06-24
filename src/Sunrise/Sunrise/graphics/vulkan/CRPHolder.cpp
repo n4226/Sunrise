@@ -223,7 +223,7 @@ namespace sunrise::gfx {
 #if SR_VK_OBJECT_NAMES
 				const char* name = vatt.name.append("_%d", window->globalIndex).c_str();
 
-				VkDebug::nameObject(renderer->device, reinterpret_cast<size_t>(attatchImage->vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
+				renderer->debugObject.nameObject(renderer->device, reinterpret_cast<size_t>(attatchImage->vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
 #endif
 				//if no array object for this window than make an empty one
 				if (images.find(window) == images.end()) {
@@ -280,7 +280,7 @@ namespace sunrise::gfx {
 							// if pass that will be presented
 							if (pass == passOptions.size() - 1) {
 								const char* name = frameOptions.attatchments[gloablAttachIndex].name.append("_%d", window->globalIndex).append("_%d", swapImage).c_str();
-								VkDebug::nameObject(renderer->device, reinterpret_cast<size_t>(VkImageView(imageView)), imageView.debugReportObjectType, name);
+								renderer->debugObject.nameObject(renderer->device, reinterpret_cast<size_t>(VkImageView(imageView)), imageView.debugReportObjectType, name);
 							}
 #endif
 

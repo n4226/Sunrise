@@ -485,7 +485,7 @@ namespace sunrise {
 
         // TODO: fix this because all windows are being added to all devices
         auto renderer =
-            new Renderer(*this, devices[index], physicalDevices[index], allocators[index], windows, deviceQueues[index], queueFamilyIndices[index]);
+            new Renderer(*this, devices[index], physicalDevices[index], allocators[index], windows, deviceQueues[index], queueFamilyIndices[index],debugObjects[index]);
 
         renderer->supportsMultiViewport = deviceInfos[index]->supportsMultiViewport;
 
@@ -567,12 +567,7 @@ namespace sunrise {
         // devie extensions
         std::vector<const char*> extensionNames = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-<<<<<<< HEAD
-            //todo fix this
-#if RenderMode == RenderModeGPU
-=======
 #if !SR_RenderDocCompatible && VK_GPUDriven
->>>>>>> GPUStages
             VK_NV_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME
 #endif
         };
@@ -612,8 +607,10 @@ namespace sunrise {
         
         auto device = physicalDevice.createDevice(vk::DeviceCreateInfo(createInfo), nullptr);
 
-        VkDebug::init(device,this);
-        VkDebug::active = debugExtAvailable;
+        auto debugObject = VkDebug(device,this);
+        debugObject.debugActive = debugExtAvailable;
+
+
 
         GPUQueues loc_deviceQueues;
 
@@ -622,6 +619,7 @@ namespace sunrise {
         device.getQueue(loc_queueFamilyIndices.resourceTransferFamily.value(), 0, &loc_deviceQueues.resourceTransfer);
 
         devices.push_back(device);
+        debugObjects.push_back(debugObject);
         deviceInfos.push_back(new DeviceInfo{ multiViewportAvailable });
         physicalDevices.push_back(physicalDevice);
         deviceQueues.push_back(loc_deviceQueues);
