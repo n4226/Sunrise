@@ -156,9 +156,12 @@
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileManager.h">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileSystem.h">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
     </ClInclude>
+=======
+>>>>>>> GPUStages
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h">
       <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
     </ClInclude>
@@ -171,6 +174,12 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h">
       <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan</Filter>
+    </ClInclude>
+>>>>>>> GPUStages
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
     </ClInclude>
@@ -276,6 +285,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\math\mesh\Mesh.h">
       <Filter>src\Sunrise\Sunrise\math\mesh</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\math\mesh\MeshPrimatives.h">
+      <Filter>src\Sunrise\Sunrise\math\mesh</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\math\mesh\MeshRendering.h">
       <Filter>src\Sunrise\Sunrise\math\mesh</Filter>
     </ClInclude>
@@ -339,6 +351,14 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
+<<<<<<< HEAD
+=======
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Stage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Node.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.h" />
+>>>>>>> GPUStages
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -374,8 +394,13 @@
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileManager.cpp">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileSystem.cpp">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
+=======
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan</Filter>
+>>>>>>> GPUStages
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUComputeStage.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
@@ -482,6 +507,9 @@
     <ClCompile Include="src\Sunrise\Sunrise\math\mesh\Mesh.cpp">
       <Filter>src\Sunrise\Sunrise\math\mesh</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\math\mesh\MeshPrimatives.cpp">
+      <Filter>src\Sunrise\Sunrise\math\mesh</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\math\mesh\MeshRendering.cpp">
       <Filter>src\Sunrise\Sunrise\math\mesh</Filter>
     </ClCompile>
@@ -563,5 +591,16 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Stage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Node.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Sunrise\Sunrise\dependencyManagment\Notes.md" />
+>>>>>>> GPUStages
   </ItemGroup>
 </Project>

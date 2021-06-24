@@ -13,7 +13,12 @@ namespace sunrise::gfx {
 
 
 		struct SUNRISE_API DependencyOptions {
-
+			size_t resourceIndex;
+			vk::ImageLayout newLayout;
+			vk::AttachmentLoadOp loadOp = vk::AttachmentLoadOp::eLoad;
+			vk::AttachmentStoreOp storeOp = vk::AttachmentStoreOp::eStore;
+			vk::AttachmentLoadOp stencilLoadOp   = vk::AttachmentLoadOp::eDontCare;
+			vk::AttachmentStoreOp stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
 		};
 
 		GPUStageDispatcher();
@@ -29,6 +34,7 @@ namespace sunrise::gfx {
 		/// TODO: look into makeing these vector parameter types into temporaries again eg std::move or &&
 		/// </summary>
 		/// <param name="runDependencies">stages that must complete before this stage exicutes each </param>
+		/// <param name="runDependencyOptions"> not one to one related to run dependancies vector, each option is about a resource</param>
 		/// <param name="encodeDependencies"></param>
 		void registerStage(GPUStage* stage, std::vector<GPUStage*>&& runDependencies, std::vector<DependencyOptions>&& runDependencyOptions, std::vector<GPUStage*>&& encodeDependencies);
 
@@ -52,6 +58,9 @@ namespace sunrise::gfx {
 		void encodeAll(vk::CommandBuffer firstLevelCMDBuffer);*/
 
 	protected:
+
+		bool multipleRenderPasses = false;
+		bool graphBuilt = false;
 
 		/// <summary>
 		/// key = a stage

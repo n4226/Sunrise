@@ -41,6 +41,9 @@ namespace sunrise {
 
 		marl::Scheduler* scheduler;
 
+
+		void quit();
+
 	protected:
 		
 		virtual bool wantsWindows();

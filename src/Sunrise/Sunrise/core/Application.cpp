@@ -119,6 +119,7 @@ namespace sunrise {
 
         SR_CORE_TRACE("Initializing Scene");
 
+        //TODO this does not support multiple scenes yet
         Scene* firstScene = loadedScenes[0];
         loadScene(firstScene,nullptr);
 
@@ -333,8 +334,10 @@ namespace sunrise {
         SR_CORE_INFO("Loading scene at addr: {}", reinterpret_cast<void*>(scene));
         scene->load();
         scene->coordinator->createPasses();
-        // load all coordinator registered pipeliens if not already
-        scene->coordinator->loadOrGetRegisteredPipesInAllWindows();
+
+        scene->coordinator->buildGraph();
+
+
 	}
 
 
@@ -354,6 +357,13 @@ namespace sunrise {
 
     bool Application::shouldLoop() {
         PROFILE_FUNCTION;
+
+        auto val = engine->shouldQuit.try_lock();
+
+        if (val != nullptr && *val) {
+            return false;
+        }
+
         for (size_t i = 0; i < windows.size(); i++)
         {
             // abstract this to a window spacific function
@@ -557,8 +567,12 @@ namespace sunrise {
         // devie extensions
         std::vector<const char*> extensionNames = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+<<<<<<< HEAD
             //todo fix this
 #if RenderMode == RenderModeGPU
+=======
+#if !SR_RenderDocCompatible && VK_GPUDriven
+>>>>>>> GPUStages
             VK_NV_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME
 #endif
         };
@@ -643,7 +657,11 @@ namespace sunrise {
         return false;
     }
 
-
+    void Application::quit()
+    {
+        auto handle = engine->shouldQuit.lock();
+        *handle = true;
+    }
 
 
 

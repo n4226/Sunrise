@@ -2,6 +2,7 @@
 
 #include "srpch.h"
 #include "GpuStage.h"
+#include "../renderPipelines/GraphicsPipeline.h"
 
 namespace sunrise::gfx {
 
@@ -32,11 +33,19 @@ namespace sunrise::gfx {
 		/// <param name="subpass"></param>
 		/// <param name="window"></param>
 		/// <returns></returns>
-		vk::CommandBuffer* selectAndSetupCommandBuff(uint32_t subpass, sunrise::Window& window);
+		vk::CommandBuffer* selectAndSetupCommandBuff(SceneRenderCoordinator* coordinator, uint32_t pass, sunrise::Window& window);
+
+		void setPipeline(sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline);
+		GraphicsPipeline* getConcretePipeline(sunrise::Window& window, VirtualGraphicsPipeline* pipeline);
 
 
 		// Inherited via GPUStage
-		virtual vk::CommandBuffer* encode(uint32_t subpass, sunrise::Window& window) override = 0;
+		// 
+		//called once 
+		virtual void setup() override = 0;
+		virtual void cleanup() override = 0;
+		// called every frame
+		virtual vk::CommandBuffer* encode(SceneRenderCoordinator* coordinator, uint32_t pass, sunrise::Window& window) override = 0;
 
 	};
 

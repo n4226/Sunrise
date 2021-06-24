@@ -21,7 +21,7 @@ namespace sunrise {
 	public:
 		MaterialManager(gfx::Renderer& renderer);
 
-		void loadStatic();
+		void loadStaticEarth();
 
 		void loadMat(std::string& matRootPath, const char* matFolder);
 

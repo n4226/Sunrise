@@ -285,4 +285,43 @@ namespace sunrise::gfx {
 	}
 
 
+	Basic2DMeshBuffer::Basic2DMeshBuffer(vk::Device device, VmaAllocator allocator, BufferCreationOptions options, Basic2DMesh* mesh)
+		: baseMesh(mesh)
+	{
+		auto bufferSize = baseMesh->fullSize();
+
+		buffer = new Buffer(device, allocator, static_cast<VkDeviceSize>(bufferSize), options);
+	}
+
+	Basic2DMeshBuffer::~Basic2DMeshBuffer()
+	{
+		delete buffer;
+	}
+
+	void Basic2DMeshBuffer::writeMeshToBuffer(bool mapandUnmap)
+	{
+		if (mapandUnmap)
+			buffer->mapMemory();
+
+		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->vertsOffset(), baseMesh->verts.data(), baseMesh->vertsSize());
+		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->indiciesOffset(), baseMesh->indicies.data(), baseMesh->indiciesSize());
+
+		if (mapandUnmap)
+			buffer->unmapMemory();
+	}
+
+	void Basic2DMeshBuffer::bindVerticiesIntoCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t baseBinding)
+	{
+		commandBuffer.bindVertexBuffers(baseBinding, {
+				buffer->vkItem
+			}, {
+				baseMesh->vertsOffset()
+			});
+	}
+
+	void Basic2DMeshBuffer::bindIndiciesIntoCommandBuffer(vk::CommandBuffer commandBuffer)
+	{
+		commandBuffer.bindIndexBuffer(buffer->vkItem, baseMesh->indiciesOffset(), vk::IndexType::eUint32);
+	}
+
 }

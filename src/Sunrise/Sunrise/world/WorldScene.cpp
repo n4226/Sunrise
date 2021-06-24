@@ -3,6 +3,7 @@
 #include "CameraSystem.h"
 #include "FloatingOriginSystem.h"
 #include "../core/Application.h"
+#include "../graphics/vulkan/renderer/MaterialManager.h"
 
 namespace sunrise {
 
@@ -24,6 +25,10 @@ namespace sunrise {
 	void WorldScene::load()
 	{
 		PROFILE_FUNCTION;
+
+		for (auto ren : app.renderers)
+			ren->materialManager->loadStaticEarth();
+
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
 		//renderer->world = this;
 		terrainSystem = new TerrainSystem(app, *this, &origin);

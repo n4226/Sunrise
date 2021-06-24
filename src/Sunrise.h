@@ -45,3 +45,6 @@
 
 ///////////////////////////////////////// Helpers
 #include "Sunrise/Sunrise/miscellaneousHelpers/miscellaneousHelpers.h"
+
+/////////////////////////////////////////////////////////////////// Dependency System
+#include "Sunrise/Sunrise/dependencyManagment/Dispatcher.h"

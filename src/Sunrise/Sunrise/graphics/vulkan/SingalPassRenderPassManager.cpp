@@ -81,7 +81,7 @@ namespace sunrise::gfx {
 		gbuffer_albedo_metallic.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 
 		gbuffer_albedo_metallic.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-		gbuffer_albedo_metallic.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+		gbuffer_albedo_metallic.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;//VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
 
 		VkAttachmentDescription gbuffer_normal_roughness{};
