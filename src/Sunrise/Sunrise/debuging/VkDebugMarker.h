@@ -26,7 +26,7 @@ namespace sunrise {
 
 			//aftermath api
 			void initAftermath();
-
+			bool aftermathActive = false;
 		private:
 
 
@@ -37,11 +37,12 @@ namespace sunrise {
 
 			// aftermath
 
-			static void VkDebug::GpuCrashDumpCallback(
+			static void VkDebug::gpuCrashDumpCallback(
 				const void* pGpuCrashDump,
 				const uint32_t gpuCrashDumpSize,
 				void* pUserData);
-			void VkDebug::OnCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize);
+
+			void VkDebug::onCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize);
 		};
 
 	}

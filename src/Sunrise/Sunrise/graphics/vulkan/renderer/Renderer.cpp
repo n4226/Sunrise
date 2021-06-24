@@ -20,6 +20,8 @@ namespace sunrise::gfx {
 	{
 		PROFILE_FUNCTION;
 
+		//TODO: check if gpu supports aftermath before doing this
+		debugObject.initAftermath();
 
 		resouceTransferer = new ResourceTransferer(device, *this);
 		//TODO: for multi gpu this maybe should not be owned by a rednerer but the application

@@ -32,9 +32,9 @@ namespace sunrise {
 		/// DO NOT USE FOR PERFORMANCE SENSATIVE TASKS
 		/// </summary>
 		/// <returns></returns>
-		static void saveStringToFile(std::string contents,std::string& const path);
+		static void saveStringToFile(const std::string& contents, const std::string&  path);
 
-		static void saveBinaryToFile(void* data, size_t length, const std::string& path);
+		static void saveBinaryToFile(const void* data, size_t length, const std::string& path);
 
 		/// <summary>
 		/// DO NOT USE FOR PERFORMANCE SENSATIVE TASKS

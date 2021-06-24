@@ -483,6 +483,7 @@ namespace sunrise {
         SR_CORE_TRACE("Creating Renderer for device {}", deviceIndex);
         auto index = devices.size() - 1;
 
+        // debug object in array is invalid after this copy
         // TODO: fix this because all windows are being added to all devices
         auto renderer =
             new Renderer(*this, devices[index], physicalDevices[index], allocators[index], windows, deviceQueues[index], queueFamilyIndices[index],debugObjects[index]);
@@ -609,7 +610,6 @@ namespace sunrise {
 
         auto debugObject = VkDebug(device,this);
         debugObject.debugActive = debugExtAvailable;
-
 
 
         GPUQueues loc_deviceQueues;

@@ -2,6 +2,7 @@
 #include "VkDebugMarker.h"
 
 #include "Sunrise/Sunrise/core/Application.h"
+#include "Sunrise/Sunrise/fileSystem/FileManager.h"
 
 #include "GFSDK_Aftermath.h"
 #include "GFSDK_Aftermath_GpuCrashDump.h"
@@ -70,28 +71,34 @@ namespace sunrise::gfx {
 
 
 	// Static callback wrapper for OnCrashDump
-	void VkDebug::GpuCrashDumpCallback(
+	void VkDebug::gpuCrashDumpCallback(
 		const void* pGpuCrashDump,
 		const uint32_t gpuCrashDumpSize,
 		void* pUserData)
 	{
 		VkDebug* pGpuCrashTracker = reinterpret_cast<VkDebug*>(pUserData);
-		pGpuCrashTracker->OnCrashDump(pGpuCrashDump, gpuCrashDumpSize);
+		pGpuCrashTracker->onCrashDump(pGpuCrashDump, gpuCrashDumpSize);
 	}
 
 	// Handler for GPU crash dump callbacks from Nsight Aftermath
-	void VkDebug::OnCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize)
+	void VkDebug::onCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize)
 	{
 
+		SR_CORE_WARN("GPU Crash, writting it to disk");
+
+		FileManager::saveBinaryToFile(pGpuCrashDump, gpuCrashDumpSize, FileManager::appWokringDir() + "/crashDumps/latest.nv-gpudmp");
 		
 	}
 
 
 	void VkDebug::initAftermath()
 	{
+		// after this call this object can not be copied or moved TODO: fix this by unregistering and re registring
 		GFSDK_Aftermath_EnableGpuCrashDumps(
 			GFSDK_Aftermath_Version_API,
-			GFSDK_Aftermath_GpuCrashDumpWatchedApiFlags_Vulkan, 0, , 0, 0, this);
+			GFSDK_Aftermath_GpuCrashDumpWatchedApiFlags_Vulkan, 0, gpuCrashDumpCallback, 0, 0, this);
+
+		aftermathActive = true;
 	}
 
 

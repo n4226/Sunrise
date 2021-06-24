@@ -70,7 +70,7 @@ namespace sunrise {
 		return std::filesystem::create_directories(std::filesystem::path(path).parent_path());
 	}
 
-	void FileManager::saveStringToFile(std::string contents, std::string& const path)
+	void FileManager::saveStringToFile(const std::string& contents, const std::string&  path)
 	{
 		createIntermediateDirs(path);
 		std::ofstream out(path);
@@ -78,8 +78,9 @@ namespace sunrise {
 		out.close();
 	}
 
-	void FileManager::saveBinaryToFile(void* data, size_t length, const std::string& path)
+	void FileManager::saveBinaryToFile(const void* data, size_t length, const std::string& path)
 	{
+		createIntermediateDirs(path);
 		std::ofstream out(path, std::ios::out | std::ios::binary);
 		out.write(static_cast<const char*>(data), length);
 		out.close();
