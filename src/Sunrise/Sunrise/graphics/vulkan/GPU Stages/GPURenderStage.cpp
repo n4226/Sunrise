@@ -4,6 +4,7 @@
 #include "Sunrise/Sunrise/core/Application.h"
 #include "Sunrise/Sunrise/core/Window.h"
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h"
+#include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
 
 namespace sunrise::gfx {
 
@@ -32,26 +33,27 @@ namespace sunrise::gfx {
 			vkHelpers::createPoolsAndCommandBufffers
 			(app.renderers[0]->device, cmdBufferPools[i], commandBuffers[i], app.maxSwapChainImages, app.renderers[0]->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
 
-
 	}
 
 
 	//TODO: right now this is assuming what framebuffer and render pass etc to use
-	vk::CommandBuffer* GPURenderStage::selectAndSetupCommandBuff(uint32_t subpass, sunrise::Window& window)
+	vk::CommandBuffer* GPURenderStage::selectAndSetupCommandBuff(SceneRenderCoordinator* coordinator, uint32_t pass, sunrise::Window& window)
 	{
 		uint32_t bufferIndex = window.currentSurfaceIndex;
 
-		auto renderer = app.renderers[0];
+		auto renderer = window.renderer;
 
+		//TODO write down why i am using a comand buffer and pool per serface if they are reset each frame - think it has to do with inflight frames
 		renderer->device.resetCommandPool(cmdBufferPools[window.indexInRenderer][bufferIndex], {});
 
 		vk::CommandBuffer* buffer = &commandBuffers[window.indexInRenderer][bufferIndex];
 
+		auto [renderPass, subpass] = coordinator->sceneRenderpassHolders[0]->renderPass(pass);
 
 		vk::CommandBufferInheritanceInfo inheritanceInfo{};
-		inheritanceInfo.renderPass = window.renderPassManager->renderPass;
+		inheritanceInfo.renderPass = renderPass->renderPass;
 		inheritanceInfo.subpass = subpass;
-		inheritanceInfo.framebuffer = window.swapChainFramebuffers[bufferIndex];
+		inheritanceInfo.framebuffer = coordinator->sceneRenderpassHolders[0]->getFrameBuffer(pass,&window,bufferIndex);
 
 		vk::CommandBufferBeginInfo beginInfo{};
 		beginInfo.flags = vk::CommandBufferUsageFlagBits::eRenderPassContinue; // Optional
@@ -61,5 +63,19 @@ namespace sunrise::gfx {
 
 		return buffer;
 	}
+
+	void GPURenderStage::setPipeline(sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline)
+	{
+		auto rawPipe = window.loadedPipes[pipeline];
+
+		buffer.bindPipeline(vk::PipelineBindPoint::eGraphics, rawPipe->vkItem);
+	}
+
+	GraphicsPipeline* GPURenderStage::getConcretePipeline(sunrise::Window& window, VirtualGraphicsPipeline* pipeline)
+	{
+		return window.loadedPipes[pipeline];
+	}
+
+	
 
 }

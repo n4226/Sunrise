@@ -15,7 +15,7 @@ namespace sunrise::gfx {
 	};
 
 
-	VkVertexInputBindingDescription makeVertBinding(uint32_t index, uint32_t stride, vk::VertexInputRate inputRate = vk::VertexInputRate::eVertex);
+	VkVertexInputBindingDescription SUNRISE_API makeVertBinding(uint32_t index, uint32_t stride, vk::VertexInputRate inputRate = vk::VertexInputRate::eVertex);
 
 	/// <summary>
 	///
@@ -27,7 +27,7 @@ namespace sunrise::gfx {
 	/// vec4 : VK_FORMAT_R32G32B32A32_SFLOAT
 	/// </summary>
 	/// <returns></returns>
-	VkVertexInputAttributeDescription makeVertAttribute(uint32_t binding, uint32_t location, VertexAttributeFormat format, uint32_t offset);
+	VkVertexInputAttributeDescription SUNRISE_API makeVertAttribute(uint32_t binding, uint32_t location, VertexAttributeFormat format, uint32_t offset);
 
 
 }

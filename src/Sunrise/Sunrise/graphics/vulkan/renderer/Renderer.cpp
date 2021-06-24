@@ -20,7 +20,7 @@ namespace sunrise::gfx {
 
 
 		resouceTransferer = new ResourceTransferer(device, *this);
-		//TODO: for multi gpu this should not be owned by a rednerer bu the application
+		//TODO: for multi gpu this maybe should not be owned by a rednerer but the application
 		materialManager = new MaterialManager(*this);
 	}
 
@@ -33,11 +33,11 @@ namespace sunrise::gfx {
 		}
 
 		createRenderResources();
-		createUniformsAndDescriptors();
+		//createUniformsAndDescriptors();
 
 		createDynamicRenderCommands();
 
-		materialManager->loadStatic();
+		
 	}
 
 	Renderer::~Renderer()
@@ -279,6 +279,10 @@ namespace sunrise::gfx {
 
 	void Renderer::allocateDescriptors()
 	{
+
+		// for each loaded pipe in each physical window, allocate descriptors
+		// see jira page on descition of how to deal with descriptors in the archetecture
+		/*
 		{
 			descriptorSets.resize(physicalWindows.size());
 
@@ -313,7 +317,7 @@ namespace sunrise::gfx {
 
 				vkAllocateDescriptorSets(device, &c_allocInfo, deferredDescriptorSets[i].data());
 			}
-		}
+		}*/
 	}
 
 	void Renderer::resetDescriptorPools()
@@ -456,7 +460,7 @@ namespace sunrise::gfx {
 
 			device.updateDescriptorSets({ globalUniformDescriptorWrite, modelUniformsDescriptorWrite, matUniformsDescriptorWrite, post_globalUniformDescriptorWrite }, {});
 
-			// differed
+			// deferred
 
 
 
@@ -599,7 +603,8 @@ namespace sunrise::gfx {
 
 			//updateRunTimeDescriptors(window);
 
-		updateCameraUniformBuffer(window);
+		// this is nolonger the renderer's responcability
+		//updateCameraUniformBuffer(window);
 
 #pragma region CreateRootCMDBuffer
 
@@ -617,41 +622,41 @@ namespace sunrise::gfx {
 		cmdBuff.begin(beginInfo);
 
 
+#pragma endregion
 		// begin a render pass
 
 		vk::RenderPassBeginInfo renderPassInfo{};
-		renderPassInfo.renderPass = window.renderPassManager->renderPass;
-		renderPassInfo.framebuffer = window.swapChainFramebuffers[window.currentSurfaceIndex];
 
 		renderPassInfo.renderArea = vk::Rect2D({ 0, 0 }, window.swapchainExtent);
 
-
-		//VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-		const std::array<float, 4> clearComponents = { 0.0f, 0.0f, 0.2f, 0.0f };
-
-		//TODO -----------------(3,"fix load ops of textures to remove unnecicary clearing") --------------------------------------------------------------------------------------------
-		std::array<vk::ClearValue, 5> clearColors = {
-			//Gbuffer images which are cleared now but that is temporary
-			vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			//GBuff Depth Tex - cleared
-			vk::ClearValue(vk::ClearDepthStencilValue({1.f,0})),
-
-			//SwapCHainOutput
-			vk::ClearValue(vk::ClearColorValue(clearComponents)),
-		};
-
-		renderPassInfo.setClearValues(clearColors);
-
-		VkRenderPassBeginInfo info = renderPassInfo;
-
-#pragma endregion
-
-		//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
-		cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
-
 		if (terrainSystem != nullptr) {
+			renderPassInfo.renderPass = window.renderPassManager->renderPass;
+			renderPassInfo.framebuffer = window.swapChainFramebuffers[window.currentSurfaceIndex];
+
+			//VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+			const std::array<float, 4> clearComponents = { 0.0f, 0.0f, 0.2f, 0.0f };
+
+			//TODO -----------------(3,"fix load ops of textures to remove unnecicary clearing") --------------------------------------------------------------------------------------------
+			std::array<vk::ClearValue, 5> clearColors = {
+				//Gbuffer images which are cleared now but that is temporary
+				vk::ClearValue(vk::ClearColorValue(clearComponents)),
+				vk::ClearValue(vk::ClearColorValue(clearComponents)),
+				vk::ClearValue(vk::ClearColorValue(clearComponents)),
+				//GBuff Depth Tex - cleared
+				vk::ClearValue(vk::ClearDepthStencilValue({1.f,0})),
+
+				//SwapCHainOutput
+				vk::ClearValue(vk::ClearColorValue(clearComponents)),
+			};
+
+			renderPassInfo.setClearValues(clearColors);
+
+			VkRenderPassBeginInfo info = renderPassInfo;
+
+
+			//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
+			cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
+
 
 			VkDebug::beginRegion(cmdBuff, "Gbuffer Pass", glm::vec4(0.7, 0.2, 0.3, 1));
 
@@ -682,6 +687,27 @@ namespace sunrise::gfx {
 		}
 		else {
 			auto coord = app.loadedScenes[0]->coordinator;
+
+			//renderPassInfo.renderPass = window.renderPassManager->renderPass;
+			//renderPassInfo.framebuffer = window.swapChainFramebuffers[window.currentSurfaceIndex];
+
+			////TODO: make this compatable with depth buffers
+			//std::vector<vk::ClearValue> clearColors{};
+			//clearColors.resize(coord->sceneRenderpass->getTotalAttatchmentCount());
+
+			//for (size_t i = 0; i < coord->sceneRenderpass->getTotalAttatchmentCount(); i++)
+			//{
+			//	clearColors[i] = vk::ClearValue(vk::ClearColorValue(coord->sceneRenderpass->options.attatchments[i].clearColor));
+			//}
+
+			//renderPassInfo.setClearValues(clearColors);
+
+			//VkRenderPassBeginInfo info = renderPassInfo;
+
+
+			////vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
+			//cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
+
 
 			coord->encodePassesForFrame(this, cmdBuff, app.currentFrameID, window);
 		}

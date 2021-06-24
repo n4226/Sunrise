@@ -18,6 +18,12 @@ namespace sunrise {
 	}
 	void Engine::startup()
 	{
+
+		{ // set to false to make sure it is
+			auto handle = shouldQuit.lock();
+			*handle = false;
+		}
+
 		auto terminate = false;
 		Instrumentor::Get().BeginSession("Launch", "instruments_Launch.profile");
 		{
@@ -101,4 +107,5 @@ namespace sunrise {
 		}
 		Instrumentor::Get().EndSession();
 	}
+	
 }

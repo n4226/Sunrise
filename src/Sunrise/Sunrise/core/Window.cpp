@@ -62,24 +62,26 @@ namespace sunrise {
 
         }
 
-
-        createFrameBufferImages();
-
-        // make graphics pipeline 
-
-
+        // temporary for splititng between legacy world system and neo CRP (composable rener pass) system
         WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
-        if (world != nullptr)
-            renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-        else
-            renderPassManager = new GPUPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-        
-        if (_virtual) {
-            renderPassManager->multiViewport = true;
-            renderPassManager->multiViewCount = subWindows.size();
-        }
 
-        renderPassManager->createMainRenderPass();
+
+        // make graphics pipeline
+
+
+        if (world != nullptr)
+        {
+            createFrameBufferImages();
+            renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
+            if (_virtual) {
+                renderPassManager->multiViewport = true;
+                renderPassManager->multiViewCount = subWindows.size();
+            }
+
+            renderPassManager->createMainRenderPass();
+        }
+        
+        
 
         if (world != nullptr) {
             pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
@@ -95,13 +97,18 @@ namespace sunrise {
             deferredPass->createPipeline();
 
             gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
+
+            worldLoadedPipes.push_back(pipelineCreator);
+            worldLoadedPipes.push_back(deferredPass);
+
+            createFramebuffers();
         }
-        createFramebuffers();
 
         createSemaphores();
+
         if (!_virtual && world != nullptr)
             SetupImgui();
-        else {
+        else if (world != nullptr) {
             // give pointers of grphics pipelines and renderpass to subwindows
             for (size_t i = 0; i < subWindows.size(); i++)
             {
@@ -201,18 +208,19 @@ namespace sunrise {
         createSwapchainImageViews();
 
         WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
-        if (world != nullptr)
+        if (world != nullptr) {
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-        else
-            renderPassManager = new GPUPassRenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-      
-        if (_virtual) {
-            renderPassManager->multiViewport = true;
-            renderPassManager->multiViewCount = subWindows.size();
+
+            if (_virtual) {
+                renderPassManager->multiViewport = true;
+                renderPassManager->multiViewCount = subWindows.size();
+            }
+
+            renderPassManager->createMainRenderPass();
+
         }
-
-        renderPassManager->createMainRenderPass();
-
+        
+      
         if (world != nullptr) {
             pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
@@ -404,10 +412,13 @@ namespace sunrise {
 
     }
 
+    //TODO remove
     void Window::createFramebuffers()
     {
-        PROFILE_FUNCTION
-            swapChainFramebuffers.resize(swapChainImageViews.size());
+        return;
+
+        PROFILE_FUNCTION;
+        swapChainFramebuffers.resize(swapChainImageViews.size());
 
         for (size_t i = 0; i < swapChainImageViews.size(); i++) {
             // see renderpass.cpp for info on order of attachments
@@ -420,7 +431,7 @@ namespace sunrise {
                 //Deferred
                 swapChainImageViews[i],
             };
-
+             
             vk::FramebufferCreateInfo framebufferInfo{};
             framebufferInfo.renderPass = renderPassManager->renderPass;
             framebufferInfo.attachmentCount = attachments.size();
@@ -459,7 +470,7 @@ namespace sunrise {
         SR_CORE_INFO("Picking monitor for window {}",globalIndex);
         for (size_t i = 0; i < monitorsCount; i++)
         {
-            SR_CORE_TRACE("comparing monitor {} to {}", glfwGetWin32Monitor(monitors[i]), name.c_str());
+            SR_CORE_TRACE("comparing monitor {} to requested {}", glfwGetWin32Monitor(monitors[i]), name.c_str());
             if (strcmp(glfwGetWin32Monitor(monitors[i]), name.c_str()) == 0) {
                 return monitors[i];
             }
@@ -569,6 +580,11 @@ namespace sunrise {
     bool Window::isPrimary()
     {
         return _primary;
+    }
+
+    bool Window::isOwned()
+    {
+        return _owned;
     }
 
     void Window::addSubWindow(Window* subWindow)

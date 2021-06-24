@@ -9,6 +9,7 @@ namespace sunrise {
 	namespace gfx {
 
 		class GPUStageDispatcher;
+		class SceneRenderCoordinator;
 
 		/// <summary>
 		/// AN abstract base clase for the GPU Stage System.
@@ -27,13 +28,18 @@ namespace sunrise {
 
 
 
+			//called once 
+			virtual void setup() = 0; 
+			virtual void lateSteup() {}
+			virtual void cleanup() = 0;
+
 			//TODO: right now all stages encode into secondar command buffs but this could change
 
 			/// <summary>
 			/// 
 			/// </summary>
 			/// <returns></returns>
-			virtual vk::CommandBuffer* encode(uint32_t subpass, Window& window) = 0;
+			virtual vk::CommandBuffer* encode(SceneRenderCoordinator* coordinator,uint32_t pass, Window& window) = 0;
 
 #if SR_LOGGING
 			std::string name;
@@ -42,6 +48,11 @@ namespace sunrise {
 		//protected:
 
 			Application& app;
+
+		protected:
+			friend GPUStageDispatcher;
+
+			bool _setup = false;
 
 		};
 

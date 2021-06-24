@@ -55,4 +55,39 @@ namespace sunrise {
 	void SUNRISE_API makeLibiglMesh(const Mesh& mesh, size_t subMesh, Eigen::MatrixXd& verts, Eigen::MatrixXi& indicies);
 	void SUNRISE_API makeMeshFromLibigl(Mesh& mesh, size_t subMesh, const Eigen::MatrixXd& verts, const Eigen::MatrixXi& indicies);
 
+
+	/// <summary>
+	/// an abstract representation of a simple 2d mesh - helpful for full screan quad generation for pos proccesing
+	/// </summary>
+	struct SUNRISE_API Basic2DMesh
+	{
+		std::vector<glm::vec2> verts;
+		std::vector<glm::uint32> indicies;
+
+		static std::array<VkVertexInputBindingDescription, 1> getBindingDescription();
+
+		static std::array<VkVertexInputAttributeDescription, 1> getAttributeDescriptions();
+
+		// offset and size functions
+
+		size_t         vertsSize();
+		//size_t           uvsSize();
+		//size_t       normalsSize();
+		//size_t      tangentsSize();
+		//size_t    bitangentsSize();
+		size_t      indiciesSize();
+		//size_t indiciesSize(size_t subMesh);
+		//size_t AllSubMeshIndiciesSize();
+
+		size_t       vertsOffset();
+		//size_t         uvsOffset();
+		//size_t     normalsOffset();
+		//size_t    tangentsOffset();
+		//size_t  bitangentsOffset();
+		size_t    indiciesOffset();
+
+		size_t    fullSize();
+
+	};
+
 }

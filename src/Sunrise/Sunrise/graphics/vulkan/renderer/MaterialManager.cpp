@@ -18,7 +18,7 @@ namespace sunrise {
 	}
 
 
-	void MaterialManager::loadStatic()
+	void MaterialManager::loadStaticEarth()
 	{
 		PROFILE_FUNCTION;
 

@@ -42,9 +42,12 @@
 #define SR_ENABLE_VK_VALIDATION_LAYERS 1
 #define SR_ENABLE_PRECONDITION_CHECKS 1
 #define SR_FILEOPEN_CHECKS 1
+#define SR_VK_OBJECT_NAMES 1
 #else
 #define SR_ENABLE_VK_VALIDATION_LAYERS 0
 #define SR_ENABLE_PRECONDITION_CHECKS 0
+#define SR_FILEOPEN_CHECKS 0
+#define SR_VK_OBJECT_NAMES 0
 #endif
 
 // for windows rutime stuff e.g static or dynamiclyh link to c++ runtime:
@@ -77,6 +80,7 @@
 #define VK_SUBPASS_INDEX_COMPUTE_PREPASS 0
 #define VK_SUBPASS_INDEX_GBUFFER 1
 #define VK_SUBPASS_INDEX_LIGHTING 2
+#define VK_GPUDriven 1
 #endif
 
 // constants 
@@ -102,3 +106,9 @@
 //#define vkMarker
 //#else
 //#endif
+
+/*
+
+Good git restore explanation: (this is seperate I will find a place to put this shortly)
+https://stackoverflow.com/questions/58003030/what-is-the-git-restore-command-and-what-is-the-difference-between-git-restor
+*/
