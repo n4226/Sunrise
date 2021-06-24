@@ -97,9 +97,13 @@ namespace sunrise {
 
 			ComposableRenderPass::CreateOptions wholeFrameRenderPassOptions;
 
+			/// <summary>
+			/// kciks off all load time things that need to hapen
+			/// </summary>
+			void buildGraph();
+
 		protected:
 			friend Window;
-			friend Application;
 			std::vector<std::pair<VirtualGraphicsPipeline*, GPUStage*>> registeredPipes{};
 			ComposableRenderPass::CreateOptions __tempWholeFrameRenderPassOptions;
 
@@ -111,11 +115,6 @@ namespace sunrise {
 			/// <param name="swapChainFormat">the format the display(s) are expecting, with multiuple windows if formats are different value is undifined</param>
 			/// <returns></returns>
 			virtual ComposableRenderPass::CreateOptions renderpassConfig(vk::Format swapChainFormat);
-
-			/// <summary>
-			/// 
-			/// </summary>
-			void buildGraph();
 
 		private:
 

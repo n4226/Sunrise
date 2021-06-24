@@ -312,8 +312,6 @@ namespace sunrise {
 
         scene->coordinator->buildGraph();
 
-        // load all coordinator registered pipeliens if not already
-        scene->coordinator->loadOrGetRegisteredPipesInAllWindows();
 
 	}
 

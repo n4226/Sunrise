@@ -15,6 +15,10 @@ namespace sunrise::gfx {
 		struct SUNRISE_API DependencyOptions {
 			size_t resourceIndex;
 			vk::ImageLayout newLayout;
+			vk::AttachmentLoadOp loadOp = vk::AttachmentLoadOp::eLoad;
+			vk::AttachmentStoreOp storeOp = vk::AttachmentStoreOp::eStore;
+			vk::AttachmentLoadOp stencilLoadOp   = vk::AttachmentLoadOp::eDontCare;
+			vk::AttachmentStoreOp stencilStoreOp = vk::AttachmentStoreOp::eDontCare;
 		};
 
 		GPUStageDispatcher();

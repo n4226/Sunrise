@@ -198,13 +198,20 @@ namespace sunrise::gfx {
 							// create empty transitions for all assets 
 							if (holderOptions.passStartLayout.size() < holderOptions.passes - 1) {
 								holderOptions.passStartLayout.push_back({});
+								holderOptions.attachmentOps.push_back({});
+								holderOptions.stencilOps.push_back({});
+
 								holderOptions.passStartLayout[holderOptions.passStartLayout.size() - 1].resize(wholeFrameRenderPassOptions.attatchments.size());
+								holderOptions.attachmentOps[holderOptions.attachmentOps.size() - 1].resize(wholeFrameRenderPassOptions.attatchments.size());
+								holderOptions.stencilOps[holderOptions.stencilOps.size() - 1].resize(wholeFrameRenderPassOptions.attatchments.size());
 								for (auto& layout : holderOptions.passStartLayout[holderOptions.passStartLayout.size() - 1]) {
 									layout = vk::ImageLayout::eUndefined;
 								}
 							}
 							
 							holderOptions.passStartLayout[holderOptions.passStartLayout.size() - 1][p.resourceIndex] = p.newLayout;
+							holderOptions.attachmentOps[holderOptions.attachmentOps.size() - 1][p.resourceIndex] = std::make_pair(p.loadOp,p.storeOp);
+							holderOptions.stencilOps[holderOptions.stencilOps.size() - 1][p.resourceIndex] = std::make_pair(p.stencilLoadOp, p.stencilStoreOp);
 						}
 					
 					}
@@ -212,6 +219,8 @@ namespace sunrise::gfx {
 				}
 
 			}
+			// set the pass of the last stage
+			passForStage[stagesInOrder[stagesInOrder.size() - 1]] = holderOptions.passes - 1;
 		}
 		else {
 			holderOptions.passes = 1;
@@ -221,6 +230,12 @@ namespace sunrise::gfx {
 		scene->coordinator->createRenderpasses(holderOptions);
 
 		graphBuilt = true;
+
+		loadOrGetRegisteredPipesInAllWindows();
+
+		for (auto stage : stagesInOrder) {
+			stage->lateSteup();
+		}
 	}
 
 	void SceneRenderCoordinator::loadOrGetRegisteredPipesInAllWindows()
@@ -279,6 +294,8 @@ namespace sunrise::gfx {
 
 		int64_t currentPass = -1;
 
+		bool inARenderPass = false;
+
 		for (auto stage : stagesInOrder) {
 
 #if SR_ENABLE_PRECONDITION_CHECKS
@@ -292,13 +309,17 @@ namespace sunrise::gfx {
 
 			if (currentPass < stagePass) {
 				//check if in a pass -- if so leave it
-				
+				if (inARenderPass) {
+					firstLevelCMDBuffer.endRenderPass();
+					inARenderPass = false;
+				}
 
 
 				// enter new render pass if and only if new pass is a different render pass
 				//TODO the currentPass >= 0  is sort of already gaurentied so coujld be removed for performance
 				if (currentPass < 0 || currentPass >= 0 && sceneRenderpassHolders[0]->arePassesDifferentRenderPasses(currentPass, stagePass)) {
 					startNewPass(++currentPass,window,firstLevelCMDBuffer); 
+					inARenderPass = true;
 				}
 
 
@@ -308,10 +329,10 @@ namespace sunrise::gfx {
 				
 			}
 
-
-			auto passInfo = sceneRenderpassHolders[0]->renderPass(currentPass);
+			//todo: abstract out calling this function on thel ine bellow in all stages #canOptimize
+			//auto passInfo = sceneRenderpassHolders[0]->renderPass(currentPass);
 			
-			auto buff = stage->encode(passInfo.second, window);
+			auto buff = stage->encode(this, currentPass, window);
 
 			VkDebug::beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
 

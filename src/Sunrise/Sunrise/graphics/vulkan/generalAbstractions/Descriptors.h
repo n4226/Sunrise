@@ -133,6 +133,10 @@ namespace sunrise::gfx {
 	/// </summary>
 	//typedef vk::DescriptorSet DescriptorSet;
 	struct SUNRISE_API DescriptorSet {
+	public:
+
+		vk::DescriptorSet vkItem;
+		DescriptorBinding makeBinding(size_t index);
 
 	private:
 		friend DescriptorPool;
@@ -142,10 +146,6 @@ namespace sunrise::gfx {
 
 		DescriptorSet(vk::DescriptorSet vkItem, std::vector<DescriptorSetLayoutBinding>* layout);
 
-	public:
-
-		vk::DescriptorSet vkItem;
-		DescriptorBinding makeBinding(size_t index);
 
 		//void bindInto();
 

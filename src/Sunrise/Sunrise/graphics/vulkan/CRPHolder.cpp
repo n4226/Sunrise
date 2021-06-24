@@ -55,8 +55,8 @@ namespace sunrise::gfx {
 			// change options for spacific render pass
 			for (size_t attach = 0; attach < wholeOptions.attatchments.size(); attach++)
 			{
-				if ((i == 0 && wholeOptions.attatchments[attach].transitionalToAtStartLayout == vk::ImageLayout::eUndefined)
-					|| (i > 0 && spacificOptions.passStartLayout[i - 1][attach] == vk::ImageLayout::eUndefined)) {
+				if ((i == 0 && shouldSkipAttachment(wholeOptions.attatchments[attach].transitionalToAtStartLayout))
+					|| (i > 0 && shouldSkipAttachment(spacificOptions.passStartLayout[i - 1][attach]))) {
 					// this attachment is not used in this pass
 
 					// mark the index as so
@@ -86,10 +86,24 @@ namespace sunrise::gfx {
 				}
 				// the start layout (the layout to transtion to at the beginnign of the renderpass) should be what the dependancy needs
 				// or the initial one specified if it is the first pass
-				if (i > 0)
+				if (i > 0) {
 					attachOptions.transitionalToAtStartLayout = spacificOptions.passStartLayout[i - 1][attach];
-				else
+
+					auto attachOps = spacificOptions.attachmentOps[i - 1][attach];
+					auto stencilOps = spacificOptions.stencilOps[i - 1][attach];
+
+					attachOptions.loadOp = attachOps.first;
+					attachOptions.storeOp = attachOps.second;
+					attachOptions.stencilLoadOp = stencilOps.first;
+					attachOptions.stencilStoreOp = stencilOps.second;
+				}
+				else {
 					attachOptions.transitionalToAtStartLayout = wholeOptions.attatchments[attach].transitionalToAtStartLayout;
+					attachOptions.loadOp = wholeOptions.attatchments[attach].loadOp;
+					attachOptions.storeOp = wholeOptions.attatchments[attach].storeOp;
+					attachOptions.stencilLoadOp = wholeOptions.attatchments[attach].stencilLoadOp;
+					attachOptions.stencilStoreOp = wholeOptions.attatchments[attach].stencilStoreOp;
+				}
 
 				if (i == spacificOptions.passes - 1) { // if the last pass
 																 // the final layout (the layout to transtion to at the end of the renderpass) should be the original final user defined layout
@@ -98,9 +112,9 @@ namespace sunrise::gfx {
 				else {
 					// the NOT final layout 
 					// (the layout to transtion to at the end of this renderpass but there is another render pass after) 
-					// should be what it transition to at the beggingin of this pass
-					//becuase the layout transition to the next pass will happen at the beggignin of the next pass
-					attachOptions.finalLayout = attachOptions.transitionalToAtStartLayout;
+					// should transition to the layout the next pass needs as dependancy as it can not heppen in the next pass
+					attachOptions.finalLayout = spacificOptions.passStartLayout[i][attach];
+
 				}
 				thisPassOptions.attatchments.push_back(attachOptions);
 				passAttachGlobalIndicies[passAttachGlobalIndicies.size() - 1].push_back(attach);
@@ -113,6 +127,23 @@ namespace sunrise::gfx {
 			//TODO: make sure move constructore actualy exists for the create options class
 			passOptions.push_back(std::move(thisPassOptions));
 		}
+	}
+
+	bool CRPHolder::shouldSkipAttachment(const vk::ImageLayout& layout)
+	{
+#if SR_ENABLE_PRECONDITION_CHECKS
+		auto result =
+#else
+		return
+#endif
+			(layout == vk::ImageLayout::eUndefined || layout == vk::ImageLayout::eShaderReadOnlyOptimal);
+
+#if SR_ENABLE_PRECONDITION_CHECKS
+		//No other formats arew currently supported
+		SR_ASSERT(result || layout == vk::ImageLayout::eColorAttachmentOptimal);
+		return result;
+#endif
+
 	}
 
 

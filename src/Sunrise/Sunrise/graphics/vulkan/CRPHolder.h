@@ -29,14 +29,29 @@ namespace sunrise::gfx {
 	public:
 
 		struct HolderOptions {
-			size_t passes;
+			size_t passes{};
 			/// <summary>
 			/// outer array is passes inner is attachment;
 			/// outer length must = passes - 1 (skipping first stage)
 			/// 
 			/// use vk::imageLayout::eUndefined to signify that that attachment is not used for a given pass
 			/// </summary>
-			std::vector<std::vector<vk::ImageLayout>> passStartLayout;
+			std::vector<std::vector<vk::ImageLayout>> passStartLayout{};
+			/// <summary>
+
+
+			/// <summary>
+			/// outer array is passes inner is attachment;
+			/// outer length must = passes - 1 (skipping first stage)
+			/// 
+			/// </summary>
+			std::vector<std::vector<std::pair<vk::AttachmentLoadOp, vk::AttachmentStoreOp>>> attachmentOps{};
+			/// <summary>
+			/// outer array is passes inner is attachment;
+			/// outer length must = passes - 1 (skipping first stage)
+			/// 
+			/// </summary>
+			std::vector<std::vector<std::pair<vk::AttachmentLoadOp, vk::AttachmentStoreOp>>> stencilOps{};
 		};
 
 		CRPHolder(const ComposableRenderPass::CreateOptions& wholeOptions,
@@ -69,6 +84,8 @@ namespace sunrise::gfx {
 	private:
 
 		void createPasses(const sunrise::gfx::ComposableRenderPass::CreateOptions& wholeOptions, const sunrise::gfx::CRPHolder::HolderOptions& spacificOptions);
+
+		bool shouldSkipAttachment(const vk::ImageLayout& layout);
 
 		void createWindowSpacificResources();
 		void createWindowImagesAndFrameBuffer(Window* window);
