@@ -567,12 +567,7 @@ namespace sunrise {
         // devie extensions
         std::vector<const char*> extensionNames = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-<<<<<<< HEAD
-            //todo fix this
-#if RenderMode == RenderModeGPU
-=======
 #if !SR_RenderDocCompatible && VK_GPUDriven
->>>>>>> GPUStages
             VK_NV_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME
 #endif
         };

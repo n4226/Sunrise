@@ -394,6 +394,7 @@ ASALocalRun/
 healthchecksdb
 
 
+*.PVS-Studio.*
 
 
 
