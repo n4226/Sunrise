@@ -28,10 +28,10 @@ namespace sunrise::gfx {
 	}
 
 
-	void SceneRenderCoordinator::registerPipeline(VirtualGraphicsPipeline* virtualPipe)
+	void SceneRenderCoordinator::registerPipeline(VirtualGraphicsPipeline* virtualPipe, GPUStage* forStage)
 	{
 		virtualPipe->create();
-		registeredPipes.push_back(virtualPipe);
+		registeredPipes.push_back(std::make_pair(virtualPipe,forStage));
 	}
 
 	void SceneRenderCoordinator::setLastPass(GPUStage* lastStage)
@@ -173,14 +173,14 @@ namespace sunrise::gfx {
 					auto& options = individualRunDependencyOptoins[stage];
 					
 					
+					bool addedPassForStage = false;
 
 					for (auto& p : options) {
-						bool addedPassForOption = false;
 
 						SR_ASSERT(p.newLayout == vk::ImageLayout::eShaderReadOnlyOptimal
-							|| p.newLayout == vk::ImageLayout::eUndefined);
+							|| p.newLayout == vk::ImageLayout::eUndefined || p.newLayout == vk::ImageLayout::eColorAttachmentOptimal);
 						//TODO right now only checking for colorAttachment to and from eShaderReadOnlyOptimal layouts
-						if (p.newLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
+						if (p.newLayout != vk::ImageLayout::eUndefined) {
 							// the resource index of the dependancy option must be valid
 							SR_ASSERT(p.resourceIndex < wholeFrameRenderPassOptions.attatchments.size());
 
@@ -188,11 +188,11 @@ namespace sunrise::gfx {
 							// this should be defined in the attachment configuration in the renderpassConfig() function
 							SR_ASSERT(stage != stagesInOrder[0]);
 
-							if (!addedPassForOption) {
+							if (!addedPassForStage) {
 								// its ok to do stageIndex - 1 becuase asserted two lines up that its not the first stage
 								passForStage[stagesInOrder[stageIndex - 1]] = holderOptions.passes - 1;
 								holderOptions.passes += 1;
-								addedPassForOption = true;
+								addedPassForStage = true;
 							}
 
 							// create empty transitions for all assets 
@@ -229,9 +229,13 @@ namespace sunrise::gfx {
 		for (auto window : app.renderers[0]->windows) {
 			//TODO: check if window already has same virtual pipeLoaded
 			for (auto pipe : registeredPipes) {
+				auto pass = passForStage[pipe.second];
+
+				auto renderPass = sceneRenderpassHolders[0]->renderPass(pass).first;
+
 				//TODO: cash pipelines through vulkan and or seperatly to prevent rebuilding as much
-				auto concretePipe = new GraphicsPipeline(window->device, window->swapchainExtent, *window->renderPassManager, pipe->definition);
-				window->loadedPipes[pipe] = concretePipe;
+				auto concretePipe = new GraphicsPipeline(window->device, window->swapchainExtent,*renderPass, pipe.first->definition);
+				window->loadedPipes[pipe.first] = concretePipe;
 			}
 		}
 	}

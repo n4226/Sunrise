@@ -32,7 +32,7 @@ namespace sunrise::gfx {
         }
     }
 
-    void GraphicsPipeline::createPipeline(GraphicsPipelineOptions& options)
+    void GraphicsPipeline::createPipeline(const GraphicsPipelineOptions& options)
     {
         /*
           Required inputs:

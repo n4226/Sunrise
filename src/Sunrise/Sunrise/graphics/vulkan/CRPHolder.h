@@ -93,10 +93,16 @@ namespace sunrise::gfx {
 		/// value = indicy into global frame options attachments array
 		/// </summary>
 		std::vector<std::vector<size_t>> passAttachGlobalIndicies{};
+		/// <summary>
+		/// outer = pass
+		/// inner = global attachments index
+		/// value = indicy into pass  options attachments array (-1 means the attachment is not in the given pass)
+		/// </summary>
+		std::vector<std::vector<int64_t>> globalAttachPassIndicies{};
 
 
 		// keys are unowned windows, every unowned window has its own swap chain and hense swap chain images and image views as well as concreate images for all other attatchemnts
-		// the swap chain images and image views are still sotred in the window all other attatchments are stored here
+		// the swap chain images and image views are still stored in the window all other attatchments are stored here
 		// in the future shared attatchment images bewtween multiple unowned winodows might be added - see todo at top of class about image creation
 		std::unordered_map<Window*, std::vector<gfx::Image*>> images{};
 
@@ -104,8 +110,11 @@ namespace sunrise::gfx {
 		std::vector<ComposableRenderPass*> renderpasses{};
 
 		/// <summary>
-		/// one for each supbass and onowned window, the last one is also referenced by the respective window
+		/// one for each supbass and onowned window, and window surface, the last one is also referenced by the respective window
 		/// outer array is pass index, map is the window, inner array is window surface index
+		/// outer = pass
+		/// map = window
+		/// inner = surface
 		/// </summary>
 		std::vector<std::unordered_map<Window*, std::vector<vk::Framebuffer>>> frameBuffers{};
 

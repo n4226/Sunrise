@@ -44,10 +44,12 @@ namespace sunrise::gfx {
 			thisPassOptions.presentedAttachment = -1;
 			// add empty vector to be filled with the global indicies for the attachments of this pass
 			passAttachGlobalIndicies.push_back({});
+			globalAttachPassIndicies.push_back({});
 
 #if SR_ENABLE_PRECONDITION_CHECKS
 			if (i > 0) 
-			// checking that a layout for all atributes was specified in the dependancy
+			// checking that a layout for all atributes was specified in the dependancy - if an attachment is not wanted in a pass it should be declaired eUndifined
+				//TODO- right now it is then undefined for the rest of the frame which might not be wanted behavure - should have a preserve option
 				SR_ASSERT(spacificOptions.passStartLayout[i - 1].size() == wholeOptions.attatchments.size());
 #endif
 			// change options for spacific render pass
@@ -56,6 +58,10 @@ namespace sunrise::gfx {
 				if ((i == 0 && wholeOptions.attatchments[attach].transitionalToAtStartLayout == vk::ImageLayout::eUndefined)
 					|| (i > 0 && spacificOptions.passStartLayout[i - 1][attach] == vk::ImageLayout::eUndefined)) {
 					// this attachment is not used in this pass
+
+					// mark the index as so
+					globalAttachPassIndicies[passAttachGlobalIndicies.size() - 1].push_back(-1);
+
 					continue;
 				}
 
@@ -68,7 +74,15 @@ namespace sunrise::gfx {
 
 				if (i > 0) {
 					// the initial layout (the layout befoer the render pass begins) shoulod be the final layout of the last pass
-					attachOptions.initialLayout = passOptions[passOptions.size() - 1].attatchments[attach].finalLayout;
+					
+					auto localIndex = globalAttachPassIndicies[i - 1][attach];
+
+					// if this attach was not in the last pass, declare the initial layout undefined
+					if (localIndex < 0) {
+						attachOptions.initialLayout = vk::ImageLayout::eUndefined;
+					}
+					else 
+						attachOptions.initialLayout = passOptions[passOptions.size() - 1].attatchments[localIndex].finalLayout;
 				}
 				// the start layout (the layout to transtion to at the beginnign of the renderpass) should be what the dependancy needs
 				// or the initial one specified if it is the first pass
@@ -90,6 +104,7 @@ namespace sunrise::gfx {
 				}
 				thisPassOptions.attatchments.push_back(attachOptions);
 				passAttachGlobalIndicies[passAttachGlobalIndicies.size() - 1].push_back(attach);
+				globalAttachPassIndicies[passAttachGlobalIndicies.size() - 1].push_back(thisPassOptions.attatchments.size() - 1);
 			}
 
 			auto pass = new ComposableRenderPass(renderer, thisPassOptions);
@@ -199,12 +214,12 @@ namespace sunrise::gfx {
 				frameBuffers.resize(passOptions.size());
 			}
 
+			// the window->swapChainFramebuffers just has references to the same frame buffers in the last passes frame buffers of this class
+			window->swapChainFramebuffers.resize(window->swapChainImageViews.size());
 
 			// make a frame buffer for each pass and if its the last pass add a ref to the window class
 			for (size_t pass = 0; pass < passOptions.size(); pass++)
 			{
-				// the window->swapChainFramebuffers just has references to the same frame buffers in the last passes frame buffers of this class
-				window->swapChainFramebuffers.resize(window->swapChainImageViews.size());
 
 
 				// swapImage is the swap chain image index
@@ -216,11 +231,16 @@ namespace sunrise::gfx {
 					auto& winAttachments = images[window];
 
 					// this is so that the indixies line up between local images and swap chain images stored in windows themselvs
-					bool passedSwapImage = false;
+					//bool passedSwapImage = false;
+
+
+
 					// a = pass local attach index
 					for (size_t a = 0; a < passOptions[pass].attatchments.size(); a++) 
 					{
 						auto gloablAttachIndex = passAttachGlobalIndicies[pass][a];
+
+
 						if (gloablAttachIndex == frameOptions.presentedAttachment) {
 
 							auto imageView = window->swapChainImageViews[swapImage];
@@ -234,9 +254,10 @@ namespace sunrise::gfx {
 #endif
 
 							attachments.push_back(imageView);
-							passedSwapImage = true;
+							//passedSwapImage = true;
 						}
 						else {
+							const bool passedSwapImage = gloablAttachIndex > frameOptions.presentedAttachment;
 							attachments.push_back(winAttachments[passedSwapImage ? gloablAttachIndex - 1 : gloablAttachIndex]->view);
 						}
 					}
@@ -254,7 +275,8 @@ namespace sunrise::gfx {
 
 					auto frameBuffer = renderer->device.createFramebuffer(framebufferInfo);
 
-					if (pass == passOptions.size())
+					// is this the last pass
+					if (pass == passOptions.size()- 1)
 						window->swapChainFramebuffers[swapImage] = frameBuffer;
 
 					//TODO: count is less eficient than could be for this

@@ -78,10 +78,12 @@ namespace sunrise {
 			/// <summary>
 			/// Registers the pipeline definition to be instantiuated by all windows rendering the scene
 			/// currently only pipelines registered before the createPasses funciton exits are garenteed to be instantiated by all windows.
-			/// must only be called once for a given pipeline
+			/// must only be called once for a given pipeline and stage
+			/// 
+			/// the same virtual pipe can be registered for multiple stages but //TODO: figure out if this is okay
 			/// </summary>
 			/// <param name="virtualPipe"></param>
-			void registerPipeline(VirtualGraphicsPipeline* virtualPipe);
+			void registerPipeline(VirtualGraphicsPipeline* virtualPipe, GPUStage* forStage);
 
 			/// <summary>
 			/// must be called once before before the createPasses funciton exits
@@ -98,7 +100,7 @@ namespace sunrise {
 		protected:
 			friend Window;
 			friend Application;
-			std::vector<VirtualGraphicsPipeline*> registeredPipes;
+			std::vector<std::pair<VirtualGraphicsPipeline*, GPUStage*>> registeredPipes{};
 			ComposableRenderPass::CreateOptions __tempWholeFrameRenderPassOptions;
 
 			

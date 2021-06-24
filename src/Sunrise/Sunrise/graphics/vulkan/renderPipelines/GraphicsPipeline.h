@@ -67,7 +67,7 @@ namespace sunrise::gfx {
 	class ComputePipeline;
 
 	/// <summary>
-	/// THIS CLASS DOES NOT HAVE A copy assignment operator so CANNOT BE PLACED IN A VECTOR. Pointers to it can e.g std::vector<GraphicsPipeline*>
+	/// THIS CLASS DOES NOT HAVE A copy assignment operator so CANNOT BE PLACED IN A VECTOR. Pointers to it can e.g std::vector of GraphicsPipeline*>
 	/// </summary>
 	class SUNRISE_API GraphicsPipeline
 	{
@@ -91,7 +91,7 @@ namespace sunrise::gfx {
 		RenderPassManager& renderPassManager;
 
 		virtual void createPipeline();
-		virtual void createPipeline(GraphicsPipelineOptions& options);
+		virtual void createPipeline(const GraphicsPipelineOptions& options);
 
 		static vk::PipelineShaderStageCreateInfo createShaderStageInfo(vk::Device device, const std::vector<char>& code, vk::ShaderStageFlagBits stage);
 
