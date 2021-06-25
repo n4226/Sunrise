@@ -4,9 +4,9 @@
 
 #include "Log.h"
 
-#ifdef SR_PLATFORM_WINDOWS
-
 extern sunrise::Application* sunrise::CreateApplication();
+
+#ifdef SR_PLATFORM_WINDOWS
 
 namespace sunrise {
 
@@ -16,6 +16,9 @@ namespace sunrise {
 		sunrise::engine = new sunrise::Engine(app);
 
 		sunrise::engine->startup();
+	}
+
+	void stopEngine() {
 
 		delete sunrise::engine;
 	}
@@ -27,6 +30,7 @@ namespace sunrise {
 int main(int arc, char** argv) {
 
 	sunrise::runEngine();
+	sunrise::stopEngine();
 
 	return 0;
 }

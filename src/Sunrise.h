@@ -44,6 +44,7 @@
 ////............................... world
 
 #include "Sunrise/Sunrise/world/WorldScene.h"
+#include "Sunrise/Sunrise/world/simlink/SimlinkMessages.h"
 
 
 ///////////////////////////////////////// Helpers
@@ -51,3 +52,7 @@
 
 /////////////////////////////////////////////////////////////////// Dependency System
 #include "Sunrise/Sunrise/dependencyManagment/Dispatcher.h"
+
+#ifndef SR_NO_NETWORKING
+#include "Sunrise/Sunrise/networking/networking.h"
+#endif

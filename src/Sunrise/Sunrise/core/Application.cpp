@@ -9,6 +9,8 @@
 #include "../graphics/vulkan/renderer/Renderer.h"
 #include "../graphics/vulkan/renderer/SceneRenderCoordinator.h"
 
+#include <asio.hpp>
+
 namespace sunrise {
 
     using namespace gfx;
@@ -27,6 +29,8 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
+        config = configure();
+
         {// configure main threaqd priority
             SR_CORE_TRACE("Initializing Proccess Priority");
 
@@ -40,27 +44,48 @@ namespace sunrise {
         }
 
 
-        {// Configure Marl
+        if (config.enableMarl) {// Configure Marl
             SR_CORE_TRACE("Initializing Marl");
 
             PROFILE_SCOPE("Configure Marl");
             auto confic = marl::Scheduler::Config();
 
-            confic.setWorkerThreadCount(std::thread::hardware_concurrency() - 1);
+            confic.setWorkerThreadCount(std::thread::hardware_concurrency() - config.marlThreadCountOffset);
 
             scheduler = new marl::Scheduler(confic);
 
             scheduler->bind();
         }
 
-        {
-            SR_CORE_TRACE("Initializing File System");
+        if (config.useFileSys) {
+            {
+                SR_CORE_TRACE("Initializing File System");
 
-            FileSystem::initilize();
+                FileSystem::initilize();
 
+            }
+
+            SR_CORE_TRACE("Initializing Configuration system");
+            configSystem.readFromDisk();
+            configSystem.writeHelpDoc();
         }
 
-        if (!wantsWindows()) return;
+        if (config.enableAsioContext) {
+            SR_CORE_TRACE("Initilizing asio context");
+            //TODO: dismantle all this 
+            context = new asio::io_context(1);
+
+            contextWork = new asio::any_io_executor(asio::require(context->get_executor(),
+                    asio::execution::outstanding_work.tracked));
+
+            if (config.enableAsioContextThread) {
+                contextThread = new std::thread([this] {
+                    context->run();
+                });
+            }
+        }
+
+        if (!config.wantsWindows || !config.vulkan) return;
 
         {
             SR_CORE_TRACE("Initializing GLFW");
@@ -70,15 +95,11 @@ namespace sunrise {
 
         }
 
-   
+
         SR_CORE_TRACE("Initializing VK Instance");
         createInstance();
     
 
-
-        SR_CORE_TRACE("Initializing Configuration system");
-        configSystem.readFromDisk();
-        configSystem.writeHelpDoc();
 
         // setup debug callback registration for vulkan
 
@@ -126,10 +147,6 @@ namespace sunrise {
         SR_CORE_INFO("Initialization Complete!");
 	}
 
-    bool Application::wantsWindows()
-    {
-        return true;
-    }
 
     void Application::createWindows()
     {
@@ -298,7 +315,7 @@ namespace sunrise {
 
         SR_CORE_INFO("Running");
         
-        if (!wantsWindows()) return;
+        if (!config.wantsWindows || !config.vulkan) return;
 
         runLoop();
 	}
@@ -309,7 +326,15 @@ namespace sunrise {
 
         SR_CORE_INFO("Shutdown");
 
-        if (!wantsWindows()) return;
+        if (context) {
+            if (contextThread) {
+                forceStopASIOContext();
+                delete contextThread;
+            }
+            delete context;
+        }
+
+        if (!config.wantsWindows || !config.vulkan) return;
 
         //TODO: fix this. see line below
         SR_CORE_ERROR("deallocation of application objects (windows, renderers, devices, etc) not performed");
@@ -386,7 +411,7 @@ namespace sunrise {
         //return;
         //drawView();
 
-        if (!wantsWindows()) return;
+        if (!config.wantsWindows || !config.vulkan) return;
 
         // update scene
         loadedScenes[0]->update();
@@ -653,6 +678,21 @@ namespace sunrise {
         SR_CORE_ERROR("{}",pMessage);
 
         return false;
+    }
+
+    void Application::stopASIOContext()
+    {
+        if (context && contextWork) {
+            //*contextWork = asio::any_io_executor();
+            delete contextWork;
+        }
+    }
+
+    void Application::forceStopASIOContext()
+    {
+        context->stop();
+
+        contextThread->join();
     }
 
     void Application::quit()

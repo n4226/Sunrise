@@ -67,6 +67,8 @@ namespace sunrise {
 				auto noApp = dynamic_cast<sunrise::NO_APPLICATION*>(app);
 				if (noApp != nullptr) {
 					SR_CORE_WARN("running in no application mode -- only basic operations will be available");
+					Instrumentor::Get().EndSession();
+					return;
 				}
 				else {
 					app->run();

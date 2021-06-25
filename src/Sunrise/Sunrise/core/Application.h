@@ -3,6 +3,28 @@
 #include "core.h"
 #include "../graphics/vulkan/RenderContext.h"
 
+#define USE_ASIO
+// see: https://stackoverflow.com/questions/9750344/boostasio-winsock-and-winsock-2-compatibility-issue
+#ifdef _WIN32
+#  ifdef USE_ASIO
+//     Set the proper SDK version before including boost/Asio
+#      include <SDKDDKVer.h>
+//     Note boost/ASIO includes Windows.h. 
+#      include <asio.hpp>
+#   else //  USE_ASIO
+#      include <Windows.h>
+#   endif //  USE_ASIO
+#else // _WIN32
+#  ifdef USE_ASIO
+#     include <asio.hpp>
+#  endif // USE_ASIO
+#endif //_WIN32
+
+//namespace asio {
+//	class io_context;
+//	class any_io_executor;
+//}
+
 namespace sunrise {
 
 	class Scene;
@@ -39,14 +61,53 @@ namespace sunrise {
 		/// </summary>
 		std::vector<Scene*> loadedScenes;
 
-		marl::Scheduler* scheduler;
+		marl::Scheduler* scheduler{};
+		/// <summary>
+		/// will remaine nullptr if config contrext thread is disabled
+		/// </summary>
+		asio::io_context* context = nullptr;
+		std::thread* contextThread;
 
+		/// <summary>
+		/// triggers context to finish when all registered tasks are done
+		/// does not force stop or wait for it to stop
+		/// </summary>
+		void stopASIOContext();
+		void forceStopASIOContext();
 
 		void quit();
 
 	protected:
 		
-		virtual bool wantsWindows();
+
+		/// <summary>
+		/// used to prevent context from exiting run until disered
+		/// </summary>
+		asio::any_io_executor* contextWork = 0;
+
+		struct ApplicationConfig {
+			/// <summary>
+			/// the number to subtract from the hardware cores e.g if cpu has 4 cores and this is 1 marl will have acces to 3 treads
+			/// default is 2, 1 for main thread and 1 for asio context
+			/// </summary>
+			size_t marlThreadCountOffset = 2;
+			bool enableMarl = true;
+
+			bool enableAsioContext = true;
+			bool enableAsioContextThread = true;
+
+			bool vulkan = true;
+			bool wantsWindows = true;
+			bool useFileSys = true;
+
+		};
+		ApplicationConfig config;
+
+		//depricated use configure() instead
+		//virtual bool wantsWindows();
+
+		// overidden by subclass to define important 
+		virtual ApplicationConfig configure() {return {};}
 
 		void createWindows();
 
