@@ -4,9 +4,9 @@
 
 #include "Log.h"
 
-#ifdef SR_PLATFORM_WINDOWS
-
 extern sunrise::Application* sunrise::CreateApplication();
+
+#ifdef SR_PLATFORM_WINDOWS
 
 namespace sunrise {
 

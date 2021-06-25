@@ -96,9 +96,9 @@
       <ImportLibrary>..\bin\Debug-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem &gt; nul)
-IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem &gt; nul)
-IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem &gt; nul)</Command>
+      <Command>IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
+IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
+IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -126,9 +126,9 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
       <ImportLibrary>..\bin\Release-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem &gt; nul)
-IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem &gt; nul)
-IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem &gt; nul)</Command>
+      <Command>IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
+IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
+IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -156,9 +156,9 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
       <ImportLibrary>..\bin\Dist-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem &gt; nul)
-IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem &gt; nul)
-IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem &gt; nul)</Command>
+      <Command>IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
+IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
+IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -234,6 +234,8 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
     <ClInclude Include="src\Sunrise\Sunrise\memory\IndexAllocator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\network\NetworkManager.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\network\network.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Scene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h" />
@@ -312,6 +314,7 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
     <ClCompile Include="src\Sunrise\Sunrise\memory\IndexAllocator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\memory\VaribleIndexAllocator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\network\NetworkManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Scene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp" />
