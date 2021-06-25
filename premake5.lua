@@ -59,6 +59,7 @@ project "Sunrise"
 		"vendor/entt/single_include",
 		"vendor/imgui/",
 		"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/include",
+		"vendor/asio-1.18.1/include"
 	}	
 
 	postbuildcommands {

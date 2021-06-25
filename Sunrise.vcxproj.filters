@@ -82,8 +82,8 @@
     <Filter Include="src\Sunrise\Sunrise\miscellaneousHelpers">
       <UniqueIdentifier>{B3589BF9-9FD5-8E3C-C852-8F50B42E2BD0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Sunrise\Sunrise\network">
-      <UniqueIdentifier>{B688C326-2296-F10C-AB7C-EDF71789BDC3}</UniqueIdentifier>
+    <Filter Include="src\Sunrise\Sunrise\networking">
+      <UniqueIdentifier>{3422DC9E-2048-A605-098E-2BD1F552CBD1}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\scene">
       <UniqueIdentifier>{1A608F40-8622-C3CA-CFD2-51573BD49BA8}</UniqueIdentifier>
@@ -96,6 +96,9 @@
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\world\materials">
       <UniqueIdentifier>{A56187F4-111B-F29E-9A7A-0C790633A80E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sunrise\Sunrise\world\simlink">
+      <UniqueIdentifier>{DA80F9A1-46EF-4E21-8FD8-0921FB8544BD}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\world\terrain">
       <UniqueIdentifier>{38BDFCE5-A42B-5265-ED14-0D6559C24701}</UniqueIdentifier>
@@ -327,11 +330,11 @@
     <ClInclude Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.h">
       <Filter>src\Sunrise\Sunrise\miscellaneousHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\network\NetworkManager.h">
-      <Filter>src\Sunrise\Sunrise\network</Filter>
+    <ClInclude Include="src\Sunrise\Sunrise\networking\NetworkManager.h">
+      <Filter>src\Sunrise\Sunrise\networking</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\network\network.h">
-      <Filter>src\Sunrise\Sunrise\network</Filter>
+    <ClInclude Include="src\Sunrise\Sunrise\networking\networking.h">
+      <Filter>src\Sunrise\Sunrise\networking</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h">
       <Filter>src\Sunrise\Sunrise\world\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\simlink\SimlinkMessages.h">
+      <Filter>src\Sunrise\Sunrise\world\simlink</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.h">
       <Filter>src\Sunrise\Sunrise\world\terrain</Filter>
@@ -557,8 +563,8 @@
     <ClCompile Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.cpp">
       <Filter>src\Sunrise\Sunrise\miscellaneousHelpers</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\network\NetworkManager.cpp">
-      <Filter>src\Sunrise\Sunrise\network</Filter>
+    <ClCompile Include="src\Sunrise\Sunrise\networking\NetworkManager.cpp">
+      <Filter>src\Sunrise\Sunrise\networking</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
@@ -583,6 +589,9 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp">
       <Filter>src\Sunrise\Sunrise\world\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\simlink\SimlinkMessages.cpp">
+      <Filter>src\Sunrise\Sunrise\world\simlink</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.cpp">
       <Filter>src\Sunrise\Sunrise\world\terrain</Filter>

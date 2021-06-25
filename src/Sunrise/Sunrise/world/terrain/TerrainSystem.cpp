@@ -11,6 +11,8 @@
 
 #include "../../graphics/vulkan/renderPipelines/concrete/gpuDriven/GPUGenCommandsPipeline.h"
 
+#include <marl/defer.h>
+
 namespace sunrise {
 
 	using namespace gfx;

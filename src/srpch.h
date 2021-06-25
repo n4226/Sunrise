@@ -21,7 +21,7 @@
 
 #include "stb_image.h"
 
-#include "marl/defer.h"
+//#include "marl/defer.h"
 #include "marl/event.h"
 #include "marl/scheduler.h"
 #include "marl/waitgroup.h"
@@ -74,8 +74,8 @@
 #define NOMINMAX
 
 // stops windows.h including winsock.h - see: https://stackoverflow.com/questions/1372480/c-redefinition-header-files-winsock2-h
-#define _WINSOCKAPI_   
-#include <windows.h>
+//#define _WINSOCKAPI_   
+//#include <windows.h>
 #endif
 
 // internal
