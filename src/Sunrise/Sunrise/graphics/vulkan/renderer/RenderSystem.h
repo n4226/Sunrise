@@ -16,6 +16,7 @@ namespace sunrise {
 		virtual void update();
 	};
 
+	// depricated
 	class RenderSystem : public System
 	{
 		/// <summary>

@@ -17,6 +17,7 @@ namespace sunrise::math {
 
 	constexpr auto dEarthRad = 6'378'137.0;
 	constexpr auto fEarthRad = 6'378'137.f;
+#pragma region Coordinate Convertions
 
 	/// <summary>
 	/// 
@@ -25,7 +26,7 @@ namespace sunrise::math {
 	/// <param name="origin"></param>
 	/// <param name="radius"></param>
 	/// <returns></returns>
-	glm::dvec3 SUNRISE_API LlatoGeo(glm::dvec3 lla, glm::dvec3 origin = glm::dvec3(),double radius = dEarthRad);
+	glm::dvec3 SUNRISE_API LlatoGeo(glm::dvec3 lla, glm::dvec3 origin = glm::dvec3(), double radius = dEarthRad);
 	/// <summary>
 	/// 
 	/// </summary>
@@ -52,8 +53,9 @@ namespace sunrise::math {
 	/// <returns></returns>
 	glm::vec3 SUNRISE_API GeotoLla(glm::vec3 geo, glm::float32 radius = 0, glm::vec3 origin = glm::vec3());
 
-	// LLA Distance
+#pragma endregion
 
+	// LLA Distance
 	double SUNRISE_API llaDistance(glm::dvec2 from,glm::dvec2 to,double radius = dEarthRad);
 
 	glm::quat SUNRISE_API fromToRotation(glm::vec3 startingDirection, glm::vec3 endingDirection);

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "srpch.h"
-#include "../Math.h"
-#include "../graphics/vulkan/renderer/RenderSystem.h"
+#include "../../Math.h"
+#include "../../graphics/vulkan/renderer/RenderSystem.h"
 
 namespace sunrise {
 

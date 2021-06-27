@@ -97,8 +97,14 @@
     <Filter Include="src\Sunrise\Sunrise\world\materials">
       <UniqueIdentifier>{A56187F4-111B-F29E-9A7A-0C790633A80E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\world\rendering">
+      <UniqueIdentifier>{2128E41A-8DE1-4EC5-1641-699F82F90435}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\world\simlink">
       <UniqueIdentifier>{DA80F9A1-46EF-4E21-8FD8-0921FB8544BD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sunrise\Sunrise\world\systems">
+      <UniqueIdentifier>{DBEFBCC7-475E-1247-9047-CD46FCF407E3}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\world\terrain">
       <UniqueIdentifier>{38BDFCE5-A42B-5265-ED14-0D6559C24701}</UniqueIdentifier>
@@ -345,12 +351,6 @@
     <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\world\CameraSystem.h">
-      <Filter>src\Sunrise\Sunrise\world</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.h">
-      <Filter>src\Sunrise\Sunrise\world</Filter>
-    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h">
       <Filter>src\Sunrise\Sunrise\world</Filter>
     </ClInclude>
@@ -360,8 +360,17 @@
     <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h">
       <Filter>src\Sunrise\Sunrise\world\materials</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\rendering\WorldSceneRenderCoordinator.h">
+      <Filter>src\Sunrise\Sunrise\world\rendering</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\simlink\SimlinkMessages.h">
       <Filter>src\Sunrise\Sunrise\world\simlink</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\systems\CameraSystem.h">
+      <Filter>src\Sunrise\Sunrise\world\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\systems\FloatingOriginSystem.h">
+      <Filter>src\Sunrise\Sunrise\world\systems</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.h">
       <Filter>src\Sunrise\Sunrise\world\terrain</Filter>
@@ -378,6 +387,10 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\GPUStages\DeferredPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\rendering\terrain\TerrainGPUStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -575,12 +588,6 @@
     <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\world\CameraSystem.cpp">
-      <Filter>src\Sunrise\Sunrise\world</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.cpp">
-      <Filter>src\Sunrise\Sunrise\world</Filter>
-    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp">
       <Filter>src\Sunrise\Sunrise\world</Filter>
     </ClCompile>
@@ -590,8 +597,17 @@
     <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp">
       <Filter>src\Sunrise\Sunrise\world\materials</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\rendering\WorldSceneRenderCoordinator.cpp">
+      <Filter>src\Sunrise\Sunrise\world\rendering</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\simlink\SimlinkMessages.cpp">
       <Filter>src\Sunrise\Sunrise\world\simlink</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\systems\CameraSystem.cpp">
+      <Filter>src\Sunrise\Sunrise\world\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\systems\FloatingOriginSystem.cpp">
+      <Filter>src\Sunrise\Sunrise\world\systems</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.cpp">
       <Filter>src\Sunrise\Sunrise\world\terrain</Filter>
@@ -629,5 +645,9 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\GPUStages\DeferredPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\rendering\terrain\TerrainGPUStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.cpp" />
   </ItemGroup>
 </Project>

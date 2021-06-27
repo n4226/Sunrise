@@ -1,9 +1,9 @@
 #include "srpch.h"
 #include "FloatingOriginSystem.h"
-#include "../core/Application.h"
-#include "../world/WorldScene.h"
-#include "terrain/TerrainSystem.h"
-#include "../graphics/vulkan/resources/ResourceTransferTask.h"
+#include "../../core/Application.h"
+#include "../WorldScene.h"
+#include "../terrain/TerrainSystem.h"
+#include "../../graphics/vulkan/resources/ResourceTransferTask.h"
 
 namespace sunrise {
 

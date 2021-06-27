@@ -6,6 +6,7 @@
 
 namespace sunrise {
 	class Window;
+	class Scene;
 	namespace gfx {
 
 		class GPUStageDispatcher;
@@ -30,16 +31,26 @@ namespace sunrise {
 
 			//called once 
 			virtual void setup() = 0; 
+			/// <summary>
+			/// when this is called getConcretePipeline(...) can be used
+			/// </summary>
 			virtual void lateSteup() {}
 			virtual void cleanup() = 0;
 
 			//TODO: right now all stages encode into secondar command buffs but this could change
 
+			struct RunOptions {
+				Scene* scene;
+				SceneRenderCoordinator* coordinator;
+				uint32_t pass;
+				Window& window;
+			};
+
 			/// <summary>
 			/// 
 			/// </summary>
 			/// <returns></returns>
-			virtual vk::CommandBuffer* encode(SceneRenderCoordinator* coordinator,uint32_t pass, Window& window) = 0;
+			virtual vk::CommandBuffer* encode(RunOptions options) = 0;
 
 #if SR_LOGGING
 			std::string name;

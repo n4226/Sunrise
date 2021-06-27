@@ -1,33 +1,37 @@
 #include "srpch.h"
 #include "WorldScene.h"
-#include "CameraSystem.h"
-#include "FloatingOriginSystem.h"
+#include "systems/CameraSystem.h"
+#include "systems/FloatingOriginSystem.h"
 #include "../core/Application.h"
 #include "../graphics/vulkan/renderer/MaterialManager.h"
+#include "rendering/WorldSceneRenderCoordinator.h"
 
 namespace sunrise {
 
 
-	/*WorldScene::WorldScene(Application& app) 
-		:app(app)
+	WorldScene::WorldScene(Application* app) 
+		: Scene(app)
 	{
 		PROFILE_FUNCTION;
 
-	}*/
+		coordinator = new WorldSceneRenderCoordinator(this);
+	}
 
 	WorldScene::~WorldScene()
 	{
 		PROFILE_FUNCTION;
 
-
+		delete coordinator;
 	}
 
 	void WorldScene::load()
 	{
 		PROFILE_FUNCTION;
 
-		for (auto ren : app.renderers)
-			ren->materialManager->loadStaticEarth();
+		// todo redo mats
+		/*for (auto ren : app.renderers)
+			ren->materialManager->loadStaticEarth();*/
+
 
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
 		//renderer->world = this;
@@ -80,6 +84,7 @@ namespace sunrise {
 
 		terrainSystem->update();
 
+		//TODO: move this to camera sys or another one?
 		for (size_t i = 0; i < app.windows.size(); i++)
 		{
 			auto& window = app.windows[i];

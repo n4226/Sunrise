@@ -75,10 +75,9 @@ namespace sunrise {
             //TODO: dismantle all this 
             context = new asio::io_context(1);
 
-            contextWork = new asio::any_io_executor(asio::require(context->get_executor(),
-                    asio::execution::outstanding_work.tracked));
-
             if (config.enableAsioContextThread) {
+                contextWork = new asio::any_io_executor(asio::require(context->get_executor(),
+                        asio::execution::outstanding_work.tracked));
                 contextThread = new std::thread([this] {
                     context->run();
                 });

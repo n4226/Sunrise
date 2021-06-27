@@ -33,7 +33,7 @@ namespace sunrise::gfx {
 		/// <param name="subpass"></param>
 		/// <param name="window"></param>
 		/// <returns></returns>
-		vk::CommandBuffer* selectAndSetupCommandBuff(SceneRenderCoordinator* coordinator, uint32_t pass, sunrise::Window& window);
+		vk::CommandBuffer* selectAndSetupCommandBuff(RunOptions options);
 
 		void setPipeline(sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline);
 		GraphicsPipeline* getConcretePipeline(sunrise::Window& window, VirtualGraphicsPipeline* pipeline);
@@ -45,7 +45,7 @@ namespace sunrise::gfx {
 		virtual void setup() override = 0;
 		virtual void cleanup() override = 0;
 		// called every frame
-		virtual vk::CommandBuffer* encode(SceneRenderCoordinator* coordinator, uint32_t pass, sunrise::Window& window) override = 0;
+		virtual vk::CommandBuffer* encode(RunOptions options) override = 0;
 
 	};
 

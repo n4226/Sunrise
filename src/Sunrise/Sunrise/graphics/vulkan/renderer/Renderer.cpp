@@ -31,10 +31,12 @@ namespace sunrise::gfx {
 	void Renderer::createAllResources()
 	{
 		for (size_t i = 0; i < windows.size(); i++)
-		{
 			windows[i]->indexInRenderer = i;
-			camFrustroms.emplace_back(windows[i]->camera.view());
-		}
+
+		// setup camera frustrums
+		camFrustroms.reserve(allWindows.size());
+		for (auto win : allWindows)
+			camFrustroms.emplace_back(win->camera.view());
 
 		createRenderResources();
 		//createUniformsAndDescriptors();
@@ -110,7 +112,9 @@ namespace sunrise::gfx {
 		PROFILE_FUNCTION;
 
 
-#pragma region Create Global vert and in
+#pragma region Create Global vert and index buffers
+
+		//todo: make this more configureable and make sure it is supported by the gpu
 
 		VkDeviceSize vCount = 70'000'000;
 		VkDeviceSize indexCount = 220'000'000;
@@ -119,34 +123,6 @@ namespace sunrise::gfx {
 
 #pragma endregion
 
-
-
-
-		std::vector<glm::vec2> deferredPassVerts = {
-			glm::vec2(-1,-1),
-			glm::vec2(1,-1),
-			glm::vec2(-1,1),
-			glm::vec2(1,1),
-		};
-
-		std::vector<glm::uint16> deferredPassindicies = {
-			0,1,2,
-			2,1,3,
-		};
-
-		auto indicyLength = (sizeof(glm::uint16) * deferredPassindicies.size());
-		deferredPassBuffIndexOffset = sizeof(glm::vec2) * deferredPassVerts.size();
-
-
-		deferredPassVertBuff = new Buffer(device, allocator, indicyLength + deferredPassBuffIndexOffset, { ResourceStorageType::cpuToGpu, { vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eTransferSrc | vk::BufferUsageFlagBits::eIndexBuffer }, vk::SharingMode::eConcurrent,
-			{ queueFamilyIndices.graphicsFamily.value(), queueFamilyIndices.resourceTransferFamily.value() } });
-
-		deferredPassVertBuff->mapMemory();
-
-		memcpy(deferredPassVertBuff->mappedData, deferredPassVerts.data(), deferredPassBuffIndexOffset);
-		memcpy(reinterpret_cast<char*>(deferredPassVertBuff->mappedData) + deferredPassBuffIndexOffset, deferredPassindicies.data(), indicyLength);
-
-		deferredPassVertBuff->unmapMemory();
 
 		createDescriptorPoolAndSets();
 
@@ -572,33 +548,33 @@ namespace sunrise::gfx {
 		PROFILE_FUNCTION;
 
 
-			/*
-				Render Pass layout -- PBR-Deferred Pipeline
+		/*
+			Render Pass layout -- PBR-Deferred Pipeline
 
-				if gpu driven: a compute pre pass
+			if gpu driven: a compute pre pass
 
-				for now i will use render sub passes but this does not allow pixels to acces their neighbors
+			for now i will use render sub passes but this does not allow pixels to acces their neighbors
 
-				gbuffer pass
+			gbuffer pass
 
-					- attatchments
+				- attatchments
 
-					- output: for now just rgb color buffer
+				- output: for now just rgb color buffer
 
-				deferred lighting pass
+			deferred lighting pass
 
-					- input: all outputed gbuffer buffers - memory synchronised
+				- input: all outputed gbuffer buffers - memory synchronised
 
-					- output: an () formatted color output texture
+				- output: an () formatted color output texture
 
 
-				a varible number of post passes
+			a varible number of post passes
 
-					- input: previus output or deferred output
+				- input: previus output or deferred output
 
-					- output: new texture same format as input
+				- output: new texture same format as input
 
-			*/
+		*/
 
 
 
@@ -614,153 +590,40 @@ namespace sunrise::gfx {
 
 	// create root cmd buffer
 
-			device.resetCommandPool(dynamicCommandPools[window.indexInRenderer][window.currentSurfaceIndex], {});
+	device.resetCommandPool(dynamicCommandPools[window.indexInRenderer][window.currentSurfaceIndex], {});
 
-		auto& cmdBuff = dynamicCommandBuffers[window.indexInRenderer][window.currentSurfaceIndex];
+	auto cmdBuff = dynamicCommandBuffers[window.indexInRenderer][window.currentSurfaceIndex];
 
-		VkCommandBufferBeginInfo beginInfo{};
-		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		beginInfo.flags = 0; //VkCommandBufferUsageFlagBits::VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT; // Optional
-		beginInfo.pInheritanceInfo = nullptr; // Optional
+	VkCommandBufferBeginInfo beginInfo{};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+	beginInfo.flags = 0; //VkCommandBufferUsageFlagBits::VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT; // Optional
+	beginInfo.pInheritanceInfo = nullptr; // Optional
 
-		cmdBuff.begin(beginInfo);
+	cmdBuff.begin(beginInfo);
 
 
 #pragma endregion
-		// begin a render pass
 
-		vk::RenderPassBeginInfo renderPassInfo{};
+		//ImGui_ImplVulkan_NewFrame();
+		//ImGui_ImplGlfw_NewFrame();
+		//ImGui::NewFrame();
+		//ImGui::ShowDemoWindow();
+		//ImGui::Render();
 
-		renderPassInfo.renderArea = vk::Rect2D({ 0, 0 }, window.swapchainExtent);
+		
+		auto coord = app.loadedScenes[0]->coordinator;
+		coord->encodePassesForFrame(this, cmdBuff, app.currentFrameID, window);
 
-		if (terrainSystem != nullptr) {
-			renderPassInfo.renderPass = window.renderPassManager->renderPass;
-			renderPassInfo.framebuffer = window.swapChainFramebuffers[window.currentSurfaceIndex];
-
-			//VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-			const std::array<float, 4> clearComponents = { 0.0f, 0.0f, 0.2f, 0.0f };
-
-			//TODO -----------------(3,"fix load ops of textures to remove unnecicary clearing") --------------------------------------------------------------------------------------------
-			std::array<vk::ClearValue, 5> clearColors = {
-				//Gbuffer images which are cleared now but that is temporary
-				vk::ClearValue(vk::ClearColorValue(clearComponents)),
-				vk::ClearValue(vk::ClearColorValue(clearComponents)),
-				vk::ClearValue(vk::ClearColorValue(clearComponents)),
-				//GBuff Depth Tex - cleared
-				vk::ClearValue(vk::ClearDepthStencilValue({1.f,0})),
-
-				//SwapCHainOutput
-				vk::ClearValue(vk::ClearColorValue(clearComponents)),
-			};
-
-			renderPassInfo.setClearValues(clearColors);
-
-			VkRenderPassBeginInfo info = renderPassInfo;
-
-
-			//vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
-			cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
-
-
-			debugObject.beginRegion(cmdBuff, "Gbuffer Pass", glm::vec4(0.7, 0.2, 0.3, 1));
-
-			encodeGBufferPass(window);
-
-			debugObject.endRegion(cmdBuff);
-
-			cmdBuff.nextSubpass(vk::SubpassContents::eInline);
-
-
-			debugObject.beginRegion(cmdBuff, "Deferred Pass", glm::vec4(0.4, 0.6, 0.3, 1));
-
-			encodeDeferredPass(window);
-
-			debugObject.endRegion(cmdBuff);
-
-
-
-			debugObject.beginRegion(cmdBuff, "IMGUI Render", glm::vec4(0.4, 0.6, 0.3, 1));
-
-			ImGui_ImplVulkan_NewFrame();
-			ImGui_ImplGlfw_NewFrame();
-			ImGui::NewFrame();
-			ImGui::ShowDemoWindow();
-			ImGui::Render();
-
-			debugObject.endRegion(cmdBuff);
-		}
-		else {
-			auto coord = app.loadedScenes[0]->coordinator;
-
-			//renderPassInfo.renderPass = window.renderPassManager->renderPass;
-			//renderPassInfo.framebuffer = window.swapChainFramebuffers[window.currentSurfaceIndex];
-
-			////TODO: make this compatable with depth buffers
-			//std::vector<vk::ClearValue> clearColors{};
-			//clearColors.resize(coord->sceneRenderpass->getTotalAttatchmentCount());
-
-			//for (size_t i = 0; i < coord->sceneRenderpass->getTotalAttatchmentCount(); i++)
-			//{
-			//	clearColors[i] = vk::ClearValue(vk::ClearColorValue(coord->sceneRenderpass->options.attatchments[i].clearColor));
-			//}
-
-			//renderPassInfo.setClearValues(clearColors);
-
-			//VkRenderPassBeginInfo info = renderPassInfo;
-
-
-			////vkCmdBeginRenderPass(commandBuffers[i], &info, VK_SUBPASS_CONTENTS_INLINE);
-			//cmdBuff.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
-
-
-			coord->encodePassesForFrame(this, cmdBuff, app.currentFrameID, window);
-		}
+		
 		// end encoding 
-
 		cmdBuff.endRenderPass();
 		cmdBuff.end();
 
 		// submit frame
-
 		submitFrameQueue(window, &cmdBuff, 1);
 	}
 
-	void Renderer::encodeGBufferPass(Window& window)
-	{
-		PROFILE_FUNCTION;
 
-		auto& cmdBuff = dynamicCommandBuffers[window.indexInRenderer][window.currentSurfaceIndex];
-
-		// run terrain system draw
-
-		if (terrainSystem == nullptr) return;
-
-		auto generatedTerrainCmds = terrainSystem->renderSystem(0, window);
-
-
-		// exicute indirect commands
-
-		cmdBuff.executeCommands({ 1, generatedTerrainCmds });
-	}
-
-
-	void Renderer::encodeDeferredPass(Window& window)
-	{
-		PROFILE_FUNCTION;
-		auto& cmdBuff = dynamicCommandBuffers[window.indexInRenderer][window.currentSurfaceIndex];
-
-		cmdBuff.bindPipeline(vk::PipelineBindPoint::eGraphics, window.deferredPass->vkItem);
-
-		cmdBuff.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, window.deferredPass->pipelineLayout, 0, { deferredDescriptorSets[window.indexInRenderer][window.currentSurfaceIndex] }, {});
-		cmdBuff.bindIndexBuffer(deferredPassVertBuff->vkItem, deferredPassBuffIndexOffset, vk::IndexType::eUint16);
-		cmdBuff.bindVertexBuffers(0, { deferredPassVertBuff->vkItem }, { 0 });
-
-
-		cmdBuff.drawIndexed(6, 1, 0, 0, 0);
-
-
-
-	}
 
 
 	void Renderer::updateCameraUniformBuffer(Window& window)
@@ -772,41 +635,41 @@ namespace sunrise::gfx {
 		//{
 		auto i = window.globalIndex;
 
-			auto& camera = windows[i]->camera;
+		auto& camera = windows[i]->camera;
 
-			SceneUniforms uniforms;
+		SceneUniforms uniforms;
 
-			uniforms.viewProjection = camera.viewProjection(windows[i]->swapchainExtent.width, windows[i]->swapchainExtent.height);
+		uniforms.viewProjection = camera.viewProjection(windows[i]->swapchainExtent.width, windows[i]->swapchainExtent.height);
 
-			uniformBuffers[i][windows[i]->currentSurfaceIndex]->mapMemory();
-			uniformBuffers[i][windows[i]->currentSurfaceIndex]->tempMapAndWrite(&uniforms, 0, sizeof(uniforms), false);
+		uniformBuffers[i][windows[i]->currentSurfaceIndex]->mapMemory();
+		uniformBuffers[i][windows[i]->currentSurfaceIndex]->tempMapAndWrite(&uniforms, 0, sizeof(uniforms), false);
 
-			//TODO fix this to not depend on world scene
+		//TODO fix this to not depend on world scene
 
-			PostProcessEarthDatAndUniforms postUniforms;
+		PostProcessEarthDatAndUniforms postUniforms;
 
-			WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
+		WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
 
-			// in floated origin (after float)
-			postUniforms.camFloatedGloabelPos = glm::vec4(camera.transform.position, 1);
-			glm::qua<glm::float32> sunRot = glm::angleAxis(glm::radians(45.f), glm::vec3(0, 1, 0));
-			if (world != nullptr) {
-				postUniforms.sunDir =
-					glm::angleAxis(glm::radians(45.f + sin(world->timef) * 0.f), glm::vec3(-1, 0, 0)) *
-					glm::vec4(glm::normalize(math::LlatoGeo(world->initialPlayerLLA, glm::dvec3(0), terrainSystem->getRadius())), 1);
-				postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>(-(world->origin)), 1);
-			}
-			postUniforms.viewMat = camera.view();
-			postUniforms.projMat = camera.projection(windows[i]->swapchainExtent.width, windows[i]->swapchainExtent.height);
-			postUniforms.invertedViewMat = glm::inverse(camera.view());
-			postUniforms.renderTargetSize.x = windows[i]->swapchainExtent.width;
-			postUniforms.renderTargetSize.y = windows[i]->swapchainExtent.height;
+		// in floated origin (after float)
+		postUniforms.camFloatedGloabelPos = glm::vec4(camera.transform.position, 1);
+		glm::qua<glm::float32> sunRot = glm::angleAxis(glm::radians(45.f), glm::vec3(0, 1, 0));
+		if (world != nullptr) {
+			postUniforms.sunDir =
+				glm::angleAxis(glm::radians(45.f + sin(world->timef) * 0.f), glm::vec3(-1, 0, 0)) *
+				glm::vec4(glm::normalize(math::LlatoGeo(world->initialPlayerLLA, glm::dvec3(0), terrainSystem->getRadius())), 1);
+			postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>(-(world->origin)), 1);
+		}
+		postUniforms.viewMat = camera.view();
+		postUniforms.projMat = camera.projection(windows[i]->swapchainExtent.width, windows[i]->swapchainExtent.height);
+		postUniforms.invertedViewMat = glm::inverse(camera.view());
+		postUniforms.renderTargetSize.x = windows[i]->swapchainExtent.width;
+		postUniforms.renderTargetSize.y = windows[i]->swapchainExtent.height;
 
-			uniformBuffers[i][windows[i]->currentSurfaceIndex]->tempMapAndWrite(&postUniforms, sizeof(uniforms), sizeof(postUniforms), false);
-			uniformBuffers[i][windows[i]->currentSurfaceIndex]->unmapMemory();
+		uniformBuffers[i][windows[i]->currentSurfaceIndex]->tempMapAndWrite(&postUniforms, sizeof(uniforms), sizeof(postUniforms), false);
+		uniformBuffers[i][windows[i]->currentSurfaceIndex]->unmapMemory();
 
 
-			camFrustroms[i] = std::move(math::Frustum(uniforms.viewProjection));
+		camFrustroms[i] = std::move(math::Frustum(uniforms.viewProjection));
 		//}
 
 		//camFrustrom = new Frustum(uniforms.viewProjection);

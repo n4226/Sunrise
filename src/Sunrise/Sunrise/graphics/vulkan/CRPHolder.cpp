@@ -8,6 +8,7 @@ namespace sunrise::gfx {
 	inline CRPHolder::CRPHolder(const ComposableRenderPass::CreateOptions& wholeOptions, const HolderOptions& spacificOptions, Renderer* renderer)
 		: renderer(renderer), frameOptions(wholeOptions), holderOptions(spacificOptions)
 	{
+		PROFILE_FUNCTION;
 		createPasses(wholeOptions, spacificOptions);
 		createWindowSpacificResources();
 	}
@@ -26,6 +27,8 @@ namespace sunrise::gfx {
 
 	void CRPHolder::createPasses(const sunrise::gfx::ComposableRenderPass::CreateOptions& wholeOptions, const sunrise::gfx::CRPHolder::HolderOptions& spacificOptions)
 	{
+		PROFILE_FUNCTION;
+
 		SR_ASSERT(wholeOptions.presentedAttachment >= 0);
 
 		/* tasks:
@@ -169,6 +172,7 @@ namespace sunrise::gfx {
 
 	void CRPHolder::createWindowSpacificResources()
 	{
+		PROFILE_FUNCTION;
 		//TODO only works for one renderer/gpu
 
 		// for each unowned window create instances of all attatchments exept the one which will be presented as that is created by the swapchain
@@ -185,6 +189,7 @@ namespace sunrise::gfx {
 
 	void CRPHolder::createWindowImagesAndFrameBuffer(Window* window)
 	{
+		PROFILE_FUNCTION;
 
 		//TODO: ut oh ??? do you need a copy of each image per swapchain image ? - i think so
 		// create framebuffer images

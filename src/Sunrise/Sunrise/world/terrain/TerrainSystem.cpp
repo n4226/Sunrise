@@ -30,7 +30,7 @@ namespace sunrise {
 
 		CreateRenderResources();
 
-
+		// initial setup of the base 8 chunks
 		for (TerrainQuadTreeNode* child : tree.leafNodes) {
 			meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
 		}
@@ -221,7 +221,7 @@ namespace sunrise {
 		PROFILE_FUNCTION
 
 		{
-			// his is temporary to prevent multiple sets of staging buffer coppies to rech deadlock currently
+			// this is temporary to prevent multiple sets of staging buffer coppies to rech deadlock currently
 			auto shouldRunLoop = safeToModifyChunks.try_lock_shared();
 			if (shouldRunLoop == nullptr || (*shouldRunLoop) == false) return;
 		}

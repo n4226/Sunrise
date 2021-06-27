@@ -14,7 +14,7 @@ namespace sunrise {
 	TreeNodeDrawResaourceToCoppy TerrainMeshLoader::loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob)
 	{
 		// get  and encode mesh
-		//TODO store this in a better place
+		//TODO store this in a better place which is more effecient
 		const auto Terrain_Chunk_Mesh_Dir = FileManager::engineTerrainChunkDir();//R"(terrain/chunkMeshes/)";
 
 		TreeNodeDrawResaourceToCoppy meshStore;

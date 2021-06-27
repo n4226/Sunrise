@@ -8,18 +8,24 @@
 
 namespace sunrise {
 
+	/// <summary>
+	/// scene which represents the earth
+	/// right now just terrain
+	/// </summary>
 	class SUNRISE_API WorldScene : public Scene
 	{
 
 	public:
-		using Scene::Scene;
+		WorldScene(Application* app);
 		~WorldScene();
 
+#pragma region Lifecycle
 		virtual void load() override;
 
 		virtual void update() override;
 
 		virtual void unload() override;
+#pragma endregion
 
 		TerrainSystem* terrainSystem;
 
@@ -27,8 +33,7 @@ namespace sunrise {
 
 		glm::dvec3 origin = glm::dvec3(0, 0, 0);
 
-		// player
-
+#pragma region player
 		const glm::dvec3 initialPlayerLLA = glm::dvec3(40.610319941413, -74.039182662964, 100);
 
 		glm::dvec3 playerLLA =
@@ -37,7 +42,7 @@ namespace sunrise {
 			initialPlayerLLA;
 
 		Transform playerTrans;
-
+#pragma endregion
 	};
 
 

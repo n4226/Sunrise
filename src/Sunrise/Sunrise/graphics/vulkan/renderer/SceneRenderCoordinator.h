@@ -33,7 +33,7 @@ namespace sunrise {
 		/// 2. overide createPasses():
 		///	2.1. call registerPipeline(VirtualGraphicsPipeline* virtualPipe) for each pipeline that will be used
 		/// 2.2. call registerStage(GPUStage* stage ...) for each stage
-		/// 2.3. call setLastPass(GPUStage* lastStage) for the pass which should be the last to execute before the presentation to the screen
+		/// 2.3. call setLastStage(GPUStage* lastStage) for the pass which should be the last to execute before the presentation to the screen
 		/// 
 		/// 
 		/// 
@@ -90,7 +90,7 @@ namespace sunrise {
 			/// if called multiple times results are undefined
 			/// </summary>
 			/// <param name="lastStage"></param>
-			void setLastPass(GPUStage* lastStage);
+			void setLastStage(GPUStage* lastStage);
 
 			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
 			std::vector<CRPHolder*> sceneRenderpassHolders;
@@ -115,6 +115,11 @@ namespace sunrise {
 			/// <param name="swapChainFormat">the format the display(s) are expecting, with multiuple windows if formats are different value is undifined</param>
 			/// <returns></returns>
 			virtual ComposableRenderPass::CreateOptions renderpassConfig(vk::Format swapChainFormat);
+
+			/// <summary>
+			/// allows subclass to perform any actions before frame encoding
+			/// </summary>
+			virtual void preFrameUpdate() {}
 
 		private:
 
