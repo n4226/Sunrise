@@ -39,8 +39,7 @@ namespace sunrise {
 		terrainSystem->trackedTransform = &playerTrans;
 		terrainSystem->world = this;
 
-		for (auto render : app.renderers)
-			render->terrainSystem = terrainSystem;
+		dynamic_cast<WorldSceneRenderCoordinator*>(coordinator)->createUniforms();
 
 		/// <summary>
 		/// importantthat the camera systemis befoer floating origin so that floating origin snaps before first frame

@@ -66,10 +66,11 @@ project "Sunrise"
 	
 		-- temp for FSTS
 
-		("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/ %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		("echo on"),
+		--("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/ %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
 		
-		--("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.dLL %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
-		--("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.pdb %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.dLL %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.pdb %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
 
 		("{COPY} %{sunriseLocation}/vendor/bin//NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
 		

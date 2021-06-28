@@ -19,7 +19,8 @@ namespace sunrise::gfx {
 		/// <param name="count"></param>
 		/// <param name="queueFamilyIndex"></param>
 		/// <param name="level"></param>
-		SUNRISE_API void createPoolsAndCommandBufffers(vk::Device device, std::vector<vk::CommandPool>& pools, std::vector<vk::CommandBuffer>& buffers, uint32_t count, uint32_t queueFamilyIndex, vk::CommandBufferLevel level = vk::CommandBufferLevel::ePrimary);
+		SUNRISE_API void createPoolsAndCommandBufffers(vk::Device device, std::vector<vk::CommandPool>& pools, std::vector<vk::CommandBuffer>& buffers,
+			uint32_t count, uint32_t queueFamilyIndex, vk::CommandBufferLevel level = vk::CommandBufferLevel::ePrimary, vk::CommandPoolCreateFlags poolFlags = {});
 
 		SUNRISE_API vk::ImageView createImageView(vk::Device device, VkImage image, ImageViewCreationOptions options);
 

@@ -17,6 +17,9 @@ namespace sunrise {
 				{ vk::DescriptorType::eCombinedImageSampler, vk::ShaderStageFlagBits::eFragment },
 				{ vk::DescriptorType::eCombinedImageSampler, vk::ShaderStageFlagBits::eFragment },
 				{ vk::DescriptorType::eCombinedImageSampler, vk::ShaderStageFlagBits::eFragment },
+				
+				// post proccesing uniforms
+				{ vk::DescriptorType::eUniformBuffer, vk::ShaderStageFlagBits::eFragment },
 			}
 		);
 

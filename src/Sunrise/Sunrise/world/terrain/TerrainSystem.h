@@ -7,7 +7,7 @@
 #include "TerrainMeshLoader.h"
 #include "../../scene/Transform.h"
 #include "../../graphics/vulkan/generalAbstractions/VkAbstractions.h"
-
+#include "../rendering/terrain/TerrainGPUStage.h"
 
 namespace sunrise {
 
@@ -18,6 +18,11 @@ namespace sunrise {
 		class Renderer;
 	}
 
+
+	/// <summary>
+	/// in charge of managing terrain tree and dispatching chunk loading jobs
+	/// render encoding is done by gpustage
+	/// </summary>
 	class TerrainSystem : public System
 	{
 	public:
@@ -51,17 +56,19 @@ namespace sunrise {
 
 	private:
 
+		friend TerrainGPUStage;
+
 #pragma region Resources
 
 		// render Resources
 
-		/// <summary>
+	/*	/// <summary>
 		/// one for each drawable
 		/// </summary>
 		std::vector<std::vector<vk::CommandPool  >> cmdBufferPools;
-		std::vector<std::vector<vk::CommandBuffer>> commandBuffers;
+		std::vector<std::vector<vk::CommandBuffer>> commandBuffers;*/
 
-		libguarded::plain_guarded<std::map<TerrainQuadTreeNode*, TreeNodeDrawData>> drawObjects;
+		libguarded::shared_guarded<std::map<TerrainQuadTreeNode*, TreeNodeDrawData>> drawObjects;
 		libguarded::shared_guarded<std::unordered_map<TerrainQuadTreeNode*, TreeNodeDrawResaourceToCoppy>> loadedMeshesToDraw = {};
 
 		bool destroyAwaitingNodes = false;
@@ -104,7 +111,14 @@ namespace sunrise {
 
 		friend FloatingOriginSystem;
 		friend TerrainMeshLoader;
+		friend TerrainGPUStage;
 
+		/// <summary>
+		/// callled in main rander loop so any non trivial actions should be cojmpleted on a worker thread
+		/// </summary>
+		/// <param name="window"></param>
+		/// <param name="surface"></param>
+		void resourcesReleased(Window* window, size_t surface);
 
 	};
 

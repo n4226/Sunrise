@@ -22,8 +22,8 @@ namespace sunrise {
 		// set = 0, binding = 3 -> materialImages - mat constant has a base index into this descriptor arrey which for now will have 5 contiguous indices for each texture 
 		std::vector<DescriptorSetLayoutBinding> set = {
 			{
-				DescriptorSetLayoutBinding(0,vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eFragment),
-				DescriptorSetLayoutBinding(1,vk::DescriptorType::eStorageBuffer, 1, vk::ShaderStageFlagBits::eFragment),
+				DescriptorSetLayoutBinding(0,vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex),
+				DescriptorSetLayoutBinding(1,vk::DescriptorType::eStorageBuffer, 1, vk::ShaderStageFlagBits::eVertex),
 				DescriptorSetLayoutBinding(2,vk::DescriptorType::eStorageBuffer, 1, vk::ShaderStageFlagBits::eFragment),
 				DescriptorSetLayoutBinding(
 					3,vk::DescriptorType::eCombinedImageSampler, maxMaterialTextureDescriptorArrayCount,

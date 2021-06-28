@@ -3,21 +3,21 @@
 
 namespace sunrise::math {
 
-    Box::Box()
+    constexpr Box::Box()
         : start(0), size(0)
     {
     }
-    Box::Box(glm::dvec2 start, glm::dvec2 size)
+    constexpr Box::Box(glm::dvec2 start, glm::dvec2 size)
         : start(start), size(size)
     {
     }
 
-    glm::dvec2 Box::getEnd() const
+    constexpr glm::dvec2 Box::getEnd() const
     {
         return start + size;
     }
 
-    glm::dvec2 Box::getCenter() const
+    constexpr glm::dvec2 Box::getCenter() const
     {
         return start + (size * 0.5);
     }

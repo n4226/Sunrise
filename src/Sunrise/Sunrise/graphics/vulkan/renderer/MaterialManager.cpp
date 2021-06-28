@@ -4,7 +4,8 @@
 #include "../../../core/Application.h"
 #include "../resources/uniforms.h"
 #include "../../../world/materials/StaticMaterialTable.h"
-
+#include "Sunrise/Sunrise/scene/Scene.h"
+#include "Sunrise/Sunrise/world/rendering/terrain/TerrainGPUStage.h"
 
 namespace sunrise {
 
@@ -240,12 +241,15 @@ namespace sunrise {
 		imageInfo.imageView = image->view;
 		imageInfo.sampler = samplers[imageIndex]->vkItem;
 
+		// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
+		auto tstage = renderer.app.loadedScenes[0]->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
 
 		for (size_t window = 0; window < renderer.windows.size(); window++) {
 			for (size_t i = 0; i < renderer.app.maxSwapChainImages; i++) {
 				VkWriteDescriptorSet descriptorWrite{};
 				descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-				descriptorWrite.dstSet = renderer.descriptorSets[window][i];
+				// todo find much better system
+				descriptorWrite.dstSet = tstage->descriptorSets.find(renderer.windows[window])->second[i]->vkItem;
 				descriptorWrite.dstBinding = 3;
 				descriptorWrite.dstArrayElement = imageIndex;
 

@@ -238,7 +238,16 @@ namespace sunrise::gfx {
 		loadOrGetRegisteredPipesInAllWindows();
 
 		for (auto stage : stagesInOrder) {
-			stage->lateSteup();
+			stage->lateSetup();
+		}
+	}
+
+	void SceneRenderCoordinator::drawableReleased(Window* window, size_t appFrame)
+	{
+		if (graphBuilt) {
+			for (auto stage : stagesInOrder) {
+				stage->drawableReleased(window, appFrame);
+			}
 		}
 	}
 
@@ -301,7 +310,7 @@ namespace sunrise::gfx {
 		*/
 
 		// subclass can run code before encoding
-		preFrameUpdate();
+		preEncodeUpdate(renderer,firstLevelCMDBuffer,frameID,window);
 
 		int64_t currentPass = -1;
 

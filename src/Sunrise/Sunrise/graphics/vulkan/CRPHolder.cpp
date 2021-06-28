@@ -68,7 +68,7 @@ namespace sunrise::gfx {
 					continue;
 				}
 
-				auto attachOptions = wholeOptions.attatchments[attach];
+				auto AttachOptions = wholeOptions.attatchments[attach];
 
 				// if this attachment will be the swapImage mark it as so
 				if (attach == wholeOptions.presentedAttachment) {
@@ -82,44 +82,44 @@ namespace sunrise::gfx {
 
 					// if this attach was not in the last pass, declare the initial layout undefined
 					if (localIndex < 0) {
-						attachOptions.initialLayout = vk::ImageLayout::eUndefined;
+						AttachOptions.initialLayout = vk::ImageLayout::eUndefined;
 					}
 					else 
-						attachOptions.initialLayout = passOptions[passOptions.size() - 1].attatchments[localIndex].finalLayout;
+						AttachOptions.initialLayout = passOptions[passOptions.size() - 1].attatchments[localIndex].finalLayout;
 				}
 				// the start layout (the layout to transtion to at the beginnign of the renderpass) should be what the dependancy needs
 				// or the initial one specified if it is the first pass
 				if (i > 0) {
-					attachOptions.transitionalToAtStartLayout = spacificOptions.passStartLayout[i - 1][attach];
+					AttachOptions.transitionalToAtStartLayout = spacificOptions.passStartLayout[i - 1][attach];
 
 					auto attachOps = spacificOptions.attachmentOps[i - 1][attach];
 					auto stencilOps = spacificOptions.stencilOps[i - 1][attach];
 
-					attachOptions.loadOp = attachOps.first;
-					attachOptions.storeOp = attachOps.second;
-					attachOptions.stencilLoadOp = stencilOps.first;
-					attachOptions.stencilStoreOp = stencilOps.second;
+					AttachOptions.loadOp = attachOps.first;
+					AttachOptions.storeOp = attachOps.second;
+					AttachOptions.stencilLoadOp = stencilOps.first;
+					AttachOptions.stencilStoreOp = stencilOps.second;
 				}
 				else {
-					attachOptions.transitionalToAtStartLayout = wholeOptions.attatchments[attach].transitionalToAtStartLayout;
-					attachOptions.loadOp = wholeOptions.attatchments[attach].loadOp;
-					attachOptions.storeOp = wholeOptions.attatchments[attach].storeOp;
-					attachOptions.stencilLoadOp = wholeOptions.attatchments[attach].stencilLoadOp;
-					attachOptions.stencilStoreOp = wholeOptions.attatchments[attach].stencilStoreOp;
+					AttachOptions.transitionalToAtStartLayout = wholeOptions.attatchments[attach].transitionalToAtStartLayout;
+					AttachOptions.loadOp = wholeOptions.attatchments[attach].loadOp;
+					AttachOptions.storeOp = wholeOptions.attatchments[attach].storeOp;
+					AttachOptions.stencilLoadOp = wholeOptions.attatchments[attach].stencilLoadOp;
+					AttachOptions.stencilStoreOp = wholeOptions.attatchments[attach].stencilStoreOp;
 				}
 
 				if (i == spacificOptions.passes - 1) { // if the last pass
 																 // the final layout (the layout to transtion to at the end of the renderpass) should be the original final user defined layout
-					attachOptions.finalLayout = wholeOptions.attatchments[attach].finalLayout;
+					AttachOptions.finalLayout = wholeOptions.attatchments[attach].finalLayout;
 				}
 				else {
 					// the NOT final layout 
 					// (the layout to transtion to at the end of this renderpass but there is another render pass after) 
 					// should transition to the layout the next pass needs as dependancy as it can not heppen in the next pass
-					attachOptions.finalLayout = spacificOptions.passStartLayout[i][attach];
+					AttachOptions.finalLayout = spacificOptions.passStartLayout[i][attach];
 
 				}
-				thisPassOptions.attatchments.push_back(attachOptions);
+				thisPassOptions.attatchments.push_back(AttachOptions);
 				passAttachGlobalIndicies[passAttachGlobalIndicies.size() - 1].push_back(attach);
 				globalAttachPassIndicies[passAttachGlobalIndicies.size() - 1].push_back(thisPassOptions.attatchments.size() - 1);
 			}
@@ -166,8 +166,8 @@ namespace sunrise::gfx {
 		return image;
 	}
 
-	inline vk::Framebuffer CRPHolder::getFrameBuffer(size_t pass, Window* window, size_t surfaceIndex) {
-		return frameBuffers[pass][window][surfaceIndex];
+	inline vk::Framebuffer CRPHolder::getFrameBuffer(size_t pass,const Window* window, size_t surfaceIndex) const {
+		return frameBuffers[pass].find(window)->second[surfaceIndex];
 	}
 
 	void CRPHolder::createWindowSpacificResources()

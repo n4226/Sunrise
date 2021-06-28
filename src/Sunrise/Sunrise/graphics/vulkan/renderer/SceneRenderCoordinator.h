@@ -50,7 +50,7 @@ namespace sunrise {
 		/// TODO: because there might/will be multiple render passes, much like the sugestion in Metal, we could start frame running witnout aquisiiton of swap chain image since it is only needed at the very end of the frame 
 		/// 
 		/// </summary>
-		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher
+		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher, public RenderResourceTracker
 		{
 		public:
 
@@ -102,6 +102,19 @@ namespace sunrise {
 			/// </summary>
 			void buildGraph();
 
+			/// <summary>
+			/// #SLOW - only call during load time then hold a weak reference
+			/// UNDEFINED if there are multiple stages of the same type registered
+			/// </summary>
+			/// <typeparam name="T"></typeparam>
+			/// <returns></returns>
+			template<typename T>
+			T* getRegisteredStageOfType();
+
+			void drawableReleased(Window* window, size_t appFrame) override;
+
+			size_t getPass(GPUStage* stage) { return passForStage[stage]; }
+
 		protected:
 			friend Window;
 			std::vector<std::pair<VirtualGraphicsPipeline*, GPUStage*>> registeredPipes{};
@@ -119,7 +132,7 @@ namespace sunrise {
 			/// <summary>
 			/// allows subclass to perform any actions before frame encoding
 			/// </summary>
-			virtual void preFrameUpdate() {}
+			virtual void preEncodeUpdate(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window) {}
 
 		private:
 
@@ -148,6 +161,20 @@ namespace sunrise {
 		};
 
 
-	}
+		template<typename T>
+		inline T* SceneRenderCoordinator::getRegisteredStageOfType()
+		{
+			for (auto stage : stagesInOrder) {
+				auto convertedStage = dynamic_cast<T*>(stage);
+
+				if (convertedStage)
+					return convertedStage;
+
+			}
+			SR_CORE_ERROR("stage requested from sceene render coordinator but was not found");
+			return nullptr;
+		}
+
+}
 }
 

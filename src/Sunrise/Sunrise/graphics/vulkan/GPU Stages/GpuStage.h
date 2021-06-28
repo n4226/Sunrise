@@ -3,6 +3,7 @@
 #include "srpch.h"
 
 //#include "Sunrise/Sunrise/core/Application.h"
+#include "../renderer/Renderer.h"
 
 namespace sunrise {
 	class Window;
@@ -19,11 +20,11 @@ namespace sunrise {
 		/// - this is how most GPU work is submitted to the Sunrise Engine
 		/// 
 		/// </summary>
-		class SUNRISE_API GPUStage
+		class SUNRISE_API GPUStage: public RenderResourceTracker
 		{
 		public:
 
-			GPUStage(Application& app,std::string&& name);
+			GPUStage(SceneRenderCoordinator* coord,std::string&& name);
 
 			virtual ~GPUStage();
 
@@ -34,7 +35,7 @@ namespace sunrise {
 			/// <summary>
 			/// when this is called getConcretePipeline(...) can be used
 			/// </summary>
-			virtual void lateSteup() {}
+			virtual void lateSetup() {}
 			virtual void cleanup() = 0;
 
 			//TODO: right now all stages encode into secondar command buffs but this could change
@@ -59,6 +60,7 @@ namespace sunrise {
 		//protected:
 
 			Application& app;
+			SceneRenderCoordinator* coord;
 
 		protected:
 			friend GPUStageDispatcher;

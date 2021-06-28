@@ -8,15 +8,16 @@
 
 namespace sunrise::gfx {
 
-	GPURenderStage::GPURenderStage(Application& app, std::string&& name)
-		: GPUStage(app,std::move(name))
+	GPURenderStage::GPURenderStage(SceneRenderCoordinator* coord, std::string&& name, bool useInternalresources)
+		: GPUStage(coord,std::move(name))
 	{
-		createRequiredRenderResources();
+		if (useInternalresources)
+			createRequiredRenderResources();
 	}
 
 	GPURenderStage::~GPURenderStage()
 	{
-
+		//todo destroy resources if useInternalResources
 	}
 
 	void GPURenderStage::createRequiredRenderResources()
@@ -47,32 +48,38 @@ namespace sunrise::gfx {
 
 		vk::CommandBuffer* buffer = &commandBuffers[options.window.indexInRenderer][bufferIndex];
 
-		auto [renderPass, subpass] = options.coordinator->sceneRenderpassHolders[0]->renderPass(options.pass);
-
-		vk::CommandBufferInheritanceInfo inheritanceInfo{};
-		inheritanceInfo.renderPass = renderPass->renderPass;
-		inheritanceInfo.subpass = subpass;
-		inheritanceInfo.framebuffer = options.coordinator->sceneRenderpassHolders[0]->getFrameBuffer(options.pass,&options.window,bufferIndex);
-
-		vk::CommandBufferBeginInfo beginInfo{};
-		beginInfo.flags = vk::CommandBufferUsageFlagBits::eRenderPassContinue; // Optional
-		beginInfo.pInheritanceInfo = &inheritanceInfo; // Optional
-
-		buffer->begin(beginInfo);
+		setupCommandBuff(*buffer, options.coordinator, options.pass, options.window, bufferIndex);
 
 		return buffer;
 	}
 
-	void GPURenderStage::setPipeline(sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline)
+	void GPURenderStage::setupCommandBuff(vk::CommandBuffer buff, SceneRenderCoordinator* coordinator, size_t pass, const Window& window, size_t surface, vk::CommandBufferUsageFlags flags)
 	{
-		auto rawPipe = window.loadedPipes[pipeline];
+		auto [renderPass, subpass] = coordinator->sceneRenderpassHolders[0]->renderPass(pass);
+
+		vk::CommandBufferInheritanceInfo inheritanceInfo{};
+		inheritanceInfo.renderPass = renderPass->renderPass;
+		inheritanceInfo.subpass = subpass;
+		inheritanceInfo.framebuffer = coordinator->sceneRenderpassHolders[0]->getFrameBuffer(pass, &window, surface);
+
+		vk::CommandBufferBeginInfo beginInfo{};
+		beginInfo.flags = flags; // Optional
+		beginInfo.pInheritanceInfo = &inheritanceInfo; // Optional
+
+		buff.begin(beginInfo);
+	}
+
+	void GPURenderStage::setPipeline(const sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline)
+	{
+		auto rawPipe = getConcretePipeline(window, pipeline);
 
 		buffer.bindPipeline(vk::PipelineBindPoint::eGraphics, rawPipe->vkItem);
 	}
 
-	GraphicsPipeline* GPURenderStage::getConcretePipeline(sunrise::Window& window, VirtualGraphicsPipeline* pipeline)
+	//TODO change this to a genaric one which finds the regestered pipeline of that type 
+	GraphicsPipeline* GPURenderStage::getConcretePipeline(const sunrise::Window& window, VirtualGraphicsPipeline* pipeline)
 	{
-		return window.loadedPipes[pipeline];
+		return window.loadedPipes.find(pipeline)->second;
 	}
 
 	

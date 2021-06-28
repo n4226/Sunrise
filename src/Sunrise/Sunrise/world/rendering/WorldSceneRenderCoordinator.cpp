@@ -1,18 +1,34 @@
 #include "srpch.h"
 #include "WorldSceneRenderCoordinator.h"
 
-#include "../gfxPipelines/WorldTerrainPipeline.h"
-#include "terrain/TerrainGPUStage.h"
+
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/concrete/DeferredStage.h"
+#include "Sunrise/Sunrise/graphics/vulkan/resources/uniforms.h"
+#include "Sunrise/Sunrise/core/Window.h"
+#include "Sunrise/Sunrise/core/Application.h"
+#include "../WorldScene.h"
+#include"Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/GPUStages/DeferredPipeline.h"
 
 namespace sunrise {
+
+	WorldSceneRenderCoordinator::WorldSceneRenderCoordinator(WorldScene* scene)
+		: SceneRenderCoordinator(scene), worldScene(scene)
+	{
+	}
+
 	WorldSceneRenderCoordinator::~WorldSceneRenderCoordinator()
 	{
-		
+		for (auto buffer : uniformBuffers)
+		{
+			for (auto sbuffer : buffer)
+				delete sbuffer;
+		}
 	}
 	
 	void WorldSceneRenderCoordinator::createPasses()
 	{
+
+
 		//https://stackoverflow.com/questions/8192185/using-stdarray-with-initialization-lists
 		std::vector<GPUStageDispatcher::DependencyOptions> gbuffToDeferredOptions = { {
 			{0, vk::ImageLayout::eColorAttachmentOptimal, vk::AttachmentLoadOp::eClear},
@@ -22,21 +38,49 @@ namespace sunrise {
 		} };
 
 		//todo: store this to then delete it in destructor or cleanup method
-		auto terrainStage = new TerrainGPUStage(app);
-		auto deferredStage = new DeferredStage(app);
+		auto terrainStage = new TerrainGPUStage(this);
+		auto deferredStage = new DeferredStage(this, { 1,2,3 });
 
+		registerPipeline(worldTerrainPipeline,terrainStage);
+		registerPipeline(deferredPipeline,deferredStage);
 
 		registerStage(terrainStage, {}, {}, {});
 		registerStage(deferredStage, { terrainStage }, std::move(gbuffToDeferredOptions), {});
 
 		setLastStage(deferredStage);
-
 	}
 
 
-	void WorldSceneRenderCoordinator::preFrameUpdate()
+	void WorldSceneRenderCoordinator::preEncodeUpdate(gfx::Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
 	{
+		// updateDescriptors
+		updateSceneUniformBuffer(window);
+	}
 
+	void WorldSceneRenderCoordinator::createUniforms()
+	{
+		using namespace gfx;
+		PROFILE_FUNCTION;
+
+		auto renderer = app.renderers[0];
+
+		//TODO test using a staging buff
+
+		// make uniforms
+		VkDeviceSize uniformBufferSize = sizeof(SceneUniforms) + sizeof(PostProcessEarthDatAndUniforms);
+
+
+		BufferCreationOptions uniformOptions = { ResourceStorageType::cpuToGpu,{vk::BufferUsageFlagBits::eUniformBuffer}, vk::SharingMode::eExclusive };
+
+		uniformBuffers.resize(renderer->physicalWindows.size());
+
+
+		for (size_t i = 0; i < uniformBuffers.size(); i++) {
+			uniformBuffers[i].resize(app.MAX_FRAMES_IN_FLIGHT);
+
+			for (size_t e = 0; e < uniformBuffers[i].size(); e++)
+				uniformBuffers[i][e] = new Buffer(renderer->device, renderer->allocator, uniformBufferSize, uniformOptions);
+		}
 	}
 
 
@@ -103,5 +147,53 @@ namespace sunrise {
 		return options;
 	}
 
+
+	void WorldSceneRenderCoordinator::updateSceneUniformBuffer(Window& window)
+	{
+		using namespace gfx;
+		PROFILE_FUNCTION;
+		// update uniform buffer
+
+		auto renderer = window.renderer;
+
+		auto globalIndex = window.globalIndex;
+		auto& camera = window.camera;
+
+		SceneUniforms uniforms;
+
+		uniforms.viewProjection = camera.viewProjection(window.swapchainExtent.width, window.swapchainExtent.height);
+
+		auto buffer = uniformBuffers[globalIndex][window.currentSurfaceIndex];
+
+		buffer->mapMemory();
+
+		buffer->tempMapAndWrite(&uniforms, 0, sizeof(uniforms), false);
+
+		PostProcessEarthDatAndUniforms postUniforms;
+
+		// in floated origin (after float)
+		postUniforms.camFloatedGloabelPos = glm::vec4(camera.transform.position, 1);
+		glm::qua<glm::float32> sunRot = glm::angleAxis(glm::radians(45.f), glm::vec3(0, 1, 0));
+
+		//todo abstract this out
+		postUniforms.sunDir =
+			glm::angleAxis(glm::radians(45.f + sin(scene->timef) * 0.f), glm::vec3(-1, 0, 0)) *
+			glm::vec4(glm::normalize(math::LlatoGeo(worldScene->initialPlayerLLA, glm::dvec3(0), worldScene->terrainSystem->getRadius())), 1);
+
+		postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>(-(worldScene->origin)), 1);
+
+		postUniforms.viewMat = camera.view();
+		postUniforms.projMat = camera.projection(window.swapchainExtent.width, window.swapchainExtent.height);
+		postUniforms.invertedViewMat = glm::inverse(camera.view());
+		postUniforms.renderTargetSize.x = window.swapchainExtent.width;
+		postUniforms.renderTargetSize.y = window.swapchainExtent.height;
+
+		buffer->tempMapAndWrite(&postUniforms, sizeof(uniforms), sizeof(postUniforms), false);
+		buffer->unmapMemory();
+
+
+		//todo abstract this somewhere else
+		renderer->camFrustroms[globalIndex] = std::move(math::Frustum(uniforms.viewProjection));
+	}
 }
 

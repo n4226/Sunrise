@@ -68,7 +68,7 @@ namespace sunrise::gfx {
 		/// <returns></returns>
 		Image* getImage(size_t globalIndex, Window* window);
 
-		vk::Framebuffer getFrameBuffer(size_t pass, Window* window, size_t surfaceIndex);
+		vk::Framebuffer getFrameBuffer(size_t pass,const Window* window, size_t surfaceIndex) const;
 
 		/// <summary>
 		/// returns the CRP and the supbass within it to use for a "logical pass" index (0..<passCount())
@@ -133,7 +133,7 @@ namespace sunrise::gfx {
 		/// map = window
 		/// inner = surface
 		/// </summary>
-		std::vector<std::unordered_map<Window*, std::vector<vk::Framebuffer>>> frameBuffers{};
+		std::vector<std::unordered_map<const Window*, std::vector<vk::Framebuffer>>> frameBuffers{};
 
 	};
 

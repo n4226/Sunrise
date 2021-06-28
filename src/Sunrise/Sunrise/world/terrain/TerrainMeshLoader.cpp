@@ -82,6 +82,8 @@ namespace sunrise {
 		BindlessMeshBuffer* stagingMeshBuff;
 		Buffer* stagingModelBuff;
 
+		// have to review how in job works
+		SR_ASSERT(!inJob);
 		if (!inJob) {
 			stagingMeshBuff = renderer->globalMeshStagingBuffer;
 			stagingModelBuff = renderer->globalModelBufferStaging;
@@ -248,7 +250,7 @@ namespace sunrise {
 
 		}*/
 
-
+		//todo is this syncronoized?
 		node->hasdraw = true;
 
 		auto drawQueue = terrainSystem->pendingDrawObjects.lock();
@@ -268,7 +270,8 @@ namespace sunrise {
 		//printf("%d after \n", drawObjects->size());
 
 		//TODO: deallocate buffers here 
-
+		
+		//todo why is this return here???????
 		return;
 		renderer->gloablVertAllocator->free(draw.vertIndex, draw.vertcount);
 		//assert((draw.indIndicies.size > 0));

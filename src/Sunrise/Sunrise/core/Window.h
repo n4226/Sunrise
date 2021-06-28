@@ -121,7 +121,7 @@ namespace sunrise {
 		gfx::DeferredPass* deferredPass;
 		gfx::GPUGenCommandsPipeline* gpuGenPipe;
 
-		std::unordered_map<gfx::VirtualGraphicsPipeline*,gfx::GraphicsPipeline*> loadedPipes = {};
+		std::unordered_map<const gfx::VirtualGraphicsPipeline*,gfx::GraphicsPipeline*> loadedPipes = {};
 		std::vector <gfx::GraphicsPipeline*> worldLoadedPipes = {};
 
 		vk::SurfaceKHR surface;
@@ -134,7 +134,13 @@ namespace sunrise {
 
 		std::vector<VkSemaphore> imageAvailableSemaphores;
 		std::vector<VkSemaphore> renderFinishedSemaphores;
+		/// <summary>
+		/// indicies are frames i.e. app.currentFrame
+		/// </summary>
 		std::vector<VkFence> inFlightFences;
+		/// <summary>
+		/// indicies are window surface inndexes i.e. window.currentSurfaceIndex
+		/// </summary>
 		std::vector<VkFence> imagesInFlight;
 
 		bool framebufferResized = false;

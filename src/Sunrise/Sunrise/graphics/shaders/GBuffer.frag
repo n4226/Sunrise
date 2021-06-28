@@ -8,7 +8,8 @@
 #include "headers/lighting/pbr.h"
 
 
-layout(binding = 4) uniform UniformBufferObject {
+//TODO: move this back to binding 4 when depth buffer added back
+layout(binding = 3) uniform UniformBufferObject {
 // global uniforms
     mat4 viewProjection;
 
@@ -287,11 +288,17 @@ vec3 calculatePostAtmosphereicScatering(
 
 
 
+//
+//layout (input_attachment_index = 0, set = 0, binding = 0) uniform subpassInput GBuffer_Albedo_Metallic;
+//layout (input_attachment_index = 1, set = 0, binding = 1) uniform subpassInput GBuffer_Normal_Roughness;
+//layout (input_attachment_index = 2, set = 0, binding = 2) uniform subpassInput GBuffer_AO;
+//layout (input_attachment_index = 3, set = 0, binding = 3) uniform subpassInput GBuffer_Depth;
 
-layout (input_attachment_index = 0, set = 0, binding = 0) uniform subpassInput GBuffer_Albedo_Metallic;
-layout (input_attachment_index = 1, set = 0, binding = 1) uniform subpassInput GBuffer_Normal_Roughness;
-layout (input_attachment_index = 2, set = 0, binding = 2) uniform subpassInput GBuffer_AO;
-layout (input_attachment_index = 3, set = 0, binding = 3) uniform subpassInput GBuffer_Depth;
+
+layout (binding = 0) uniform sampler2D GBuffer_Albedo_Metallic;
+layout (binding = 1) uniform sampler2D GBuffer_Normal_Roughness;
+layout (binding = 2) uniform sampler2D GBuffer_AO;
+//layout (binding = 3) uniform sampler2D GBuffer_Depth;
 
 float remap(float value, float low1,float high1,float low2,float high2) {
     return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
@@ -302,10 +309,15 @@ layout(location = 0) in vec2 inPos;
 
 void main() {
     
-    vec4 albedo_metallic =   subpassLoad(GBuffer_Albedo_Metallic);
-    vec4 normal_sroughness = subpassLoad(GBuffer_Normal_Roughness);
-    float ao =               subpassLoad(GBuffer_AO).x;
-    float depth =            subpassLoad(GBuffer_Depth).x; 
+
+	//TODO can calculate this in vertex to be more efficient
+    // second param is lod
+	vec2 uvs = gl_FragCoord.xy / vec2(textureSize(GBuffer_Albedo_Metallic,0));
+
+    vec4 albedo_metallic =   texture(GBuffer_Albedo_Metallic,uvs);
+    vec4 normal_sroughness = texture(GBuffer_Normal_Roughness,uvs);
+    float ao =               texture(GBuffer_AO,uvs).x;
+    //float depth =            texture(GBuffer_Depth,uvs).x; 
 
     //albedo_metallic = normal_sroughness;
 

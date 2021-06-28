@@ -17,7 +17,18 @@ namespace sunrise {
 
 		class ResourceTransferer;
 
-		class SUNRISE_API Renderer
+		class SUNRISE_API RenderResourceTracker {
+		public:
+			/// <summary>
+			/// callled in main rander loop so any non trivial actions should be cojmpleted on a worker thread
+			/// </summary>
+			/// <param name="window"></param>
+			/// <param name="surface"></param>
+			virtual void drawableReleased(Window* window, size_t appFrame) {}
+
+		};
+
+		class SUNRISE_API Renderer: private RenderResourceTracker
 		{
 		public:
 
@@ -69,9 +80,6 @@ namespace sunrise {
 
 #pragma region Resources
 
-			// one per surface
-			std::vector<std::vector<Buffer*>> uniformBuffers;
-
 			//TODO: important for multi gpu (SUN-51) staging buffer dont have to be duplicated accros multiple gpus so we will have to see
 			//how this turns out and the best way to do this
 #pragma region Bindless resources
@@ -115,11 +123,13 @@ namespace sunrise {
 
 			bool supportsMultiViewport = false;
 
+			std::vector<math::Frustum> camFrustroms;
 
 		private:
 			friend TerrainSystem;
 			friend MaterialManager;
 			friend Application;
+			friend Window;
 
 #pragma region methods
 
@@ -139,15 +149,7 @@ namespace sunrise {
 
 #pragma region Descriptors
 
-
-			void createDescriptorPoolAndSets();
-
-			void allocateDescriptors();
-
 			void resetDescriptorPools();
-
-			void updateLoadTimeDescriptors(Window& window);
-			void updateRunTimeDescriptors(Window& window);
 
 #pragma endregion
 
@@ -157,41 +159,22 @@ namespace sunrise {
 
 			void createRenderResources();
 
-
-			void createUniformsAndDescriptors();
-
-
 			void createDynamicRenderCommands();
 
-
-			void updateCameraUniformBuffer(Window& window);
+			/// <summary>
+			/// callled in main rander loop so any non trivial actions should be cojmpleted on a worker thread
+			/// </summary>
+			/// <param name="window"></param>
+			/// <param name="surface"></param>
+			void drawableReleased(Window* window, size_t appFrame) override;
 
 
 			// render resources
-
-
 			std::vector<std::vector<vk::CommandPool  >> dynamicCommandPools;
 			std::vector<std::vector<vk::CommandBuffer>> dynamicCommandBuffers;
 
 
-
-			//vk::DescriptorPool descriptorPool;
-			//// first dimension is windows second is surface index
-			//std::vector<std::vector<VkDescriptorSet>> descriptorSets;
-
-
-
-
-			//vk::DescriptorPool deferredDescriptorPool;
-			//std::vector<std::vector<VkDescriptorSet>> deferredDescriptorSets;
-
-
-
-			std::vector<math::Frustum> camFrustroms;
-
-
 			// handles
-
 			Application& app;
 
 		};

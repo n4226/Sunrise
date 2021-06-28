@@ -16,19 +16,19 @@ namespace sunrise::gfx::vkHelpers {
 		allocInfo.commandBufferCount = count;
 
 
-
 		//auto result = vkAllocateCommandBuffers(device, &allocInfo, buffers);
 		auto result = device.allocateCommandBuffers(&allocInfo, buffers);
 	}
 
-	void createPoolsAndCommandBufffers(vk::Device device, std::vector<vk::CommandPool>& pools, std::vector<vk::CommandBuffer>& buffers, uint32_t count, uint32_t queueFamilyIndex, vk::CommandBufferLevel level)
+	void createPoolsAndCommandBufffers(vk::Device device, std::vector<vk::CommandPool>& pools, std::vector<vk::CommandBuffer>& buffers,
+		uint32_t count, uint32_t queueFamilyIndex, vk::CommandBufferLevel level, vk::CommandPoolCreateFlags poolFlags)
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 
-			vk::CommandPoolCreateInfo poolInfo{};
+		vk::CommandPoolCreateInfo poolInfo{};
 
 		poolInfo.queueFamilyIndex = queueFamilyIndex;
-		poolInfo.flags = vk::CommandPoolCreateFlags(); // Optional
+		poolInfo.flags = poolFlags;
 
 		pools.reserve(count);
 		buffers.resize(count);
