@@ -1,7 +1,7 @@
 #include "srpch.h"
 #include "CameraSystem.h"
-#include "../core/Application.h"
-#include "../world/WorldScene.h"
+#include "../../core/Application.h"
+#include "../../world/WorldScene.h"
 
 namespace sunrise {
 

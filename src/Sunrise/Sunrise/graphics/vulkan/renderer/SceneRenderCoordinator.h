@@ -33,7 +33,7 @@ namespace sunrise {
 		/// 2. overide createPasses():
 		///	2.1. call registerPipeline(VirtualGraphicsPipeline* virtualPipe) for each pipeline that will be used
 		/// 2.2. call registerStage(GPUStage* stage ...) for each stage
-		/// 2.3. call setLastPass(GPUStage* lastStage) for the pass which should be the last to execute before the presentation to the screen
+		/// 2.3. call setLastStage(GPUStage* lastStage) for the pass which should be the last to execute before the presentation to the screen
 		/// 
 		/// 
 		/// 
@@ -50,7 +50,7 @@ namespace sunrise {
 		/// TODO: because there might/will be multiple render passes, much like the sugestion in Metal, we could start frame running witnout aquisiiton of swap chain image since it is only needed at the very end of the frame 
 		/// 
 		/// </summary>
-		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher
+		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher, public RenderResourceTracker
 		{
 		public:
 
@@ -90,7 +90,7 @@ namespace sunrise {
 			/// if called multiple times results are undefined
 			/// </summary>
 			/// <param name="lastStage"></param>
-			void setLastPass(GPUStage* lastStage);
+			void setLastStage(GPUStage* lastStage);
 
 			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
 			std::vector<CRPHolder*> sceneRenderpassHolders;
@@ -101,6 +101,19 @@ namespace sunrise {
 			/// kciks off all load time things that need to hapen
 			/// </summary>
 			void buildGraph();
+
+			/// <summary>
+			/// #SLOW - only call during load time then hold a weak reference
+			/// UNDEFINED if there are multiple stages of the same type registered
+			/// </summary>
+			/// <typeparam name="T"></typeparam>
+			/// <returns></returns>
+			template<typename T>
+			T* getRegisteredStageOfType();
+
+			void drawableReleased(Window* window, size_t appFrame) override;
+
+			size_t getPass(GPUStage* stage) { return passForStage[stage]; }
 
 		protected:
 			friend Window;
@@ -115,6 +128,11 @@ namespace sunrise {
 			/// <param name="swapChainFormat">the format the display(s) are expecting, with multiuple windows if formats are different value is undifined</param>
 			/// <returns></returns>
 			virtual ComposableRenderPass::CreateOptions renderpassConfig(vk::Format swapChainFormat);
+
+			/// <summary>
+			/// allows subclass to perform any actions before frame encoding
+			/// </summary>
+			virtual void preEncodeUpdate(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window) {}
 
 		private:
 
@@ -143,6 +161,20 @@ namespace sunrise {
 		};
 
 
-	}
+		template<typename T>
+		inline T* SceneRenderCoordinator::getRegisteredStageOfType()
+		{
+			for (auto stage : stagesInOrder) {
+				auto convertedStage = dynamic_cast<T*>(stage);
+
+				if (convertedStage)
+					return convertedStage;
+
+			}
+			SR_CORE_ERROR("stage requested from sceene render coordinator but was not found");
+			return nullptr;
+		}
+
+}
 }
 

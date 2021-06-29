@@ -27,8 +27,9 @@ namespace sunrise {
 
 	void TerrainQuadTreeNode::split()
 	{
-		PROFILE_FUNCTION
-			if (isSplit) return;
+		PROFILE_FUNCTION;
+
+		if (isSplit) return;
 		isSplit = true;
 
 		auto chldSize = frame.size / 2.0;

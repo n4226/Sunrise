@@ -26,10 +26,8 @@ namespace sunrise::gfx {
 		//vkItem.pImmutableSamplers = samplers;
 
 		auto c_flags = VkDescriptorBindingFlags(flags);
-
-		if (c_flags != 0) {
-			this->flags = new VkDescriptorBindingFlags(c_flags);
-		}
+		this->flags = c_flags;
+		
 	}
 
 
@@ -52,7 +50,6 @@ namespace sunrise::gfx {
 
 	DescriptorSetLayoutBinding::~DescriptorSetLayoutBinding()
 	{
-		delete flags;
 	}
 
 
@@ -72,9 +69,9 @@ namespace sunrise::gfx {
 		{
 			auto& binding = options.setLayoutBindings[i];
 			bindings[i] = binding.vkItem;
-			if (binding.flags != nullptr) {
+			if (binding.flags != VkDescriptorBindingFlags()) {
 				needsFlags = true;
-				bindingFlags[i] = *binding.flags;
+				bindingFlags[i] = binding.flags;
 			}
 			else if (needsFlags)
 				bindingFlags[i] = {};

@@ -10,21 +10,21 @@ namespace sunrise::gfx {
 	class SUNRISE_API GPURenderStage : public GPUStage
 	{
 	public:
-		GPURenderStage(Application& app,std::string&& name);
+		GPURenderStage(SceneRenderCoordinator* coord,std::string&& name, bool useInternalresources = true);
 		~GPURenderStage();
 
-		void createRequiredRenderResources();
 
 	protected:
 
+		void createRequiredRenderResources();
 
 		// Render Resources
 
 		/// <summary>
 		/// one for each drawable
 		/// </summary>
-		std::vector<std::vector<vk::CommandPool  >> cmdBufferPools;
-		std::vector<std::vector<vk::CommandBuffer>> commandBuffers;
+		std::vector<std::vector<vk::CommandPool  >> cmdBufferPools{};
+		std::vector<std::vector<vk::CommandBuffer>> commandBuffers{};
 
 
 		/// <summary>
@@ -33,10 +33,12 @@ namespace sunrise::gfx {
 		/// <param name="subpass"></param>
 		/// <param name="window"></param>
 		/// <returns></returns>
-		vk::CommandBuffer* selectAndSetupCommandBuff(SceneRenderCoordinator* coordinator, uint32_t pass, sunrise::Window& window);
+		vk::CommandBuffer* selectAndSetupCommandBuff(RunOptions options);
 
-		void setPipeline(sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline);
-		GraphicsPipeline* getConcretePipeline(sunrise::Window& window, VirtualGraphicsPipeline* pipeline);
+		void setupCommandBuff(vk::CommandBuffer buff, SceneRenderCoordinator* coordinator, size_t pass,const Window& window,size_t surface,vk::CommandBufferUsageFlags flags = vk::CommandBufferUsageFlagBits::eRenderPassContinue);
+
+		void setPipeline(const sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline);
+		GraphicsPipeline* getConcretePipeline(const sunrise::Window& window, VirtualGraphicsPipeline* pipeline);
 
 
 		// Inherited via GPUStage
@@ -45,7 +47,7 @@ namespace sunrise::gfx {
 		virtual void setup() override = 0;
 		virtual void cleanup() override = 0;
 		// called every frame
-		virtual vk::CommandBuffer* encode(SceneRenderCoordinator* coordinator, uint32_t pass, sunrise::Window& window) override = 0;
+		virtual vk::CommandBuffer* encode(RunOptions options) override = 0;
 
 	};
 

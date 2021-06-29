@@ -11,10 +11,14 @@ namespace sunrise {
 	{
 	public:
 		Scene(Application* app);
-		Scene(Application* app, gfx::SceneRenderCoordinator* coordinator);
+		Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool sceneControlsCoordLifecycle = false);
 		virtual ~Scene();
 
 		virtual void load() = 0;
+		/// <summary>
+		/// after coordinator is fully initilized
+		/// </summary>
+		virtual void lateLoad() {}
 
 		virtual void update();
 

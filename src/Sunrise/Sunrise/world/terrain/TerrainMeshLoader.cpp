@@ -14,7 +14,7 @@ namespace sunrise {
 	TreeNodeDrawResaourceToCoppy TerrainMeshLoader::loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob)
 	{
 		// get  and encode mesh
-		//TODO store this in a better place
+		//TODO store this in a better place which is more effecient
 		const auto Terrain_Chunk_Mesh_Dir = FileManager::engineTerrainChunkDir();//R"(terrain/chunkMeshes/)";
 
 		TreeNodeDrawResaourceToCoppy meshStore;
@@ -57,7 +57,7 @@ namespace sunrise {
 		{
 			PROFILE_SCOPE("creating empty mesh")
 
-				auto mesh = createChunkMesh(*node);
+			auto mesh = createChunkMesh(*node);
 
 			meshStore.mesh = mesh;
 		}
@@ -82,6 +82,8 @@ namespace sunrise {
 		BindlessMeshBuffer* stagingMeshBuff;
 		Buffer* stagingModelBuff;
 
+		// have to review how in job works
+		SR_ASSERT(!inJob);
 		if (!inJob) {
 			stagingMeshBuff = renderer->globalMeshStagingBuffer;
 			stagingModelBuff = renderer->globalModelBufferStaging;
@@ -175,8 +177,9 @@ namespace sunrise {
 		}
 		else
 		{
-			PROFILE_SCOPE("loading with pre creating empty mesh")
-				auto mesh = preLoadedMesh.mesh;
+			PROFILE_SCOPE("loading with pre creating empty mesh");
+			
+			auto mesh = preLoadedMesh.mesh;
 
 			vertCount = mesh->verts.size();
 			indCounts = { mesh->indicies[0].size() };
@@ -248,7 +251,7 @@ namespace sunrise {
 
 		}*/
 
-
+		//todo is this syncronoized?
 		node->hasdraw = true;
 
 		auto drawQueue = terrainSystem->pendingDrawObjects.lock();
@@ -268,7 +271,8 @@ namespace sunrise {
 		//printf("%d after \n", drawObjects->size());
 
 		//TODO: deallocate buffers here 
-
+		
+		//todo why is this return here???????
 		return;
 		renderer->gloablVertAllocator->free(draw.vertIndex, draw.vertcount);
 		//assert((draw.indIndicies.size > 0));

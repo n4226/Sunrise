@@ -83,9 +83,9 @@ namespace sunrise {
 
 				ticket.wait();
 
-				PROFILE_SCOPE("performTask Marl blocking")
+				PROFILE_SCOPE("performTask Marl blocking");
 
-					vk::CommandBuffer cmdBuffer;
+				vk::CommandBuffer cmdBuffer;
 
 				if (requiresGfxQueue) {
 					cmdBuffer = gfxCmdBuffer;
@@ -97,6 +97,8 @@ namespace sunrise {
 				}
 
 				cmdBuffer.begin({ { vk::CommandBufferUsageFlagBits::eOneTimeSubmit } });
+
+				renderer.debugObject.beginRegion(cmdBuffer, "Resource Transfer Task", glm::vec4(0.4,0.2,0.1,1));
 
 				// perform tasks
 				for (Task& task : tasks) {
@@ -125,6 +127,8 @@ namespace sunrise {
 						}
 
 				}
+				renderer.debugObject.endRegion(cmdBuffer);
+				
 				cmdBuffer.end();
 
 

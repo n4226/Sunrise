@@ -12,6 +12,7 @@ namespace sunrise::gfx {
 	// implementatino heavly inspired by atrticle at: https://www.saschawillems.de/blog/2016/05/28/tutorial-on-using-vulkans-vk_ext_debug_marker-with-renderdoc/
 
 	VkDebug::VkDebug(vk::Device device,Application* app)
+		: device(device)
 	{
 		vk::DynamicLoader dl;
 		// This dispatch class will fetch function pointers for the passed device if possible, else for the passed instance
@@ -23,7 +24,7 @@ namespace sunrise::gfx {
 		pfnCmdDebugMarkerInsert = (PFN_vkCmdDebugMarkerInsertEXT)dldid.vkGetDeviceProcAddr(device, "vkCmdDebugMarkerInsertEXT");
 	}
 
-	void VkDebug::nameObject(vk::Device device,size_t handle, vk::DebugReportObjectTypeEXT objectType,const char* name)
+	void VkDebug::nameObject(size_t handle, vk::DebugReportObjectTypeEXT objectType,const char* name) const
 	{
 		// Check for a valid function pointer
 		if (pfnDebugMarkerSetObjectName)
@@ -37,19 +38,19 @@ namespace sunrise::gfx {
 		}
 	}
 
-	void VkDebug::insertMarker(vk::CommandBuffer  cmdBuff,const char* name, glm::vec4 color)
+	void VkDebug::insertMarker(vk::CommandBuffer  cmdBuff,const char* name, glm::vec4 color) const
 	{
 		// Check for a valid function pointer
 		if (pfnCmdDebugMarkerInsert) {
 			VkDebugMarkerMarkerInfoEXT markerInfo = {};
 			markerInfo.sType = VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT;
 			memcpy(markerInfo.color, &color[0], sizeof(float) * 4);
-			markerInfo.pMarkerName = "Set primary viewport";
+			markerInfo.pMarkerName = name;
 			pfnCmdDebugMarkerInsert(static_cast<VkCommandBuffer>(cmdBuff), &markerInfo);
 		}
 	}
 
-	void VkDebug::beginRegion(vk::CommandBuffer cmdBuff,const char* name, glm::vec4 color)
+	void VkDebug::beginRegion(vk::CommandBuffer cmdBuff,const char* name, glm::vec4 color) const
 	{
 		// Check for a valid function pointer
 		if (pfnCmdDebugMarkerBegin) {
@@ -61,7 +62,7 @@ namespace sunrise::gfx {
 		}
 	}
 
-	void VkDebug::endRegion(vk::CommandBuffer cmdBuff)
+	void VkDebug::endRegion(vk::CommandBuffer cmdBuff) const
 	{
 		// Check for a valid function pointer
 		if (pfnCmdDebugMarkerEnd) {

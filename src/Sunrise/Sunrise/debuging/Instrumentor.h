@@ -57,6 +57,7 @@ public:
 
     void EndSession()
     {
+        SR_CORE_TRACE("Ending profile sesion");
 #if SR_MULTI_THREADED_PROFILING
         {
             auto queue = pendingResults.lock();
@@ -73,6 +74,7 @@ public:
         delete m_CurrentSession;
         m_CurrentSession = nullptr;
         m_ProfileCount = 0;
+        SR_CORE_TRACE("finsihed ending profile sesion");
     }
 
 

@@ -66,10 +66,24 @@ project "Sunrise"
 	
 		-- temp for FSTS
 
-		("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.dLL %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
-		("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.pdb %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		("echo on"),
 
-		("{COPY} %{sunriseLocation}/vendor/bin//NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		-- important: for FSTS project, mainProjDir has to be manuually switched between main program and mesh gen by chosing which set of the varible happens last
+		("{COPYDIR} %{wks.location}/bin/" .. outputdir .. "/Sunrise/ %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		
+		--{ generic commands but dont owrk currently
+		--("{COPYFILE} %{wks.location}bin/" .. outputdir .. "/Sunrise/Sunrise.dLL %{wks.location}bin/" .. outputdir .. "/%{mainProjDir}/"),
+		--("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.pdb %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+
+		("{COPYFILE} %{sunriseLocation}/vendor/bin//NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		--}
+
+
+
+		--("xcopy /Q /E /Y /I %{wks.location}bin\\" .. outputdir .. "\\Sunrise\\Sunrise.dLL %{wks.location}bin\\" .. outputdir .. "\\%{mainProjDir}\\"),
+		--("xcopy /Q /E /Y /I %{wks.location}bin\\" .. outputdir .. "\\Sunrise\\Sunrise.pdb %{wks.location}bin\\" .. outputdir .. "\\%{mainProjDir}\\"),
+		--("{COPYFILE} %{sunriseLocation}/vendor/bin//NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+		--("xcopy /Q /E /Y /I %{wks.location}\\Sunrise\\vendor\\bin\\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\\lib\\x64\\GFSDK_Aftermath_Lib.x64.dll %{wks.location}bin\\" .. outputdir .. "\\%{mainProjDir}\\"),
 		
 
 		-- shaders again temp

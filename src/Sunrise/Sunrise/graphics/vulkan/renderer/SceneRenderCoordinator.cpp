@@ -30,11 +30,13 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::registerPipeline(VirtualGraphicsPipeline* virtualPipe, GPUStage* forStage)
 	{
+		PROFILE_FUNCTION;
+
 		virtualPipe->create();
 		registeredPipes.push_back(std::make_pair(virtualPipe,forStage));
 	}
 
-	void SceneRenderCoordinator::setLastPass(GPUStage* lastStage)
+	void SceneRenderCoordinator::setLastStage(GPUStage* lastStage)
 	{
 		this->lastStage = lastStage;
 	}
@@ -47,6 +49,8 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::buildGraph()
 	{
+		PROFILE_FUNCTION;
+
 		/* Steps
 
 		TODO: add mutli queue support
@@ -234,12 +238,23 @@ namespace sunrise::gfx {
 		loadOrGetRegisteredPipesInAllWindows();
 
 		for (auto stage : stagesInOrder) {
-			stage->lateSteup();
+			stage->lateSetup();
+		}
+	}
+
+	void SceneRenderCoordinator::drawableReleased(Window* window, size_t appFrame)
+	{
+		if (graphBuilt) {
+			for (auto stage : stagesInOrder) {
+				stage->drawableReleased(window, appFrame);
+			}
 		}
 	}
 
 	void SceneRenderCoordinator::loadOrGetRegisteredPipesInAllWindows()
 	{
+		PROFILE_FUNCTION;
+
 		// loop through all top level windows: virtual or onowned
 		for (auto window : app.renderers[0]->windows) {
 			//TODO: check if window already has same virtual pipeLoaded
@@ -257,6 +272,7 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::createRenderpasses(const CRPHolder::HolderOptions& holderOptions)
 	{
+		PROFILE_FUNCTION;
 
 		sceneRenderpassHolders.push_back(new CRPHolder(std::move(__tempWholeFrameRenderPassOptions), holderOptions, app.renderers[0]));
 
@@ -271,6 +287,7 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::encodePassesForFrame(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
 	{
+		PROFILE_FUNCTION;
 		/* Steps
 
 		TODO: add mutli queue support
@@ -291,6 +308,9 @@ namespace sunrise::gfx {
 		https://visualgo.net/en/dfsbfs
 		not as good as first website i had for graphs
 		*/
+
+		// subclass can run code before encoding
+		preEncodeUpdate(renderer,firstLevelCMDBuffer,frameID,window);
 
 		int64_t currentPass = -1;
 
@@ -332,13 +352,18 @@ namespace sunrise::gfx {
 			//todo: abstract out calling this function on thel ine bellow in all stages #canOptimize
 			//auto passInfo = sceneRenderpassHolders[0]->renderPass(currentPass);
 			
-			auto buff = stage->encode(this, currentPass, window);
+
+			//todo this has to be deleted when frame done preoccesing
+
+			GPUStage::RunOptions options = { scene, this, currentPass, window };
+
+			auto buff = stage->encode(options);
 
 			renderer->debugObject.beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
 
 			firstLevelCMDBuffer.executeCommands(*buff);
 
-			renderer->debugObject.endRegion(firstLevelCMDBuffer);
+ 			renderer->debugObject.endRegion(firstLevelCMDBuffer);
 
 		}
 
@@ -347,6 +372,8 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::startNewPass(int64_t pass, Window& window, vk::CommandBuffer firstLevelCMDBuffer)
 	{
+		PROFILE_FUNCTION;
+
 		auto passInfo = sceneRenderpassHolders[0]->renderPass(pass);
 
 

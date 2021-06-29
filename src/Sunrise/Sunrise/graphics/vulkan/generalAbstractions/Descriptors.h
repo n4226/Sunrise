@@ -84,7 +84,7 @@ namespace sunrise::gfx {
 
 		VkDescriptorSetLayoutBinding vkItem{};
 
-		VkDescriptorBindingFlags* flags = nullptr;
+		VkDescriptorBindingFlags flags{};
 
 		/// <summary>
 		/// do not use

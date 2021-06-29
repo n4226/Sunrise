@@ -10,6 +10,7 @@ namespace sunrise::gfx {
     {
         // DescriptorSetLayout
 
+        // bindfings shoudl be ordered from least update frequency (binding 0) to most updated (
         // global uniforms - 
         // set = 0, binding = 0 -> viewProj
         // set = 0, binding = 1 -> modelMat - per opbject/instance

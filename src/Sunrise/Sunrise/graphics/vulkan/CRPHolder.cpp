@@ -8,6 +8,7 @@ namespace sunrise::gfx {
 	inline CRPHolder::CRPHolder(const ComposableRenderPass::CreateOptions& wholeOptions, const HolderOptions& spacificOptions, Renderer* renderer)
 		: renderer(renderer), frameOptions(wholeOptions), holderOptions(spacificOptions)
 	{
+		PROFILE_FUNCTION;
 		createPasses(wholeOptions, spacificOptions);
 		createWindowSpacificResources();
 	}
@@ -26,6 +27,8 @@ namespace sunrise::gfx {
 
 	void CRPHolder::createPasses(const sunrise::gfx::ComposableRenderPass::CreateOptions& wholeOptions, const sunrise::gfx::CRPHolder::HolderOptions& spacificOptions)
 	{
+		PROFILE_FUNCTION;
+
 		SR_ASSERT(wholeOptions.presentedAttachment >= 0);
 
 		/* tasks:
@@ -65,7 +68,7 @@ namespace sunrise::gfx {
 					continue;
 				}
 
-				auto attachOptions = wholeOptions.attatchments[attach];
+				auto AttachOptions = wholeOptions.attatchments[attach];
 
 				// if this attachment will be the swapImage mark it as so
 				if (attach == wholeOptions.presentedAttachment) {
@@ -79,44 +82,44 @@ namespace sunrise::gfx {
 
 					// if this attach was not in the last pass, declare the initial layout undefined
 					if (localIndex < 0) {
-						attachOptions.initialLayout = vk::ImageLayout::eUndefined;
+						AttachOptions.initialLayout = vk::ImageLayout::eUndefined;
 					}
 					else 
-						attachOptions.initialLayout = passOptions[passOptions.size() - 1].attatchments[localIndex].finalLayout;
+						AttachOptions.initialLayout = passOptions[passOptions.size() - 1].attatchments[localIndex].finalLayout;
 				}
 				// the start layout (the layout to transtion to at the beginnign of the renderpass) should be what the dependancy needs
 				// or the initial one specified if it is the first pass
 				if (i > 0) {
-					attachOptions.transitionalToAtStartLayout = spacificOptions.passStartLayout[i - 1][attach];
+					AttachOptions.transitionalToAtStartLayout = spacificOptions.passStartLayout[i - 1][attach];
 
 					auto attachOps = spacificOptions.attachmentOps[i - 1][attach];
 					auto stencilOps = spacificOptions.stencilOps[i - 1][attach];
 
-					attachOptions.loadOp = attachOps.first;
-					attachOptions.storeOp = attachOps.second;
-					attachOptions.stencilLoadOp = stencilOps.first;
-					attachOptions.stencilStoreOp = stencilOps.second;
+					AttachOptions.loadOp = attachOps.first;
+					AttachOptions.storeOp = attachOps.second;
+					AttachOptions.stencilLoadOp = stencilOps.first;
+					AttachOptions.stencilStoreOp = stencilOps.second;
 				}
 				else {
-					attachOptions.transitionalToAtStartLayout = wholeOptions.attatchments[attach].transitionalToAtStartLayout;
-					attachOptions.loadOp = wholeOptions.attatchments[attach].loadOp;
-					attachOptions.storeOp = wholeOptions.attatchments[attach].storeOp;
-					attachOptions.stencilLoadOp = wholeOptions.attatchments[attach].stencilLoadOp;
-					attachOptions.stencilStoreOp = wholeOptions.attatchments[attach].stencilStoreOp;
+					AttachOptions.transitionalToAtStartLayout = wholeOptions.attatchments[attach].transitionalToAtStartLayout;
+					AttachOptions.loadOp = wholeOptions.attatchments[attach].loadOp;
+					AttachOptions.storeOp = wholeOptions.attatchments[attach].storeOp;
+					AttachOptions.stencilLoadOp = wholeOptions.attatchments[attach].stencilLoadOp;
+					AttachOptions.stencilStoreOp = wholeOptions.attatchments[attach].stencilStoreOp;
 				}
 
 				if (i == spacificOptions.passes - 1) { // if the last pass
 																 // the final layout (the layout to transtion to at the end of the renderpass) should be the original final user defined layout
-					attachOptions.finalLayout = wholeOptions.attatchments[attach].finalLayout;
+					AttachOptions.finalLayout = wholeOptions.attatchments[attach].finalLayout;
 				}
 				else {
 					// the NOT final layout 
 					// (the layout to transtion to at the end of this renderpass but there is another render pass after) 
 					// should transition to the layout the next pass needs as dependancy as it can not heppen in the next pass
-					attachOptions.finalLayout = spacificOptions.passStartLayout[i][attach];
+					AttachOptions.finalLayout = spacificOptions.passStartLayout[i][attach];
 
 				}
-				thisPassOptions.attatchments.push_back(attachOptions);
+				thisPassOptions.attatchments.push_back(AttachOptions);
 				passAttachGlobalIndicies[passAttachGlobalIndicies.size() - 1].push_back(attach);
 				globalAttachPassIndicies[passAttachGlobalIndicies.size() - 1].push_back(thisPassOptions.attatchments.size() - 1);
 			}
@@ -163,12 +166,13 @@ namespace sunrise::gfx {
 		return image;
 	}
 
-	inline vk::Framebuffer CRPHolder::getFrameBuffer(size_t pass, Window* window, size_t surfaceIndex) {
-		return frameBuffers[pass][window][surfaceIndex];
+	inline vk::Framebuffer CRPHolder::getFrameBuffer(size_t pass,const Window* window, size_t surfaceIndex) const {
+		return frameBuffers[pass].find(window)->second[surfaceIndex];
 	}
 
 	void CRPHolder::createWindowSpacificResources()
 	{
+		PROFILE_FUNCTION;
 		//TODO only works for one renderer/gpu
 
 		// for each unowned window create instances of all attatchments exept the one which will be presented as that is created by the swapchain
@@ -185,6 +189,7 @@ namespace sunrise::gfx {
 
 	void CRPHolder::createWindowImagesAndFrameBuffer(Window* window)
 	{
+		PROFILE_FUNCTION;
 
 		//TODO: ut oh ??? do you need a copy of each image per swapchain image ? - i think so
 		// create framebuffer images
@@ -223,7 +228,7 @@ namespace sunrise::gfx {
 #if SR_VK_OBJECT_NAMES
 				const char* name = vatt.name.append("_%d", window->globalIndex).c_str();
 
-				renderer->debugObject.nameObject(renderer->device, reinterpret_cast<size_t>(attatchImage->vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
+				renderer->debugObject.nameObject(reinterpret_cast<size_t>(attatchImage->vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
 #endif
 				//if no array object for this window than make an empty one
 				if (images.find(window) == images.end()) {
@@ -279,8 +284,8 @@ namespace sunrise::gfx {
 #if SR_VK_OBJECT_NAMES
 							// if pass that will be presented
 							if (pass == passOptions.size() - 1) {
-								const char* name = frameOptions.attatchments[gloablAttachIndex].name.append("_%d", window->globalIndex).append("_%d", swapImage).c_str();
-								renderer->debugObject.nameObject(renderer->device, reinterpret_cast<size_t>(VkImageView(imageView)), imageView.debugReportObjectType, name);
+								const char* name = frameOptions.attatchments[gloablAttachIndex].name.append("_%D", window->globalIndex).append("_%D", swapImage).c_str();
+								renderer->debugObject.nameObject(reinterpret_cast<size_t>(VkImageView(imageView)), imageView.debugReportObjectType, name);
 							}
 #endif
 

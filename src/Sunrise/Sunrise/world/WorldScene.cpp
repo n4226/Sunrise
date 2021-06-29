@@ -1,33 +1,34 @@
 #include "srpch.h"
 #include "WorldScene.h"
-#include "CameraSystem.h"
-#include "FloatingOriginSystem.h"
+#include "systems/CameraSystem.h"
+#include "systems/FloatingOriginSystem.h"
 #include "../core/Application.h"
 #include "../graphics/vulkan/renderer/MaterialManager.h"
+#include "rendering/WorldSceneRenderCoordinator.h"
 
 namespace sunrise {
 
 
-	/*WorldScene::WorldScene(Application& app) 
-		:app(app)
+	WorldScene::WorldScene(Application* app) 
+		: Scene(app)
 	{
 		PROFILE_FUNCTION;
 
-	}*/
+		coordinator = new WorldSceneRenderCoordinator(this);
+	}
 
 	WorldScene::~WorldScene()
 	{
 		PROFILE_FUNCTION;
 
-
+		delete coordinator;
 	}
 
 	void WorldScene::load()
 	{
 		PROFILE_FUNCTION;
 
-		for (auto ren : app.renderers)
-			ren->materialManager->loadStaticEarth();
+
 
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
 		//renderer->world = this;
@@ -35,8 +36,7 @@ namespace sunrise {
 		terrainSystem->trackedTransform = &playerTrans;
 		terrainSystem->world = this;
 
-		for (auto render : app.renderers)
-			render->terrainSystem = terrainSystem;
+		dynamic_cast<WorldSceneRenderCoordinator*>(coordinator)->createUniforms();
 
 		/// <summary>
 		/// importantthat the camera systemis befoer floating origin so that floating origin snaps before first frame
@@ -51,6 +51,12 @@ namespace sunrise {
 		timef = 0;
 
 		generalSystems[0]->update();
+	}
+
+	void WorldScene::lateLoad()
+	{
+		for (auto ren : app.renderers)
+			ren->materialManager->loadStaticEarth();
 	}
 
 
@@ -80,6 +86,7 @@ namespace sunrise {
 
 		terrainSystem->update();
 
+		//TODO: move this to camera sys or another one?
 		for (size_t i = 0; i < app.windows.size(); i++)
 		{
 			auto& window = app.windows[i];

@@ -96,9 +96,9 @@
       <ImportLibrary>..\bin\Debug-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
-IF EXIST $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
-IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)</Command>
+      <Command>echo on
+xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -126,9 +126,9 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
       <ImportLibrary>..\bin\Release-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
-IF EXIST $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
-IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)</Command>
+      <Command>echo on
+xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -156,9 +156,9 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
       <ImportLibrary>..\bin\Dist-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.dLL $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
-IF EXIST $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb\ (xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise\Sunrise.pdb $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)
-IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll\ (xcopy /Q /E /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul) ELSE (xcopy /Q /Y /I $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystemXplanePlugin &gt; nul)</Command>
+      <Command>echo on
+xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -194,6 +194,7 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\ImguiRenderPassManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\RenderContext.h" />
@@ -212,6 +213,7 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\ComputePipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\GraphicsPipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\DeferredPassPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\GPUStages\DeferredPipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.h" />
@@ -239,12 +241,15 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
     <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Scene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\world\CameraSystem.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\rendering\WorldSceneRenderCoordinator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\rendering\terrain\TerrainGPUStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\simlink\SimlinkMessages.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\systems\CameraSystem.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\systems\FloatingOriginSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h" />
@@ -274,6 +279,7 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ImguiRenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.cpp" />
@@ -293,6 +299,7 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\ComputePipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\GraphicsPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\DeferredPassPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\GPUStages\DeferredPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.cpp" />
@@ -319,12 +326,15 @@ IF EXIST $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.
     <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Scene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\world\CameraSystem.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\world\FloatingOriginSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\rendering\WorldSceneRenderCoordinator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\rendering\terrain\TerrainGPUStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\simlink\SimlinkMessages.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\systems\CameraSystem.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\systems\FloatingOriginSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.cpp" />

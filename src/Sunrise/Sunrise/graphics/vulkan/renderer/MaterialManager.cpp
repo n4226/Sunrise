@@ -4,7 +4,8 @@
 #include "../../../core/Application.h"
 #include "../resources/uniforms.h"
 #include "../../../world/materials/StaticMaterialTable.h"
-
+#include "Sunrise/Sunrise/scene/Scene.h"
+#include "Sunrise/Sunrise/world/rendering/terrain/TerrainGPUStage.h"
 
 namespace sunrise {
 
@@ -40,7 +41,7 @@ namespace sunrise {
 		//todo:add this back for mip gen
 		renderer.resouceTransferer->newTask(pendingTasks, []() {
 
-			}, true);
+		}, true);
 		pendingTasks.clear();
 
 
@@ -88,8 +89,18 @@ namespace sunrise {
 
 		renderer.globalMaterialUniformBufferStaging->tempMapAndWrite(&matInfor, index, sizeof(matInfor));
 
-		//TODO: Transfer
 
+		//todo: batch to be more efficent
+		ResourceTransferer::BufferTransferTask transferTask;
+
+		transferTask.srcBuffer = renderer.globalMaterialUniformBufferStaging->vkItem;
+		transferTask.dstBuffer = renderer.globalMaterialUniformBuffer->vkItem;
+		transferTask.regions = { { index, index, sizeof(matInfor) } };
+
+		ResourceTransferer::Task task = { ResourceTransferer::TaskType::bufferTransfers };
+		task.bufferTransferTask = transferTask;
+
+		pendingGFXTasks.push_back(task);
 	}
 
 	void MaterialManager::addCopyToTasks(Buffer* buffer, Image* image)
@@ -188,9 +199,10 @@ namespace sunrise {
 
 		auto image = new Image(renderer.device, renderer.allocator, imageSize, imageOptions, vk::ImageAspectFlagBits::eColor);
 
+		//image->name("matImage", renderer.debugObject);
+		//renderer.debugObject.nameObject(renderer.device, reinterpret_cast<size_t>(image->vkItem), vk::DebugReportObjectTypeEXT::eImage, "matImage");
 
 		return { buff, image };
-
 
 
 	}
@@ -240,12 +252,15 @@ namespace sunrise {
 		imageInfo.imageView = image->view;
 		imageInfo.sampler = samplers[imageIndex]->vkItem;
 
+		// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
+		auto tstage = renderer.app.loadedScenes[0]->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
 
 		for (size_t window = 0; window < renderer.windows.size(); window++) {
 			for (size_t i = 0; i < renderer.app.maxSwapChainImages; i++) {
 				VkWriteDescriptorSet descriptorWrite{};
 				descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-				descriptorWrite.dstSet = renderer.descriptorSets[window][i];
+				// todo find much better system
+				descriptorWrite.dstSet = tstage->descriptorSets.find(renderer.windows[window])->second[i]->vkItem;
 				descriptorWrite.dstBinding = 3;
 				descriptorWrite.dstArrayElement = imageIndex;
 

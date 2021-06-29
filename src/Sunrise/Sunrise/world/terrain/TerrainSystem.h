@@ -7,7 +7,7 @@
 #include "TerrainMeshLoader.h"
 #include "../../scene/Transform.h"
 #include "../../graphics/vulkan/generalAbstractions/VkAbstractions.h"
-
+#include "../rendering/terrain/TerrainGPUStage.h"
 
 namespace sunrise {
 
@@ -18,17 +18,30 @@ namespace sunrise {
 		class Renderer;
 	}
 
-	class TerrainSystem : public RenderSystem
+
+	/// <summary>
+	/// in charge of managing terrain tree and dispatching chunk loading jobs
+	/// render encoding is done by gpustage
+	/// </summary>
+	class TerrainSystem : public System
 	{
 	public:
 
+#pragma region base Methods
 		TerrainSystem(Application& app, WorldScene& scene, glm::dvec3* origin);
 		~TerrainSystem();
 
 		void CreateRenderResources();
 
+		// todo remove this function as moving to GPU-stage system
+		vk::CommandBuffer* renderSystem(uint32_t subpass, Window& window);
+		
 		void update() override;
-		vk::CommandBuffer* renderSystem(uint32_t subpass, Window& window) override;
+		void invalidateDescriptors();
+
+		double getRadius();
+
+#pragma endregion
 
 		Transform* trackedTransform = nullptr;
 		glm::dvec3* origin = nullptr;
@@ -38,21 +51,24 @@ namespace sunrise {
 
 		//Renderer* renderer;
 
+		// max lod levels for 
 		const uint16_t lodLevels = 13;
-
-		double getRadius();
-
-		void invalidateDescriptors();
 
 	private:
 
-		// temp resources
+		friend TerrainGPUStage;
 
-		std::set<TerrainQuadTreeNode*> toSplit = {};
-		std::set<TerrainQuadTreeNode*> toCombine = {};
-		std::set<TerrainQuadTreeNode*> toDestroyDraw = {};
-		std::set<TerrainQuadTreeNode*> toDrawDraw = {};
+#pragma region Resources
 
+		// render Resources
+
+	/*	/// <summary>
+		/// one for each drawable
+		/// </summary>
+		std::vector<std::vector<vk::CommandPool  >> cmdBufferPools;
+		std::vector<std::vector<vk::CommandBuffer>> commandBuffers;*/
+
+		libguarded::shared_guarded<std::map<TerrainQuadTreeNode*, TreeNodeDrawData>> drawObjects;
 		libguarded::shared_guarded<std::unordered_map<TerrainQuadTreeNode*, TreeNodeDrawResaourceToCoppy>> loadedMeshesToDraw = {};
 
 		bool destroyAwaitingNodes = false;
@@ -64,41 +80,46 @@ namespace sunrise {
 #endif
 		libguarded::shared_guarded<std::map<TerrainQuadTreeNode*, TreeNodeDrawData>> pendingDrawObjects;
 
-		TerrainQuadTree tree;
+		//async resources
+		marl::Ticket::Queue ticketQueue;
 
-		TerrainMeshLoader meshLoader;
+		// temp resources
+		std::set<TerrainQuadTreeNode*> toSplit = {};
+		std::set<TerrainQuadTreeNode*> toCombine = {};
+		std::set<TerrainQuadTreeNode*> toDestroyDraw = {};
+		std::set<TerrainQuadTreeNode*> toDrawDraw = {};
+
+#pragma endregion
+
+#pragma region Tree Traversal and Updating Methods
 
 		void processTree();
-
-
+		
 		double threshold(const TerrainQuadTreeNode* node);
 
 		bool determinActive(const TerrainQuadTreeNode* node);
 
 		void setActiveState(TerrainQuadTreeNode* node);
-
-		//updating descriptors
+		
+#pragma endregion
 
 		void writePendingDrawOobjects(gfx::Renderer& renderer);
 
-		//async resources
-		marl::Ticket::Queue ticketQueue;
+		TerrainQuadTree tree;
+		TerrainMeshLoader meshLoader;
 
-		// Render Resources
-
-		/// <summary>
-		/// one for each drawable
-		/// </summary>
-		std::vector<std::vector<vk::CommandPool  >> cmdBufferPools;
-		std::vector<std::vector<vk::CommandBuffer>> commandBuffers;
-
-		/*vk::DescriptorPool descriptorPool;
-		std::vector<VkDescriptorSet> descriptorSets;*/
-
-		libguarded::plain_guarded<std::map<TerrainQuadTreeNode*, TreeNodeDrawData>> drawObjects;
 
 		friend FloatingOriginSystem;
 		friend TerrainMeshLoader;
+		friend TerrainGPUStage;
+
+		/// <summary>
+		/// callled in main rander loop so any non trivial actions should be cojmpleted on a worker thread
+		/// </summary>
+		/// <param name="window"></param>
+		/// <param name="surface"></param>
+		void resourcesReleased(Window* window, size_t surface);
+
 	};
 
 }

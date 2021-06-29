@@ -11,6 +11,8 @@
 
 #include "../../graphics/vulkan/renderPipelines/concrete/gpuDriven/GPUGenCommandsPipeline.h"
 
+#include "../WorldScene.h"
+
 #include <marl/defer.h>
 
 namespace sunrise {
@@ -30,7 +32,7 @@ namespace sunrise {
 
 		CreateRenderResources();
 
-
+		// initial setup of the base 8 chunks
 		for (TerrainQuadTreeNode* child : tree.leafNodes) {
 			meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
 		}
@@ -40,9 +42,9 @@ namespace sunrise {
 
 	TerrainSystem::~TerrainSystem()
 	{
-		for (auto pool : cmdBufferPools)
+	/*	for (auto pool : cmdBufferPools)
 			for (auto spool : pool)
-				app.renderers[0]->device.destroyCommandPool(spool);
+				app.renderers[0]->device.destroyCommandPool(spool);*/
 	}
 
 	void TerrainSystem::CreateRenderResources()
@@ -51,26 +53,26 @@ namespace sunrise {
 
 		SR_CORE_TRACE("Creating Terrain System resources");
 
-
-		cmdBufferPools.resize(app.renderers[0]->windows.size());
-		commandBuffers.resize(app.renderers[0]->windows.size());
-
-		for (size_t i = 0; i < app.renderers[0]->windows.size(); i++)
-			vkHelpers::createPoolsAndCommandBufffers
-			(app.renderers[0]->device, cmdBufferPools[i], commandBuffers[i], app.maxSwapChainImages, app.renderers[0]->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
-
-#if RenderMode == RenderModeCPU2
-
-		cmdBuffsUpToDate.resize(app.renderers[0]->windows.size());
-
-		for (size_t i = 0; i < cmdBuffsUpToDate.size(); i++) {
-
-			cmdBuffsUpToDate[i].resize(app.maxSwapChainImages);
-
-			for (auto& sval : cmdBuffsUpToDate[i])
-				sval = true;
-		}
-#endif
+//
+//		cmdBufferPools.resize(app.renderers[0]->windows.size());
+//		commandBuffers.resize(app.renderers[0]->windows.size());
+//
+//		for (size_t i = 0; i < app.renderers[0]->windows.size(); i++)
+//			vkHelpers::createPoolsAndCommandBufffers
+//			(app.renderers[0]->device, cmdBufferPools[i], commandBuffers[i], app.maxSwapChainImages, app.renderers[0]->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
+//
+//#if RenderMode == RenderModeCPU2
+//
+//		cmdBuffsUpToDate.resize(app.renderers[0]->windows.size());
+//
+//		for (size_t i = 0; i < cmdBuffsUpToDate.size(); i++) {
+//
+//			cmdBuffsUpToDate[i].resize(app.maxSwapChainImages);
+//
+//			for (auto& sval : cmdBuffsUpToDate[i])
+//				sval = true;
+//		}
+//#endif
 	}
 
 	void TerrainSystem::update()
@@ -80,126 +82,7 @@ namespace sunrise {
 		processTree();
 	}
 
-	vk::CommandBuffer* TerrainSystem::renderSystem(uint32_t subpass, Window& window)
-	{
-		PROFILE_FUNCTION;
 
-		uint32_t bufferIndex = window.currentSurfaceIndex;
-
-		auto renderer = app.renderers[0];
-
-		//TODO for cpu2 reencode commands in a sppereate thread to stop hitching
-		// if CPU mode 2 than only re encode commands for this surface's command buffer when changes occor otherwise just return the cmd buff for hte current surface
-#if RenderMode == RenderModeCPU2
-		{
-			//TODO: posibly make this a try lock to improve performance
-			auto cmdsValid = drawCommandsValid.lock();
-
-			if (*cmdsValid == false) {
-				for (size_t i = 0; i < cmdBuffsUpToDate.size(); i++) {
-					for (auto& sval : cmdBuffsUpToDate[i])
-						sval = false;
-				}
-				*cmdsValid = true;
-			}
-			if (cmdBuffsUpToDate[window.indexInRenderer][bufferIndex] == true)
-				return &commandBuffers[window.indexInRenderer][bufferIndex];
-			else
-				cmdBuffsUpToDate[window.indexInRenderer][bufferIndex] = true;
-		}
-
-#endif
-
-		renderer->device.resetCommandPool(cmdBufferPools[window.indexInRenderer][bufferIndex], {});
-
-		vk::CommandBuffer* buffer = &commandBuffers[window.indexInRenderer][bufferIndex];
-
-
-		vk::CommandBufferInheritanceInfo inheritanceInfo{};
-		inheritanceInfo.renderPass = window.renderPassManager->renderPass;
-		inheritanceInfo.subpass = subpass;
-		inheritanceInfo.framebuffer = window.swapChainFramebuffers[bufferIndex];
-
-		vk::CommandBufferBeginInfo beginInfo{};
-		beginInfo.flags = vk::CommandBufferUsageFlagBits::eRenderPassContinue; // Optional
-		beginInfo.pInheritanceInfo = &inheritanceInfo; // Optional
-
-		buffer->begin(beginInfo);
-
-		buffer->bindPipeline(vk::PipelineBindPoint::eGraphics, window.pipelineCreator->vkItem);
-
-		// setup descriptor and buffer bindings
-
-		buffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, window.pipelineCreator->pipelineLayout, 0, { renderer->descriptorSets[window.indexInRenderer][window.currentSurfaceIndex] }, {});
-
-		//// temp using cpu buffs  FIX THIS SOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
-		//renderer->globalMeshStagingBuffer->bindVerticiesIntoCommandBuffer(*buffer, 0);
-		//renderer->globalMeshBuffer->bindIndiciesIntoCommandBuffer(*buffer);
-
-		renderer->globalMeshBuffer->bindVerticiesIntoCommandBuffer(*buffer, 0);
-		renderer->globalMeshBuffer->bindIndiciesIntoCommandBuffer(*buffer);
-		
-
-#if RenderMode == RenderModeGPU
-#pragma region GPU Driven Encoding
-		//TODO: for now gpu driven pipe only works with one monitor across one gpu
-		// execute compute pass to genrerate commands 
-
-
-		// optinally olptimise commands 
-
-		auto optimized = VK_FALSE;
-
-
-
-		// execute those commands
-
-		//buffer->executeGeneratedCommandsNV(optimized, );
-		size_t drawCount;
-		{ //TODO: find a way to do this without locking to allow for multi
-			auto drawObjects = this->drawObjects.lock();
-			drawCount = drawObjects->size();
-		}
-		window.gpuGenPipe->exicuteIndirectCommands(*buffer, drawCount,renderer->globalMeshBuffer);
-
-#pragma endregion
-#else
-#pragma region CPU Driven Encoding
-
-		// encode draws
-		{
-			PROFILE_SCOPE("encode draws");
-			auto drawObjects = this->drawObjects.lock();
-			//printf("number of draws = %d \n", drawObjects->size());
-			for (auto it = drawObjects->begin(); it != drawObjects->end(); it++)
-			{
-
-				// frustrom cull
-#if RenderMode == RenderModeCPU1
-				if (!renderer->camFrustroms[window.indexInRenderer].IsBoxVisible(it->second.aabbMin, it->second.aabbMax)) {
-					continue;
-				}
-#endif
-
-				auto modelUnSize = sizeof(glm::uint32);
-				//buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, modelUnSize, &it->second.drawDatas[0]);
-				for (size_t i = 0; i < it->second.indexCounts.size(); i++)
-				{
-					auto indexCount = it->second.indexCounts[i];
-					auto indexOffset = it->second.indIndicies[i];
-					//buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eFragment, modelUnSize, sizeof(DrawPushData) - modelUnSize, reinterpret_cast<char*>(&(it->second.drawDatas[i])) + modelUnSize);
-
-					buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(DrawPushData), &it->second.drawDatas[i]);
-					buffer->drawIndexed(indexCount, 1, indexOffset, it->second.vertIndex, 0);
-				}
-			}
-		}
-#pragma endregion
-#endif
-		buffer->end();
-
-		return buffer;
-	}
 
 	double TerrainSystem::getRadius()
 	{
@@ -208,12 +91,13 @@ namespace sunrise {
 
 	void TerrainSystem::invalidateDescriptors()
 	{
-#if RenderMode == RenderModeCPU2
-		{
-			auto cmdsValid = drawCommandsValid.lock();
-			*cmdsValid = false;
-		}
-#endif
+		SR_CORE_CRITICAL("{} not updatedf for gpu passes ",__FUNCSIG__);
+//#if RenderMode == RenderModeCPU2
+//		{
+//			auto cmdsValid = drawCommandsValid.lock();
+//			*cmdsValid = false;
+//		}
+//#endif
 	}
 
 	void TerrainSystem::processTree()
@@ -221,7 +105,9 @@ namespace sunrise {
 		PROFILE_FUNCTION
 
 		{
-			// his is temporary to prevent multiple sets of staging buffer coppies to rech deadlock currently
+			// this is temporary to prevent multiple sets of staging buffer coppies to rech deadlock currently
+
+			// for now tree updating is coursly syn cronized so wonce the tree begins updating all other updates are frozen / forbiden until all new chunks are loaded from disk - might need improvment for streaming
 			auto shouldRunLoop = safeToModifyChunks.try_lock_shared();
 			if (shouldRunLoop == nullptr || (*shouldRunLoop) == false) return;
 		}
@@ -304,54 +190,70 @@ namespace sunrise {
 
 			//auto ticket = ticketQueue.take();
 
-			//TODO - thread this again in marl task this is jsut for testing
 			marl::schedule([this]() {
-				PROFILE_SCOPE("create draw draw job")
+				PROFILE_SCOPE("create draw draw job");
 					//MarlSafeTicketLock lock(ticket);
 
-					marl::WaitGroup preLoadingWaitGroup(toDrawDraw.size());
+				marl::WaitGroup preLoadingWaitGroup(toDrawDraw.size());
 
 				for (TerrainQuadTreeNode* chunk : toDrawDraw) {
 					marl::schedule([this, chunk, preLoadingWaitGroup]() {
 						defer(preLoadingWaitGroup.done());
 						meshLoader.loadMeshPreDrawChunk(chunk, true);
-						});
+					});
 				}
 
 				preLoadingWaitGroup.wait();
 
+				// actually modify render structures
 				for (TerrainQuadTreeNode* chunk : toDrawDraw) {
 					meshLoader.drawChunk(chunk, {}, false);
 				}
 
-				//TODO - fix
+				//write staging buffer updates to gpu buffs
 				writePendingDrawOobjects(*app.renderers[0]);
 
-				for (TerrainQuadTreeNode* chunk : toDestroyDraw) {
-					meshLoader.removeDrawChunk(chunk);
-				}
 
-				for (TerrainQuadTreeNode* chunk : toCombine) {
-					chunk->combine();
-				}
-
-				toCombine.clear();
-				toDestroyDraw.clear();
 				toDrawDraw.clear();
 
+				// re encode draws
+				// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
+				auto tstage = world->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
+				
+				// todo make this more robust
+				for (auto win : app.renderers[0]->windows) {
+					for (size_t surface = 0; surface < win->swapChainImages.size(); surface++)
+					{
+						tstage->reEncodeBuffer(*win, surface);
+					}
+				}
 
+				{ // swaping active command buffers
+					auto activeHandler = tstage->activeBuffer.lock(); 
+					*activeHandler = (*activeHandler + 1) % TerrainGPUStage::setsOfCMDBuffers;
+				}
+
+				//todo: wait and then calculate when to delete old chunks that should be see below
+				{ //todo fix - don't know that these chunks are still not being used by a drawable
+					for (TerrainQuadTreeNode* chunk : toDestroyDraw) {
+						meshLoader.removeDrawChunk(chunk);
+					}
+
+					for (TerrainQuadTreeNode* chunk : toCombine) {
+						chunk->combine();
+					}
+
+					toCombine.clear();
+					toDestroyDraw.clear();
+				}
+
+				// TODO The tree can posibly be marked as safe to modify before rencoding draw calls
 				{
 					auto shouldRunLoop = safeToModifyChunks.lock();
 					*shouldRunLoop = true;
 					destroyAwaitingNodes = true;
 				}
-#if RenderMode == RenderModeCPU2
-				{
-					auto cmdsValid = drawCommandsValid.lock();
-					*cmdsValid = false;
-				}
-#endif
-				});
+			});
 
 		}
 		else {
@@ -459,7 +361,7 @@ namespace sunrise {
 					//std::this_thread::sleep_for(1s);
 				}
 			}
-			}, false,false);
+			}, true,false);
 
 	}
 

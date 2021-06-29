@@ -81,7 +81,7 @@ namespace sunrise::gfx {
 
 		void gpuCopyToOther(Buffer& destination, vk::CommandBuffer& buffer);
 
-
+		void name(const char* name,const VkDebug& debugObject) const;
 
 	private:
 		bool memoryMapped = false;

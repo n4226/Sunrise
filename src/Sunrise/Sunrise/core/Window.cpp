@@ -63,13 +63,13 @@ namespace sunrise {
         }
 
         // temporary for splititng between legacy world system and neo CRP (composable rener pass) system
-        WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
+        //WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
 
 
         // make graphics pipeline
 
 
-        if (world != nullptr)
+     /*   if (world != nullptr)
         {
             createFrameBufferImages();
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
@@ -80,44 +80,45 @@ namespace sunrise {
 
             renderPassManager->createMainRenderPass();
         }
+        */
         
-        
 
-        if (world != nullptr) {
-            pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
-
-            pipelineCreator->createPipeline();
-
-            //TODO: find better way to abstract use of multiple windows with different shaders 
-        
-            // create deferred pipeline
-
-            deferredPass = new DeferredPass(device, { swapchainExtent }, *renderPassManager);
-
-            deferredPass->createPipeline();
-
-            gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
-
-            worldLoadedPipes.push_back(pipelineCreator);
-            worldLoadedPipes.push_back(deferredPass);
-
-            createFramebuffers();
-        }
+//        if (world != nullptr) {
+//            pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
+//
+//            pipelineCreator->createPipeline();
+//
+//            //TODO: find better way to abstract use of multiple windows with different shaders 
+//        
+//            // create deferred pipeline
+//
+//            deferredPass = new DeferredPass(device, { swapchainExtent }, *renderPassManager);
+//
+//            deferredPass->createPipeline();
+//
+//#if RenderMode == RenderModeGPU
+//            gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
+//#endif
+//            worldLoadedPipes.push_back(pipelineCreator);
+//            worldLoadedPipes.push_back(deferredPass);
+//
+//            createFramebuffers();
+//        }
 
         createSemaphores();
 
-        if (!_virtual && world != nullptr)
-            SetupImgui();
-        else if (world != nullptr) {
-            // give pointers of grphics pipelines and renderpass to subwindows
-            for (size_t i = 0; i < subWindows.size(); i++)
-            {
-                subWindows[i]->pipelineCreator = pipelineCreator;
-                subWindows[i]->renderPassManager = renderPassManager;
-                subWindows[i]->deferredPass = deferredPass;
-                subWindows[i]->gpuGenPipe = gpuGenPipe;
-            }
-        }
+        //if (!_virtual && world != nullptr)
+        //    SetupImgui();
+        //else if (world != nullptr) {
+        //    // give pointers of grphics pipelines and renderpass to subwindows
+        //    for (size_t i = 0; i < subWindows.size(); i++)
+        //    {
+        //        subWindows[i]->pipelineCreator = pipelineCreator;
+        //        subWindows[i]->renderPassManager = renderPassManager;
+        //        subWindows[i]->deferredPass = deferredPass;
+        //        subWindows[i]->gpuGenPipe = gpuGenPipe;
+        //    }
+        //}
 
     }
 
@@ -190,13 +191,14 @@ namespace sunrise {
 
     void Window::recreateSwapchain()
     {
+        throw std::runtime_error(
+            "Resizing windows hasbeen disabled to re enable, will need to make it work with multi window / MVR / multi gpu and CRP and scene coordinator");
         int width = 0, height = 0;
         glfwGetFramebufferSize(window, &width, &height);
         while (width == 0 || height == 0) {
             glfwGetFramebufferSize(window, &width, &height);
             glfwWaitEvents();
         }
-
 
         device.waitIdle();
 
@@ -207,8 +209,8 @@ namespace sunrise {
         createSwapchain();
         createSwapchainImageViews();
 
-        WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
-        if (world != nullptr) {
+        //WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
+       /* if (world != nullptr) {
             renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
 
             if (_virtual) {
@@ -218,9 +220,9 @@ namespace sunrise {
 
             renderPassManager->createMainRenderPass();
 
-        }
+        }*/
         
-      
+  /*    
         if (world != nullptr) {
             pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
 
@@ -230,7 +232,7 @@ namespace sunrise {
 
             deferredPass->createPipeline();
             gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
-        }
+        }*/
 
         createFrameBufferImages();
         createFramebuffers();
@@ -259,6 +261,8 @@ namespace sunrise {
         VkExtent2D extent = GPUSelector::chooseSwapExtent(swapChainSupport.capabilities, window);
 
         uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
+
+        SR_CORE_TRACE("createing window swapchain with {} images.", imageCount);
 
         if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
             imageCount = swapChainSupport.capabilities.maxImageCount;
@@ -521,7 +525,7 @@ namespace sunrise {
 
     void Window::makeWindwWithMode(ConfigSystem::Config::Window& winConfig, GLFWmonitor* monitor)
     {
-        auto windowName = "name";
+        auto windowName = app.getName();
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
         // see this for why this is turned off https://github.com/glfw/glfw/issues/447
@@ -674,9 +678,13 @@ namespace sunrise {
 
     bool Window::getDrawable()
     {
-        PROFILE_FUNCTION
+        PROFILE_FUNCTION;
 
+        // this is to wait for inflight frame to finish
+        // if cpu gets to far ahead, will wait here until an inflight frame finishes
         vkWaitForFences(device, 1, &inFlightFences[app.currentFrame], VK_TRUE, UINT64_MAX);
+
+        renderer->frameReleased(app.currentFrame);
 
         auto index = device.acquireNextImageKHR(swapChain, UINT64_MAX, imageAvailableSemaphores[app.currentFrame], nullptr);
         //cout << "current index = " << index.value << endl;
@@ -695,7 +703,10 @@ namespace sunrise {
         // Check if a previous frame is using this image (i.e. there is its fence to wait on)
         // wait when the current image is being used by a frame that is still inflight
         if (imagesInFlight[currentSurfaceIndex] != VK_NULL_HANDLE) {
+            //todo consider using get fence and doing other work on this thread instead of waiting
             vkWaitForFences(device, 1, &imagesInFlight[currentSurfaceIndex], VK_TRUE, UINT64_MAX);
+
+            renderer->drawableReleased(this, currentSurfaceIndex);
         }
 
         // Mark the image as now being in use by this frame
@@ -706,10 +717,10 @@ namespace sunrise {
 
     void Window::presentDrawable()
     {
-        PROFILE_FUNCTION
-            // present frame on screen
+        PROFILE_FUNCTION;
+        // present frame on screen
 
-            vk::PresentInfoKHR presentInfo{};
+        vk::PresentInfoKHR presentInfo{};
 
         std::vector<vk::Semaphore> signalSemaphores = { renderFinishedSemaphores[app.currentFrame] };
 

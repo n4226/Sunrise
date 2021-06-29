@@ -75,10 +75,9 @@ namespace sunrise {
             //TODO: dismantle all this 
             context = new asio::io_context(1);
 
-            contextWork = new asio::any_io_executor(asio::require(context->get_executor(),
-                    asio::execution::outstanding_work.tracked));
-
             if (config.enableAsioContextThread) {
+                contextWork = new asio::any_io_executor(asio::require(context->get_executor(),
+                        asio::execution::outstanding_work.tracked));
                 contextThread = new std::thread([this] {
                     context->run();
                 });
@@ -328,10 +327,12 @@ namespace sunrise {
 
         if (context) {
             if (contextThread) {
+                PROFILE_SCOPE("Asio Context Job");
                 forceStopASIOContext();
                 delete contextThread;
             }
-            delete context;
+            //TODO THIS never returns for some reason
+            //delete context;
         }
 
         if (!config.wantsWindows || !config.vulkan) return;
@@ -362,6 +363,7 @@ namespace sunrise {
 
         scene->coordinator->buildGraph();
 
+        scene->lateLoad();
 
 	}
 

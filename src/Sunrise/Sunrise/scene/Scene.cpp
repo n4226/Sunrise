@@ -11,8 +11,8 @@ namespace sunrise {
 		coordinator = new gfx::SceneRenderCoordinator(this);
 	}
 
-	Scene::Scene(Application* app, gfx::SceneRenderCoordinator* coordinator)
-		: app(*app), coordinator(coordinator)
+	Scene::Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool sceneControlsCoordLifecycle)
+		: app(*app), coordinator(coordinator), inControlOfCoordinatorLifecycle(sceneControlsCoordLifecycle)
 	{
 
 	}

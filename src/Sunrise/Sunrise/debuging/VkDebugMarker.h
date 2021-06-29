@@ -15,12 +15,12 @@ namespace sunrise {
 			VkDebug(vk::Device device, Application* app);
 
 			// debug report api
-			void nameObject(vk::Device device, size_t handle, vk::DebugReportObjectTypeEXT objectType, const char* name);
+			void nameObject(size_t handle, vk::DebugReportObjectTypeEXT objectType, const char* name) const;
 			//static void tagObject(size_t handle, char* name);
 
-			void insertMarker(vk::CommandBuffer cmdBuff, const char* name, glm::vec4 color);
-			void beginRegion(vk::CommandBuffer cmdBuff, const char* name, glm::vec4 color);
-			void endRegion(vk::CommandBuffer cmdBuff);
+			void insertMarker(vk::CommandBuffer cmdBuff, const char* name, glm::vec4 color) const;
+			void beginRegion(vk::CommandBuffer cmdBuff, const char* name, glm::vec4 color) const;
+			void endRegion(vk::CommandBuffer cmdBuff) const;
 			bool debugActive;
 			// end debug report api
 
@@ -43,6 +43,8 @@ namespace sunrise {
 				void* pUserData);
 
 			void VkDebug::onCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize);
+
+			vk::Device device;
 		};
 
 	}

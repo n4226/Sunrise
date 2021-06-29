@@ -17,9 +17,24 @@ namespace sunrise {
 
 		class ResourceTransferer;
 
-		class SUNRISE_API Renderer
+		class SUNRISE_API RenderResourceTracker {
+		public:
+			/// <summary>
+			/// callled in main rander loop so any non trivial actions should be cojmpleted on a worker thread
+			/// </summary>
+			/// <param name="window"></param>
+			/// <param name="surface"></param>
+			virtual void drawableReleased(Window* window, size_t surface) {}
+
+			virtual void frameReleased(size_t appFrame) {}
+
+		};
+
+		class SUNRISE_API Renderer: private RenderResourceTracker
 		{
 		public:
+
+#pragma region Main API
 
 			Renderer(Application& app, vk::Device device, vk::PhysicalDevice physicalDevice,
 				VmaAllocator allocator, std::vector<Window*> windows, GPUQueues& deviceQueues, QueueFamilyIndices& queueFamilyIndices, VkDebug debugObject);
@@ -29,18 +44,21 @@ namespace sunrise {
 			void beforeRenderScene();
 			void renderFrame(Window& window);
 
-			// systems
-			TerrainSystem* terrainSystem = nullptr;
+			void windowSizeChanged(size_t allWindowIndex);
 
-			MaterialManager* materialManager = nullptr;
+#pragma endregion
 
-			// handles
+#pragma region handles
+
 			vk::Device device;
 			vk::PhysicalDevice physicalDevice;
 			VmaAllocator allocator;
 			GPUQueues& deviceQueues;
 			QueueFamilyIndices& queueFamilyIndices;
 
+			/// <summary>
+			/// ?? look into exact specs of this array
+			/// </summary>
 			std::vector<Window*> windows;
 			/// <summary>
 			/// includes _owned windows
@@ -54,113 +72,111 @@ namespace sunrise {
 			/// </summary>
 			std::vector<Window*> physicalWindows;
 
+			MaterialManager* materialManager = nullptr;
 
+			VkDebug debugObject;
 
+			ResourceTransferer* resouceTransferer;
 
-			std::vector<std::vector<Buffer*>> uniformBuffers;
+#pragma endregion
 
-			// dindless vars
+#pragma region Resources
+
+			//TODO: important for multi gpu (SUN-51) staging buffer dont have to be duplicated accros multiple gpus so we will have to see
+			//how this turns out and the best way to do this
+#pragma region Bindless resources
 
 			VaribleIndexAllocator* gloablVertAllocator = nullptr;
-			VaribleIndexAllocator* gloablIndAllocator  = nullptr;
+			VaribleIndexAllocator* gloablIndAllocator = nullptr;
 
+			// the actuall buff the gpu reads from for draw calls
 			BindlessMeshBuffer* globalMeshBuffer;
 
 			// thye main thread staging buffer
 			BindlessMeshBuffer* globalMeshStagingBuffer;
 
+			// so worker threads can directly allocate meshes to global bufferes 
 			libguarded::shared_guarded < std::vector<size_t>> freeThreadLocalGlobalMeshandModelStagingBufferIndicies;
 			libguarded::shared_guarded < std::unordered_map<std::thread::id, size_t>> ThreadLocalGlobalMeshandModelStagingBufferThreadIndicies;
 
 			std::vector<BindlessMeshBuffer*> threadLocalGlobalMeshStagingBuffers;
 
-
 			IndexAllocator* globalModelBufferAllocator;
+			// 2 gpu buffs are required for snapping origin to update model transforms of current models without disrupting drawing
 			std::array<Buffer*, 2> globalModelBuffers;
 
+			// active buffer is the one the gpu is using for current encodes
 			size_t gpuUnactiveGlobalModelBuffer = 1;
 			size_t gpuActiveGlobalModelBuffer = 0;
 
 			Buffer* globalModelBufferStaging;
-
 			std::vector<Buffer*> threadLocalGlobalModelStagingBuffers;
-
 
 			IndexAllocator* matUniformAllocator;
 			Buffer* globalMaterialUniformBufferStaging;
 			Buffer* globalMaterialUniformBuffer;
 
+#pragma endregion
 
-			void windowSizeChanged(size_t allWindowIndex);
+#pragma endregion
 
-			ResourceTransferer* resouceTransferer;
 
 			// deivce spacific features
 
 			bool supportsMultiViewport = false;
 
-			VkDebug debugObject;
+			std::vector<math::Frustum> camFrustroms;
 
 		private:
+			friend TerrainSystem;
+			friend MaterialManager;
+			friend Application;
+			friend Window;
 
-			void createRenderResources();
+#pragma region methods
+
+#pragma region Bindless
 
 			void makeGlobalMeshBuffers(const VkDeviceSize& vCount, const VkDeviceSize& indexCount);
 
-			void createDescriptorPoolAndSets();
 
-			void allocateDescriptors();
+#pragma endregion
 
-			void resetDescriptorPools();
-
-			void createUniformsAndDescriptors();
-
-			void updateLoadTimeDescriptors(Window& window);
-			void updateRunTimeDescriptors(Window& window);
-
-			void createDynamicRenderCommands();
+#pragma region Frame Command Proccesing
 
 			void submitFrameQueue(Window& window, vk::CommandBuffer* buffers, uint32_t bufferCount);
 
+#pragma endregion
 
 
-			void encodeDeferredPass(Window& window);
+#pragma region Descriptors
 
-			void encodeGBufferPass(Window& window);
+			void resetDescriptorPools();
 
-			void updateCameraUniformBuffer(Window& window);
+#pragma endregion
+
+
+#pragma endregion
+
+
+			void createRenderResources();
+
+			void createDynamicRenderCommands();
+
+			/// <summary>
+			/// callled in main rander loop so any non trivial actions should be cojmpleted on a worker thread
+			/// </summary>
+			/// <param name="window"></param>
+			/// <param name="surface"></param>
+			void drawableReleased(Window* window, size_t surface) override;
+
 
 			// render resources
-
-
 			std::vector<std::vector<vk::CommandPool  >> dynamicCommandPools;
 			std::vector<std::vector<vk::CommandBuffer>> dynamicCommandBuffers;
 
 
-
-			vk::DescriptorPool descriptorPool;
-			// first dimension is windows second is surface index
-			std::vector<std::vector<VkDescriptorSet>> descriptorSets;
-
-
-			// deferred pass
-
-			Buffer* deferredPassVertBuff;
-			size_t deferredPassBuffIndexOffset;
-
-
-			vk::DescriptorPool deferredDescriptorPool;
-			std::vector<std::vector<VkDescriptorSet>> deferredDescriptorSets;
-
-			friend TerrainSystem;
-			friend MaterialManager;
-			friend Application;
-
-
-			std::vector<math::Frustum> camFrustroms;
-
 			// handles
-
 			Application& app;
 
 		};
