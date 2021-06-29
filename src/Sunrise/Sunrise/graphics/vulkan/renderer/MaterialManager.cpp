@@ -41,7 +41,7 @@ namespace sunrise {
 		//todo:add this back for mip gen
 		renderer.resouceTransferer->newTask(pendingTasks, []() {
 
-			}, true);
+		}, true);
 		pendingTasks.clear();
 
 
@@ -189,6 +189,7 @@ namespace sunrise {
 
 		auto image = new Image(renderer.device, renderer.allocator, imageSize, imageOptions, vk::ImageAspectFlagBits::eColor);
 
+		//renderer.debugObject.nameObject(renderer.device, reinterpret_cast<size_t>(image->vkItem), vk::DebugReportObjectTypeEXT::eImage, "matImage");
 
 		return { buff, image };
 

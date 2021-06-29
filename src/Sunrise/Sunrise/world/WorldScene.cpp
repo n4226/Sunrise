@@ -28,9 +28,6 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
-		// todo redo mats
-		/*for (auto ren : app.renderers)
-			ren->materialManager->loadStaticEarth();*/
 
 
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
@@ -54,6 +51,12 @@ namespace sunrise {
 		timef = 0;
 
 		generalSystems[0]->update();
+	}
+
+	void WorldScene::lateLoad()
+	{
+		for (auto ren : app.renderers)
+			ren->materialManager->loadStaticEarth();
 	}
 
 

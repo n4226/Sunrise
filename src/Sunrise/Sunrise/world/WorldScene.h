@@ -22,6 +22,8 @@ namespace sunrise {
 #pragma region Lifecycle
 		virtual void load() override;
 
+		virtual void lateLoad() override;
+
 		virtual void update() override;
 
 		virtual void unload() override;

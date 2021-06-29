@@ -361,6 +361,7 @@ namespace sunrise {
 
         scene->coordinator->buildGraph();
 
+        scene->lateLoad();
 
 	}
 

@@ -160,7 +160,7 @@ namespace sunrise {
 
 		//return active buff
 		size_t activeBUff = mainThreadLocalCopyOfActiveBuffer;
-
+		SR_CORE_TRACE("rendering terrain using set {}", activeBUff);
 		return &commandBuffers[activeBUff][options.window.indexInRenderer][bufferIndex];
 	}
 
@@ -182,6 +182,9 @@ namespace sunrise {
 		auto handle = activeBuffer.lock_shared();
 
 		size_t buffSet = *handle == 0 ? 1 : 0;
+
+		SR_CORE_TRACE("encoding terrain using set {}", buffSet);
+
 
 		renderer->device.resetCommandPool(cmdBufferPools[buffSet][window.indexInRenderer][surface], {});
 
@@ -225,7 +228,7 @@ namespace sunrise {
 					auto indexOffset = it->second.indIndicies[i];
 					//buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eFragment, modelUnSize, sizeof(DrawPushData) - modelUnSize, reinterpret_cast<char*>(&(it->second.drawDatas[i])) + modelUnSize);
 
-					buffer.pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(gfx::DrawPushData), &it->second.drawDatas[i]);
+					buffer.pushConstants(pipeline->pipelineLayout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(gfx::DrawPushData), &it->second.drawDatas[i]);
 					buffer.drawIndexed(indexCount, 1, indexOffset, it->second.vertIndex, 0);
 				}
 			}

@@ -230,7 +230,7 @@ namespace sunrise {
 
 				{ // swaping active command buffers
 					auto activeHandler = tstage->activeBuffer.lock(); 
-					*activeHandler = *activeHandler + 1 % TerrainGPUStage::setsOfCMDBuffers;
+					*activeHandler = (*activeHandler + 1) % TerrainGPUStage::setsOfCMDBuffers;
 				}
 
 				//todo: wait and then calculate when to delete old chunks that should be see below

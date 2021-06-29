@@ -58,10 +58,10 @@ namespace sunrise {
 					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAlbedoMetalicIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
 
 				vk::DescriptorImageInfo imageInfo2 = { inputImageSampler->vkItem ,
-					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAoIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
+					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffNormalSpecularIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
 
 				vk::DescriptorImageInfo imageInfo3 = { inputImageSampler->vkItem ,
-					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffNormalSpecularIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
+					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAoIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
 
 
 				VkDescriptorBufferInfo globalUniformBufferInfo{};

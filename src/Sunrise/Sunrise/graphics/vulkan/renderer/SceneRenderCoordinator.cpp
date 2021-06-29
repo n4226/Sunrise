@@ -363,7 +363,7 @@ namespace sunrise::gfx {
 
 			firstLevelCMDBuffer.executeCommands(*buff);
 
-			renderer->debugObject.endRegion(firstLevelCMDBuffer);
+ 			renderer->debugObject.endRegion(firstLevelCMDBuffer);
 
 		}
 

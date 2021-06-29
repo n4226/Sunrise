@@ -57,7 +57,7 @@ namespace sunrise {
 		{
 			PROFILE_SCOPE("creating empty mesh")
 
-				auto mesh = createChunkMesh(*node);
+			auto mesh = createChunkMesh(*node);
 
 			meshStore.mesh = mesh;
 		}
@@ -177,8 +177,9 @@ namespace sunrise {
 		}
 		else
 		{
-			PROFILE_SCOPE("loading with pre creating empty mesh")
-				auto mesh = preLoadedMesh.mesh;
+			PROFILE_SCOPE("loading with pre creating empty mesh");
+			
+			auto mesh = preLoadedMesh.mesh;
 
 			vertCount = mesh->verts.size();
 			indCounts = { mesh->indicies[0].size() };

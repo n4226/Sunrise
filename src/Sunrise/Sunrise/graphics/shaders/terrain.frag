@@ -6,11 +6,13 @@
 
 layout( push_constant ) uniform DrawPushData {
   uint modelIndex;
+  // i.e what material this will be this is the equivilent to setting material == grass
   uint matIndex;
 } drawData;
 
 
 struct MaterialUniforms {
+// the texture i.e mem address of texture(s)
     uint baseTextureIndex;
 };
 

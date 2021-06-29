@@ -107,7 +107,7 @@ namespace sunrise {
 		gbuffer_albedo_metallic.initialLayout = vk::ImageLayout::eUndefined;
 		gbuffer_albedo_metallic.transitionalToAtStartLayout = vk::ImageLayout::eColorAttachmentOptimal;
 		gbuffer_albedo_metallic.finalLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-		gbuffer_albedo_metallic.clearColor = { 0.0f, 0.8f, 0.0f, 1.0f };
+		gbuffer_albedo_metallic.clearColor = { 0.6f, 0.0f, 0.0f, 1.0f };
 		gbuffer_albedo_metallic.usage |= vk::ImageUsageFlagBits::eSampled;
 		//gbuffer_albedo_metallic.usage |= vk::ImageUsageFlagBits::eStorage;
 		gbuffer_albedo_metallic.name = "gbuffer: albedo (b,g,r) and metallic (a)";
@@ -121,7 +121,7 @@ namespace sunrise {
 		gbuffer_normal_roughness.initialLayout = vk::ImageLayout::eUndefined;
 		gbuffer_normal_roughness.transitionalToAtStartLayout = vk::ImageLayout::eColorAttachmentOptimal;
 		gbuffer_normal_roughness.finalLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-		gbuffer_normal_roughness.clearColor = { 0.0f, 0.8f, 0.0f, 1.0f };
+		gbuffer_normal_roughness.clearColor = { 0.0f, 0.0f, 0.0f, 0.0f };
 		gbuffer_normal_roughness.usage |= vk::ImageUsageFlagBits::eSampled;
 		//attach2.usage |= vk::ImageUsageFlagBits::eStorage;
 		gbuffer_normal_roughness.name = "gbuffer: normal (b,g,r) and roughness (a)";
@@ -135,7 +135,7 @@ namespace sunrise {
 		gbuffer_ao.initialLayout = vk::ImageLayout::eUndefined;
 		gbuffer_ao.transitionalToAtStartLayout = vk::ImageLayout::eColorAttachmentOptimal;
 		gbuffer_ao.finalLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-		gbuffer_ao.clearColor = { 0.0f, 0.8f, 0.0f, 1.0f };
+		gbuffer_ao.clearColor = { 0.0f, 0.0f, 0.0f, 0.0f };
 		gbuffer_ao.usage |= vk::ImageUsageFlagBits::eSampled;
 		//attach2.usage |= vk::ImageUsageFlagBits::eStorage;
 		gbuffer_ao.name = "gbuffer: ao";

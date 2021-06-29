@@ -15,6 +15,10 @@ namespace sunrise {
 		virtual ~Scene();
 
 		virtual void load() = 0;
+		/// <summary>
+		/// after coordinator is fully initilized
+		/// </summary>
+		virtual void lateLoad() {}
 
 		virtual void update();
 
