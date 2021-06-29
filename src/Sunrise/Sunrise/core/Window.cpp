@@ -683,8 +683,8 @@ namespace sunrise {
         // this is to wait for inflight frame to finish
         // if cpu gets to far ahead, will wait here until an inflight frame finishes
         vkWaitForFences(device, 1, &inFlightFences[app.currentFrame], VK_TRUE, UINT64_MAX);
-        // release resources tied to that frame which is now nolonger in flight
-        renderer->drawableReleased(this, app.currentFrame);
+
+        renderer->frameReleased(app.currentFrame);
 
         auto index = device.acquireNextImageKHR(swapChain, UINT64_MAX, imageAvailableSemaphores[app.currentFrame], nullptr);
         //cout << "current index = " << index.value << endl;
@@ -705,7 +705,8 @@ namespace sunrise {
         if (imagesInFlight[currentSurfaceIndex] != VK_NULL_HANDLE) {
             //todo consider using get fence and doing other work on this thread instead of waiting
             vkWaitForFences(device, 1, &imagesInFlight[currentSurfaceIndex], VK_TRUE, UINT64_MAX);
-            
+
+            renderer->drawableReleased(this, currentSurfaceIndex);
         }
 
         // Mark the image as now being in use by this frame

@@ -53,7 +53,7 @@ namespace sunrise {
 			for (size_t j = 0; j < app.renderers[0]->windows.size(); j++) {
 				gfx::vkHelpers::createPoolsAndCommandBufffers
 				(app.renderers[0]->device, cmdBufferPools[i][j], commandBuffers[i][j], app.maxSwapChainImages, app.renderers[0]->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
-
+				
 			}
 
 		}
@@ -67,6 +67,10 @@ namespace sunrise {
 		auto renderer = app.renderers[0];
 		for (auto window : renderer->windows)
 		{
+			setUsedBySurface.insert(std::make_pair(window, std::vector<size_t>()));
+			setUsedBySurface.at(window).resize(window->swapChainImages.size());
+
+
 			descriptorSets[window] = {};
 			for (size_t swap = 0; swap < window->swapChainImages.size(); swap++)
 			{
@@ -154,25 +158,49 @@ namespace sunrise {
 			if (handle != nullptr) {
 				if (*handle != mainThreadLocalCopyOfActiveBuffer) {
 					mainThreadLocalCopyOfActiveBuffer = *handle;
+					//SR_CORE_INFO("Swaping command buf sets to send set {} to the gpu", mainThreadLocalCopyOfActiveBuffer);
 				}
 			}
 		}
 
 		//return active buff
 		size_t activeBUff = mainThreadLocalCopyOfActiveBuffer;
-		SR_CORE_TRACE("rendering terrain using set {}", activeBUff);
+
+		// mark this buffer as being used
+		{ 
+			auto handle = this->commandBuffersInUse.lock();
+
+			//https://stackoverflow.com/questions/17172080/insert-vs-emplace-vs-operator-in-c-map
+
+			(*handle)[activeBUff] += 1;
+
+			//SR_CORE_TRACE("ref count for set {} is now {}", activeBUff, (*handle)[activeBUff]);
+
+			setUsedBySurface[&options.window][bufferIndex] = activeBUff;
+		}
+
+
 		return &commandBuffers[activeBUff][options.window.indexInRenderer][bufferIndex];
 	}
 
 	void TerrainGPUStage::drawableReleased(Window* window, size_t surface)
 	{
-		
+		// todo: now usage is only tracked for a whole set so no encodig can be done if only one frame in flihgt is using any of the buffers in that set
+		auto buffSet = setUsedBySurface.at(window)[surface];
+		{
+			auto handle = this->commandBuffersInUse.lock();
+
+			(*handle)[buffSet] -= 1;
+			//SR_CORE_TRACE("ref count for set {} is now {}", buffSet, (*handle)[buffSet]);
+		}
 	}
 
 
 	void TerrainGPUStage::reEncodeBuffer(const Window& window, size_t surface)
 	{
 		PROFILE_FUNCTION;
+
+		// bad synch problem
 
 		// this funciton must not be called if a frame  is currently still inflight with the associteted command buffer
 
@@ -183,7 +211,22 @@ namespace sunrise {
 
 		size_t buffSet = *handle == 0 ? 1 : 0;
 
-		SR_CORE_TRACE("encoding terrain using set {}", buffSet);
+		// wait if buffer in flight is using this set
+		while (true) {
+			{
+				auto handle = this->commandBuffersInUse.lock();
+
+				// todo: make this waiting much better
+				if ((*handle)[buffSet] <= 0) {
+					break;
+				}
+			}
+			SR_CORE_INFO("sleeping waiting for terrain sys buff to leave inflight");
+			Sleep(1);
+		}
+
+
+		//SR_CORE_TRACE("encoding terrain using set {}", buffSet);
 
 
 		renderer->device.resetCommandPool(cmdBufferPools[buffSet][window.indexInRenderer][surface], {});

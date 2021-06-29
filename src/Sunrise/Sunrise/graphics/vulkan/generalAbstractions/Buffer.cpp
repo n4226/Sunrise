@@ -139,6 +139,12 @@ namespace sunrise::gfx {
 
 	}
 
+	void Buffer::name(const char* name, const VkDebug& debugObject) const
+	{
+#if SR_VK_OBJECT_NAMES
+		debugObject.nameObject(reinterpret_cast<size_t>(vkItem), vk::DebugReportObjectTypeEXT::eBuffer, name);
+#endif
+	}
 
 	Buffer::~Buffer()
 	{

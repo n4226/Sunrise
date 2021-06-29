@@ -39,6 +39,8 @@ namespace sunrise::gfx {
 		Image(vk::Device device, VmaAllocator allocator, vk::Extent3D size, ImageCreationOptions options, vk::ImageAspectFlags aspectFlags);
 		~Image();
 
+		void name(const char* name, const VkDebug& debugObject) const;
+
 		vk::Extent3D size;
 		VmaAllocation allocation = nullptr;
 		VkImage vkItem = nullptr;

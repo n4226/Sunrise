@@ -81,7 +81,7 @@ namespace sunrise {
 			{
 				//Task();
 				TaskType type;
-
+				//todo use std::varient
 				BufferTransferTask bufferTransferTask;
 				ImageLayoutTransitionTask imageLayoutTransitonTask;
 				BufferToImageCopyWithTransitionTask bufferToImageCopyWithTransitionTask;

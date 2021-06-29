@@ -89,8 +89,18 @@ namespace sunrise {
 
 		renderer.globalMaterialUniformBufferStaging->tempMapAndWrite(&matInfor, index, sizeof(matInfor));
 
-		//TODO: Transfer
 
+		//todo: batch to be more efficent
+		ResourceTransferer::BufferTransferTask transferTask;
+
+		transferTask.srcBuffer = renderer.globalMaterialUniformBufferStaging->vkItem;
+		transferTask.dstBuffer = renderer.globalMaterialUniformBuffer->vkItem;
+		transferTask.regions = { { index, index, sizeof(matInfor) } };
+
+		ResourceTransferer::Task task = { ResourceTransferer::TaskType::bufferTransfers };
+		task.bufferTransferTask = transferTask;
+
+		pendingGFXTasks.push_back(task);
 	}
 
 	void MaterialManager::addCopyToTasks(Buffer* buffer, Image* image)
@@ -189,10 +199,10 @@ namespace sunrise {
 
 		auto image = new Image(renderer.device, renderer.allocator, imageSize, imageOptions, vk::ImageAspectFlagBits::eColor);
 
+		//image->name("matImage", renderer.debugObject);
 		//renderer.debugObject.nameObject(renderer.device, reinterpret_cast<size_t>(image->vkItem), vk::DebugReportObjectTypeEXT::eImage, "matImage");
 
 		return { buff, image };
-
 
 
 	}

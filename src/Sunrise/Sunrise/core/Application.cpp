@@ -327,10 +327,12 @@ namespace sunrise {
 
         if (context) {
             if (contextThread) {
+                PROFILE_SCOPE("Asio Context Job");
                 forceStopASIOContext();
                 delete contextThread;
             }
-            delete context;
+            //TODO THIS never returns for some reason
+            //delete context;
         }
 
         if (!config.wantsWindows || !config.vulkan) return;

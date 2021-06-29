@@ -24,7 +24,9 @@ namespace sunrise {
 			/// </summary>
 			/// <param name="window"></param>
 			/// <param name="surface"></param>
-			virtual void drawableReleased(Window* window, size_t appFrame) {}
+			virtual void drawableReleased(Window* window, size_t surface) {}
+
+			virtual void frameReleased(size_t appFrame) {}
 
 		};
 
@@ -166,7 +168,7 @@ namespace sunrise {
 			/// </summary>
 			/// <param name="window"></param>
 			/// <param name="surface"></param>
-			void drawableReleased(Window* window, size_t appFrame) override;
+			void drawableReleased(Window* window, size_t surface) override;
 
 
 			// render resources

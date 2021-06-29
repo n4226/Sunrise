@@ -31,7 +31,7 @@ namespace sunrise {
 		/// </summary>
 		/// <param name="window"></param>
 		/// <param name="surface"></param>
-		void drawableReleased(Window* window, size_t appFrame) override;
+		void drawableReleased(Window* window, size_t surface) override;
 
 		static const size_t setsOfCMDBuffers = 2;
 		/// <summary>
@@ -41,6 +41,22 @@ namespace sunrise {
 		std::array<std::vector<std::vector<vk::CommandPool  >>, setsOfCMDBuffers> cmdBufferPools{};
 		std::array<std::vector<std::vector<vk::CommandBuffer>>, setsOfCMDBuffers> commandBuffers{};
 
+		/// <summary>
+		/// indicies of map keys: set (array), window (outer vector), swapchain image (inner vector)
+		/// indicies of map values: window, swapchain image
+		/// </summary>
+		//libguarded::shared_guarded<std::unordered_map<std::tuple<Window*, size_t>,std::tuple<size_t,size_t,size_t>>> commandBuffersInUse{};
+
+		/// <summary>
+		/// keys are the sets of command buffs (std::array for commandBuffers varible)
+		/// ref sys
+		/// </summary>
+		libguarded::shared_guarded<std::unordered_map<size_t, size_t>> commandBuffersInUse{};
+
+		// used on single thread for ref system above
+		std::unordered_map<Window*, std::vector<size_t>> setUsedBySurface{};
+
+
 		size_t mainThreadLocalCopyOfActiveBuffer = 0;
 		libguarded::shared_guarded<size_t> activeBuffer = libguarded::shared_guarded<size_t>(0);
 
@@ -49,6 +65,8 @@ namespace sunrise {
 		std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>> descriptorSets{};
 
 		WorldSceneRenderCoordinator* worldCoord;
+
+
 
 		/// <summary>
 		/// TODO: not garentied that this will stay the same by render scene coordintaor but asuming it is

@@ -148,6 +148,7 @@ namespace sunrise::gfx {
 
 		globalMaterialUniformBufferStaging = new Buffer(device, allocator, sizeof(MaterialUniforms) * maxMaterialTextureDescriptorArrayCount, options);
 
+		//globalMaterialUniformBufferStaging->name("Staging - Material Uniform Buffer", debugObject);
 
 
 		threadLocalGlobalModelStagingBuffers.resize(workerThreads);
@@ -162,6 +163,8 @@ namespace sunrise::gfx {
 		options.usage = vk::BufferUsageFlagBits::eStorageBuffer | vk::BufferUsageFlagBits::eTransferDst;
 
 		globalMaterialUniformBuffer = new Buffer(device, allocator, sizeof(MaterialUniforms) * maxMaterialTextureDescriptorArrayCount, options);
+
+		//globalMaterialUniformBuffer->name("Material Uniform Buffer",debugObject);
 
 		globalModelBuffers = {
 			new Buffer(device, allocator, sizeof(ModelUniforms) * maxModelUniformDescriptorArrayCount, options),

@@ -69,4 +69,14 @@ namespace sunrise::gfx {
 		vmaDestroyImage(allocator, vkItem, allocation);
 	}
 
+	void Image::name(const char* name, const VkDebug& debugObject) const
+	{
+#if SR_VK_OBJECT_NAMES
+		debugObject.nameObject(reinterpret_cast<size_t>(vkItem), vk::DebugReportObjectTypeEXT::eImage, name);
+
+		auto longName = std::string(name) + " View";
+		debugObject.nameObject(reinterpret_cast<size_t>(VkImageView(view)), vk::DebugReportObjectTypeEXT::eImageView, longName.c_str());
+#endif
+	}
+
 }
