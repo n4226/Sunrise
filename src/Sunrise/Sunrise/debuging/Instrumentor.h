@@ -147,6 +147,7 @@ public:
     InstrumentationTimer(const char* name)
         : m_Name(name), m_Stopped(false)
     {
+        SR_CORE_ASSERT(strlen(name) > 0);
         m_StartTimepoint = std::chrono::high_resolution_clock::now();
     }
 

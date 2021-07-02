@@ -121,7 +121,7 @@ namespace sunrise {
 
 
 		udpSocket->async_receive_from(udpBytesBuff, remote_endpoint_, [this](asio::error_code err, size_t byteCount) {
-			SR_CORE_INFO("data Recieved with size {}, message:  {}", byteCount, std::string(udpBytes.begin(),udpBytes.begin() + byteCount));
+			//SR_CORE_INFO("data Recieved with size {}, message:  {}", byteCount, std::string(udpBytes.begin(),udpBytes.begin() + byteCount));
 
 			//auto handle = registeredCalbkack.lock();
 			if (registeredCalbkack) {

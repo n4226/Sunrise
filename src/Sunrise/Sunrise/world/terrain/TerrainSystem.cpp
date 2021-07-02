@@ -216,6 +216,11 @@ namespace sunrise {
 
 				toDrawDraw.clear();
 
+				// this here so that "deleted chiunks dont render but THEY ARE NOT ACTUALLY FREED RIGHT NOW"
+				for (TerrainQuadTreeNode* chunk : toDestroyDraw) {
+					meshLoader.removeDrawChunk(chunk);
+				}
+
 				// re encode draws
 				// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
 				auto tstage = world->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
@@ -235,9 +240,7 @@ namespace sunrise {
 
 				//todo: wait and then calculate when to delete old chunks that should be see below
 				{ //todo fix - don't know that these chunks are still not being used by a drawable
-					for (TerrainQuadTreeNode* chunk : toDestroyDraw) {
-						meshLoader.removeDrawChunk(chunk);
-					}
+					
 
 					for (TerrainQuadTreeNode* chunk : toCombine) {
 						chunk->combine();

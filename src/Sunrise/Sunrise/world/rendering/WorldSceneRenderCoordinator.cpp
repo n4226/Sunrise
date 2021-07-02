@@ -8,6 +8,7 @@
 #include "Sunrise/Sunrise/core/Application.h"
 #include "../WorldScene.h"
 #include"Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/GPUStages/DeferredPipeline.h"
+#include "Sunrise/Sunrise/graphics/vulkan/generalAbstractions/GPUSelector.h"
 
 namespace sunrise {
 
@@ -32,14 +33,15 @@ namespace sunrise {
 		//https://stackoverflow.com/questions/8192185/using-stdarray-with-initialization-lists
 		std::vector<GPUStageDispatcher::DependencyOptions> gbuffToDeferredOptions = { {
 			{0, vk::ImageLayout::eColorAttachmentOptimal, vk::AttachmentLoadOp::eClear},
-			{1, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eClear},
-			{2, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eClear},
-			{3, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eClear}
+			{1, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eLoad},
+			{2, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eLoad},
+			{3, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eLoad},
+			{4, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eLoad}
 		} };
 
 		//todo: store this to then delete it in destructor or cleanup method
 		auto terrainStage = new TerrainGPUStage(this);
-		auto deferredStage = new DeferredStage(this, { 1,2,3 });
+		auto deferredStage = new DeferredStage(this, { 1,2,3,4 });
 
 		registerPipeline(worldTerrainPipeline,terrainStage);
 		registerPipeline(deferredPipeline,deferredStage);
@@ -140,9 +142,24 @@ namespace sunrise {
 		//attach2.usage |= vk::ImageUsageFlagBits::eStorage;
 		gbuffer_ao.name = "gbuffer: ao";
 
-		//TODO: add depth buffer
+		
+		auto gbuffer_depth = gfx::ComposableRenderPass::CreateOptions::VAttatchment();
 
-		gfx::ComposableRenderPass::CreateOptions options = { {deferredA, gbuffer_albedo_metallic, gbuffer_normal_roughness, gbuffer_ao}, 0 };
+		auto depthBufferFormat =
+			gfx::GPUSelector::findSupportedFormat(app.renderers[0]->physicalDevice, { vk::Format::eD32Sfloat }, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
+
+		gbuffer_depth.type = gfx::ComposableRenderPass::CreateOptions::AttatchmentType::Depth;
+		gbuffer_depth.format = depthBufferFormat;
+		gbuffer_depth.loadOp = vk::AttachmentLoadOp::eClear;
+		gbuffer_depth.initialLayout = vk::ImageLayout::eUndefined;
+		gbuffer_depth.transitionalToAtStartLayout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
+		gbuffer_depth.finalLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+		gbuffer_depth.clearDepthStencil = { { 1.f, 0 } };
+		gbuffer_depth.usage = vk::ImageUsageFlagBits::eDepthStencilAttachment | vk::ImageUsageFlagBits::eSampled;
+		gbuffer_depth.name = "gbuffer: depth";
+
+
+		gfx::ComposableRenderPass::CreateOptions options = { {deferredA, gbuffer_albedo_metallic, gbuffer_normal_roughness, gbuffer_ao, gbuffer_depth}, 0 };
 
 		return options;
 	}
@@ -177,7 +194,7 @@ namespace sunrise {
 
 		//todo abstract this out
 		postUniforms.sunDir =
-			glm::angleAxis(glm::radians(45.f + sin(scene->timef) * 0.f), glm::vec3(-1, 0, 0)) *
+			glm::angleAxis(glm::radians(10.f + sin(scene->timef * 0.1f) * 20.f), glm::vec3(-1, 0, 0)) *
 			glm::vec4(glm::normalize(math::LlatoGeo(worldScene->initialPlayerLLA, glm::dvec3(0), worldScene->terrainSystem->getRadius())), 1);
 
 		postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>(-(worldScene->origin)), 1);
@@ -185,6 +202,7 @@ namespace sunrise {
 		postUniforms.viewMat = camera.view();
 		postUniforms.projMat = camera.projection(window.swapchainExtent.width, window.swapchainExtent.height);
 		postUniforms.invertedViewMat = glm::inverse(camera.view());
+		postUniforms.invertedProjMat = glm::inverse(camera.projection(window.swapchainExtent.width, window.swapchainExtent.height));
 		postUniforms.renderTargetSize.x = window.swapchainExtent.width;
 		postUniforms.renderTargetSize.y = window.swapchainExtent.height;
 

@@ -23,6 +23,8 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
+		SR_CORE_INFO("Attempting to load {} Required materials", StaticMaterialTable::entries.size());
+
 		auto matRootPath = FileManager::engineMaterialDir() + "staticAlloc/";
 
 		// load each static material from disk into buffers then copy to images using resource transfer manager
@@ -31,12 +33,13 @@ namespace sunrise {
 
 		for (auto mat : StaticMaterialTable::reverseEntries)
 		{
-			loadMat(matRootPath, mat.second.c_str());
+			if (FileManager::exists(matRootPath + mat.second))
+				loadMat(matRootPath, mat.second.c_str());
+			else
+				SR_CORE_WARN("Skiping {} world material becuase its directory was not found", mat.second);
 		}
 
-		/*loadmat(matrootpath, "grass1");
-		loadmat(matrootpath, "building1");*/
-
+		SR_CORE_TRACE("Copying images to the gpu and generating mip maps");
 
 		//todo:add this back for mip gen
 		renderer.resouceTransferer->newTask(pendingTasks, []() {
@@ -50,13 +53,32 @@ namespace sunrise {
 			}, true, true);
 		pendingGFXTasks.clear();
 
+
+		SR_CORE_TRACE("Static Material loading complete");
 	}
 
 	void MaterialManager::loadMat(std::string& matRootPath, const char* matFolder)
 	{
 		PROFILE_FUNCTION;
 
-		auto al_index = FinishLoadingTexture(loadTex((matRootPath + matFolder + "/" + matFolder + "-albedo3.jpg").c_str()));
+		//todo simplify string ops to save performance
+
+		auto files = getFilesForMaterial(matRootPath, matFolder, { ".jpg"});
+
+		if (files.ambientOclusion == "")
+			files.ambientOclusion = files.albedoPath;
+
+		if (files.metalic == "")
+			files.metalic = files.albedoPath;
+
+		if (files.normal == "")
+			files.normal = files.albedoPath;
+
+		if (files.roughness == "")
+			files.roughness = files.albedoPath;
+
+
+		//auto al_index = FinishLoadingTexture(loadTex((matRootPath + matFolder + "/" + matFolder + "-albedo3.jpg").c_str()));
 		////auto al_index1 = FinishLoadingTexture(loadTex((matRootPath + matFolder + "/" + matFolder + "-albedo3.jpg").c_str()));
 		////auto al_index2 = FinishLoadingTexture(loadTex((matRootPath + matFolder + "/" + matFolder + "-albedo3.jpg").c_str()));
 
@@ -73,11 +95,14 @@ namespace sunrise {
 		////auto [r_buffer, r_image] = loadTex((matRootPath + matFolder + "/" + matFolder + "-albedo3.png").c_str());
 
 
-		//auto al_index = FinishLoadingTexture(loadTex((matRootPath + matFolder + "/" + matFolder + "-albedo3.png").c_str()));
-		//auto n_index  = FinishLoadingTexture(loadTex((matRootPath + matFolder + "/" + matFolder + "-normal1-ogl.png").c_str()));
-		////auto m_index  = FinishLoadingTexture(loadTex((matRootPath + matFolder + "/" + matFolder + "-metal.psd").c_str()));
-		//auto ao_index = FinishLoadingTexture(loadTex((matRootPath + matFolder + "/" + matFolder + "-ao.png").c_str()));
-		////auto [r_buffer, r_image] = loadTex((matRootPath + matFolder + "/" + matFolder + "-albedo3.png").c_str());
+		// 5 textures per material -- this order is important
+		auto al_index = FinishLoadingTexture(loadTex(files.albedoPath.c_str(),(std::string(matFolder) + " Albedo").c_str()));
+		auto n_index  = FinishLoadingTexture(loadTex(files.normal.c_str(), (std::string(matFolder) + " Normal").c_str()));
+		auto m_index  = FinishLoadingTexture(loadTex(files.metalic.c_str(), (std::string(matFolder) + " Metalic").c_str()));
+		auto ao_index = FinishLoadingTexture(loadTex(files.ambientOclusion.c_str(), (std::string(matFolder) + " AO").c_str()));
+		auto r_index  = FinishLoadingTexture(loadTex(files.roughness.c_str(), (std::string(matFolder) + " Roughness").c_str()));
+
+		//auto [r_buffer, r_image] = loadTex((matRootPath + matFolder + "/" + matFolder + "-albedo3.png").c_str());
 
 
 
@@ -100,8 +125,47 @@ namespace sunrise {
 		ResourceTransferer::Task task = { ResourceTransferer::TaskType::bufferTransfers };
 		task.bufferTransferTask = transferTask;
 
+	
 		pendingGFXTasks.push_back(task);
 	}
+
+
+	MaterialManager::MaterialFiles MaterialManager::getFilesForMaterial(std::string& matRootPath, const char* matFolder, const std::unordered_set<std::string>& suportedFileExtensions)
+	{
+		MaterialFiles result{};
+
+		auto files = FileManager::listDirContents(matRootPath + matFolder, true, true);
+
+		for (auto& file : files) {
+
+			auto extension = std::filesystem::path(file).extension();
+			if (suportedFileExtensions.size() == 0 || suportedFileExtensions.count(extension.string()) == 0) {
+				continue;
+			}
+
+			auto localFIleCopy = file;
+			//lolwercase strings to make case not matter
+			std::transform(localFIleCopy.begin(), localFIleCopy.end(), localFIleCopy.begin(),
+				[](unsigned char c) { return std::tolower(c); });
+
+			//albedo
+			if (file.find("albedo") != std::string::npos || file.find("defuse") != std::string::npos)
+				result.albedoPath = std::move(file);
+			//normal
+			else if (file.find("normal") != std::string::npos)
+				result.normal = std::move(file);
+			// roughness
+			else if (file.find("rough") != std::string::npos)
+				result.roughness = std::move(file);
+			else if (file.find("metal") != std::string::npos)
+				result.metalic = std::move(file);
+			else if (file.find("ao") != std::string::npos)
+				result.ambientOclusion = std::move(file);
+		}
+
+		return result;
+	}
+
 
 	void MaterialManager::addCopyToTasks(Buffer* buffer, Image* image)
 	{
@@ -139,7 +203,9 @@ namespace sunrise {
 		pendingGFXTasks.push_back(task);
 	}
 
-	std::tuple<Buffer*, Image*> MaterialManager::loadTex(const char* path)
+
+
+	std::tuple<Buffer*, Image*> MaterialManager::loadTex(const char* path,const char* name)
 	{
 		PROFILE_FUNCTION;
 
@@ -201,6 +267,7 @@ namespace sunrise {
 
 		//image->name("matImage", renderer.debugObject);
 		//renderer.debugObject.nameObject(renderer.device, reinterpret_cast<size_t>(image->vkItem), vk::DebugReportObjectTypeEXT::eImage, "matImage");
+		image->name(name, renderer.debugObject);
 
 		return { buff, image };
 

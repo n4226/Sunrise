@@ -65,6 +65,23 @@ namespace sunrise {
 		return std::filesystem::exists(path);
 	}
 
+	std::vector<std::string> FileManager::listDirContents(const std::string& path, bool includeSubDirectories,bool filesOnly)
+	{
+		std::vector<std::string> results;
+
+		if (includeSubDirectories)
+			for (auto& path : std::filesystem::recursive_directory_iterator(path)) {
+				if (!filesOnly || (filesOnly && path.is_regular_file()))
+					results.push_back(path.path().generic_string());
+			}
+		else
+			for (auto path : std::filesystem::directory_iterator(path)) {
+				if (!filesOnly || (filesOnly && path.is_regular_file()))
+					results.push_back(path.path().generic_string());
+			}
+		return results;
+	}
+
 	bool FileManager::createIntermediateDirs(const std::string& path)
 	{
 		return std::filesystem::create_directories(std::filesystem::path(path).parent_path());

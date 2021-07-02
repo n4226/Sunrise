@@ -313,11 +313,19 @@ namespace sunrise {
 				auto geo_unCentered = math::LlatoGeo(lla, {}, chunk.tree->radius);
 
 				mesh->verts.emplace_back(geo_unCentered - chunk.center_geo);//Math::LlatoGeo(glm::dvec3(frame.getCenter(), 0), {}, radius));
-#if DEBUG
+#if 0
 				mesh->normals.emplace_back(static_cast<glm::vec3>(glm::normalize(geo_unCentered)) * (static_cast<float>(chunk.lodLevel + 1) / 13.f));
 #else
 				mesh->normals.emplace_back(static_cast<glm::vec3>(glm::normalize(geo_unCentered)));
+				//mesh->tangents.emplace_back(glm::angleAxis(glm::radians(90.f),glm::vec3(0,0,1)) * mesh->normals[mesh->normals.size() - 1]);
+				if (mesh->verts.size() > 1)
+					mesh->bitangents.emplace_back(mesh->verts[mesh->verts.size() - 2] - mesh->verts[mesh->verts.size() - 1]);
+				else mesh->bitangents.emplace_back(mesh->normals[mesh->normals.size() - 1]);
+				mesh->tangents.emplace_back(glm::cross(mesh->normals[mesh->normals.size() - 1], mesh->bitangents[mesh->bitangents.size() - 1]));
 #endif
+
+
+
 				// scalled chunk uvs
 				auto uvx = (chunkStrideLat / frame.size.x) * nonLLAFrameHeight;
 				auto uvy = (chunkStrideLon / frame.size.y) * nonLLAFrameWidth;
@@ -362,8 +370,8 @@ namespace sunrise {
 			vert++;
 		}
 
-		mesh->tangents.resize(mesh->verts.size());
-		mesh->bitangents.resize(mesh->verts.size());
+		//mesh->tangents.resize(mesh->verts.size());
+		//mesh->bitangents.resize(mesh->verts.size());
 
 		return mesh;
 	}

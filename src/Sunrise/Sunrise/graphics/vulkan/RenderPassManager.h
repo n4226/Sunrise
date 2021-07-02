@@ -19,6 +19,7 @@ namespace sunrise::gfx {
 
 		virtual size_t getSubPassCount();
 		virtual size_t getTotalAttatchmentCount();
+		virtual size_t getColorAttatchmentCount();
 		static const size_t gbufferAttachmentCount = 3;
 
 		virtual void createMainRenderPass();
@@ -41,6 +42,9 @@ namespace sunrise::gfx {
 		VkFormat depthBufferFormat;
 
 		vk::Device device;
+
+
+		size_t colorAttachmentCount;
 	};
 
 

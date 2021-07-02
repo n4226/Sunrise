@@ -45,6 +45,7 @@ namespace sunrise {
 
 		for (System* sys : generalSystems) {
 			sys->world = this;
+			sys->setup();
 		}
 
 		time = 0;

@@ -46,6 +46,7 @@ namespace sunrise {
 
 			std::vector<const char*> validationLayers = {
 				#if SR_ENABLE_VK_VALIDATION_LAYERS
+				//"VK_LAYER_LUNARG_api_dump",
 				"VK_LAYER_KHRONOS_validation"
 				#endif
 			};

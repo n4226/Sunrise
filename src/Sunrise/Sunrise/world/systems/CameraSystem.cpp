@@ -3,6 +3,10 @@
 #include "../../core/Application.h"
 #include "../../world/WorldScene.h"
 
+#include "Sunrise/Sunrise/world/simlink/SimlinkMessages.h"
+#include "Sunrise/Sunrise/networking/networking.h"
+
+
 namespace sunrise {
 
 	using namespace math;
@@ -10,8 +14,10 @@ namespace sunrise {
 	CameraSystem::CameraSystem()
 		: cameraPath(cameraPoints, true)
 	{
-
+		
 	}
+
+
 
 	void CameraSystem::update()
 	{
@@ -27,8 +33,31 @@ namespace sunrise {
 			//world->playerLLA.z = -cos(world->timef) * 10000 + 10100;
 			// the camera looks at -> +z
 			//world->playerLLA.z = sin(world->timef * 0.1f) * 400 + 500;
+		
+		//TODO THJIS WAS REMOVED TO KEEP PLAYER AT ORIGIN
+		//movePlayerAlongCamPath();
 
-			movePlayerAlongCamPath();
+		// update playerlla
+		bool con;
+		glm::vec3 simlinkRot;
+
+		{
+			auto handle = updateStreamed.try_lock();
+			con = hasConnection;
+			
+			if (con) {
+				if (handle && handle->lla != glm::dvec3(0)) {
+
+					world->playerLLA = handle->lla;
+					simlinkRot = glm::eulerAngles(handle->rot);
+				}
+			}
+			else {
+				movePlayerAlongCamPath();
+			}
+		}
+		
+
 
 		world->playerTrans.position = LlatoGeo(world->playerLLA, world->origin, world->terrainSystem->getRadius());
 
@@ -77,16 +106,33 @@ namespace sunrise {
 		auto deltaAngle = atan2(currentToNewLlaDelta.x, currentToNewLlaDelta.y);
 
 		//std::cout << glm::degrees(deltaAngle) << std::endl;
+		if (con) {
 
-		world->playerTrans.rotation = finalOrientation *
-			glm::angleAxis(glm::radians(90.f), glm::vec3(-1, 0, 0))
-			// this is temporarry to rotate around to look
-			//*glm::angleAxis(glm::radians(world->timef * 20.f), glm::vec3(0, 1, 0))
+			world->playerTrans.rotation = finalOrientation *
+				glm::angleAxis(glm::radians(90.f), glm::vec3(-1, 0, 0))
+				// this is temporarry to rotate around to look
+				//*glm::angleAxis(glm::radians(world->timef * 20.f), glm::vec3(0, 1, 0))
 
+				* glm::angleAxis(simlinkRot.z, glm::vec3(0, 1, 0))
+				* glm::angleAxis(simlinkRot.y, glm::vec3(0, 0, -1))
+				* glm::angleAxis(simlinkRot.x, glm::vec3(-1, 0, 0))
+				//TODO ADD THIS BACK FOR LOOKING ALONG PATH make cmaera look at future path
+				//* glm::angleAxis(static_cast<float>(deltaAngle - M_PI_2), glm::vec3(0, -1, 0))
+				;
 
-			// make cmaera look at future path
-			* glm::angleAxis(static_cast<float>(deltaAngle - M_PI_2), glm::vec3(0, -1, 0))
-			;
+		} else {
+			world->playerTrans.rotation = finalOrientation *
+				glm::angleAxis(glm::radians(90.f), glm::vec3(-1, 0, 0))
+				// this is temporarry to rotate around to look
+				//*glm::angleAxis(glm::radians(world->timef * 20.f), glm::vec3(0, 1, 0))
+
+				/** glm::angleAxis(simlinkRot.z, glm::vec3(0, 1, 0))
+				* glm::angleAxis(simlinkRot.y, glm::vec3(0, 0, -1))
+				* glm::angleAxis(simlinkRot.x, glm::vec3(-1, 0, 0))*/
+				//TODO ADD THIS BACK FOR LOOKING ALONG PATH make cmaera look at future path
+				* glm::angleAxis(static_cast<float>(deltaAngle - M_PI_2), glm::vec3(0, -1, 0))
+				;
+		}
 
 		//glm::
 		//static_cast<glm::quat>(glm::lookAt(glm::vec3(0), glm::cross(N,glm::vec3(0,0,1)),-N));
@@ -106,6 +152,30 @@ namespace sunrise {
 		//* glm::angleAxis(glm::radians(static_cast<float>(world->playerLLA.y)), glm::vec3(0, -1, 0))
 		//* glm::angleAxis(glm::radians(90.f * world->timef), glm::vec3(-1, 0, 0));
 		//;
+	}
+
+	void CameraSystem::setup()
+	{
+		sunrise::NetworkManager::CreateOptions netOptions{};
+
+		netOptions.newThread = false;
+		netOptions.type = sunrise::NetworkManager::Type::server;
+		netOptions.udpBufferSize = sizeof(sunrise::SimlinkMessages::simpleUpdate);
+		netOptions.deferServerStart = true;
+
+		networkManager = new sunrise::NetworkManager(netOptions, *world->app.context);
+
+		networkManager->registerUDPMessageCalback(std::function([this](const sunrise::SimlinkMessages::simpleUpdate& data) {
+			//SR_INFO("got a simpleUpdate: position: ({}, {}, {})", data.lla.x, data.lla.y, data.lla.z);
+			{
+				auto handle = updateStreamed.lock();
+
+				(*handle) = data;
+				hasConnection = true;
+			}
+			}));
+
+		networkManager->startServer();
 	}
 
 

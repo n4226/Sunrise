@@ -539,20 +539,39 @@ namespace sunrise {
         SR_CORE_TRACE("goint to get queue family indicies");
         auto loc_queueFamilyIndices = GPUSelector::gpuQueueFamilies(physicalDevice, windows[window]->surface);
 
+#if SR_SingleQueueForRenderDoc_onlyCreateOne
+        loc_queueFamilyIndices.resourceTransferFamily = loc_queueFamilyIndices.graphicsFamily;
+#endif
+
         const float queuePriority1 = 1.0f;
         vk::DeviceQueueCreateInfo gfxQueueCreateInfo({}, loc_queueFamilyIndices.graphicsFamily.value(), 1);
         gfxQueueCreateInfo.pQueuePriorities = &queuePriority1;
+#if !SR_SingleQueueForRenderDoc_onlyCreateOne
         vk::DeviceQueueCreateInfo transferQueueCreateInfo({}, loc_queueFamilyIndices.resourceTransferFamily.value(), 1);
         transferQueueCreateInfo.pQueuePriorities = &queuePriority1;
+#endif
 
-
-        std::array<VkDeviceQueueCreateInfo, 2> queueCreateInfos = { VkDeviceQueueCreateInfo(gfxQueueCreateInfo), VkDeviceQueueCreateInfo(transferQueueCreateInfo) };
+        std::array<VkDeviceQueueCreateInfo, 
+#if !SR_SingleQueueForRenderDoc_onlyCreateOne
+            2
+#else
+            1
+#endif
+        > queueCreateInfos = { VkDeviceQueueCreateInfo(gfxQueueCreateInfo), 
+#if !SR_SingleQueueForRenderDoc_onlyCreateOne
+            VkDeviceQueueCreateInfo(transferQueueCreateInfo) 
+#endif
+        };
 
         //TODO: add proper way of requesting and falling back on device features
         //vk::PhysicalDeviceFeatures deviceFeatures();
         VkPhysicalDeviceFeatures requestedDeviceFeatures{};
         requestedDeviceFeatures.samplerAnisotropy = VK_TRUE;
-
+       /* 
+        VkPhysicalDeviceSeparateDepthStencilLayoutsFeatures seperateDepth;
+        seperateDepth.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES;
+        seperateDepth.pNext = nullptr;
+        seperateDepth.separateDepthStencilLayouts = true;*/
 
         VkPhysicalDeviceFeatures supportedFeatures;
         vkGetPhysicalDeviceFeatures(physicalDevice, &supportedFeatures);
@@ -567,7 +586,7 @@ namespace sunrise {
 
         VkPhysicalDeviceDescriptorIndexingFeatures desIndexingFeatures{};
         desIndexingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES;
-        desIndexingFeatures.pNext = nullptr;
+        desIndexingFeatures.pNext = nullptr;//&seperateDepth;
 
         desIndexingFeatures.descriptorBindingUpdateUnusedWhilePending = VK_TRUE;
         // not suported by gtx 1080 ti
@@ -643,8 +662,11 @@ namespace sunrise {
 
         device.getQueue(loc_queueFamilyIndices.graphicsFamily.value(), 0, &loc_deviceQueues.graphics);
         device.getQueue(loc_queueFamilyIndices.presentFamily.value(), 0, &loc_deviceQueues.presentation);
+#if SR_SingleQueueForRenderDoc_onlyCreateOne
+        device.getQueue(loc_queueFamilyIndices.graphicsFamily.value(), 0, &loc_deviceQueues.resourceTransfer);
+#else
         device.getQueue(loc_queueFamilyIndices.resourceTransferFamily.value(), 0, &loc_deviceQueues.resourceTransfer);
-
+#endif
         devices.push_back(device);
         debugObjects.push_back(debugObject);
         deviceInfos.push_back(new DeviceInfo{ multiViewportAvailable });

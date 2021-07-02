@@ -139,11 +139,11 @@ namespace sunrise::gfx {
 #else
 		return
 #endif
-			(layout == vk::ImageLayout::eUndefined || layout == vk::ImageLayout::eShaderReadOnlyOptimal);
+			(layout == vk::ImageLayout::eUndefined || layout == vk::ImageLayout::eShaderReadOnlyOptimal || layout == vk::ImageLayout::eDepthReadOnlyOptimal);
 
 #if SR_ENABLE_PRECONDITION_CHECKS
 		//No other formats arew currently supported
-		SR_ASSERT(result || layout == vk::ImageLayout::eColorAttachmentOptimal);
+		SR_ASSERT(result || layout == vk::ImageLayout::eColorAttachmentOptimal || layout == vk::ImageLayout::eDepthStencilAttachmentOptimal);
 		return result;
 #endif
 

@@ -36,7 +36,7 @@ namespace sunrise {
 		glm::dvec3 origin = glm::dvec3(0, 0, 0);
 
 #pragma region player
-		const glm::dvec3 initialPlayerLLA = glm::dvec3(40.610319941413, -74.039182662964, 100);
+		const glm::dvec3 initialPlayerLLA = glm::dvec3(40.610319941413, -74.039182662964, 4);
 
 		glm::dvec3 playerLLA =
 			//glm::dvec3(0, 0, 1000);

@@ -105,8 +105,12 @@ namespace sunrise::gfx {
 		VkDeviceSize vCount = 70'000'000;
 		VkDeviceSize indexCount = 220'000'000;
 
+#if SR_RenderDocCompatible
+		// debug tools like renderdocf and nsight graphics have real trouble with huge allocations so they have to be reduced
+		makeGlobalMeshBuffers(vCount / 10, indexCount / 10);
+#else
 		makeGlobalMeshBuffers(vCount, indexCount);
-
+#endif
 #pragma endregion
 
 
@@ -289,7 +293,6 @@ namespace sunrise::gfx {
 
 		
 		// end encoding 
-		cmdBuff.endRenderPass();
 		cmdBuff.end();
 
 		// submit frame

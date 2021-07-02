@@ -14,6 +14,7 @@ namespace sunrise {
 		WorldScene* world = nullptr;
 
 		virtual void update();
+		virtual void setup() {}
 	};
 
 	// depricated

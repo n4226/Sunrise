@@ -9,12 +9,13 @@
 
 
 //TODO: move this back to binding 4 when depth buffer added back
-layout(binding = 3) uniform UniformBufferObject {
+layout(binding = 4) uniform UniformBufferObject {
 // global uniforms
     mat4 viewProjection;
 
     // post uniforms
     mat4 invertedViewMat;
+    mat4 invertedProjMat;
     mat4 viewMat;
     mat4 projMat;
 
@@ -298,7 +299,7 @@ vec3 calculatePostAtmosphereicScatering(
 layout (binding = 0) uniform sampler2D GBuffer_Albedo_Metallic;
 layout (binding = 1) uniform sampler2D GBuffer_Normal_Roughness;
 layout (binding = 2) uniform sampler2D GBuffer_AO;
-//layout (binding = 3) uniform sampler2D GBuffer_Depth;
+layout (binding = 3) uniform sampler2D GBuffer_Depth;
 
 float remap(float value, float low1,float high1,float low2,float high2) {
     return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
@@ -312,24 +313,32 @@ void main() {
 
 	//TODO can calculate this in vertex to be more efficient
     // second param is lod
-	vec2 uvs = gl_FragCoord.xy / vec2(textureSize(GBuffer_Albedo_Metallic,0));
-
+	vec2 uvs = (inPos + 1) / 2;// / vec2(ubo.renderTargetSize);
     vec4 albedo_metallic =   texture(GBuffer_Albedo_Metallic,uvs);
     vec4 normal_sroughness = texture(GBuffer_Normal_Roughness,uvs);
     float ao =               texture(GBuffer_AO,uvs).x;
-    //float depth =            texture(GBuffer_Depth,uvs).x; 
-
+    float depth =            texture(GBuffer_Depth,uvs).x; 
     //albedo_metallic = normal_sroughness;
 
-    //depth = remap(depth,0.9993,1,0,1);
-    //albedo_metallic.xyz = vec3(depth);
 
+    vec3 color;
 
     //TODO: remove this to render the actual scene
-    if (normal_sroughness.w == 0) {
-        albedo_metallic.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy * 0.5 + 0.5,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
-        albedo_metallic.w = 1;
+    if (depth == 1) {
+        color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy * 0.5 + 0.5,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
+        //albedo_metallic.w = 1;
+    }
+    else {
+
+        SampledPBRMaterial mat;
+        mat.albedo = albedo_metallic.xyz;
+        mat.worldSpaceNormals = normal_sroughness.xyz;
+        mat.metallic = albedo_metallic.w;
+        mat.ao = ao.x;
+        mat.roughness = normal_sroughness.w;
+
+        color = calculateLighting(uvs,depth,ubo.invertedViewMat,ubo.invertedProjMat,mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos.xyz);
     }
 
-    outColor = vec4(albedo_metallic.xyz, 1);
+    outColor = vec4(color, 1);
 }

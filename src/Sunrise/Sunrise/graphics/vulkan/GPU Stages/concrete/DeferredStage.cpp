@@ -63,6 +63,9 @@ namespace sunrise {
 				vk::DescriptorImageInfo imageInfo3 = { inputImageSampler->vkItem ,
 					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAoIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
 
+				vk::DescriptorImageInfo imageInfo4 = { inputImageSampler->vkItem ,
+					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffDepthIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
+
 
 				VkDescriptorBufferInfo globalUniformBufferInfo{};
 				globalUniformBufferInfo.buffer = worldCoord->uniformBuffers[window->indexInRenderer][swap]->vkItem;
@@ -78,11 +81,14 @@ namespace sunrise {
 				gfx::DescriptorPool::UpdateOperation updateOp3 = { gfx::DescriptorPool::UpdateOperation::Type::write,
 					des[0]->makeBinding(2),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo3) };
 
+				gfx::DescriptorPool::UpdateOperation updateOp4 = { gfx::DescriptorPool::UpdateOperation::Type::write,
+					des[0]->makeBinding(3),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo4) };
+
 
 				gfx::DescriptorPool::UpdateOperation sceneUniformsUpdateOp = { gfx::DescriptorPool::UpdateOperation::Type::write,
-					des[0]->makeBinding(3),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(globalUniformBufferInfo) };
+					des[0]->makeBinding(4),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(globalUniformBufferInfo) };
 
-				descriptorPool->update({ updateOp1, updateOp2, updateOp3, sceneUniformsUpdateOp });
+				descriptorPool->update({ updateOp1, updateOp2, updateOp3, updateOp4, sceneUniformsUpdateOp });
 			}
 		}
 	}

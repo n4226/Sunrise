@@ -28,7 +28,7 @@ namespace sunrise {
 			struct CreateOptions {
 
 				enum class AttatchmentType {
-					Color, Depth
+					Color, Depth, Stencil
 				};
 
 				struct VAttatchment {
@@ -55,9 +55,13 @@ namespace sunrise {
 					vk::ImageUsageFlags usage = vk::ImageUsageFlagBits::eColorAttachment;
 
 					/// <summary>
-					/// only visable if load op is set to clear
+					/// only visable if load op is set to clear and type == color
 					/// </summary>
 					std::array<float, 4> clearColor = { 0.0f, 0.0f, 0.2f, 1.0f };
+					/// <summary>
+					/// only visivle if load op is set to clear and type == depth
+					/// </summary>
+					vk::ClearDepthStencilValue clearDepthStencil = { 1.f, 0};
 
 					//debug options
 					std::string name = "";
@@ -84,6 +88,7 @@ namespace sunrise {
 
 			virtual void createMainRenderPass() override;
 			virtual size_t getTotalAttatchmentCount() override;
+			virtual size_t getColorAttatchmentCount() override;
 			virtual size_t getSubPassCount() override;
 
 

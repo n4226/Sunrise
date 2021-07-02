@@ -27,8 +27,10 @@ layout(location = 2) in vec3 inNormal;
 layout(location = 3) in vec3 inTangent;
 layout(location = 4) in vec3 inBitangent;
 
-layout(location = 0) out vec3 outNormal;
-layout(location = 1) out vec2 outUvs;
+layout(location = 0) out vec3 outFragModelNormal;
+layout(location = 1) out vec3 outFragModelTangent;
+layout(location = 2) out vec3 outFragModelBitangent;
+layout(location = 3) out vec2 outUvs;
 
 //vec2 positions[3] = vec2[](
 //    vec2(0.0, -0.5),
@@ -44,6 +46,11 @@ layout(location = 1) out vec2 outUvs;
 
 void main() {
     outUvs = inUv;
-    outNormal = inNormal;
+    outFragModelNormal = inNormal;
+    outFragModelTangent = inTangent;
+    outFragModelBitangent = inBitangent;
+
+    // convert normal to worldspace
+    //outWorldNormal = (modelUniform.data[drawData.modelIndex].model * vec4(inNormal,0)).xyz;
     gl_Position = ubo.viewProjection * modelUniform.data[drawData.modelIndex].model * vec4(inPosition, 1.0);
 }

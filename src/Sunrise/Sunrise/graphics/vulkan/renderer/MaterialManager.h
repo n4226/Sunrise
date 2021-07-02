@@ -28,6 +28,23 @@ namespace sunrise {
 
 	private:
 
+		struct MaterialFiles {
+			std::string albedoPath{};
+			std::string normal{};
+			std::string metalic{};
+			std::string roughness{};
+			std::string ambientOclusion{};
+		};
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="matRootPath"></param>
+		/// <param name="matFolder"></param>
+		/// <param name="suportedFileExtensions"> if left blank all are considered supported</param>
+		/// <returns></returns>
+		MaterialFiles getFilesForMaterial(std::string& matRootPath, const char* matFolder, const std::unordered_set<std::string>& suportedFileExtensions = {});
+
 
 		std::vector<gfx::Image*>  images;
 		std::vector<gfx::Buffer*> buffers;
@@ -37,7 +54,7 @@ namespace sunrise {
 		std::vector<gfx::ResourceTransferer::Task> pendingTasks = {};
 		std::vector<gfx::ResourceTransferer::Task> pendingGFXTasks = {};
 
-		std::tuple<gfx::Buffer*, gfx::Image*> loadTex(const char* path);
+		std::tuple<gfx::Buffer*, gfx::Image*> loadTex(const char* path, const char* name);
 
 		glm::uint32 FinishLoadingTexture(std::tuple<gfx::Buffer*, gfx::Image*> texture);
 

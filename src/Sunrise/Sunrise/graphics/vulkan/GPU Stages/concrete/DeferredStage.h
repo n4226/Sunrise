@@ -15,6 +15,7 @@ namespace sunrise {
 			size_t gbuffAlbedoMetalicIndex;
 			size_t gbuffNormalSpecularIndex;
 			size_t gbuffAoIndex;
+			size_t gbuffDepthIndex;
 		};
 
 		DeferredStage(gfx::SceneRenderCoordinator* coord, AttachOptions attachments);

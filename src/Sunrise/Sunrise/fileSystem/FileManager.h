@@ -26,6 +26,7 @@ namespace sunrise {
 
 
 		static bool exists(const std::string& path);
+		static std::vector<std::string> listDirContents(const std::string& path, bool includeSubDirectories, bool filesOnl);
 		static bool createIntermediateDirs(const std::string& path);
 
 		/// <summary>

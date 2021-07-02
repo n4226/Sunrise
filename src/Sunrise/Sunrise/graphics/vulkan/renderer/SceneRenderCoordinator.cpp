@@ -182,7 +182,7 @@ namespace sunrise::gfx {
 					for (auto& p : options) {
 
 						SR_ASSERT(p.newLayout == vk::ImageLayout::eShaderReadOnlyOptimal
-							|| p.newLayout == vk::ImageLayout::eUndefined || p.newLayout == vk::ImageLayout::eColorAttachmentOptimal);
+							|| p.newLayout == vk::ImageLayout::eUndefined || p.newLayout == vk::ImageLayout::eColorAttachmentOptimal || p.newLayout == vk::ImageLayout::eDepthAttachmentOptimal || p.newLayout == vk::ImageLayout::eDepthReadOnlyOptimal);
 						//TODO right now only checking for colorAttachment to and from eShaderReadOnlyOptimal layouts
 						if (p.newLayout != vk::ImageLayout::eUndefined) {
 							// the resource index of the dependancy option must be valid
@@ -361,13 +361,15 @@ namespace sunrise::gfx {
 
 			renderer->debugObject.beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
 
-			firstLevelCMDBuffer.executeCommands(*buff);
+			//if (currentPass == 1)
+				firstLevelCMDBuffer.executeCommands(*buff);
 
  			renderer->debugObject.endRegion(firstLevelCMDBuffer);
 
 		}
 
-
+		if (inARenderPass)
+			firstLevelCMDBuffer.endRenderPass();
 	}
 
 	void SceneRenderCoordinator::startNewPass(int64_t pass, Window& window, vk::CommandBuffer firstLevelCMDBuffer)
@@ -390,7 +392,10 @@ namespace sunrise::gfx {
 
 		for (size_t i = 0; i < clearColors.size(); i++)
 		{
-			clearColors[i] = vk::ClearValue(vk::ClearColorValue(passInfo.first->options.attatchments[i].clearColor));
+			if (passInfo.first->options.attatchments[i].type == ComposableRenderPass::CreateOptions::AttatchmentType::Color)
+				clearColors[i] = vk::ClearValue(vk::ClearColorValue(passInfo.first->options.attatchments[i].clearColor));
+			else
+				clearColors[i] = vk::ClearValue(passInfo.first->options.attatchments[i].clearDepthStencil);
 		}
 
 		renderPassInfo.setClearValues(clearColors);

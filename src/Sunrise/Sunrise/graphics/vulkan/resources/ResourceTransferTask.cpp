@@ -61,6 +61,11 @@ namespace sunrise {
 				//marl::schedule([]() {printf("transfer job"); });
 				auto ticket = ticketQueue.take();
 
+#if SR_SingleQueueForRenderDoc
+			requiresGfxQueue = true;
+			synchronus = true;
+#endif
+
 			if (synchronus)
 				performTask(tasks, ticket, completionHandler, requiresGfxQueue);
 			else {
@@ -71,6 +76,7 @@ namespace sunrise {
 
 		void ResourceTransferer::performTask(std::vector<Task> tasks, marl::Ticket ticket, std::function<void()> completionHandler, bool requiresGfxQueue)
 		{
+
 
 			static int c = 0;
 			//if (c++ > 7) return;
@@ -137,10 +143,12 @@ namespace sunrise {
 				submitInfo.pCommandBuffers = &cmdBuffer;
 
 				if (requiresGfxQueue) {
+					SR_CORE_WARN("submitting resource task(s) to main gfx queue");
 					renderer.deviceQueues.graphics.submit(submitInfo, waitFence);
 					//renderer.deviceQueues.graphics.waitIdle();
 				}
 				else {
+					SR_CORE_INFO("submitting resource task(s) to transfer queue");
 					renderer.deviceQueues.resourceTransfer.submit(submitInfo, waitFence);
 					//renderer.deviceQueues.resourceTransfer.waitIdle();
 					//renderer.device.waitIdle();

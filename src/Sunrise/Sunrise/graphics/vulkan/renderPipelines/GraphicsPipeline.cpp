@@ -184,7 +184,7 @@ namespace sunrise::gfx {
 
         std::vector<VkPipelineColorBlendAttachmentState> colorBlends;//(RenderPassManager::gbufferAttachmentCount, colorBlendAttachment);
 
-        colorBlends.resize(renderPassManager.getTotalAttatchmentCount());
+        colorBlends.resize(renderPassManager.getColorAttatchmentCount());
 
         for (size_t i = 0; i < colorBlends.size(); i++)
         {

@@ -26,6 +26,10 @@ namespace sunrise::gfx {
 	{
 		return 4;
 }
+	size_t RenderPassManager::getColorAttatchmentCount()
+	{
+		return 3;
+}
 // dont know why i did this ??
 #if SR_RELEASE || SR_DIST
 #pragma optimize( "", off )

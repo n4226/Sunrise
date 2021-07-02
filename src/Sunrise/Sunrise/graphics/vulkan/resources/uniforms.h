@@ -16,6 +16,7 @@ namespace sunrise::gfx {
 
     struct PostProcessEarthDatAndUniforms {
         glm::mat4 invertedViewMat;
+        glm::mat4 invertedProjMat;
         glm::mat4 viewMat;
         glm::mat4 projMat;
 

@@ -127,6 +127,16 @@ namespace sunrise::gfx {
 
 
 		}
+		
+		/*std::vector<vk::InputAttachmentAspectReference> aspects{};
+
+		aspects.reserve(attachments.size());
+
+		for 
+
+		vk::RenderPassInputAttachmentAspectCreateInfo aspectInfo;*/
+
+		colorAttachmentCount = colorReferences.size();
 
 		vk::RenderPassCreateInfo renderPassInfo{};
 		renderPassInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
@@ -140,11 +150,18 @@ namespace sunrise::gfx {
 			renderPassInfo.pNext = &multiViewInfo;
 		
 		renderPass = device.createRenderPass(renderPassInfo);
+		
 	}
 
 	size_t ComposableRenderPass::getTotalAttatchmentCount()
 	{
 		return options.attatchments.size();
+	}
+
+	size_t ComposableRenderPass::getColorAttatchmentCount()
+	{
+		//todo asumes 1 pass
+		return colorAttachmentCount;
 	}
 
 	size_t ComposableRenderPass::getSubPassCount()

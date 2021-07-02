@@ -8,13 +8,17 @@
 
 #define SR_MULTI_THREADED_PROFILING 1
 
-#define SR_RenderDocCompatible 0
+#define SR_RenderDocCompatible 1
+#define SR_SingleQueueForRenderDoc 0
+
+// will not build without modifications
+#define SR_SingleQueueForRenderDoc_onlyCreateOne 0
 
 //#if SR_MULTI_THREADED_PROFILING
 //dddd
 //#endif
 
-#if SR_PROFILING
+#if SR_PROFILING && SR_DEBUG
 #define PROFILE_SCOPE(name) InstrumentationTimer timer##__line__(name);
 #define PROFILE_FUNCTION PROFILE_SCOPE(__FUNCSIG__)
 #define PROFILE_SCOPE_LEVEL2(name) InstrumentationTimer timer##__line__(name);
@@ -94,6 +98,7 @@
 #define FLOATING_ORIGIN_SNAP_DISTANCE 100'000
 
 #define SR_ASSERT(value) assert(value)
+#define SR_CORE_ASSERT(value) assert(value)
 
 // used to be in post build stage
 

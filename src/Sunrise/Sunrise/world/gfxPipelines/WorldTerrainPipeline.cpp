@@ -23,7 +23,7 @@ namespace sunrise {
 		std::vector<DescriptorSetLayoutBinding> set = {
 			{
 				DescriptorSetLayoutBinding(0,vk::DescriptorType::eUniformBuffer, 1, vk::ShaderStageFlagBits::eVertex),
-				DescriptorSetLayoutBinding(1,vk::DescriptorType::eStorageBuffer, 1, vk::ShaderStageFlagBits::eVertex),
+				DescriptorSetLayoutBinding(1,vk::DescriptorType::eStorageBuffer, 1, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment),
 				DescriptorSetLayoutBinding(2,vk::DescriptorType::eStorageBuffer, 1, vk::ShaderStageFlagBits::eFragment),
 				DescriptorSetLayoutBinding(
 					3,vk::DescriptorType::eCombinedImageSampler, maxMaterialTextureDescriptorArrayCount,

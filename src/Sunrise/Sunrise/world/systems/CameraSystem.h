@@ -4,21 +4,28 @@
 #include "../../Math.h"
 #include "../../graphics/vulkan/renderer/RenderSystem.h"
 
+#include "Sunrise/Sunrise/world/simlink/SimlinkMessages.h"
+
+
 namespace sunrise {
 
+	class NetworkManager;
 
 	class CameraSystem : public System
 	{
 	public:
 		CameraSystem();
-		void update() override;
 
+		void update() override;
+		void setup() override;
 	private:
+
+		bool hasConnection = false;
 
 		void movePlayerAlongCamPath();
 
 		//TODO: don't think this is correct
-		const double speed = 300; // in meters / second
+		const double speed = 3;//300; // in meters / second
 
 		//TODO: reset this back to 0
 		size_t currentSegment = 0;
@@ -46,20 +53,20 @@ namespace sunrise {
 			//glm::dvec3(40.51994075985466 , -73.96928018695641,500)
 
 
-			glm::dvec3(40.51994075985466 , -73.96928018695641,300), //500),
-			glm::dvec3(40.54709068849014 , -73.98451039585544,300), //500),
-			glm::dvec3(40.60603999938215 , -74.02412689599031,300), //500),
-			glm::dvec3(40.68617096089564 , -74.03331417746679,300), //500),
-			glm::dvec3(40.73199901859223 , -74.01813813429706,300), //500),
-			glm::dvec3(40.76734669031339 , -74.01368629698507,300), //500),
-			glm::dvec3(40.79415639586417 , -73.98463708020655,300), //500),
-			glm::dvec3(40.78492880489573 , -73.96389654744658,300), //500),
-			glm::dvec3(40.76711927501298 , -73.97452691880592,300), //500),
-			glm::dvec3(40.73273944708617 , -73.98185517766292,300), //500),
-			glm::dvec3(40.71398903798578 , -73.99861573311571,300), //500),
-			glm::dvec3(40.63009052816579 , -74.05752673164039,300), //500),
-			glm::dvec3(40.59898784065786 , -74.04207906535621,300), //500),
-			glm::dvec3(40.5273511630884  , -74.01884552005585,300), //500),
+			glm::dvec3(40.51994075985466 , -73.96928018695641,20), //300), //500),
+			glm::dvec3(40.54709068849014 , -73.98451039585544,20), //300), //500),
+			glm::dvec3(40.60603999938215 , -74.02412689599031,20), //300), //500),
+			glm::dvec3(40.68617096089564 , -74.03331417746679,20), //300), //500),
+			glm::dvec3(40.73199901859223 , -74.01813813429706,20), //300), //500),
+			glm::dvec3(40.76734669031339 , -74.01368629698507,20), //300), //500),
+			glm::dvec3(40.79415639586417 , -73.98463708020655,20), //300), //500),
+			glm::dvec3(40.78492880489573 , -73.96389654744658,20), //300), //500),
+			glm::dvec3(40.76711927501298 , -73.97452691880592,20), //300), //500),
+			glm::dvec3(40.73273944708617 , -73.98185517766292,20), //300), //500),
+			glm::dvec3(40.71398903798578 , -73.99861573311571,20), //300), //500),
+			glm::dvec3(40.63009052816579 , -74.05752673164039,20), //300), //500),
+			glm::dvec3(40.59898784065786 , -74.04207906535621,20), //300), //500),
+			glm::dvec3(40.5273511630884  , -74.01884552005585,20), //300), //500),
 
 			//- this is the first point again 
 			//glm::dvec3(40.51994075985466 , -73.96928018695641,100)
@@ -80,6 +87,10 @@ namespace sunrise {
 
 
 		math::Path<glm::dvec3> cameraPath;
+
+		libguarded::shared_guarded<SimlinkMessages::simpleUpdate> updateStreamed = libguarded::shared_guarded<SimlinkMessages::simpleUpdate>(SimlinkMessages::simpleUpdate());
+
+		sunrise::NetworkManager* networkManager;
 
 	};
 
