@@ -5,7 +5,7 @@
 namespace sunrise {
 
 
-	class VaribleIndexAllocator
+	class SUNRISE_API VaribleIndexAllocator
 	{
 	public:
 		VaribleIndexAllocator(size_t size);
@@ -20,9 +20,13 @@ namespace sunrise {
 		void free(size_t address, size_t size);
 
 
+		size_t maxAllocationSizeAvailable();
+
 		const size_t totalSize;
 		size_t allocatedSize = 0;
 
+	private:
+		
 		struct freeSpace {
 			size_t start;
 			size_t size;

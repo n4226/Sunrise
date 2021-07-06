@@ -37,6 +37,7 @@ namespace sunrise::math::mesh {
 
 
 	typedef CGAL::Exact_predicates_inexact_constructions_kernel       K;
+	//typedef CGAL::Exact_predicates_exact_constructions_kernel       K;
 	typedef CGAL::Triangulation_vertex_base_2<K>                      Vb;
 	typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, K>    Fbb;
 	typedef CGAL::Constrained_triangulation_face_base_2<K, Fbb>        Fb;
@@ -155,7 +156,9 @@ namespace sunrise::math::mesh {
 		}
 
 		for (auto& point : newVerts) {
-			mesh->verts.emplace_back(point.x(), point.y());
+			glm::float64 px = point.x();//.get_relative_precision_of_to_double();
+			glm::float64 py = point.y();//.get_relative_precision_of_to_double();
+			mesh->verts.emplace_back(px,py);
 		}
 
 
@@ -191,12 +194,41 @@ namespace sunrise::math::mesh {
 
 	}
 
-	std::vector<std::vector<glm::dvec2>>* intersectionOf(std::vector<glm::dvec2>& polygon1, std::vector<glm::dvec2>& polygon2)
+	/// <summary>
+	/// both must be the same orentation e.g. either clockwise or coutner clockwise
+	/// </summary>
+	/// <param name="_polygon1"></param>
+	/// <param name="_polygon2"></param>
+	/// <returns></returns>
+	std::vector<std::vector<glm::dvec2>> intersectionOf(const std::vector<glm::dvec2>& _polygon1,const std::vector<glm::dvec2>& _polygon2)
 	{
+		//https://doc.cgal.org/latest/Algebraic_foundations/group__PkgAlgebraicFoundationsRef.html#ga1f1bcd74fce34fd532445590bbda5cd5
+		////typedef CGAL::Exact_predicates_inexact_constructions_kernel       K;
+		typedef CGAL::Exact_predicates_exact_constructions_kernel      K;
+		typedef CGAL::Triangulation_vertex_base_2<K>                      Vb;
+		typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, K>    Fbb;
+		typedef CGAL::Constrained_triangulation_face_base_2<K, Fbb>        Fb;
+		typedef CGAL::Triangulation_data_structure_2<Vb, Fb>               TDS;
+		typedef CGAL::Exact_predicates_tag                                Itag;
+		typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag>  CDT;
+		typedef CDT::Point                                                Point;
+		typedef CGAL::Polygon_2<K>                                        Polygon_2;
+		typedef CGAL::Polygon_with_holes_2<K>                             Polygon_with_holes_2;
+		typedef CDT::Face_handle                                          Face_handle;
+		typedef std::list<Polygon_with_holes_2>                           Pwh_list_2;
 		
+
+
+		auto polygon1 = _polygon1;
+		auto polygon2 = _polygon2;
+
+		makeOpenIfClosedForCGAL(polygon1);
+		makeOpenIfClosedForCGAL(polygon2);
+
 		Polygon_2 p1;
 		Polygon_2 p2;
 
+		auto ds = p1.is_convex();
 
 		p1.resize(polygon1.size());
 		p2.resize(polygon2.size());
@@ -210,26 +242,35 @@ namespace sunrise::math::mesh {
 			p2[i] = Point(polygon2[i].x, polygon2[i].y);
 		}
 
+		SR_ASSERT(p1.is_clockwise_oriented() == p2.is_clockwise_oriented());
 
 		// Compute the intersection of P and Q.
 		//Pwh_list_2                  intR;
 		std::vector<Polygon_with_holes_2>                  intR;
 
+
+
 		CGAL::intersection(p1, p2, std::back_inserter(intR));
 		//CGAL::join(p1, p2, unionR);
 
 
-		auto outPolygon = new std::vector<std::vector<glm::dvec2>>();
+		auto outPolygon = std::vector<std::vector<glm::dvec2>>();
+
+		if (intR.size() == 0)
+			return outPolygon;
 
 		if (intR[0].is_unbounded()) {
-			delete outPolygon;
 			throw std::runtime_error("not supported yet");
 		}
 
-		outPolygon->push_back({});
+		outPolygon.push_back({});
 		
 		for (auto vert = intR[0].outer_boundary().vertices_begin(); vert != intR[0].outer_boundary().vertices_end(); vert = std::next(vert)) {
-			(*outPolygon)[0].emplace_back(vert->x(),vert->y());
+			glm::float64 px = to_double(vert->x());
+			glm::float64 py = to_double(vert->y());
+			outPolygon[0].emplace_back(px, py);
+			
+			//outPolygon[0].emplace_back(vert->x(),vert->y());
 		}
 
 		for (auto hit = intR[0].holes_begin(); hit != intR[0].holes_end(); ++hit) {
@@ -239,10 +280,18 @@ namespace sunrise::math::mesh {
 		return outPolygon;
 	}
 
+	void makeOpenIfClosedForCGAL(std::vector<glm::dvec2>& polygon)
+	{
+		if (polygon.size() == 0) return;
+
+		if (polygon[polygon.size() - 1] == polygon[0])
+			polygon.pop_back();
+	}
+
 	Box bounds(std::vector<glm::dvec2>& points)
 	{
 		glm::dvec2 min = glm::dvec2(std::numeric_limits<double>::max()); //glm::dvec2(90, 180);
-		glm::dvec2 max = glm::dvec2(std::numeric_limits<double>::min()); //glm::dvec2(-90, -180);
+		glm::dvec2 max = glm::dvec2(-std::numeric_limits<double>::max()); //glm::dvec2(-90, -180);
 
 		for (auto& pos : points) {
 			if (pos.x < min.x)
@@ -256,7 +305,19 @@ namespace sunrise::math::mesh {
 				max.y = pos.y;
 		}
 
-		return Box(min, max - min);
+		SR_CORE_ASSERT(min != glm::dvec2(std::numeric_limits<double>::max()) && max != glm::dvec2(-std::numeric_limits<double>::max()));
+
+		auto result = Box(min, max - min);
+
+#if SR_ENABLE_PRECONDITION_CHECKS
+
+		for (auto& point : points) {
+			SR_ASSERT(result.contains(point));
+		}
+
+#endif
+
+		return result;
 	}
 
 	

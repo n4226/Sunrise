@@ -22,6 +22,27 @@ namespace sunrise {
 
 	}
 
+
+	size_t VaribleIndexAllocator::maxAllocationSizeAvailable()
+	{
+		freeSpace* space = nullptr;
+
+		bool loop = true;
+
+		if (freeSpaces.empty())
+		{
+			throw std::runtime_error("allocation empty");
+			return 0;
+		}
+
+		std::pop_heap(freeSpaces.begin(), freeSpaces.end(), freeSpace_rank_greater_than());
+		space = freeSpaces[freeSpaces.size() - 1];
+		std::push_heap(freeSpaces.begin(), freeSpaces.end(), freeSpace_rank_greater_than());
+		
+		return space->size;
+	}
+
+
 	size_t VaribleIndexAllocator::alloc(size_t size)
 	{
 
@@ -52,7 +73,7 @@ namespace sunrise {
 			}
 		}
 
-		assert(space->size >= size);
+		SR_CORE_ASSERT(space->size >= size);
 
 		allocatedSize += size;
 
@@ -64,7 +85,7 @@ namespace sunrise {
 		if (newSpace->size > 0)
 			addFreeSpace(newSpace);
 
-#if !SR_DIST
+#if SR_LOGGING
 		auto allocPercent = static_cast<float>(allocatedSize) / (totalSize / 100);
 		if (allocPercent > 10)
 			SR_CORE_WARN("varible allocator usage is {}%",allocPercent);

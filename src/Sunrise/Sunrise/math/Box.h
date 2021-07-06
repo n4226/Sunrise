@@ -17,11 +17,11 @@ namespace sunrise::math {
 		constexpr glm::dvec2 getEnd() const;
 		constexpr glm::dvec2 getCenter() const;
 
-		bool contains(glm::dvec2 point) const;
+		constexpr bool contains(glm::dvec2 point) const;
 		bool containsAny(std::vector<glm::dvec2>& points) const;
 		bool containsAny(std::vector<glm::dvec2>&& points) const;
-		bool overlaps(Box other) const;
-		//bool contains(Box other);
+		constexpr bool overlaps(Box other) const;
+		//constexpr bool contains(Box other) const;
 
 		std::vector<glm::dvec2> polygon() const;
 

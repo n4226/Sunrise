@@ -24,8 +24,14 @@ namespace sunrise::math::mesh
 	/// </summary>
 	SUNRISE_API std::pair<TriangulatedMesh*, bool> triangulate(std::vector<std::vector<glm::dvec2>>& polygon);
 
-	SUNRISE_API std::vector<std::vector<glm::dvec2>>* intersectionOf(std::vector<glm::dvec2>& polygon1, std::vector<glm::dvec2>& polygon2);
+	SUNRISE_API std::vector<std::vector<glm::dvec2>> intersectionOf(const std::vector<glm::dvec2>& polygon1,const std::vector<glm::dvec2>& polygon2);
 
+	/// <summary>
+	/// if the polygon passed in has the first point repeated as the last point this will remove it
+	/// </summary>
+	/// <param name="polygon"></param>
+	/// <returns></returns>
+	SUNRISE_API void makeOpenIfClosedForCGAL(std::vector<glm::dvec2>& polygon);
 	
 	SUNRISE_API Box bounds(std::vector<glm::dvec2>& points);
 
