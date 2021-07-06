@@ -24,14 +24,15 @@ project "Sunrise"
 	}
 
 	libdirs {
-		"vendor/marl-main/marl-main/Debug",
 		--"C:/code/visual studio/FSTS/Sunrise/vendor/mango-master/mango-master/build/vs2019/x64/Debug",
 		"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 		"C:/VulkanSDK/1.2.154.1/Lib",
 		"vendor/bin/glfw/windows/glfw-3.3.2.bin.WIN64/glfw-3.3.2.bin.WIN64/lib-vc2019",
 		"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64",
 	}
+	
 
+	
 	links {
 		--TODO add back mango
 		--"mango",
@@ -109,16 +110,28 @@ project "Sunrise"
 		runtime "Debug"
 		symbols "on"
 
+		libdirs {
+			"vendor/marl-main/marl-main/build/Debug",
+		}
+
 	filter "configurations:Release"
 		defines "SR_RELEASE"
 		--runtime "Debug"
 		runtime "Release"
 		optimize "on"	
 
+		libdirs {
+			"vendor/marl-main/marl-main/build/Release",
+		}
+
 	filter "configurations:Dist"
 		defines "SR_DIST"
 		runtime "Release"
 		optimize "on"
+
+		libdirs {
+			"vendor/marl-main/marl-main/build/Release",
+		}
 
 	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp or files:vendor/imgui/**.cpp' }
 		flags {"NoPCH"}

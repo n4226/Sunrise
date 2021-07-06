@@ -205,63 +205,88 @@ vec3 computeIncidentLight(
 
 vec3 calculatePostAtmosphereicScatering(
     ivec2 textureSize,
-    vec2 textPosition,  // x and y of this fragment in the texture
+    vec2 ndc,  // x and y of this fragment in the texture
     vec3 camPos, // without floating origin  // world // in geo coordinates
     mat4x4 ViewMatrix,
     vec3 sunDirection
 ) {
-
-    // calculate origin(pos) and direction(dir)
-
-    vec3 orig = camPos;
-
-    //#warning remmber that this fov and other camera info is not checked in any way to e what is on the CPU so be carful
-
-    // swift way
-
-    //    float aspectRatio = textureSize.x / float(textureSize.y);
-    //    float fov = 60;
-    //    float angle = tan(fov * PI / 180 * 0.5f);
-    //    
-    //    //
-    //    float rayx = (2 * textPosition.x - 1) * aspectRatio * angle;
-    //    float rayy = (1 - textPosition.y * 2) * angle;
-    //    
-    //    vec3 dir = vec3(rayx, rayy, -1);
-    //    //    dir = normalize(dir);
-    //    dir = normalize((mat4(ViewMatrix) * vec4(dir,0)).xyz);
-    //
-
-
-    vec4 reverseVec;
-
-    //TODO: this whole file is a complete mess but it apears to be less lickely for the sky to fall
-
-    /* inverse perspective projection */
-
-    // in [-1,1] for x and y
-    vec2 normalizedUvs = textPosition.xy * 2 - 1;
-
-    // see: https://veldrid.dev/articles/backend-differences.html
-    // Vulkan: [-1,1][-1,1][0,1] NOTE: Vulkan's clip space Y axis is inverted compared to other API's.
-
-    // the view direction in NDC space ([-1.1], [-1,1], [0,1] -z (0z is near plane))
-    vec3 viewDirNDC = normalize(vec3(normalizedUvs,1));
-
-    vec3 viewDirEye = (inverse(ubo.projMat) * vec4(viewDirNDC,1)).xyz;
-    // view direection in world space
-    vec3 viewDerWorld = (ubo.invertedViewMat * vec4(viewDirEye,0)).xyz;
-
+//    // calculate origin(pos) and direction(dir)
+        vec3 orig = camPos;
+//    
 //
-//    reverseVec = vec4(normalizedUvs, 0.0, 1.0);
-//    reverseVec = inverse(ubo.projMat) * reverseVec;
 //
-//    /* inverse modelview, without translation */
-//    reverseVec.w = 0.0;
-//    reverseVec = ubo.invertedViewMat * reverseVec;
+//    //#warning remmber that this fov and other camera info is not checked in any way to e what is on the CPU so be carful
 //
-    /* send */
-    vec3 dir = viewDerWorld;//vec3(reverseVec);
+//    // swift way
+//
+//    //    float aspectRatio = textureSize.x / float(textureSize.y);
+//    //    float fov = 60;
+//    //    float angle = tan(fov * PI / 180 * 0.5f);
+//    //    
+//    //    //
+//    //    float rayx = (2 * textPosition.x - 1) * aspectRatio * angle;
+//    //    float rayy = (1 - textPosition.y * 2) * angle;
+//    //    
+//    //    vec3 dir = vec3(rayx, rayy, -1);
+//    //    //    dir = normalize(dir);
+//    //    dir = normalize((mat4(ViewMatrix) * vec4(dir,0)).xyz);
+//    //
+//
+//
+//    vec4 reverseVec;
+//
+//    //TODO: this whole file is a complete mess but it apears to be less lickely for the sky to fall
+//
+//    /* inverse perspective projection */
+//
+//    // in [-1,1] for x and y
+//    vec2 normalizedUvs = textPosition.xy * 2 - 1;
+//
+//    // see: https://veldrid.dev/articles/backend-differences.html
+//    // Vulkan: [-1,1][-1,1][0,1] NOTE: Vulkan's clip space Y axis is inverted compared to other API's.
+//
+//    // the view direction in NDC space ([-1.1], [-1,1], [0,1] -z (0z is near plane))
+//    vec3 viewDirNDC = normalize(vec3(normalizedUvs,1));
+//
+//    vec3 viewDirEye = (inverse(ubo.projMat) * vec4(viewDirNDC,1)).xyz;
+//    // view direection in world space
+//    vec3 viewDerWorld = (ubo.invertedViewMat * vec4(viewDirEye,0)).xyz;
+//
+////
+////    reverseVec = vec4(normalizedUvs, 0.0, 1.0);
+////    reverseVec = inverse(ubo.projMat) * reverseVec;
+////
+////    /* inverse modelview, without translation */
+////    reverseVec.w = 0.0;
+////    reverseVec = ubo.invertedViewMat * reverseVec;
+////
+//
+//
+//    
+//
+//
+//
+//    /* send */
+//    vec3 dir = viewDerWorld;//vec3(reverseVec);
+//
+
+    vec4 clipSpaceFragPos = vec4(ndc, 0.5f, 1.0);
+
+    // dont think i need this but i dont know;
+    //clipSpaceFragPos.y = -clipSpaceFragPos.y;
+
+
+    vec4 viewSpaceFragPosition =
+        ubo.invertedProjMat * clipSpaceFragPos;
+    
+    // perspective division
+    viewSpaceFragPosition /= viewSpaceFragPosition.w;
+
+    vec4 worldSpaceFragPosition =
+        ubo.invertedViewMat * viewSpaceFragPosition;
+
+    vec3 dirTemp = ubo.camFloatedGloabelPos.xyz - worldSpaceFragPosition.xyz;
+    vec3 dir =  normalize(dirTemp);
 
 
     // 
@@ -325,7 +350,7 @@ void main() {
 
     //TODO: remove this to render the actual scene
     if (depth == 1) {
-        color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy * 0.5 + 0.5,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
+        color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
         //albedo_metallic.w = 1;
     }
     else {

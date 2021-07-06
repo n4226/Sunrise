@@ -116,11 +116,7 @@ namespace sunrise {
 
 		for (TerrainQuadTreeNode* node : tree.leafNodes) {
 
-			auto threshold = this->threshold(node);
-
-			auto distance = glm::distance(adjustedOriginTrackedPos, node->center_geo);
-
-			if (node->active && !node->isSplit && node->lodLevel < (lodLevels - 1) && distance < threshold)
+			if (node->active && !node->isSplit && node->lodLevel < (lodLevels - 1) && splitFormThreshold(node,adjustedOriginTrackedPos))
 			{
 				// split node
 
@@ -129,11 +125,7 @@ namespace sunrise {
 			}
 			else if (node->parent != nullptr && node->parent->isSplit)
 			{
-				auto nextThreshold = this->threshold(node->parent);
-
-				auto nextDistance = glm::distance(adjustedOriginTrackedPos, node->parent->center_geo);
-
-				if (nextDistance > (nextThreshold * 1.05))
+				if (combineFromThreshold(node->parent,adjustedOriginTrackedPos))
 				{
 					//combine node
 
@@ -293,7 +285,29 @@ namespace sunrise {
 	{
 		auto nodeRad = math::llaDistance(node->frame.start, node->frame.getEnd(), tree.radius);
 		//      return  radius / (node.lodLevel + 1).double * 1;
-		return nodeRad * 1;
+		return nodeRad;
+	}
+
+	bool sunrise::TerrainSystem::splitFormThreshold(const TerrainQuadTreeNode* node, const glm::dvec3& trackedPos)
+	{
+		auto distance = glm::distance(trackedPos, node->center_geo);
+
+		auto threshold = TerrainSystem::threshold(node);
+
+		threshold = threshold / 1.5;
+
+		return distance < threshold;
+	}
+
+	bool sunrise::TerrainSystem::combineFromThreshold(const TerrainQuadTreeNode* node, const glm::dvec3& trackedPos)
+	{
+		auto distance = glm::distance(trackedPos, node->center_geo);
+
+		auto threshold = TerrainSystem::threshold(node);
+
+		threshold = threshold / 1.5;
+
+		return distance > (threshold * 1.05);
 	}
 
 	bool TerrainSystem::determinActive(const TerrainQuadTreeNode* node)

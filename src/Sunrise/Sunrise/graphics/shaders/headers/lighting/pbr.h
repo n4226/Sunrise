@@ -237,8 +237,8 @@ vec3 calculateLighting(
     float z = depth;
     vec4 clipSpaceFragPos = vec4(texCoards * 2.0f - 1.0f, z, 1.0);
 
-    // dont think i need this;
-    clipSpaceFragPos.y = -clipSpaceFragPos.y;
+    // dont think i need this but i dont know;
+    //clipSpaceFragPos.y = -clipSpaceFragPos.y;
 
 
     vec4 viewSpaceFragPosition =

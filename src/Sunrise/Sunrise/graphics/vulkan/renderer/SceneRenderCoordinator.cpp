@@ -358,14 +358,14 @@ namespace sunrise::gfx {
 			GPUStage::RunOptions options = { scene, this, currentPass, window };
 
 			auto buff = stage->encode(options);
-
+#if SR_LOGGING
 			renderer->debugObject.beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
-
+#endif
 			//if (currentPass == 1)
 				firstLevelCMDBuffer.executeCommands(*buff);
-
+#if SR_LOGGING
  			renderer->debugObject.endRegion(firstLevelCMDBuffer);
-
+#endif
 		}
 
 		if (inARenderPass)

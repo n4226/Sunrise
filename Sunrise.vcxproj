@@ -92,7 +92,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Debug-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -122,7 +122,7 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Release-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -152,7 +152,7 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>..\bin\Dist-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>

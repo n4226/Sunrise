@@ -102,8 +102,8 @@ namespace sunrise::gfx {
 
 		//todo: make this more configureable and make sure it is supported by the gpu
 
-		VkDeviceSize vCount = 70'000'000;
-		VkDeviceSize indexCount = 220'000'000;
+		VkDeviceSize vCount = 70'000'000 * 1.5;
+		VkDeviceSize indexCount = 220'000'000 * 5;
 
 #if SR_RenderDocCompatible
 		// debug tools like renderdocf and nsight graphics have real trouble with huge allocations so they have to be reduced

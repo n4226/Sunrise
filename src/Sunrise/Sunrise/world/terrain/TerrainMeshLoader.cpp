@@ -229,7 +229,7 @@ namespace sunrise {
 		{
 			//TODO: i don't like all this in the loop do something better for performance
 			// 1 here means all unatributed chunks will default to grass, 0 would be ocean
-			uint32_t matIndex = 1;
+			uint32_t matIndex = 2;
 			if (preLoadedMesh.binMeshAttributes != nullptr && preLoadedMesh.binMeshAttributes->subMeshMats.size() > i) {
 				matIndex = preLoadedMesh.binMeshAttributes->subMeshMats[i];
 			}
@@ -273,7 +273,7 @@ namespace sunrise {
 		//TODO: deallocate buffers here 
 		
 		//todo why is this return here???????
-		return;
+		//return;
 		renderer->gloablVertAllocator->free(draw.vertIndex, draw.vertcount);
 		//assert((draw.indIndicies.size > 0));
 		renderer->gloablIndAllocator->free(draw.indIndicies[0], draw.totalIndexCount);

@@ -136,20 +136,21 @@ namespace sunrise {
 
 		auto files = FileManager::listDirContents(matRootPath + matFolder, true, true);
 
-		for (auto& file : files) {
+		for (auto& _file : files) {
 
-			auto extension = std::filesystem::path(file).extension();
+			auto extension = std::filesystem::path(_file).extension();
 			if (suportedFileExtensions.size() == 0 || suportedFileExtensions.count(extension.string()) == 0) {
 				continue;
 			}
 
-			auto localFIleCopy = file;
+			auto file = _file;
 			//lolwercase strings to make case not matter
-			std::transform(localFIleCopy.begin(), localFIleCopy.end(), localFIleCopy.begin(),
+			std::transform(file.begin(), file.end(), file.begin(),
 				[](unsigned char c) { return std::tolower(c); });
 
 			//albedo
-			if (file.find("albedo") != std::string::npos || file.find("defuse") != std::string::npos)
+			if (file.find("albedo") != std::string::npos || file.find("defuse") != std::string::npos 
+				|| file.find("color") != std::string::npos)
 				result.albedoPath = std::move(file);
 			//normal
 			else if (file.find("normal") != std::string::npos)

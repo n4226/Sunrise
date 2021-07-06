@@ -102,7 +102,7 @@ namespace sunrise {
 
         // setup debug callback registration for vulkan
 
-#if SR_VALIDATION
+#if SR_ENABLE_VK_DEBUG
 
         VkDebugReportCallbackCreateInfoEXT debugInfo;
 
@@ -123,7 +123,7 @@ namespace sunrise {
 
 
         auto loc_vkCreateDebugReportCallbackEXT =(PFN_vkCreateDebugReportCallbackEXT)dldid.vkGetInstanceProcAddr(instance, "vkCreateDebugReportCallbackEXT");
-        
+        SR_ASSERT(loc_vkCreateDebugReportCallbackEXT != nullptr);
         loc_vkCreateDebugReportCallbackEXT(instance, &debugInfo,nullptr, &debugObject);
 #endif
 

@@ -8,8 +8,8 @@
 
 #define SR_MULTI_THREADED_PROFILING 1
 
-#define SR_RenderDocCompatible 1
-#define SR_SingleQueueForRenderDoc 0
+#define SR_RenderDocCompatible 1 && SR_DEBUG
+#define SR_SingleQueueForRenderDoc 0 && SR_DEBUG
 
 // will not build without modifications
 #define SR_SingleQueueForRenderDoc_onlyCreateOne 0
@@ -44,11 +44,13 @@
 
 #if SR_DEBUG && SR_VALIDATION
 #define SR_ENABLE_VK_VALIDATION_LAYERS 1
+#define SR_ENABLE_VK_DEBUG 1
 #define SR_ENABLE_PRECONDITION_CHECKS 1
 #define SR_FILEOPEN_CHECKS 1
 #define SR_VK_OBJECT_NAMES 1
 #else
 #define SR_ENABLE_VK_VALIDATION_LAYERS 0
+#define SR_ENABLE_VK_DEBUG 0
 #define SR_ENABLE_PRECONDITION_CHECKS 0
 #define SR_FILEOPEN_CHECKS 0
 #define SR_VK_OBJECT_NAMES 0

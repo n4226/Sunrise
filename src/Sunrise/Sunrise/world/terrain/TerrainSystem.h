@@ -34,7 +34,7 @@ namespace sunrise {
 		void CreateRenderResources();
 
 		// todo remove this function as moving to GPU-stage system
-		vk::CommandBuffer* renderSystem(uint32_t subpass, Window& window);
+		//vk::CommandBuffer* renderSystem(uint32_t subpass, Window& window);
 		
 		void update() override;
 		void invalidateDescriptors();
@@ -51,8 +51,8 @@ namespace sunrise {
 
 		//Renderer* renderer;
 
-		// max lod levels for 
-		const uint16_t lodLevels = 13;
+		// max lod levels for terrain - max lod is this - 1
+		const uint16_t lodLevels = 14;
 
 	private:
 
@@ -96,6 +96,9 @@ namespace sunrise {
 		void processTree();
 		
 		double threshold(const TerrainQuadTreeNode* node);
+
+		bool splitFormThreshold(const TerrainQuadTreeNode* node,const glm::dvec3& trackedPos);
+		bool combineFromThreshold(const TerrainQuadTreeNode* node,const glm::dvec3& trackedPos);
 
 		bool determinActive(const TerrainQuadTreeNode* node);
 
