@@ -7,24 +7,112 @@
 
 //#include "igl/triangle/triangulate.h"
 
+//#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Triangulation_2.h>
 #include <CGAL/Triangulation_vertex_base_with_info_2.h>
-
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+//
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 #include <CGAL/Polygon_2.h>
 #include <iostream>
 #include <limits>
-
+	
 
 #include <CGAL/Boolean_set_operations_2.h>
+	
+
+using namespace boost::polygon::operators;
 
 //TODO ----------------------------------------------------------------------------------- CGAL WILL HAVE TO BE LICENSED FOR PROFIT ----------------------------------------------------------------------------------------------------------
 
 namespace sunrise::math::mesh {
 
+
+
+		// must be ccw
+	bMultiPolygon boostFromMesh(Polygon2D p) {
+
+		std::vector<bPoint> points = {};
+
+		for (size_t i = 0; i < p.size(); i++)
+		{
+			points.push_back(bPoint(p[i].x, p[i].y));
+		}
+
+		bPolygon polygon;
+
+		bgm::assign_points(polygon, points);
+		return { polygon };
+	}
+
+		// must be ccw
+	Polygon2D meshFromBoost(bMultiPolygon p) {
+		Polygon2D poly;
+
+		bgm::for_each_point(p, [&poly](bPoint point) {
+			poly.push_back(glm::dvec2(point.x(), point.y()));
+		});
+		
+		/*for each (auto point in p.)
+		{
+			poly.push_back(glm::dvec2(point.x(), point.y()));
+		}*/
+
+		return poly;
+	}
+
+	Polygon2D bunion(Polygon2D p1, Polygon2D p2) {
+		auto bp1 = boostFromMesh(p1);
+		auto bp2 = boostFromMesh(p2);
+
+		bMultiPolygon result;
+
+		bgm::union_(bp1, bp2, result);
+
+		return meshFromBoost(result);
+	}
+	
+
+	Polygon2D binterseciton(Polygon2D p1, Polygon2D p2) {
+		auto bp1 = boostFromMesh(p1);
+		auto bp2 = boostFromMesh(p2);
+
+		bMultiPolygon result;
+
+		boost::geometry::intersection(bp1, bp2, result);
+
+		return meshFromBoost(result);
+	}
+
+	bool bDoIntersect(Polygon2D p1, Polygon2D p2) {
+		auto bp1 = boostFromMesh(p1);
+		auto bp2 = boostFromMesh(p2);
+
+		return boost::geometry::overlaps(bp1, bp2);
+	}
+
+	Polygon2D bDifference(Polygon2D p1, Polygon2D p2) {
+		auto bp1 = boostFromMesh(p1);
+		auto bp2 = boostFromMesh(p2);
+
+		bMultiPolygon result;
+
+		boost::geometry::difference(bp1, bp2, result);
+
+		return meshFromBoost(result);
+	}
+
+	Polygon2D bunionSMDifference(Polygon2D p1, Polygon2D p2) {
+		auto bp1 = boostFromMesh(p1);
+		auto bp2 = boostFromMesh(p2);
+
+		bMultiPolygon result;
+
+		boost::geometry::sym_difference(bp1, bp2, result);
+
+		return meshFromBoost(result);
+	}
 
 	struct FaceInfo2
 	{
@@ -158,6 +246,8 @@ namespace sunrise::math::mesh {
 		for (auto& point : newVerts) {
 			glm::float64 px = point.x();//.get_relative_precision_of_to_double();
 			glm::float64 py = point.y();//.get_relative_precision_of_to_double();
+			//glm::float64 px = to_double(point.x());
+			//glm::float64 py = to_double(point.y());
 			mesh->verts.emplace_back(px,py);
 		}
 
@@ -194,6 +284,188 @@ namespace sunrise::math::mesh {
 
 	}
 
+	std::vector<std::vector<glm::dvec2>> differenceBetween(const std::vector<glm::dvec2>& _polygon1, const std::vector<glm::dvec2>& _polygon2)
+	{
+		typedef CGAL::Exact_predicates_exact_constructions_kernel      K;
+		typedef CGAL::Triangulation_vertex_base_2<K>                      Vb;
+		typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, K>    Fbb;
+		typedef CGAL::Constrained_triangulation_face_base_2<K, Fbb>        Fb;
+		typedef CGAL::Triangulation_data_structure_2<Vb, Fb>               TDS;
+		typedef CGAL::Exact_predicates_tag                                Itag;
+		typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag>  CDT;
+		typedef CDT::Point                                                Point;
+		typedef CGAL::Polygon_2<K>                                        Polygon_2;
+		typedef CGAL::Polygon_with_holes_2<K>                             Polygon_with_holes_2;
+		typedef CDT::Face_handle                                          Face_handle;
+		typedef std::list<Polygon_with_holes_2>                           Pwh_list_2;
+
+		auto polygon1 = _polygon1;
+		auto polygon2 = _polygon2;
+
+		makeOpenIfClosedForCGAL(polygon1);
+		makeOpenIfClosedForCGAL(polygon2);
+
+		Polygon_2 p1;
+		Polygon_2 p2;
+
+
+		p1.resize(polygon1.size());
+		p2.resize(polygon2.size());
+
+		for (size_t i = 0; i < polygon1.size(); i++)
+		{
+			p1[i] = Point(polygon1[i].x, polygon1[i].y);
+		}
+		for (size_t i = 0; i < polygon2.size(); i++)
+		{
+			p2[i] = Point(polygon2[i].x, polygon2[i].y);
+		}
+
+		auto ds = p1.is_convex();
+		auto ds2 = p2.is_simple();
+
+		auto as = p1.is_convex();
+		auto as2 = p2.is_simple();
+		SR_ASSERT(p1.is_clockwise_oriented() == p2.is_clockwise_oriented());
+		SR_CORE_TRACE("difference of two {} oriented polygons (true == clockwise)", p1.is_clockwise_oriented());
+
+		if (p1.is_clockwise_oriented()) {
+			p1.reverse_orientation();
+			p2.reverse_orientation();
+		}
+
+		// Compute the intersection of P and Q.
+		Polygon_with_holes_2                  UR;
+		std::vector<Polygon_with_holes_2>                  intR;
+
+
+		if (!CGAL::join(p1, p2, UR)) {
+			// difference will also be trivial
+			return { polygon1 };
+		}
+
+
+		// this function require4s both polygons to be counter clockwise oriented (may be a bug)
+		CGAL::difference(p1, p2, std::back_inserter(intR));
+		/*CGAL::join(p1, p2, UR);
+		intR.resize(UR.size());
+		intR.assign(UR.begin(),UR.end());*/
+
+		auto outPolygon = std::vector<std::vector<glm::dvec2>>();
+
+		if (intR.size() == 0)
+			return outPolygon;
+
+		if (intR[0].is_unbounded()) {
+			throw std::runtime_error("not supported yet");
+		}
+
+		outPolygon.push_back({});
+
+		for (auto vert = intR[0].outer_boundary().vertices_begin(); vert != intR[0].outer_boundary().vertices_end(); vert = std::next(vert)) {
+			glm::float64 px = to_double(vert->x());
+			glm::float64 py = to_double(vert->y());
+			outPolygon[0].emplace_back(px, py);
+
+			//outPolygon[0].emplace_back(vert->x(),vert->y());
+		}
+
+		for (auto hit = intR[0].holes_begin(); hit != intR[0].holes_end(); ++hit) {
+
+		}
+
+		return outPolygon;
+
+	}
+
+	std::vector<std::vector<glm::dvec2>> symmetricDifferenceBetween(const std::vector<glm::dvec2>& _polygon1, const std::vector<glm::dvec2>& _polygon2)
+	{
+		typedef CGAL::Exact_predicates_exact_constructions_kernel      K;
+		typedef CGAL::Triangulation_vertex_base_2<K>                      Vb;
+		typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, K>    Fbb;
+		typedef CGAL::Constrained_triangulation_face_base_2<K, Fbb>        Fb;
+		typedef CGAL::Triangulation_data_structure_2<Vb, Fb>               TDS;
+		typedef CGAL::Exact_predicates_tag                                Itag;
+		typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag>  CDT;
+		typedef CDT::Point                                                Point;
+		typedef CGAL::Polygon_2<K>                                        Polygon_2;
+		typedef CGAL::Polygon_with_holes_2<K>                             Polygon_with_holes_2;
+		typedef CDT::Face_handle                                          Face_handle;
+		typedef std::list<Polygon_with_holes_2>                           Pwh_list_2;
+
+		auto polygon1 = _polygon1;
+		auto polygon2 = _polygon2;
+
+		makeOpenIfClosedForCGAL(polygon1);
+		makeOpenIfClosedForCGAL(polygon2);
+
+		Polygon_2 p1;
+		Polygon_2 p2;
+
+
+		p1.resize(polygon1.size());
+		p2.resize(polygon2.size());
+
+		for (size_t i = 0; i < polygon1.size(); i++)
+		{
+			p1[i] = Point(polygon1[i].x, polygon1[i].y);
+		}
+		for (size_t i = 0; i < polygon2.size(); i++)
+		{
+			p2[i] = Point(polygon2[i].x, polygon2[i].y);
+		}
+
+		auto ds = p1.is_convex();
+		auto ds2 = p2.is_simple();
+
+		auto as = p1.is_convex();
+		auto as2 = p2.is_simple();
+		SR_ASSERT(p1.is_clockwise_oriented() == p2.is_clockwise_oriented());
+		SR_CORE_TRACE("sym difference of two {} oriented polygons (true == clockwise)", p1.is_clockwise_oriented());
+
+		if (p1.is_clockwise_oriented()) {
+			p1.reverse_orientation();
+			p2.reverse_orientation();
+		}
+
+		// Compute the intersection of P and Q.
+		//Pwh_list_2                  UR;
+		std::vector<Polygon_with_holes_2>                  intR;
+
+
+
+		// this function require4s both polygons to be counter clockwise oriented (may be a bug)
+		CGAL::symmetric_difference(p1, p2, std::back_inserter(intR));
+		/*CGAL::join(p1, p2, UR);
+		intR.resize(UR.size());
+		intR.assign(UR.begin(),UR.end());*/
+
+		auto outPolygon = std::vector<std::vector<glm::dvec2>>();
+
+		if (intR.size() == 0)
+			return outPolygon;
+
+		if (intR[0].is_unbounded()) {
+			throw std::runtime_error("not supported yet");
+		}
+
+		outPolygon.push_back({});
+
+		for (auto vert = intR[0].outer_boundary().vertices_begin(); vert != intR[0].outer_boundary().vertices_end(); vert = std::next(vert)) {
+			glm::float64 px = to_double(vert->x());
+			glm::float64 py = to_double(vert->y());
+			outPolygon[0].emplace_back(px, py);
+
+			//outPolygon[0].emplace_back(vert->x(),vert->y());
+		}
+
+		for (auto hit = intR[0].holes_begin(); hit != intR[0].holes_end(); ++hit) {
+
+		}
+
+		return outPolygon;
+	}
+
 	/// <summary>
 	/// both must be the same orentation e.g. either clockwise or coutner clockwise
 	/// </summary>
@@ -203,7 +475,7 @@ namespace sunrise::math::mesh {
 	std::vector<std::vector<glm::dvec2>> intersectionOf(const std::vector<glm::dvec2>& _polygon1,const std::vector<glm::dvec2>& _polygon2)
 	{
 		//https://doc.cgal.org/latest/Algebraic_foundations/group__PkgAlgebraicFoundationsRef.html#ga1f1bcd74fce34fd532445590bbda5cd5
-		////typedef CGAL::Exact_predicates_inexact_constructions_kernel       K;
+		//typedef CGAL::Exact_predicates_inexact_constructions_kernel       K;
 		typedef CGAL::Exact_predicates_exact_constructions_kernel      K;
 		typedef CGAL::Triangulation_vertex_base_2<K>                      Vb;
 		typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, K>    Fbb;
@@ -221,14 +493,13 @@ namespace sunrise::math::mesh {
 
 		auto polygon1 = _polygon1;
 		auto polygon2 = _polygon2;
-
+		
 		makeOpenIfClosedForCGAL(polygon1);
 		makeOpenIfClosedForCGAL(polygon2);
 
 		Polygon_2 p1;
 		Polygon_2 p2;
 
-		auto ds = p1.is_convex();
 
 		p1.resize(polygon1.size());
 		p2.resize(polygon2.size());
@@ -242,17 +513,30 @@ namespace sunrise::math::mesh {
 			p2[i] = Point(polygon2[i].x, polygon2[i].y);
 		}
 
+		auto ds  = p1.is_convex();
+		auto ds2 = p2.is_simple();
+
+		auto as  = p1.is_convex();
+		auto as2 = p2.is_simple();
 		SR_ASSERT(p1.is_clockwise_oriented() == p2.is_clockwise_oriented());
+		SR_CORE_TRACE("Intersection of two {} oriented polygons (true == clockwise)",p1.is_clockwise_oriented());
+
+		if (p1.is_clockwise_oriented()) {
+			p1.reverse_orientation();
+			p2.reverse_orientation();
+		}
 
 		// Compute the intersection of P and Q.
-		//Pwh_list_2                  intR;
+		//Pwh_list_2                  UR;
 		std::vector<Polygon_with_holes_2>                  intR;
 
 
 
+		// this function require4s both polygons to be counter clockwise oriented (may be a bug)
 		CGAL::intersection(p1, p2, std::back_inserter(intR));
-		//CGAL::join(p1, p2, unionR);
-
+		/*CGAL::join(p1, p2, UR);
+		intR.resize(UR.size());
+		intR.assign(UR.begin(),UR.end());*/
 
 		auto outPolygon = std::vector<std::vector<glm::dvec2>>();
 
@@ -278,6 +562,204 @@ namespace sunrise::math::mesh {
 		}
 
 		return outPolygon;
+	}
+
+	std::vector<std::vector<glm::dvec2>> unionOf(const std::vector<glm::dvec2>& _polygon1, const std::vector<glm::dvec2>& _polygon2)
+	{
+		if (_polygon1.size() == 0)
+			return { _polygon2 };
+
+
+		if (_polygon2.size() == 0)
+			return { _polygon1 };
+
+		//https://doc.cgal.org/latest/Algebraic_foundations/group__PkgAlgebraicFoundationsRef.html#ga1f1bcd74fce34fd532445590bbda5cd5
+		//typedef CGAL::Exact_predicates_inexact_constructions_kernel       K;
+		typedef CGAL::Exact_predicates_exact_constructions_kernel      K;
+		typedef CGAL::Triangulation_vertex_base_2<K>                      Vb;
+		typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, K>    Fbb;
+		typedef CGAL::Constrained_triangulation_face_base_2<K, Fbb>        Fb;
+		typedef CGAL::Triangulation_data_structure_2<Vb, Fb>               TDS;
+		typedef CGAL::Exact_predicates_tag                                Itag;
+		typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag>  CDT;
+		typedef CDT::Point                                                Point;
+		typedef CGAL::Polygon_2<K>                                        Polygon_2;
+		typedef CGAL::Polygon_with_holes_2<K>                             Polygon_with_holes_2;
+		typedef CDT::Face_handle                                          Face_handle;
+		typedef std::list<Polygon_with_holes_2>                           Pwh_list_2;
+
+
+
+		auto polygon1 = _polygon1;
+		auto polygon2 = _polygon2;
+
+		makeOpenIfClosedForCGAL(polygon1);
+		makeOpenIfClosedForCGAL(polygon2);
+
+		Polygon_2 p1;
+		Polygon_2 p2;
+
+
+		p1.resize(polygon1.size());
+		p2.resize(polygon2.size());
+
+		for (size_t i = 0; i < polygon1.size(); i++)
+		{
+			p1[i] = Point(polygon1[i].x, polygon1[i].y);
+		}
+		for (size_t i = 0; i < polygon2.size(); i++)
+		{
+			p2[i] = Point(polygon2[i].x, polygon2[i].y);
+		}
+
+		auto ds = p1.is_convex();
+		auto ds2 = p2.is_simple();
+
+		auto as = p1.is_convex();
+		auto as2 = p2.is_simple();
+		SR_ASSERT(p1.is_clockwise_oriented() == p2.is_clockwise_oriented());
+		SR_CORE_TRACE("union of two {} oriented polygons (true == clockwise)", p1.is_clockwise_oriented());
+
+		if (p1.is_clockwise_oriented()) {
+			p1.reverse_orientation();
+			p2.reverse_orientation();
+		}
+
+		// Compute the intersection of P and Q.
+		Polygon_with_holes_2                  UR;
+		std::vector<Polygon_with_holes_2>                  intR;
+
+
+
+		// this function require4s both polygons to be counter clockwise oriented (may be a bug)
+		//CGAL::join(p1, p2, intR);
+		if (!CGAL::join(p1, p2, UR)) {
+			// union is jsut the two polygons
+			return { polygon1, polygon2 };
+		}
+		/*intR.resize(UR.size());
+		intR.assign(UR.begin(),UR.end());*/
+
+		intR.push_back(UR);
+
+		auto outPolygon = std::vector<std::vector<glm::dvec2>>();
+
+
+
+		if (intR.size() == 0)
+			return outPolygon;
+
+		if (intR[0].is_unbounded()) {
+			throw std::runtime_error("not supported yet");
+		}
+
+		outPolygon.push_back({});
+
+		for (auto vert = intR[0].outer_boundary().vertices_begin(); vert != intR[0].outer_boundary().vertices_end(); vert = std::next(vert)) {
+			glm::float64 px = to_double(vert->x());
+			glm::float64 py = to_double(vert->y());
+			outPolygon[0].emplace_back(px, py);
+
+			//outPolygon[0].emplace_back(vert->x(),vert->y());
+		}
+
+		for (auto hit = intR[0].holes_begin(); hit != intR[0].holes_end(); ++hit) {
+
+		}
+
+		return outPolygon;
+	}
+
+	bool pointInPolygon(glm::dvec2 point, Polygon2D polygon) {
+		auto points = polygon;
+		int i, j, nvert = polygon.size();
+		bool c = false;
+
+		for (i = 0, j = nvert - 1; i < nvert; j = i++) {
+			if (((points[i].y >= point.y) != (points[j].y >= point.y)) &&
+				(point.x <= (points[j].x - points[i].x) * (point.y - points[i].y) / (points[j].y - points[i].y) + points[i].x)
+				)
+				c = !c;
+		}
+
+		return c;
+	}
+
+	bool overlap(const std::vector<glm::dvec2>& _polygon1, const std::vector<glm::dvec2>& _polygon2)
+	{
+
+		
+
+
+		//https://doc.cgal.org/latest/Algebraic_foundations/group__PkgAlgebraicFoundationsRef.html#ga1f1bcd74fce34fd532445590bbda5cd5
+		//typedef CGAL::Exact_predicates_inexact_constructions_kernel       K;
+		typedef CGAL::Exact_predicates_exact_constructions_kernel      K;
+		typedef CGAL::Triangulation_vertex_base_2<K>                      Vb;
+		typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo2, K>    Fbb;
+		typedef CGAL::Constrained_triangulation_face_base_2<K, Fbb>        Fb;
+		typedef CGAL::Triangulation_data_structure_2<Vb, Fb>               TDS;
+		typedef CGAL::Exact_predicates_tag                                Itag;
+		typedef CGAL::Constrained_Delaunay_triangulation_2<K, TDS, Itag>  CDT;
+		typedef CDT::Point                                                Point;
+		typedef CGAL::Polygon_2<K>                                        Polygon_2;
+		typedef CGAL::Polygon_with_holes_2<K>                             Polygon_with_holes_2;
+		typedef CDT::Face_handle                                          Face_handle;
+		typedef std::list<Polygon_with_holes_2>                           Pwh_list_2;
+
+
+
+		auto polygon1 = _polygon1;
+		auto polygon2 = _polygon2;
+
+		makeOpenIfClosedForCGAL(polygon1);
+		makeOpenIfClosedForCGAL(polygon2);
+
+
+		//overide without cgal
+
+		for (size_t i = 0; i < polygon1.size(); i++)
+		{
+			if (pointInPolygon(polygon1[i], polygon2)) {
+				return true;
+			}
+		}
+		return false;
+		// exdone
+
+		Polygon_2 p1;
+		Polygon_2 p2;
+
+
+		p1.resize(polygon1.size());
+		p2.resize(polygon2.size());
+
+		for (size_t i = 0; i < polygon1.size(); i++)
+		{
+			p1[i] = Point(polygon1[i].x, polygon1[i].y);
+		}
+		for (size_t i = 0; i < polygon2.size(); i++)
+		{
+			p2[i] = Point(polygon2[i].x, polygon2[i].y);
+		}
+
+		auto ds = p1.is_convex();
+		auto ds2 = p2.is_simple();
+
+		auto as = p1.is_convex();
+		auto as2 = p2.is_simple();
+		SR_ASSERT(p1.is_clockwise_oriented() == p2.is_clockwise_oriented());
+		SR_CORE_TRACE("do intersect test of two {} oriented polygons (true == clockwise)", p1.is_clockwise_oriented());
+
+		if (p1.is_clockwise_oriented()) {
+			p1.reverse_orientation();
+			p2.reverse_orientation();
+		}
+
+		//return CGAL::do_intersect(p1, p2);
+
+		Polygon_with_holes_2                  UR;
+
+		return CGAL::join(p1, p2, UR);
 	}
 
 	void makeOpenIfClosedForCGAL(std::vector<glm::dvec2>& polygon)
@@ -320,7 +802,11 @@ namespace sunrise::math::mesh {
 		return result;
 	}
 
+
+
 	
+
+
 
 
 }
