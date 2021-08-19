@@ -207,8 +207,8 @@ namespace sunrise {
 		postUniforms.renderTargetSize.y = window.swapchainExtent.height;
 
 		buffer->tempMapAndWrite(&postUniforms, sizeof(uniforms), sizeof(postUniforms), false);
-		buffer->unmapMemory();
 
+		buffer->unmapMemory();
 
 		//todo abstract this somewhere else
 		renderer->camFrustroms[globalIndex] = std::move(math::Frustum(uniforms.viewProjection));

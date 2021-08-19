@@ -33,10 +33,12 @@ namespace sunrise {
 
 		inputImageSampler = new gfx::Sampler(app.renderers[0]->device, {});
 
-		gfx::DescriptorPool::CreateOptions::DescriptorTypeAllocOptions sampledImageAllocOptions = { vk::DescriptorType::eSampledImage, app.maxSwapChainImages };
-		gfx::DescriptorPool::CreateOptions::DescriptorTypeAllocOptions uniformAllocOptions = { vk::DescriptorType::eUniformBuffer, app.maxSwapChainImages };
+		size_t estimatedSurfaceCount = app.maxSwapChainImages * app.windows.size();
 
-		descriptorPool = new gfx::DescriptorPool(app.renderers[0]->device, { app.maxSwapChainImages, { sampledImageAllocOptions, uniformAllocOptions} });
+		gfx::DescriptorPool::CreateOptions::DescriptorTypeAllocOptions sampledImageAllocOptions = { vk::DescriptorType::eSampledImage, estimatedSurfaceCount };
+		gfx::DescriptorPool::CreateOptions::DescriptorTypeAllocOptions uniformAllocOptions = { vk::DescriptorType::eUniformBuffer, estimatedSurfaceCount };
+
+		descriptorPool = new gfx::DescriptorPool(app.renderers[0]->device, { estimatedSurfaceCount, { sampledImageAllocOptions, uniformAllocOptions} });
 
 	}
 

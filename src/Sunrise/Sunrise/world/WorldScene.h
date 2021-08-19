@@ -43,6 +43,8 @@ namespace sunrise {
 			//glm::dvec3(40.610319941413, -74.039182662964, 100);
 			initialPlayerLLA;
 
+		glm::qua<glm::float32> playerLLARotation{};
+
 		Transform playerTrans;
 #pragma endregion
 	};

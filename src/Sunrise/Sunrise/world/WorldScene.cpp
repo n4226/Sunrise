@@ -2,6 +2,8 @@
 #include "WorldScene.h"
 #include "systems/CameraSystem.h"
 #include "systems/FloatingOriginSystem.h"
+#include "systems/PlayerMovementSystem.h"
+#include "systems/WindowCameraController.h"
 #include "../core/Application.h"
 #include "../graphics/vulkan/renderer/MaterialManager.h"
 #include "rendering/WorldSceneRenderCoordinator.h"
@@ -39,9 +41,9 @@ namespace sunrise {
 		dynamic_cast<WorldSceneRenderCoordinator*>(coordinator)->createUniforms();
 
 		/// <summary>
-		/// importantthat the camera systemis befoer floating origin so that floating origin snaps before first frame
+		/// it is important that the camera systemis befoer floating origin so that floating origin snaps before first frame
 		/// </summary>
-		generalSystems = { new CameraSystem(), new FloatingOriginSystem() };
+		generalSystems = { new PlayerMovementSystem(), new WindowCameraController(), new CameraSystem(), new FloatingOriginSystem() };
 
 		for (System* sys : generalSystems) {
 			sys->world = this;
@@ -87,19 +89,6 @@ namespace sunrise {
 
 		terrainSystem->update();
 
-		//TODO: move this to camera sys or another one?
-		for (size_t i = 0; i < app.windows.size(); i++)
-		{
-			auto& window = app.windows[i];
-
-			auto camTrans = configSystem.global().cameras[i];
-
-			window->camera.transform = playerTrans;
-			//window->camera.transform.rotation = glm::identity<glm::quat>();
-			window->camera.transform.position
-				//= glm::vec3(0);
-				+= camTrans.offset;
-		}
 
 		frameNum += 1;
 	}

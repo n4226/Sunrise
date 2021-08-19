@@ -273,10 +273,10 @@ vec3 calculatePostAtmosphereicScatering(
     vec4 clipSpaceFragPos = vec4(ndc, 0.5f, 1.0);
 
     // dont think i need this but i dont know;
-    //clipSpaceFragPos.y = -clipSpaceFragPos.y;
+    clipSpaceFragPos.y = -clipSpaceFragPos.y;
 
 
-    vec4 viewSpaceFragPosition =
+     vec4 viewSpaceFragPosition =
         ubo.invertedProjMat * clipSpaceFragPos;
     
     // perspective division

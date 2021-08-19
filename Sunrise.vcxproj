@@ -162,6 +162,7 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sunrise\Sunrise\world\systems\PlayerMovementSystem.h" />
     <ClInclude Include="src\Sunrise.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
@@ -255,8 +256,10 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.h" />
     <ClInclude Include="src\srpch.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\systems\WindowCameraController.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\world\systems\PlayerMovementSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
@@ -363,6 +366,7 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\systems\WindowCameraController.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
