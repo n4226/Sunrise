@@ -6,7 +6,7 @@ namespace sunrise {
 
 	BinaryMeshSeirilizer::BinaryMeshSeirilizer(Mesh& originalMesh)
 	{
-		assert(originalMesh.verts.size() == originalMesh.uvs.size() && originalMesh.normals.size() == originalMesh.tangents.size() && originalMesh.bitangents.size());
+		assert(originalMesh.verts.size() == originalMesh.uvs.size() && originalMesh.normals.size() == originalMesh.tangents.size() && originalMesh.normals.size() == originalMesh.bitangents.size());
 
 		auto headerLength = sizeof(uint32_t) * (2 + originalMesh.indicies.size());
 		// vert size * 56

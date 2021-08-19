@@ -22,7 +22,7 @@ namespace sunrise::math {
         return start + (size * 0.5);
     }
 
-    bool Box::contains(glm::dvec2 point) const
+    constexpr bool Box::contains(glm::dvec2 point) const
     {
         if (point.x < start.x || point.y < start.y) {
             return false;
@@ -53,21 +53,22 @@ namespace sunrise::math {
         return false;
     }
 
-    bool Box::overlaps(Box other) const
+    // see https://www.geeksforgeeks.org/find-two-rectangles-overlap/
+    constexpr bool Box::overlaps(Box other) const
     {
-        /*if (start.x >= other.getEnd().x || other.start.x >= getEnd().x) return false;
 
-        if (start.y <= other.getEnd().y || other.start.y <= getEnd().y) return false;
+        if (start.x == getEnd().x || start.y == getEnd().y || other.start.x == other.getEnd().x
+            || other.start.y == other.getEnd().y) {
+            // the line cannot have positive overlap
+            return false;
+        }
 
-        return true;*/
+        if (start.x >= other.getEnd().x || other.start.x >= getEnd().x) return false;
 
-        if (contains(other.start)) return true;
-        if (contains(other.getEnd())) return true;
-        //if (contains(other.start)) return true;
-       // if (contains(other.start)) return true;
+        if (start.y >= other.getEnd().y || other.start.y >= getEnd().y) return false;
 
+        return true;
 
-        return false;
 
     }
 

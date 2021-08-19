@@ -1,5 +1,5 @@
 
-
+-- Must be built with /bigobj command line argument which now has to be done manually after every vs proj rebuild in the project settings`
 project "Sunrise"
 
 	kind "SharedLib"
@@ -60,7 +60,9 @@ project "Sunrise"
 		"vendor/entt/single_include",
 		"vendor/imgui/",
 		"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/include",
-		"vendor/asio-1.18.1/include"
+		"vendor/asio-1.18.1/include",
+		"vendor/CGAL-5.3/include",
+		"vendor/boost_1_76_0",
 	}	
 
 	postbuildcommands {

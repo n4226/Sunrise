@@ -115,6 +115,9 @@
     <Filter Include="src\Sunrise\Sunrise\world\simlink">
       <UniqueIdentifier>{DA80F9A1-46EF-4E21-8FD8-0921FB8544BD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\world\simpleChunkViewerScene">
+      <UniqueIdentifier>{86E99672-7292-FEA1-9B28-1A21873019E3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\world\systems">
       <UniqueIdentifier>{DBEFBCC7-475E-1247-9047-CD46FCF407E3}</UniqueIdentifier>
     </Filter>
@@ -390,6 +393,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\world\simlink\SimlinkMessages.h">
       <Filter>src\Sunrise\Sunrise\world\simlink</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\simpleChunkViewerScene\SimpleChunkViewerScene.h">
+      <Filter>src\Sunrise\Sunrise\world\simpleChunkViewerScene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\systems\CameraSystem.h">
       <Filter>src\Sunrise\Sunrise\world\systems</Filter>
     </ClInclude>
@@ -636,6 +642,9 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\simlink\SimlinkMessages.cpp">
       <Filter>src\Sunrise\Sunrise\world\simlink</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\simpleChunkViewerScene\SimpleChunkViewerScene.cpp">
+      <Filter>src\Sunrise\Sunrise\world\simpleChunkViewerScene</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\systems\CameraSystem.cpp">
       <Filter>src\Sunrise\Sunrise\world\systems</Filter>
