@@ -31,7 +31,7 @@ namespace sunrise {
 		PROFILE_FUNCTION;
 
 		//TODO: Remove
-		//terrainMask = new std::vector<math::Box>{ math::Box(playerLLA, glm::dvec2(0.01)) };
+		terrainMask = new std::vector<math::Box>{ math::Box(playerLLA, glm::dvec2(0.01)) };
 
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
 		//renderer->world = this;
@@ -68,6 +68,10 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 		Scene::update();
+
+		if (frameNum == 2000) {
+			reloadTerrainInMask();
+		}
 
 		//if (frameNum == 2000) {
 		//	char** stats = new char*;
@@ -116,7 +120,9 @@ namespace sunrise {
 
 	void WorldScene::reloadTerrainInMask()
 	{
-
+		//terrainMask = new std::vector<math::Bo/x>{ math::Box(glm::dvec2(playerLLA) + glm::dvec2(0.1,0.1), glm::dvec2(0.01))};
+		if (terrainMask != nullptr)
+			terrainSystem->reloadTerrainInMask();
 	}
 
 

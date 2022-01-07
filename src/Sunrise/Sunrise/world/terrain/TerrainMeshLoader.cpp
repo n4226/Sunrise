@@ -11,7 +11,7 @@ namespace sunrise {
 
 	using namespace gfx;
 
-	TreeNodeDrawResaourceToCoppy TerrainMeshLoader::loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob)
+	TreeNodeDrawResaourceToCoppy TerrainMeshLoader::loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob,bool diskOnly)
 	{
 		// get  and encode mesh
 		//TODO store this in a better place which is more effecient
@@ -53,7 +53,7 @@ namespace sunrise {
 			}
 
 		}
-		else
+		else if (!diskOnly)
 		{
 			PROFILE_SCOPE("creating empty mesh")
 

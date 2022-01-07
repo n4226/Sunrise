@@ -41,6 +41,8 @@ namespace sunrise {
 
 		double getRadius();
 
+		void CreateTerrainInMask(sunrise::WorldScene& scene, sunrise::Application& app);
+		void reloadTerrainInMask();
 #pragma endregion
 
 		Transform* trackedTransform = nullptr;

@@ -42,18 +42,33 @@ namespace sunrise {
 		else {
 			SR_CORE_INFO("Terrain System Initiated in Masked mode. DO NOT change this for the lifetime of thie object");
 			maskedMode = true;
-
-
-			for (auto& chunk : *scene.terrainMask)
-			{
-				auto leaf = new TerrainQuadTreeNode(chunk, nullptr, &tree, 0);
-				tree.leafNodes.insert(leaf);
-				meshLoader.drawChunk(leaf, meshLoader.loadMeshPreDrawChunk(leaf), false);
-			}
-			writePendingDrawOobjects(*app.renderers[0]);
+			//TODO: fix memory leak here
+			tree.leafNodes.clear();
+			CreateTerrainInMask(scene, app);
 		}
 
 		//writePendingDrawOobjects();
+	}
+
+	void TerrainSystem::CreateTerrainInMask(sunrise::WorldScene& scene, sunrise::Application& app)
+	{
+		for (auto& chunk : *scene.terrainMask)
+		{
+			auto leaf = new TerrainQuadTreeNode(chunk, nullptr, &tree, 0);
+			tree.leafNodes.insert(leaf);
+			auto mesh = meshLoader.loadMeshPreDrawChunk(leaf, false, !scene.doNotSparslyPopulateMask);
+			if (mesh.binMesh != nullptr || mesh.mesh != nullptr)
+				meshLoader.drawChunk(leaf, mesh, false);
+		}
+		writePendingDrawOobjects(*app.renderers[0]);
+	}
+
+	void TerrainSystem::reloadTerrainInMask()
+	{
+		for (auto node : tree.leafNodes)
+			meshLoader.removeDrawChunk(node);
+
+		CreateTerrainInMask(scene, scene.app);
 	}
 
 	TerrainSystem::~TerrainSystem()

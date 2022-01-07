@@ -53,7 +53,7 @@ namespace sunrise {
 		TerrainSystem* terrainSystem;
 
 
-		TreeNodeDrawResaourceToCoppy loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob = false);
+		TreeNodeDrawResaourceToCoppy loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob = false, bool diskOnly = false);
 		void drawChunk(TerrainQuadTreeNode* node, TreeNodeDrawResaourceToCoppy preLoadedMesh, bool inJob = false);
 		void removeDrawChunk(TerrainQuadTreeNode* node, bool inJob = false);
 
