@@ -18,6 +18,7 @@ namespace sunrise {
 
 
 
+
 	void CameraSystem::update()
 	{
 		PROFILE_FUNCTION;

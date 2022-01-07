@@ -58,7 +58,7 @@ namespace sunrise {
 			virtual ~SceneRenderCoordinator();
 
 			/// <summary>
-			/// called shortly after initilization 
+			/// called shortly after initilization or scene reload
 			/// this is where the gpu stages should be registered
 			/// </summary>
 			virtual void createPasses();
@@ -114,6 +114,11 @@ namespace sunrise {
 			void drawableReleased(Window* window, size_t appFrame) override;
 
 			size_t getPass(GPUStage* stage) { return passForStage[stage]; }
+
+			/// <summary>
+			/// resets all saved properties so items can be re generated - called when scene is reloaded
+			/// </summary>
+			void reset();
 
 		protected:
 			friend Window;

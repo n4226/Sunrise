@@ -2,6 +2,7 @@
 
 #include "core.h"
 #include "../graphics/vulkan/RenderContext.h"
+#include "input/InputHolder.h"
 
 #define USE_ASIO
 // see: https://stackoverflow.com/questions/9750344/boostasio-winsock-and-winsock-2-compatibility-issue
@@ -29,7 +30,7 @@ namespace sunrise {
 
 	class Scene;
 
-	class SUNRISE_API Application: public gfx::RenderContext
+	class SUNRISE_API Application: public gfx::RenderContext, public InputHolder
 	{
 	public:
 		Application(Scene* initialScene);
@@ -53,8 +54,9 @@ namespace sunrise {
 		// scene api
 
 		void loadScene(Scene* scene, void* animationProperties);
+		void unloadScene(Scene* scene);
 
-
+		void hotReloadScene();
 
 		/// <summary>
 		/// normally just one scene
@@ -75,10 +77,18 @@ namespace sunrise {
 		void stopASIOContext();
 		void forceStopASIOContext();
 
+		bool getKey(int key) override;
+
 		void quit();
 
 	protected:
 		
+		void configureGLFWEvents();
+
+		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+		
+		static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+		static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 		/// <summary>
 		/// used to prevent context from exiting run until disered

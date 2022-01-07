@@ -24,6 +24,18 @@ namespace sunrise {
 		}
 	}
 
+	NetworkManager::~NetworkManager()
+	{
+		switch(options.type)
+		{
+		case Type::server:
+			delete udpSocket;
+		case Type::client:
+			
+			break;
+		}
+	}
+
 	void NetworkManager::registerUDPCalback(std::function<void(char*, size_t)> callback)
 	{
 		registeredCalbkack = new std::function(callback);

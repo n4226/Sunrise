@@ -82,7 +82,7 @@ namespace sunrise {
 		};
 
 		NetworkManager(const CreateOptions& options, asio::io_context& context);
-
+		~NetworkManager();
 		/// <summary>
 		/// can only call befoer server starts
 		/// </summary>

@@ -89,6 +89,14 @@ namespace sunrise {
 
 		terrainSystem->update();
 
+		if (app.getKey(GLFW_KEY_ESCAPE)) {
+			app.quit();
+		}
+
+		/*if (app.mouseLeft) {
+			SR_CORE_("Mouse at ({},{})", app.mousePos.x, app.mousePos.y);
+		} else 
+		SR_CORE_TRACE("Mouse at ({},{})", app.mousePos.x,app.mousePos.y);*/
 
 		frameNum += 1;
 	}
@@ -99,6 +107,7 @@ namespace sunrise {
 		delete terrainSystem;
 
 		for (System* sys : generalSystems) {
+			sys->cleanup();
 			delete sys;
 		}
 

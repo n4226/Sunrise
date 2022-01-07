@@ -15,6 +15,7 @@ namespace sunrise {
 
 		virtual void update();
 		virtual void setup() {}
+		virtual void cleanup() {}
 	};
 
 	// depricated

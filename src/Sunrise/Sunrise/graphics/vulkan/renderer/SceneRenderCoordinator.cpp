@@ -251,6 +251,15 @@ namespace sunrise::gfx {
 		}
 	}
 
+	void SceneRenderCoordinator::reset()
+	{
+		registeredPipes.clear();
+		lastStage = nullptr;
+		__tempWholeFrameRenderPassOptions = ComposableRenderPass::CreateOptions();
+		stagesInOrder.clear();
+		passForStage.clear();
+	}
+
 	void SceneRenderCoordinator::loadOrGetRegisteredPipesInAllWindows()
 	{
 		PROFILE_FUNCTION;

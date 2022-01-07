@@ -41,6 +41,11 @@ namespace sunrise {
 		networkManager->startServer();
 	}
 
+	void PlayerMovementSystem::cleanup()
+	{
+		delete networkManager;
+	}
+
 	void PlayerMovementSystem::update()
 	{
 		bool con;
@@ -67,8 +72,73 @@ namespace sunrise {
 				}
 			}
 			else {
+				if (mode == MovementMode::Path) {
 				movePlayerAlongCamPath();
 				rotatePlayerAlongCamPath();
+				}
+				else {
+					auto movement = glm::vec3(0, 0, 0);
+					if (world->app.getKey(GLFW_KEY_W)) {
+						movement += glm::vec3(1, 0, 0);
+					}
+					if (world->app.getKey(GLFW_KEY_S)) {
+						movement += glm::vec3(-1, 0, 0);
+
+					}
+					if (world->app.getKey(GLFW_KEY_A)) {
+						movement += glm::vec3(0, -1, 0);
+
+					}
+					if (world->app.getKey(GLFW_KEY_D)) {
+						movement += glm::vec3(0, 1, 0);
+					}
+
+
+					movement *= 0.0001 * 5;
+
+					if (world->app.getKey(GLFW_KEY_Q)) {
+						//movement *= 10;
+						movement += glm::vec3(0, 0, 10);
+					}
+
+					if (world->app.getKey(GLFW_KEY_E)) {
+						movement += glm::vec3(0, 0, -10);
+						//movement /= 10;
+					}
+
+					if (world->app.getKey(GLFW_KEY_LEFT_SHIFT)) {
+						movement *= 10;
+					}
+
+					if (world->app.getKey(GLFW_KEY_LEFT_CONTROL)) {
+						movement /= 10;
+					}
+
+					movement *= world->deltaTimef;
+
+
+
+					auto sensativity = glm::dvec2(1, 1) * 60.0 * 180.0 * 20.0;
+
+					if (world->app.mouseLeft) {
+						auto mouseDelta = world->app.mousePosFrameDelta * world->deltaTime * sensativity;
+						manualMouseTranslation += mouseDelta;
+					}
+
+					//SR_CORE_INFO("mouseDelta: {},{}", world->app.mousePosFrameDelta.x, world->app.mousePosFrameDelta.y);
+
+
+					world->playerLLARotation =
+						glm::angleAxis(glm::radians(90.f), glm::vec3(-1, 0, 0)) *
+						glm::angleAxis(glm::radians((float)(manualMouseTranslation.x)), glm::vec3(0, 1, 0)) *
+						glm::angleAxis(glm::radians((float)(manualMouseTranslation.y)), glm::vec3(1, 0, 0));
+
+
+					movement = glm::angleAxis(glm::radians((float)(manualMouseTranslation.x)), glm::vec3(0, 0, 1)) *
+						//glm::angleAxis(glm::radians((float)(manualMouseTranslation.y)), glm::vec3(0, 1, 0)) *
+						movement;
+					world->playerLLA += glm::dvec3(movement);
+				}
 			}
 		}
 

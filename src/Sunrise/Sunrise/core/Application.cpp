@@ -89,9 +89,9 @@ namespace sunrise {
         {
             SR_CORE_TRACE("Initializing GLFW");
 
+
             glfwInit();
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
         }
 
 
@@ -128,6 +128,10 @@ namespace sunrise {
 #endif
 
         createWindows();
+
+        {
+            configureGLFWEvents();
+        }
 
         if (loadedScenes.size() > 0)
         for (size_t i = 0; i < renderers.size(); i++) {
@@ -367,6 +371,23 @@ namespace sunrise {
 
 	}
 
+    void sunrise::Application::unloadScene(Scene* scene)
+    {
+        scene->unload();
+        scene->coordinator->reset();
+    }
+
+    void Application::hotReloadScene()
+    {
+        SR_CORE_WARN("Scene Hot Reload Initiated");
+        //TODO: fix for multi gpu and multiple scenes
+        windows[0]->device.waitIdle();
+
+        unloadScene(loadedScenes[0]);
+        loadScene(loadedScenes[0], nullptr);
+
+    }
+
 
     void Application::runLoop()
     {
@@ -379,6 +400,7 @@ namespace sunrise {
 
         SR_CORE_INFO("Shutdown Requested");
 
+        //TODO: fix for multi gpu
         windows[0]->device.waitIdle();
     }
 
@@ -414,6 +436,10 @@ namespace sunrise {
         //drawView();
 
         if (!config.wantsWindows || !config.vulkan) return;
+
+        // run application updates
+        mousePosFrameDelta = mousePos - lastFrameMosPos;
+        lastFrameMosPos = mousePos;
 
         // update scene
         loadedScenes[0]->update();
@@ -719,14 +745,64 @@ namespace sunrise {
         contextThread->join();
     }
 
+
     void Application::quit()
     {
         auto handle = engine->shouldQuit.lock();
         *handle = true;
     }
 
+    void Application::configureGLFWEvents()
+    {
+        PROFILE_FUNCTION;
+        
+        if (windows.size() == 0) return;
+
+        auto window = windows[0]->window;
+
+        //TODO: fix for multiple windows
+        SR_CORE_WARN("Mouse input does not work correclty for multiple windows");
+
+        glfwSetKeyCallback(window, &Application::key_callback);
+
+        glfwSetCursorPosCallback(window, &Application::cursor_position_callback);
+        glfwSetMouseButtonCallback(window, mouse_button_callback);
+    }
+
+    void Application::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+    {
+        if (button == GLFW_MOUSE_BUTTON_LEFT) {
+            engine->app->mouseLeft = action != GLFW_RELEASE;
+        }
+
+        if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+            engine->app->mouseRight = action != GLFW_RELEASE;
+        }
+    }
+
+    void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        //SR_CORE_INFO("key {} pressed, key");
+        //engine->app.
+        if (key == GLFW_KEY_R && (mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL && action == GLFW_PRESS) {
+            engine->app->hotReloadScene();
+        }
+    }
+
+    void Application::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+    {
+        if (engine->app->windows.size() == 0) return;
+        auto size = glm::ivec2(0, 0);
+        glfwGetWindowSize(engine->app->windows[0]->window, &size.x, &size.y);
+        engine->app->mousePos = glm::dvec2(xpos, ypos) / glm::dvec2(size);
+    }
 
 
+    bool Application::getKey(int key)
+    {
+        if (windows.size() == 0) return false;
+        return glfwGetKey(windows[0]->window,key);
+    }
 
 
     //  NO____APPLICTION

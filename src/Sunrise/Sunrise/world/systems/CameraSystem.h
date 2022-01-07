@@ -11,6 +11,9 @@ namespace sunrise {
 
 	class NetworkManager;
 
+	/// <summary>
+	/// This system proceses the current playerlla to world corrdinates and rotations =
+	/// </summary>
 	class CameraSystem : public System
 	{
 	public:

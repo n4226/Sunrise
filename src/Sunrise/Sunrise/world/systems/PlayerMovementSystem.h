@@ -8,6 +8,7 @@
 
 namespace sunrise {
 
+	
 
 	class PlayerMovementSystem: public System
 	{
@@ -16,12 +17,23 @@ namespace sunrise {
 
 		void update() override;
 		void setup() override;
+		void cleanup() override;
+
+		enum class MovementMode
+		{
+			Path,Manual
+		};
 	private:
+
+		MovementMode mode = MovementMode::Manual;
 
 		bool hasConnection = false;
 
 		void movePlayerAlongCamPath();
 		void rotatePlayerAlongCamPath();
+
+		//manual constants
+		glm::dvec2 manualMouseTranslation = glm::dvec2(0,0);
 
 		//TODO: don't think this is correct
 		const double speed = 300;//300; // in meters / second

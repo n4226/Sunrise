@@ -23,7 +23,7 @@ namespace sunrise {
 	{
 		square = new Basic2DMesh(MeshPrimatives::Basic2D::screenQuad());
 
-		// todo make staging buffer so faster for simple draw
+		// TODO: make staging buffer so faster for simple draw
 		meshBuff = new gfx::Basic2DMeshBuffer(app.renderers[0]->device, app.renderers[0]->allocator,
 			{ gfx::ResourceStorageType::cpuToGpu,vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer,
 			vk::SharingMode::eExclusive }

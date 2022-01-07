@@ -229,7 +229,7 @@ namespace sunrise {
 		{
 			//TODO: i don't like all this in the loop do something better for performance
 			// 1 here means all unatributed chunks will default to grass, 0 would be ocean
-			uint32_t matIndex = 2;
+			uint32_t matIndex = 1;
 			if (preLoadedMesh.binMeshAttributes != nullptr && preLoadedMesh.binMeshAttributes->subMeshMats.size() > i) {
 				matIndex = preLoadedMesh.binMeshAttributes->subMeshMats[i];
 			}

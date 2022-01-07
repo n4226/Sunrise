@@ -205,13 +205,48 @@ vec3 computeIncidentLight(
 
 vec3 calculatePostAtmosphereicScatering(
     ivec2 textureSize,
-    vec2 ndc,  // x and y of this fragment in the texture
+    vec2 ndc,  // x and y of this fragment in the texture // in [0,1]
     vec3 camPos, // without floating origin  // world // in geo coordinates
     mat4x4 ViewMatrix,
     vec3 sunDirection
 ) {
-//    // calculate origin(pos) and direction(dir)
+
+    vec4 clipSFPos = vec4(ndc, 1.0, 1.0);
+
+    vec4 viewSFPosition = 
+        ubo.invertedProjMat * ubo.invertedViewMat * clipSFPos;
+
+    viewSFPosition /= viewSFPosition.w;
+
+    // return vec3(viewSFPosition.xyz);
+
+
+//return camPos;//vec3(ndc,0);
+
+
+
+
+   // calculate origin(pos) and direction(dir)
         vec3 orig = camPos;
+
+        //vec4 clipSpaceFragPos = vec4((ndc * 2) - 1, 0.5f, 1.0);
+
+    // // dont think i need this but i dont know;
+    // clipSpaceFragPos.y = -clipSpaceFragPos.y;
+
+
+    //  vec4 viewSpaceFragPosition =
+    //     ubo.invertedProjMat * clipSpaceFragPos;
+    
+    // // perspective division
+    // viewSpaceFragPosition /= viewSpaceFragPosition.w;
+
+    // vec4 worldSpaceFragPosition =
+    //     ubo.invertedViewMat * viewSpaceFragPosition;
+
+
+
+
 //    
 //
 //
@@ -273,7 +308,7 @@ vec3 calculatePostAtmosphereicScatering(
     vec4 clipSpaceFragPos = vec4(ndc, 0.5f, 1.0);
 
     // dont think i need this but i dont know;
-    clipSpaceFragPos.y = -clipSpaceFragPos.y;
+    //clipSpaceFragPos.y = -clipSpaceFragPos.y;
 
 
      vec4 viewSpaceFragPosition =
@@ -285,17 +320,23 @@ vec3 calculatePostAtmosphereicScatering(
     vec4 worldSpaceFragPosition =
         ubo.invertedViewMat * viewSpaceFragPosition;
 
-    vec3 dirTemp = ubo.camFloatedGloabelPos.xyz - worldSpaceFragPosition.xyz;
+    vec3 dirTemp = worldSpaceFragPosition.xyz - ubo.camFloatedGloabelPos.xyz;
     vec3 dir =  normalize(dirTemp);
 
 
     // 
 
     float t0, t1, tMax = kInfinity;
-    // if the view ray intersects earth set the max to be the distance/time till the surface
+    //if the view ray intersects earth set the max to be the distance/time till the surface
     if (raySphereIntersect(orig, dir, earthRadius, t0, t1) && t1 > 0) {
         tMax = max(0, t0);
     }
+
+    // float at0, at1; // - maybe problem with atmosphere being only visible inside planet is because t1 is less then zero in other func?
+    // if (raySphereIntersect(orig,dir,earthRadius,at0, at1) && at1 > 0) {
+    //     return vec3(0.5,0.4,0.1);
+    // }
+    // else return vec3(0,0,0.3);
 
     return computeIncidentLight(orig, dir, 0, tMax, sunDirection);
 
@@ -338,6 +379,8 @@ void main() {
 
 	//TODO can calculate this in vertex to be more efficient
     // second param is lod
+    // inPos is in rnage [-0.5,0.5]
+    // uvs are in range [0,1]
 	vec2 uvs = (inPos + 1) / 2;// / vec2(ubo.renderTargetSize);
     vec4 albedo_metallic =   texture(GBuffer_Albedo_Metallic,uvs);
     vec4 normal_sroughness = texture(GBuffer_Normal_Roughness,uvs);
@@ -351,6 +394,7 @@ void main() {
     //TODO: remove this to render the actual scene
     if (depth == 1) {
         color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
+        //color.xyz = vec3(0,0.2,0.4);
         //albedo_metallic.w = 1;
     }
     else {
