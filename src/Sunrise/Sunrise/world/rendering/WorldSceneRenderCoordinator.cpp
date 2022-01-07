@@ -194,8 +194,8 @@ namespace sunrise {
 
 		//todo abstract this out
 		postUniforms.sunDir =
-			glm::angleAxis(glm::radians(10.f + sin(scene->timef * 0.1f) * 20.f), glm::vec3(-1, 0, 0)) *
-			glm::vec4(glm::normalize(math::LlatoGeo(worldScene->initialPlayerLLA, glm::dvec3(0), worldScene->terrainSystem->getRadius())), 1);
+			//glm::angleAxis(glm::radians(sin(scene->timef * 0.1f) * 80.f), glm::vec3(-1, 0, 0)) *
+			glm::vec4(glm::normalize(math::LlatoGeo(worldScene->initialPlayerLLA, glm::dvec3(0), worldScene->terrainSystem->getRadius())), 0);
 
 		postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>(-(worldScene->origin)), 1);
 

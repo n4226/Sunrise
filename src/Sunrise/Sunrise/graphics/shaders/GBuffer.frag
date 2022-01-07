@@ -394,11 +394,11 @@ void main() {
     //TODO: remove this to render the actual scene
     if (depth == 1) {
         color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
+        // color *= ubo.sunDir.xyz;
         //color.xyz = vec3(0,0.2,0.4);
         //albedo_metallic.w = 1;
     }
     else {
-
         SampledPBRMaterial mat;
         mat.albedo = albedo_metallic.xyz;
         mat.worldSpaceNormals = normal_sroughness.xyz;
@@ -407,6 +407,10 @@ void main() {
         mat.roughness = normal_sroughness.w;
 
         color = calculateLighting(uvs,depth,ubo.invertedViewMat,ubo.invertedProjMat,mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos.xyz);
+        
+        // float brightness = dot(normalize(normal_sroughness.xyz),normalize(-ubo.sunDir.xyz));
+        
+        // color = vec3(albedo_metallic.www);
     }
 
     outColor = vec4(color, 1);

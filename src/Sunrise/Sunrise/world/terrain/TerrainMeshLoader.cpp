@@ -202,7 +202,7 @@ namespace sunrise {
 		transform.position = node->center_geo - *terrainSystem->origin;
 		transform.scale = glm::vec3{ 1,1,1 };
 		transform.rotation = glm::identity<glm::quat>();
-
+			
 		ModelUniforms mtrans;
 		mtrans.model = transform.matrix();
 
@@ -283,9 +283,9 @@ namespace sunrise {
 
 	Mesh* TerrainMeshLoader::createChunkMesh(const TerrainQuadTreeNode& chunk)
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 
-			Mesh* mesh = new Mesh();
+		Mesh* mesh = new Mesh();
 
 		size_t resolution = 10;
 		auto d_resolution = static_cast<double>(resolution);
@@ -372,6 +372,8 @@ namespace sunrise {
 
 		//mesh->tangents.resize(mesh->verts.size());
 		//mesh->bitangents.resize(mesh->verts.size());
+
+		mesh->calculateTangentsAndBitangents();
 
 		return mesh;
 	}

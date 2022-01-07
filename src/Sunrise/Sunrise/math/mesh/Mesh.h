@@ -49,6 +49,8 @@ namespace sunrise {
 		/// optinal link to atributes
 		/// </summary>
 		BinaryMeshAttrributes* attributes = nullptr;
+
+		void calculateTangentsAndBitangents();
 	};
 
 

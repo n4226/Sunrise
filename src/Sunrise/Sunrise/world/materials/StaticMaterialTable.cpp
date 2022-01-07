@@ -19,10 +19,10 @@ namespace sunrise {
 			{0, "ocean1"},
 			{1, "grass1"},
 			//for time:
-			/*
+			///*
 			{2, "building1"},
 			{3, "asphalt1"},
-			*/
+			//*/
 
 			//{4, "concrete1"},
 	};

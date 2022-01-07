@@ -57,10 +57,12 @@ void main() {
     // remape normals to correct domain
     normal = normal * 2.0 - 1.0;   
 
-    mat3 TBN = mat3(fragModelTangent,fragModelTangent, fragModelNormal);
+    mat3 TBN = mat3(fragModelTangent,fragModelBitangent, fragModelNormal);
+    
+    // vec3 worldNormal = fragModelBitangent;
 
-    vec3 worldNormal = (matGeo * vec4(fragModelNormal,0)).xyz; 
-    //vec3 worldNormal = (matGeo * vec4(normal,0)).xyz;
+    // vec3 worldNormal = (matGeo * vec4(fragModelNormal,0)).xyz; 
+    vec3 worldNormal = (matGeo * vec4(TBN * (normal * vec3(0.6,0.6,1)),0)).xyz;
 
     outAlbedo_Metallic = vec4(color, metallic);
     outNormal_Roughness = vec4(worldNormal, roughness);
