@@ -2,6 +2,8 @@
 
 #include "Triangulation.h"
 
+// until fix of triangulation with new lib
+#if 0
 //#include <CGAL/draw_triangulation_2.h>
 //CGAL_USE_BASIC_VIEWER
 
@@ -15,14 +17,14 @@
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <CGAL/Triangulation_face_base_with_info_2.h>
 #include <CGAL/Polygon_2.h>
-#include <iostream>
+#include <iostream>	
 #include <limits>
 	
 
 #include <CGAL/Boolean_set_operations_2.h>
 	
 
-using namespace boost::polygon::operators;
+//using namespace boost::polygon::operators;
 
 //TODO ----------------------------------------------------------------------------------- CGAL WILL HAVE TO BE LICENSED FOR PROFIT ----------------------------------------------------------------------------------------------------------
 
@@ -30,89 +32,90 @@ namespace sunrise::math::mesh {
 
 
 
-		// must be ccw
-	bMultiPolygon boostFromMesh(Polygon2D p) {
+	//	// must be ccw
+	//bMultiPolygon boostFromMesh(Polygon2D p) {
 
-		std::vector<bPoint> points = {};
+	//	std::vector<bPoint> points = {};
 
-		for (size_t i = 0; i < p.size(); i++)
-		{
-			points.push_back(bPoint(p[i].x, p[i].y));
-		}
+	//	for (size_t i = 0; i < p.size(); i++)
+	//	{
+	//		points.push_back(bPoint(p[i].x, p[i].y));
+	//	}
 
-		bPolygon polygon;
+	//	bPolygon polygon;
 
-		bgm::assign_points(polygon, points);
-		return { polygon };
-	}
+	//	bgm::assign_points(polygon, points);
+	// 
+	//	return { polygon };
+	//}
 
-		// must be ccw
-	Polygon2D meshFromBoost(bMultiPolygon p) {
-		Polygon2D poly;
+	//	// must be ccw
+	//Polygon2D meshFromBoost(bMultiPolygon p) {
+	//	Polygon2D poly;
 
-		bgm::for_each_point(p, [&poly](bPoint point) {
-			poly.push_back(glm::dvec2(point.x(), point.y()));
-		});
-		
-		/*for each (auto point in p.)
-		{
-			poly.push_back(glm::dvec2(point.x(), point.y()));
-		}*/
+	//	bgm::for_each_point(p, [&poly](bPoint point) {
+	//		poly.push_back(glm::dvec2(point.x(), point.y()));
+	//	});
+	//	
+	//	/*for each (auto point in p.)
+	//	{
+	//		poly.push_back(glm::dvec2(point.x(), point.y()));
+	//	}*/
 
-		return poly;
-	}
+	//	return poly;
+	//}
 
-	Polygon2D bunion(Polygon2D p1, Polygon2D p2) {
-		auto bp1 = boostFromMesh(p1);
-		auto bp2 = boostFromMesh(p2);
+	//Polygon2D bunion(Polygon2D p1, Polygon2D p2) {
+	//	auto bp1 = boostFromMesh(p1);
+	//	auto bp2 = boostFromMesh(p2);
 
-		bMultiPolygon result;
+	//	bMultiPolygon result;
 
-		bgm::union_(bp1, bp2, result);
+	//	bgm::union_(bp1, bp2, result);
 
-		return meshFromBoost(result);
-	}
-	
+	//	return meshFromBoost(result);
+	//}
+	//
 
-	Polygon2D binterseciton(Polygon2D p1, Polygon2D p2) {
-		auto bp1 = boostFromMesh(p1);
-		auto bp2 = boostFromMesh(p2);
+	//Polygon2D binterseciton(Polygon2D p1, Polygon2D p2) {
+	//	auto bp1 = boostFromMesh(p1);
+	//	auto bp2 = boostFromMesh(p2);
 
-		bMultiPolygon result;
+	//	bMultiPolygon result;
 
-		boost::geometry::intersection(bp1, bp2, result);
+	//	boost::geometry::intersection(bp1, bp2, result);
 
-		return meshFromBoost(result);
-	}
+	//	return meshFromBoost(result);
+	//}
 
-	bool bDoIntersect(Polygon2D p1, Polygon2D p2) {
-		auto bp1 = boostFromMesh(p1);
-		auto bp2 = boostFromMesh(p2);
+	//bool bDoIntersect(Polygon2D p1, Polygon2D p2) {
+	//	auto bp1 = boostFromMesh(p1);
+	//	auto bp2 = boostFromMesh(p2);
 
-		return boost::geometry::overlaps(bp1, bp2);
-	}
+	//	return boost::geometry::overlaps(bp1, bp2);
+	//}
 
-	Polygon2D bDifference(Polygon2D p1, Polygon2D p2) {
-		auto bp1 = boostFromMesh(p1);
-		auto bp2 = boostFromMesh(p2);
+	//Polygon2D bDifference(Polygon2D p1, Polygon2D p2) {
+	//	auto bp1 = boostFromMesh(p1);
+	//	auto bp2 = boostFromMesh(p2);
 
-		bMultiPolygon result;
+	//	bMultiPolygon result;
 
-		boost::geometry::difference(bp1, bp2, result);
+	//	boost::geometry::difference(bp1, bp2, result);
 
-		return meshFromBoost(result);
-	}
+	//	return meshFromBoost(result);
+	//}
 
-	Polygon2D bunionSMDifference(Polygon2D p1, Polygon2D p2) {
-		auto bp1 = boostFromMesh(p1);
-		auto bp2 = boostFromMesh(p2);
+	//Polygon2D bunionSMDifference(Polygon2D p1, Polygon2D p2) {
+	//	auto bp1 = boostFromMesh(p1);
+	//	auto bp2 = boostFromMesh(p2);
 
-		bMultiPolygon result;
+	//	bMultiPolygon result;
 
-		boost::geometry::sym_difference(bp1, bp2, result);
+	//	boost::geometry::sym_difference(bp1, bp2, result);
 
-		return meshFromBoost(result);
-	}
+	//	return meshFromBoost(result);
+	//}
 
 	struct FaceInfo2
 	{
@@ -810,3 +813,4 @@ namespace sunrise::math::mesh {
 
 
 }
+#endif

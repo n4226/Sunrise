@@ -6,29 +6,29 @@
 #include "Mesh.h"
 #include "../Box.h"
 
-#include "boost/polygon/polygon.hpp"
-#include "boost/geometry/geometry.hpp"
+//#include "boost/polygon/polygon.hpp"
+//#include "boost/geometry/geometry.hpp"
 #include <cassert>
-
-namespace gtl = boost::polygon;
-namespace bgm = boost::geometry;
+//
+//namespace gtl = boost::polygon;
+//namespace bgm = boost::geometry;
 
 namespace sunrise::math::mesh
 {
 	typedef std::vector<glm::dvec2> Polygon2D;
 	typedef std::vector<Polygon2D> HPolygon2D;
 
-	// boost poly
-	typedef   boost::geometry::model::d2::point_xy<double> bPoint;
-	// booleans mean ccw and open in order
-	typedef   boost::geometry::model::polygon<bPoint, false, false> bPolygon;
-	typedef   boost::geometry::model::multi_polygon<bPolygon> bMultiPolygon;
+	//// boost poly
+	//typedef   boost::geometry::model::d2::point_xy<double> bPoint;
+	//// booleans mean ccw and open in order
+	//typedef   boost::geometry::model::polygon<bPoint, false, false> bPolygon;
+	//typedef   boost::geometry::model::multi_polygon<bPolygon> bMultiPolygon;
 
-	//typedef gtl::polygon_data<double> bPolygon;
-	//typedef gtl::polygon_traits<bPolygon>::point_type bPoint;
+	////typedef gtl::polygon_data<double> bPolygon;
+	////typedef gtl::polygon_traits<bPolygon>::point_type bPoint;
 
-	SUNRISE_API bMultiPolygon boostFromMesh(Polygon2D p);
-	SUNRISE_API Polygon2D meshFromBoost(bMultiPolygon p);
+	//SUNRISE_API bMultiPolygon boostFromMesh(Polygon2D p);
+	//SUNRISE_API Polygon2D meshFromBoost(bMultiPolygon p);
 
 	SUNRISE_API Polygon2D bunion(Polygon2D p1, Polygon2D p2);
 

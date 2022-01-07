@@ -26,19 +26,19 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -55,22 +55,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\..\bin\Debug-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Debug-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Debug-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\bin\Release-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Release-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Release-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\..\bin\Dist-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Dist-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Dist-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
@@ -87,19 +87,18 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;C:\code\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\..\bin\Debug-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\bin\Debug-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>echo on
-xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise $(SolutionDir)\bin\Debug-windows-x86_64\SunriseWorldMeshGen
-copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\SunriseWorldMeshGen</Command>
+xcopy /Q /E /Y /I $(SolutionDir)\bin\Debug-windows-x86_64\Sunrise $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -123,13 +122,13 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;C:\code\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\..\bin\Release-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\bin\Release-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>echo on
-xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise $(SolutionDir)\bin\Release-windows-x86_64\SunriseWorldMeshGen
-copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\SunriseWorldMeshGen</Command>
+xcopy /Q /E /Y /I $(SolutionDir)\bin\Release-windows-x86_64\Sunrise $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -153,13 +152,13 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>vendor\marl-main\marl-main\Debug;C:\code\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\..\bin\Dist-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>..\bin\Dist-windows-x86_64\Sunrise\Sunrise.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>echo on
-xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise $(SolutionDir)\bin\Dist-windows-x86_64\SunriseWorldMeshGen
-copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\SunriseWorldMeshGen</Command>
+xcopy /Q /E /Y /I $(SolutionDir)\bin\Dist-windows-x86_64\Sunrise $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -252,6 +251,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\world\simpleChunkViewerScene\SimpleChunkViewerScene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\systems\CameraSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\systems\FloatingOriginSystem.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\systems\PlayerMovementSystem.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\systems\WindowCameraController.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h" />
@@ -338,6 +339,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\world\simpleChunkViewerScene\SimpleChunkViewerScene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\systems\CameraSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\systems\FloatingOriginSystem.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\systems\PlayerMovementSystem.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\systems\WindowCameraController.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTree.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.cpp" />

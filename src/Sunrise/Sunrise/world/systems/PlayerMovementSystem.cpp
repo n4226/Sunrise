@@ -45,6 +45,7 @@ namespace sunrise {
 	{
 		bool con;
 
+
 		{
 			auto handle = updateStreamed.try_lock();
 			con = hasConnection;
