@@ -30,7 +30,8 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
-
+		//TODO: Remove
+		//terrainMask = new std::vector<math::Box>{ math::Box(playerLLA, glm::dvec2(0.01)) };
 
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
 		//renderer->world = this;
@@ -110,6 +111,11 @@ namespace sunrise {
 			sys->cleanup();
 			delete sys;
 		}
+
+	}
+
+	void WorldScene::reloadTerrainInMask()
+	{
 
 	}
 

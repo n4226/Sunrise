@@ -32,9 +32,25 @@ namespace sunrise {
 
 		CreateRenderResources();
 
-		// initial setup of the base 8 chunks
-		for (TerrainQuadTreeNode* child : tree.leafNodes) {
-			meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
+
+		if (scene.terrainMask == nullptr) {
+			// initial setup of the base 8 chunks
+			for (TerrainQuadTreeNode* child : tree.leafNodes) {
+				meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
+			}
+		}
+		else {
+			SR_CORE_INFO("Terrain System Initiated in Masked mode. DO NOT change this for the lifetime of thie object");
+			maskedMode = true;
+
+
+			for (auto& chunk : *scene.terrainMask)
+			{
+				auto leaf = new TerrainQuadTreeNode(chunk, nullptr, &tree, 0);
+				tree.leafNodes.insert(leaf);
+				meshLoader.drawChunk(leaf, meshLoader.loadMeshPreDrawChunk(leaf), false);
+			}
+			writePendingDrawOobjects(*app.renderers[0]);
 		}
 
 		//writePendingDrawOobjects();
@@ -79,7 +95,8 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
-		processTree();
+		if (!maskedMode)
+			processTree();
 	}
 
 

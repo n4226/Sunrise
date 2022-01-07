@@ -123,6 +123,8 @@ namespace sunrise {
 		/// <param name="surface"></param>
 		void resourcesReleased(Window* window, size_t surface);
 
+
+		bool maskedMode = false;
 	};
 
 }
