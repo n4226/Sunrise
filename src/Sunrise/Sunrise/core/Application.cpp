@@ -172,6 +172,7 @@ namespace sunrise {
 
             window->createWindowAndSurface();
 
+            //TODO: abstract somewhere else
             window->camera.fov = 60;
             window->camera.zNear = 0.1;
             window->camera.zFar = 100'000;//1'000'000;

@@ -116,7 +116,7 @@ namespace sunrise {
 			delete sys;
 		}
 
-	}
+	} 
 
 	void WorldScene::reloadTerrainInMask()
 	{

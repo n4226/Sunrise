@@ -483,6 +483,9 @@ namespace sunrise {
 
 #if SR_DEBUG
         //TODO return secondary monitor monitor when debugging to prevent screen lockups on crash or breakpoint;
+        
+        SR_CORE_WARN("Changing windowing mode to windowed during dev for safety");
+        configSystem.global().windows[globalIndex].mode = ConfigSystem::Config::Window::WindowMode::windowed;
 #endif
 
         return glfwGetPrimaryMonitor();
@@ -504,12 +507,12 @@ namespace sunrise {
         auto app = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
         app->framebufferResized = true;
     }
-
+        
     void Window::createWindow()
     {
         PROFILE_FUNCTION;
 
-        auto windowConfig = configSystem.global().windows[globalIndex];
+        auto& windowConfig = configSystem.global().windows[globalIndex];
 
         auto monitor = getMonitorFromNativeName(windowConfig.monitor);
         SR_CORE_INFO("creating window {} on monitor {}", globalIndex, glfwGetWin32Monitor(monitor));
