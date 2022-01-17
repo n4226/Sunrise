@@ -11,4 +11,5 @@ right now copy and past vendor/marl-main/marl-main/debug folder into new clone f
 // dont listen to these yer look aboce this is for clean notes in future
 Build notes -
 
+// marl might have to be manually switched to build for non dll multithreaded library on windows
 //marl has to be rebuilt for both produciton and release using cmake or cmake gui

@@ -3,10 +3,16 @@
 #include "srpch.h"
 
 #ifdef SR_PLATFORM_WINDOWS
-	#ifdef SR_BUILD_DLL
-		#define SUNRISE_API __declspec(dllexport)
+	// SR_DYNAMIC_BUILD does not excist but could be added in future to export required symbols again
+	// TODO: fix but now this is requred
+	#if 1
+		#ifdef SR_BUILD_DLL
+			#define SUNRISE_API __declspec(dllexport)
+		#else
+			#define SUNRISE_API __declspec(dllimport)
+		#endif
 	#else
-		#define SUNRISE_API __declspec(dllimport)
+		#define SUNRISE_API
 	#endif
 #else
 #error Windows is currently the only supported platform

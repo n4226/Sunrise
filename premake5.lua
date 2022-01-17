@@ -2,8 +2,10 @@
 -- Must be built with /bigobj command line argument which now has to be done manually after every vs proj rebuild in the project settings`
 project "Sunrise"
 
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -66,39 +68,15 @@ project "Sunrise"
 	}	
 
 	postbuildcommands {
-	
-		-- temp for FSTS
-
 		("echo on"),
 
 		-- important: for FSTS project, mainProjDir has to be manuually switched between main program and mesh gen by chosing which set of the varible happens last
-		("{COPYDIR} %{wks.location}/bin/" .. outputdir .. "/Sunrise/ %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
-		
-		--{ generic commands but dont owrk currently
-		--("{COPYFILE} %{wks.location}bin/" .. outputdir .. "/Sunrise/Sunrise.dLL %{wks.location}bin/" .. outputdir .. "/%{mainProjDir}/"),
-		--("{COPY} %{wks.location}/bin/" .. outputdir .. "/Sunrise/Sunrise.pdb %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
-
+		-- no longer needed for static linking ("{COPYDIR} %{wks.location}/bin/" .. outputdir .. "/Sunrise/ %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
 		("{COPYFILE} %{sunriseLocation}/vendor/bin//NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
-		--}
-
-
-
-		--("xcopy /Q /E /Y /I %{wks.location}bin\\" .. outputdir .. "\\Sunrise\\Sunrise.dLL %{wks.location}bin\\" .. outputdir .. "\\%{mainProjDir}\\"),
-		--("xcopy /Q /E /Y /I %{wks.location}bin\\" .. outputdir .. "\\Sunrise\\Sunrise.pdb %{wks.location}bin\\" .. outputdir .. "\\%{mainProjDir}\\"),
-		--("{COPYFILE} %{sunriseLocation}/vendor/bin//NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
-		--("xcopy /Q /E /Y /I %{wks.location}\\Sunrise\\vendor\\bin\\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\\lib\\x64\\GFSDK_Aftermath_Lib.x64.dll %{wks.location}bin\\" .. outputdir .. "\\%{mainProjDir}\\"),
-		
-
-		-- shaders again temp
-		-- C:/code/visual studio/FSTS/Sunrise/src/Sunrise/Sunrise/graphics/shaders
-		--("call C:/code/visual studio/FSTS/Sunrise/src/Sunrise/Sunrise/graphcis/shaders/compileShaders.bat"),
-		--("XCOPY /S /Y src/Sunrise/Sunrise/graphcis/shaders/* ../bin/" .. outputdir .. "/FlightSimTerrainSystem/shaders"),
 	}
 
 	filter "system:windows"
 		
-		cppdialect "C++17"
-		staticruntime "off"
 		systemversion "latest"
 
 		defines {

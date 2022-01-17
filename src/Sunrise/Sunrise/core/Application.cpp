@@ -449,7 +449,7 @@ namespace sunrise {
         // run application updates
         mousePosFrameDelta = mousePos - lastFrameMosPos;
         lastFrameMosPos = mousePos;
-
+ 
         //update imGUI
         ImGui_ImplGlfw_NewFrame();
         ImGui_ImplVulkan_NewFrame();
