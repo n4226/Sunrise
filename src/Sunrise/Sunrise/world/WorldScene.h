@@ -65,6 +65,11 @@ namespace sunrise {
 
 		Transform playerTrans;
 #pragma endregion
+
+		/// <summary>
+		/// the lat and lon of sun
+		/// </summary>
+		glm::dvec3 sunLL = initialPlayerLLA;
 	};
 
 

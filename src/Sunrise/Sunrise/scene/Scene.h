@@ -24,6 +24,7 @@ namespace sunrise {
 
 		//TODO: better abstract
 		virtual void onDrawUI() {};
+		virtual void onDrawMainMenu() {};
 
 		virtual void unload() = 0;
 

@@ -73,10 +73,16 @@ namespace sunrise {
 			}
 			else {
 				if (mode == MovementMode::Path) {
-				movePlayerAlongCamPath();
-				rotatePlayerAlongCamPath();
+					movePlayerAlongCamPath();
+					rotatePlayerAlongCamPath();
 				}
 				else {
+
+					// don't move camera if a gui window is being manipulated
+					if (world->app.imguiValid())
+						if (ImGui::IsAnyItemActive())
+							return;
+
 					auto movement = glm::vec3(0, 0, 0);
 					if (world->app.getKey(GLFW_KEY_W)) {
 						movement += glm::vec3(1, 0, 0);

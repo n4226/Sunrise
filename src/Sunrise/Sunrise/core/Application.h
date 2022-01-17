@@ -81,6 +81,10 @@ namespace sunrise {
 
 		void quit();
 
+		static void setDefaultTheme();
+
+		bool imguiValid();
+
 	protected:
 		
 		void configureGLFWEvents();
@@ -110,6 +114,11 @@ namespace sunrise {
 			bool wantsWindows = true;
 			bool useFileSys = true;
 
+			//MARK: UI
+			bool drawAppDomainUI = true;
+			std::function<void()> addToMainMenu = []() {};
+			std::function<void()> addToFileMainMenu = []() {};
+			std::function<void()> setAppTheme = Application::setDefaultTheme;
 		};
 		ApplicationConfig config;
 
@@ -130,6 +139,10 @@ namespace sunrise {
 		void runLoop() override;
 		bool shouldLoop() override;
 		void runLoopIteration() override;
+			
+		void drawMainUI();
+
+		bool _imguiValid = false;
 
 		static VkBool32 debugCallbackFunc(
 			VkDebugReportFlagsEXT                       flags,

@@ -31,7 +31,7 @@ namespace sunrise {
 		PROFILE_FUNCTION;
 
 		//TODO: Remove
-		terrainMask = new std::vector<math::Box>{ math::Box(playerLLA, glm::dvec2(0.01)) };
+		//terrainMask = new std::vector<math::Box>{ math::Box(playerLLA, glm::dvec2(0.01)) };
 
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
 		//renderer->world = this;
@@ -65,7 +65,33 @@ namespace sunrise {
 
 	void WorldScene::onDrawUI()
 	{
-		ImGui::ShowDemoWindow();
+		ImGui::Begin("World Scene Settings",nullptr,ImGuiWindowFlags_NoCollapse);
+
+		ImGui::Text("World Scene Settings");
+
+		std::array<float,3> llaPos = {playerLLA.x, playerLLA.y, playerLLA.z};
+
+		if (ImGui::InputFloat3("LLA Position", llaPos.data(), "%.5f")) {
+			playerLLA.x = llaPos[0];
+			playerLLA.y = llaPos[1];
+			playerLLA.z = llaPos[2];
+		}
+
+		if (ImGui::Button("Reset POS")) {
+			playerLLA = initialPlayerLLA;
+		}
+
+		//sunPos
+		std::array<float, 2> sun = { sunLL.x, sunLL.y };
+		if (ImGui::SliderFloat2("Sun Pos", sun.data(), -180.f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
+			sunLL.x = sun[0];
+			sunLL.y = sun[1];
+		}
+		if (ImGui::Button("Reset Sun")) {
+			sunLL = initialPlayerLLA;
+		}
+
+		ImGui::End();
 	}
 
 
@@ -99,9 +125,6 @@ namespace sunrise {
 
 		terrainSystem->update();
 
-		if (app.getKey(GLFW_KEY_ESCAPE)) {
-			app.quit();
-		}
 
 		/*if (app.mouseLeft) {
 			SR_CORE_("Mouse at ({},{})", app.mousePos.x, app.mousePos.y);
