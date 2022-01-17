@@ -24,6 +24,8 @@ namespace sunrise {
 
 		virtual void lateLoad() override;
 
+		virtual void onDrawUI() override;
+
 		virtual void update() override;
 
 		virtual void unload() override;

@@ -22,6 +22,9 @@ namespace sunrise {
 
 		virtual void update();
 
+		//TODO: better abstract
+		virtual void onDrawUI() {};
+
 		virtual void unload() = 0;
 
 

@@ -42,7 +42,7 @@ project "Sunrise"
 	}
 
 	includedirs {
-		"src",
+		"src", "src/Sunrise",
 		"vendor/spdlog/include",
 		"C:/VulkanSDK/1.2.154.1/Include",
 		"vendor/glm-master",

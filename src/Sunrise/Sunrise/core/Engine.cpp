@@ -58,7 +58,8 @@ namespace sunrise {
 	}
 	void Engine::run()
 	{
-		Instrumentor::Get().BeginSession("Run", "instruments_Run.profile");
+		//TODO: Add back runtime profiling 
+		//Instrumentor::Get().BeginSession("Run", "instruments_Run.profile");
 		{
 			PROFILE_FUNCTION;
 
@@ -80,7 +81,7 @@ namespace sunrise {
 				//throw e;
 			}
 		}
-		Instrumentor::Get().EndSession();
+		//Instrumentor::Get().EndSession();
 
 		shutdown();
 	}

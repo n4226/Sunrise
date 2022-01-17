@@ -4,6 +4,8 @@
 
 #include "core.h"
 
+#include "environment.h"
+
 // This ignore	s all warnings raised inside External headers
 #pragma warning(push, 0)
 #include <spdlog/spdlog.h>
@@ -61,7 +63,7 @@ namespace sunrise {
 
 }
 
-#if defined SR_DEBUG || defined SR_RELEASE
+#if SR_LOGGING
 // Core log macros
 #define SR_CORE_TRACE(...)    ::sunrise::Log::GetCoreLogger()->trace(__VA_ARGS__)
 #define SR_CORE_INFO(...)     ::sunrise::Log::GetCoreLogger()->info(__VA_ARGS__)

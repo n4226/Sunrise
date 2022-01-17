@@ -16,6 +16,9 @@
     <Filter Include="src\Sunrise\Sunrise\core">
       <UniqueIdentifier>{B52B8F8D-A150-DE0D-CA9B-C39DB61FDD2B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\core\input">
+      <UniqueIdentifier>{941F3D27-8045-078E-698B-8C5955502C5A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\debuging">
       <UniqueIdentifier>{D1B97C9A-BD74-6C46-662C-E59052C6B6D6}</UniqueIdentifier>
     </Filter>
@@ -33,6 +36,9 @@
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\graphics">
       <UniqueIdentifier>{1D364845-09F1-37F1-B2A8-B03B9E428281}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sunrise\Sunrise\graphics\imGui">
+      <UniqueIdentifier>{271DBD11-1359-C07B-7C6B-D87268C66896}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\graphics\shaders">
       <UniqueIdentifier>{16C0626D-02A7-2465-ABF7-8A8297BD9DCB}</UniqueIdentifier>
@@ -165,6 +171,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\core\environment.h">
       <Filter>src\Sunrise\Sunrise\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\core\input\InputHolder.h">
+      <Filter>src\Sunrise\Sunrise\core\input</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\debuging\Instrumentor.h">
       <Filter>src\Sunrise\Sunrise\debuging</Filter>
     </ClInclude>
@@ -197,6 +206,12 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileSystem.h">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiStage.h">
+      <Filter>src\Sunrise\Sunrise\graphics\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiVulkanContainer.h">
+      <Filter>src\Sunrise\Sunrise\graphics\imGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h">
       <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
@@ -423,7 +438,6 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\core\input\InputHolder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -440,6 +454,9 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\core\Window.cpp">
       <Filter>src\Sunrise\Sunrise\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\core\input\InputHolder.cpp">
+      <Filter>src\Sunrise\Sunrise\core\input</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp">
       <Filter>src\Sunrise\Sunrise\debuging</Filter>
@@ -470,6 +487,12 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileSystem.cpp">
       <Filter>src\Sunrise\Sunrise\fileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiStage.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\imGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiVulkanContainer.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\imGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan</Filter>
@@ -699,6 +722,5 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\core\input\InputHolder.cpp" />
   </ItemGroup>
 </Project>

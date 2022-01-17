@@ -157,6 +157,7 @@ namespace sunrise::gfx {
 		size_t index;
 	};
 
+
 	/// <summary>
 	/// wrapper of vk::DescriptorPool
 	/// </summary>
@@ -166,6 +167,15 @@ namespace sunrise::gfx {
 		struct CreateOptions {
 
 			struct DescriptorTypeAllocOptions {
+				DescriptorTypeAllocOptions(vk::DescriptorType type, size_t maxNum) {
+					this->type = type;
+					this->maxNum = maxNum;
+				}
+				DescriptorTypeAllocOptions() = default;
+				DescriptorTypeAllocOptions(vk::DescriptorPoolSize size) {
+					type = size.type;
+					maxNum = size.descriptorCount;
+				}
 
 				vk::DescriptorType type;
 				// the total max number of this descriptor allocated - if the pool allocates 2 sets and each one has 2 of this descriptor than thes would have to be 4 in order to allocate both sets
@@ -282,6 +292,7 @@ namespace sunrise::gfx {
 
 
 	};
+
 
 
 }

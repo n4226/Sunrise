@@ -27,7 +27,7 @@ namespace sunrise {
 		void reEncodeBuffer(const Window& window, size_t surface);
 
 		/// <summary>
-		/// callled in main rander loop so any non trivial actions should be cojmpleted on a worker thread
+		/// callled in main rander loop so any non trivial actions should be completed on a worker thread
 		/// </summary>
 		/// <param name="window"></param>
 		/// <param name="surface"></param>

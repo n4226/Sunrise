@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -107,7 +107,7 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -137,7 +137,7 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -162,7 +162,6 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Sunrise\Sunrise\core\input\InputHolder.h" />
     <ClInclude Include="src\Sunrise.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
@@ -173,6 +172,7 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     <ClInclude Include="src\Sunrise\Sunrise\core\Window.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\core.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\environment.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\core\input\InputHolder.h" />
     <ClInclude Include="src\Sunrise\Sunrise\debuging\Instrumentor.h" />
     <ClInclude Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.h" />
     <ClInclude Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.h" />
@@ -184,6 +184,8 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     <ClInclude Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\fileSystem\FileSystem.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiVulkanContainer.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\pbr.h" />
@@ -261,12 +263,12 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Sunrise\Sunrise\core\input\InputHolder.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Log.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Window.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\core\input\InputHolder.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\debuging\VkDebugMarker.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Dispatcher.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\dependencyManagment\Node.cpp" />
@@ -277,6 +279,8 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     <ClCompile Include="src\Sunrise\Sunrise\fileFormats\binary\BinaryMeshAttrributes.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\fileSystem\FileSystem.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiVulkanContainer.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\CRPHolder.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ComposableRenderPass.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\ANewGPUStageSystemDesign.cpp" />

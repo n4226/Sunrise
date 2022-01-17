@@ -63,6 +63,11 @@ namespace sunrise {
 			ren->materialManager->loadStaticEarth();
 	}
 
+	void WorldScene::onDrawUI()
+	{
+		ImGui::ShowDemoWindow();
+	}
+
 
 	void WorldScene::update()
 	{

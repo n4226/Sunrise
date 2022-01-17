@@ -17,10 +17,10 @@ namespace sunrise::gfx {
 	{
 #if SR_ENABLE_PRECONDITION_CHECKS
 		// this is to make sure a stage is not registered more than once
-		assert(individualRunDependencies.count(stage) == 0);
-		assert(individualRunDependencyOptoins.count(stage) == 0);
+		SR_CORE_ASSERT(individualRunDependencies.count(stage) == 0);
+		SR_CORE_ASSERT(individualRunDependencyOptoins.count(stage) == 0);
 
-		assert(!graphBuilt);
+		SR_CORE_ASSERT(!graphBuilt);
 #endif
 
 		if (!stage->_setup) {

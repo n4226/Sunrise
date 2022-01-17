@@ -3,7 +3,7 @@
 #include "../renderer/Renderer.h"
 #include "../generalAbstractions/VkAbstractions.h"
 
-
+#include "backends/imgui_impl_vulkan.h"
 
 namespace sunrise {
 
@@ -54,7 +54,7 @@ namespace sunrise {
 
 
 
-		void ResourceTransferer::newTask(std::vector<Task>& tasks, std::function<void()> completionHandler, bool synchronus, bool requiresGfxQueue)
+		void ResourceTransferer::newTask(const std::vector<Task>& tasks, std::function<void()> completionHandler, bool synchronus, bool requiresGfxQueue)
 		{
 			PROFILE_FUNCTION
 
@@ -71,6 +71,15 @@ namespace sunrise {
 			else {
 				marl::schedule([tasks, ticket, completionHandler, this, requiresGfxQueue]() { performTask(tasks, ticket, completionHandler, requiresGfxQueue); });
 			}
+		}
+
+		void ResourceTransferer::inlineSynchronousTask(std::function<void(vk::CommandBuffer)> method, bool requiresGfxQueue)
+		{
+			auto task = Task{};
+			task.type = TaskType::custom;
+			newTask({ task }, []() {
+
+			}, true, requiresGfxQueue);
 		}
 
 
@@ -104,7 +113,7 @@ namespace sunrise {
 
 				cmdBuffer.begin({ { vk::CommandBufferUsageFlagBits::eOneTimeSubmit } });
 
-				renderer.debugObject.beginRegion(cmdBuffer, "Resource Transfer Task", glm::vec4(0.4,0.2,0.1,1));
+				renderer.debugObject.beginRegion(cmdBuffer, "Async or Resource Transfer Task", glm::vec4(0.4,0.2,0.1,1));
 
 				// perform tasks
 				for (Task& task : tasks) {
@@ -125,12 +134,21 @@ namespace sunrise {
 						//Graphics Queue
 
 
-						case TaskType::generateMipMaps:
-							performGenerateMipMapsTask(task.generateMipMapsTask,cmdBuffer);
-							break;
-						default:
-							break;
-						}
+					case TaskType::generateMipMaps:
+						performGenerateMipMapsTask(task.generateMipMapsTask,cmdBuffer);
+						break;
+
+					case TaskType::imguiFontGen:
+						ImGui_ImplVulkan_CreateFontsTexture(cmdBuffer);
+						break;
+
+						//custom
+					case TaskType::custom:
+						task.customTask(cmdBuffer);
+						break;
+					default:
+						break;
+					}
 
 				}
 				renderer.debugObject.endRegion(cmdBuffer);

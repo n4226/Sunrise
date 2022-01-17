@@ -11,6 +11,9 @@
 
 #include <asio.hpp>
 
+#include "backends/imgui_impl_vulkan.h"
+#include "backends/imgui_impl_glfw.h"
+
 namespace sunrise {
 
     using namespace gfx;
@@ -442,8 +445,24 @@ namespace sunrise {
         mousePosFrameDelta = mousePos - lastFrameMosPos;
         lastFrameMosPos = mousePos;
 
+        //update imGUI
+        ImGui_ImplGlfw_NewFrame();
+        ImGui_ImplVulkan_NewFrame();
+        ImGui::NewFrame();
+
+
         // update scene
         loadedScenes[0]->update();
+
+        {
+            PROFILE_SCOPE("Draw UI");
+            loadedScenes[0]->onDrawUI();
+
+            {
+                PROFILE_SCOPE("IMGUI - Render");
+                ImGui::Render();
+            }
+        }
 
         renderers[0]->beforeRenderScene();
 

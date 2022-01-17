@@ -44,6 +44,7 @@ namespace sunrise {
 
 	void DeferredStage::lateSetup()
 	{
+		//TODO: label why this has to be done
 		//todo make this better
 		auto worldCoord = dynamic_cast<WorldSceneRenderCoordinator*>(coord);
 		for (auto window : app.renderers[0]->windows)

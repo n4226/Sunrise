@@ -8,13 +8,14 @@
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h"
 #include "Sunrise/Sunrise/graphics/vulkan/renderPipelines/GraphicsPipeline.h"
 
+#include "backends/imgui_impl_vulkan.h"
+
 namespace sunrise::gfx {
 
 
 	SceneRenderCoordinator::SceneRenderCoordinator(Scene* scene)
 		: scene(scene), app(scene->app)
 	{
-
 	}
 
 	SceneRenderCoordinator::~SceneRenderCoordinator()
@@ -240,6 +241,25 @@ namespace sunrise::gfx {
 		for (auto stage : stagesInOrder) {
 			stage->lateSetup();
 		}
+
+		//Setup ImGui
+		imguiStage = new ImGuiStage(this);
+
+		ImGui::CreateContext();
+
+		//this initializes the core structures of imgui
+		generateIMGUIResources(app); //-- Fix for Multi window
+
+		//TODO: move 
+		//see: https://twitter.com/ocornut/status/939547856171659264?lang=en
+		float SCALE = 2.0f;
+		ImFontConfig cfg;
+		cfg.SizePixels = 13 * SCALE;
+		ImGui::GetIO().Fonts->AddFontDefault(&cfg); //don't know what this is -> ->DisplayOffset.y = SCALE;
+
+		for (auto window : app.renderers[0]->physicalWindows) {
+			setupIMGUIForWindow(window, app);
+		}
 	}
 
 	void SceneRenderCoordinator::drawableReleased(Window* window, size_t appFrame)
@@ -375,10 +395,31 @@ namespace sunrise::gfx {
 #if SR_LOGGING
  			renderer->debugObject.endRegion(firstLevelCMDBuffer);
 #endif
+
+			if (stage == lastStage) {
+				//draw imgui
+
+#if SR_LOGGING
+				renderer->debugObject.beginRegion(firstLevelCMDBuffer, "ImGui Pass", glm::vec4(1, 0.1, 0.2, 1));
+#endif
+				GPUStage::RunOptions options = { scene, this, currentPass, window };
+
+				auto imguiBuff = imguiStage->encode(options);
+
+				firstLevelCMDBuffer.executeCommands(*imguiBuff);
+
+#if SR_LOGGING
+				renderer->debugObject.endRegion(firstLevelCMDBuffer);
+#endif
+			}
+
+				//if(imguideaw
 		}
 
 		if (inARenderPass)
 			firstLevelCMDBuffer.endRenderPass();
+
+
 	}
 
 	void SceneRenderCoordinator::startNewPass(int64_t pass, Window& window, vk::CommandBuffer firstLevelCMDBuffer)

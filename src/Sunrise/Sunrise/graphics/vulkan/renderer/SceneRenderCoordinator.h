@@ -6,6 +6,9 @@
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUStageDispatcher.h"
 #include "Sunrise/Sunrise/graphics/vulkan/CRPHolder.h"
 
+#include "Sunrise/graphics/imGui/ImGuiVulkanContainer.h"
+#include "Sunrise/graphics/imGui/ImGuiStage.h"
+
 namespace sunrise {
 
 	class Scene;
@@ -50,7 +53,7 @@ namespace sunrise {
 		/// TODO: because there might/will be multiple render passes, much like the sugestion in Metal, we could start frame running witnout aquisiiton of swap chain image since it is only needed at the very end of the frame 
 		/// 
 		/// </summary>
-		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher, public RenderResourceTracker
+		class SUNRISE_API SceneRenderCoordinator : public GPUStageDispatcher, public RenderResourceTracker, protected ImGuiVulkanContainer
 		{
 		public:
 
@@ -162,6 +165,7 @@ namespace sunrise {
 			void startNewPass(int64_t pass, Window& window, vk::CommandBuffer firstLevelCMDBuffer);
 
 
+			ImGuiStage* imguiStage;
 
 		};
 

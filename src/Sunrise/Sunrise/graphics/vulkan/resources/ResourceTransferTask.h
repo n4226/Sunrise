@@ -33,7 +33,9 @@ namespace sunrise {
 				bufferTransfers = 0,
 				bufferToImageCopyWithTransition,
 				imageLayoutTransition,
-				generateMipMaps
+				generateMipMaps,
+				imguiFontGen,
+				custom
 			};
 
 			struct BufferTransferTask {
@@ -86,6 +88,7 @@ namespace sunrise {
 				ImageLayoutTransitionTask imageLayoutTransitonTask;
 				BufferToImageCopyWithTransitionTask bufferToImageCopyWithTransitionTask;
 				GenerateMipMapsTask generateMipMapsTask;
+				std::function<void(vk::CommandBuffer)> customTask;
 			};
 
 			//inline static ResourceTransferer* shared;
@@ -101,9 +104,10 @@ namespace sunrise {
 			/// </summary>
 			/// <param name="task"></param>
 			/// <param name="onDone">called on the job thread</param>
-			void newTask(std::vector<Task>& tasks, std::function<void()> completionHandler, bool synchronus = false, bool requiresGfxQueue = false);
+			void newTask(const std::vector<Task>& tasks, std::function<void()> completionHandler, bool synchronus = false, bool requiresGfxQueue = false);
 
 
+			void inlineSynchronousTask(std::function<void(vk::CommandBuffer)> method, bool requiresGfxQueue);
 
 		protected:
 			friend Renderer;
