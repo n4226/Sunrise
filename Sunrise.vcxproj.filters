@@ -438,6 +438,8 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\UIScene.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -722,5 +724,7 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\UIScene.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.cpp" />
   </ItemGroup>
 </Project>

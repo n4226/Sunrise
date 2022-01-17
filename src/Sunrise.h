@@ -39,6 +39,8 @@
 ////////////////////////////////////////// Scene
 
 #include "Sunrise/Sunrise/scene/Scene.h"
+#include "Sunrise/Sunrise/scene/included/UIScene.h"
+
 #include "Sunrise/Sunrise/scene/Camera.h"
 
 ////............................... world

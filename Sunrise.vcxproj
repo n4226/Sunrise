@@ -261,6 +261,8 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainQuadTreeNode.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainSystem.h" />
     <ClInclude Include="src\srpch.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\UIScene.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
@@ -354,6 +356,8 @@ copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.
     <ClCompile Include="src\srpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\UIScene.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.cpp" />
     <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
