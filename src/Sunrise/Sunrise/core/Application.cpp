@@ -34,6 +34,9 @@ namespace sunrise {
 
         config = configure();
 
+        if (config.wantsWindows)
+            SR_CORE_ASSERT(config.useFileSys);
+
         {// configure main threaqd priority
             SR_CORE_TRACE("Initializing Proccess Priority");
 
