@@ -68,9 +68,11 @@ namespace sunrise {
 
             }
 
-            SR_CORE_TRACE("Initializing Configuration system");
-            configSystem.readFromDisk();
-            configSystem.writeHelpDoc();
+            if (config.wantsWindows) {
+                SR_CORE_TRACE("Initializing Configuration system");
+                configSystem.readFromDisk();
+                configSystem.writeHelpDoc();
+            }
         }
 
         if (config.enableAsioContext) {

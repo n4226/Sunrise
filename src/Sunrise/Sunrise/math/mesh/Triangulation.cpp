@@ -813,4 +813,45 @@ namespace sunrise::math::mesh {
 
 
 }
+#else
+namespace sunrise::math::mesh {
+
+	Box bounds(std::vector<glm::dvec2>& points)
+	{
+		glm::dvec2 min = glm::dvec2(std::numeric_limits<double>::max()); //glm::dvec2(90, 180);
+		glm::dvec2 max = glm::dvec2(-std::numeric_limits<double>::max()); //glm::dvec2(-90, -180);
+
+		for (auto& pos : points) {
+			if (pos.x < min.x)
+				min.x = pos.x;
+			if (pos.y < min.y)
+				min.y = pos.y;
+
+			if (pos.x > max.x)
+				max.x = pos.x;
+			if (pos.y > max.y)
+				max.y = pos.y;
+		}
+
+		SR_CORE_ASSERT(min != glm::dvec2(std::numeric_limits<double>::max()) && max != glm::dvec2(-std::numeric_limits<double>::max()));
+
+		auto result = Box(min, max - min);
+
+#if SR_ENABLE_PRECONDITION_CHECKS
+
+		for (auto& point : points) {
+			SR_ASSERT(result.contains(point));
+		}
+
+#endif
+
+		return result;
+	}
+
+
+
+	std::pair<TriangulatedMesh*, bool> triangulate(std::vector<std::vector<glm::dvec2>>& polygon) {
+		return std::make_pair(nullptr, false);
+	}
+}
 #endif

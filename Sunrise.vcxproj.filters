@@ -100,6 +100,9 @@
     <Filter Include="src\Sunrise\Sunrise\scene">
       <UniqueIdentifier>{1A608F40-8622-C3CA-CFD2-51573BD49BA8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\scene\included">
+      <UniqueIdentifier>{913320FD-7D6F-2367-E681-3B5ED2DCCB81}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\world">
       <UniqueIdentifier>{B48DDE40-2050-12CB-6900-A157D501EBA8}</UniqueIdentifier>
     </Filter>
@@ -387,6 +390,12 @@
     <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\UIScene.h">
+      <Filter>src\Sunrise\Sunrise\scene\included</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.h">
+      <Filter>src\Sunrise\Sunrise\scene\included</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h">
       <Filter>src\Sunrise\Sunrise\world</Filter>
     </ClInclude>
@@ -438,8 +447,6 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\scene\included\UIScene.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -652,6 +659,12 @@
     <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\UIScene.cpp">
+      <Filter>src\Sunrise\Sunrise\scene\included</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.cpp">
+      <Filter>src\Sunrise\Sunrise\scene\included</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp">
       <Filter>src\Sunrise\Sunrise\world</Filter>
     </ClCompile>
@@ -724,7 +737,5 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\scene\included\UIScene.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.cpp" />
   </ItemGroup>
 </Project>
