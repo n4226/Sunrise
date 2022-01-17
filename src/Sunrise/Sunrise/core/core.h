@@ -9,7 +9,8 @@
 		#ifdef SR_BUILD_DLL
 			#define SUNRISE_API __declspec(dllexport)
 		#else
-			#define SUNRISE_API __declspec(dllimport)
+			//#define SUNRISE_API __declspec(dllimport)
+			#define SUNRISE_API
 		#endif
 	#else
 		#define SUNRISE_API
