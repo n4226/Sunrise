@@ -36,7 +36,7 @@ namespace sunrise::gfx {
 	/// </summary>
 	/// <returns></returns>
 
-	inline std::vector<DescriptorSetLayoutBinding> DescriptorSetLayoutBinding::createWholeSet(std::vector<Shell>&& bindings) {
+    std::vector<DescriptorSetLayoutBinding> DescriptorSetLayoutBinding::createWholeSet(std::vector<Shell>&& bindings) {
 
 		std::vector<DescriptorSetLayoutBinding> result(bindings.size());
 

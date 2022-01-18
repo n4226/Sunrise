@@ -18,16 +18,24 @@
 //dddd
 //#endif
 
+#if defined(__FUNCSIG__)
+     #define SR_FUNC_SIG __FUNCSIG__
+ #elif defined(__PRETTY_FUNCTION__)
+     #define SR_FUNC_SIG __PRETTY_FUNCTION__
+ #else
+     #define SR_FUNC_SIG __FUNCTION__
+ #endif
+
 #if SR_PROFILING && SR_DEBUG
 #define PROFILE_SCOPE(name) InstrumentationTimer timer##__line__(name);
-#define PROFILE_FUNCTION PROFILE_SCOPE(__FUNCSIG__)
+#define PROFILE_FUNCTION PROFILE_SCOPE(SR_FUNC_SIG)
 #define PROFILE_SCOPE_LEVEL2(name) InstrumentationTimer timer##__line__(name);
-#define PROFILE_FUNCTION_LEVEL2 PROFILE_SCOPE_LEVEL2(__FUNCSIG__)
+#define PROFILE_FUNCTION_LEVEL2 PROFILE_SCOPE_LEVEL2(SR_FUNC_SIG)
 #elif SR_PROFILING_LITE
 #define PROFILE_SCOPE(name)
 #define PROFILE_FUNCTION
 #define PROFILE_SCOPE_LEVEL2(name) InstrumentationTimer timer##__line__(name);
-#define PROFILE_FUNCTION_LEVEL2 PROFILE_SCOPE_LEVEL2(__FUNCSIG__)
+#define PROFILE_FUNCTION_LEVEL2 PROFILE_SCOPE_LEVEL2(SR_FUNC_SIG)
 #else
 #define PROFILE_SCOPE(name)
 #define PROFILE_FUNCTION 
@@ -119,3 +127,9 @@
 Good git restore explanation: (this is seperate I will find a place to put this shortly)
 https://stackoverflow.com/questions/58003030/what-is-the-git-restore-command-and-what-is-the-difference-between-git-restor
 */
+
+//vulkan constants
+
+#if SR_PLATFORM_WINDOWS
+#define SR_USE_AFTERMATH
+#endif

@@ -3,6 +3,7 @@
 #include "srpch.h"
 #include "Bezier.h"
 
+#include "../../Math.h"
 
 namespace sunrise::math {
 
@@ -47,14 +48,14 @@ namespace sunrise::math {
 				float controlNetLength;
 
 				if (isLLAData)
-					controlNetLength = Math::llaDistance(points[0], points[1], llaRad) + Math::llaDistance(points[1], points[2], llaRad) + Math::llaDistance(points[2], points[3], llaRad);
+					controlNetLength = math::llaDistance(points[0], points[1], llaRad) + math::llaDistance(points[1], points[2], llaRad) + math::llaDistance(points[2], points[3], llaRad);
 				else
 					controlNetLength = glm::distance(points[0], points[1]) + glm::distance(points[1], points[2]) + glm::distance(points[2], points[3]);
 
 				double estimatedCurveLength;
 
 				if (isLLAData)
-					estimatedCurveLength = Math::llaDistance(points[0], points[3], llaRad) + controlNetLength / 2.0;
+					estimatedCurveLength = math::llaDistance(points[0], points[3], llaRad) + controlNetLength / 2.0;
 				else
 					estimatedCurveLength = glm::distance(points[0], points[3]) + controlNetLength / 2.0;
 
@@ -65,7 +66,7 @@ namespace sunrise::math {
 					t += 1 / divisions;
 					auto pointOnCurve = Bezier::evaluateCubic(points[0], points[1], points[2], points[3], t);
 					if (isLLAData)
-						dstSinceLastEvenPoint += Math::llaDistance(previousPoint, pointOnCurve, llaRad);
+						dstSinceLastEvenPoint += math::llaDistance(previousPoint, pointOnCurve, llaRad);
 					else
 						dstSinceLastEvenPoint += glm::distance(previousPoint, pointOnCurve);
 
@@ -109,7 +110,7 @@ namespace sunrise::math {
 			for (size_t i = 0; i < getNumSegments(); i++)
 			{
 				auto points = getPointsInSegment(i);
-				length += Math::llaDistance(points[0], points[2]);
+				length += math::llaDistance(points[0], points[2]);
 			}
 			return length;
 		}

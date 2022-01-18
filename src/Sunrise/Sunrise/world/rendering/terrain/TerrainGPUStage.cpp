@@ -222,7 +222,12 @@ namespace sunrise {
 				}
 			}
 			SR_CORE_INFO("sleeping waiting for terrain sys buff to leave inflight");
+            
+#ifdef SR_PLATFORM_MACOS
+            sleep(1);
+#else
 			Sleep(1);
+#endif
 		}
 
 

@@ -125,7 +125,7 @@ namespace sunrise::gfx {
 	{
 		//TODO: WARN: imGUi apears to only work with singal gpu
 
-		SR_CORE_CRITICAL("{} Not Implimented", __FUNCSIG__);
+		SR_CORE_CRITICAL("{} Not Implimented", SR_FUNC_SIG);
 		SR_CORE_ASSERT(false);
 		
 	}

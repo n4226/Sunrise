@@ -10,8 +10,8 @@
 #include "../graphics/vulkan/SingalPassRenderPassManager.h"
 #include "../world/WorldScene.h"
 
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
+
+
 
 #include "backends/imgui_impl_vulkan.h"
 #include "backends/imgui_impl_glfw.h"
@@ -467,15 +467,16 @@ namespace sunrise {
         }
     }
 
-    GLFWmonitor* Window::getMonitorFromNativeName(std::string& const name)
+    GLFWmonitor* Window::getMonitorFromNativeName(const std::string& name)
     {
         int monitorsCount = 0;
         auto monitors = glfwGetMonitors(&monitorsCount);
         SR_CORE_INFO("Picking monitor for window {}",globalIndex);
         for (size_t i = 0; i < monitorsCount; i++)
         {
-            SR_CORE_TRACE("comparing monitor {} to requested {}", glfwGetWin32Monitor(monitors[i]), name.c_str());
-            if (strcmp(glfwGetWin32Monitor(monitors[i]), name.c_str()) == 0) {
+            SR_CORE_TRACE("comparing monitor {} to requested {}", getNativeMonitorName(monitors[i]), name.c_str());
+            
+            if (strcmp(getNativeMonitorName(monitors[i]).c_str(), name.c_str()) == 0) {
                 return monitors[i];
             }
         }
@@ -490,6 +491,9 @@ namespace sunrise {
 
         return glfwGetPrimaryMonitor();
     }
+
+    
+
 
     void Window::createSurface()
     {
@@ -515,7 +519,7 @@ namespace sunrise {
         auto& windowConfig = configSystem.global().windows[globalIndex];
 
         auto monitor = getMonitorFromNativeName(windowConfig.monitor);
-        SR_CORE_INFO("creating window {} on monitor {}", globalIndex, glfwGetWin32Monitor(monitor));
+        SR_CORE_INFO("creating window {} on monitor {}", globalIndex, getNativeMonitorName(monitor));
 
 
 

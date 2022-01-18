@@ -11,6 +11,19 @@
 
 #include "../graphics/vulkan/generalAbstractions/Image.h"
 
+//#ifdef SR_PLATFORM_WINDOWS
+//#define SR_NATIVE_MONITOR GLFWmonitor*
+//#elif defined (SR_PLATFORM_MACOS)
+//#define SR_NATIVE_MONITOR CGDirectDisplayID
+//#endif
+
+#ifdef SR_PLATFORM_WINDOWS
+#define GLFW_EXPOSE_NATIVE_WIN32
+#elif defined(SR_PLATFORM_MACOS)
+#define GLFW_EXPOSE_NATIVE_COCOA
+#endif
+#include <GLFW/glfw3native.h>
+
 namespace sunrise {
 
 	class WorldScene;
@@ -19,6 +32,7 @@ namespace sunrise {
 		class GPUGenCommandsPipeline;
 	}
 	class Application;
+
 
 	/// <summary>
 	/// This class represents a window
@@ -167,6 +181,19 @@ namespace sunrise {
 
 		bool shouldClose();
 
+        
+
+        static std::string getNativeMonitorName(GLFWmonitor* monitor) {
+        #ifdef SR_PLATFORM_WINDOWS
+                return glfwGetWin32Monitor(monitor)->name
+        #elif defined(SR_PLATFORM_MACOS)
+                return std::to_string(glfwGetCocoaMonitor(monitor));
+        #else
+        #error Platform not supported
+        #endif
+        }
+
+        
 	private:
 
 		bool _virtual;
@@ -199,13 +226,12 @@ namespace sunrise {
 
 		void createSemaphores();
 
-		void Window::SetupImgui();
+        void SetupImgui();
 
 		VkDescriptorPool imguiDescriptorQueue;
 
-		GLFWmonitor* getMonitorFromNativeName(std::string& const name);
-
-
+        GLFWmonitor* getMonitorFromNativeName(const std::string& name);
+        
 		void destroyWindow();
 		void destroySurface();
 

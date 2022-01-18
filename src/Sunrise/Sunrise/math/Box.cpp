@@ -3,24 +3,12 @@
 
 namespace sunrise::math {
 
-    constexpr Box::Box()
-        : start(0), size(0)
-    {
-    }
-    constexpr Box::Box(glm::dvec2 start, glm::dvec2 size)
-        : start(start), size(size)
-    {
-    }
+        
+    
 
-    constexpr glm::dvec2 Box::getEnd() const
-    {
-        return start + size;
-    }
+    
 
-    constexpr glm::dvec2 Box::getCenter() const
-    {
-        return start + (size * 0.5);
-    }
+    
 
     constexpr bool Box::contains(glm::dvec2 point) const
     {

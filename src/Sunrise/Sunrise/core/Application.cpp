@@ -37,9 +37,10 @@ namespace sunrise {
         if (config.wantsWindows)
             SR_CORE_ASSERT(config.useFileSys);
 
+//TODO: add priotrity to other platforms
+#ifdef SR_PLATFORM_WINDOWS
         {// configure main threaqd priority
             SR_CORE_TRACE("Initializing Proccess Priority");
-
             auto nativeHandle = GetCurrentThread();
             //SetThreadPriority(nativeHandle, THREAD_PRIORITY_TIME_CRITICAL);
             auto nativeProessHandle = GetCurrentProcess();
@@ -48,7 +49,7 @@ namespace sunrise {
             //printf("d"); 
             //SetPriorityClass()
         }
-
+#endif
 
         if (config.enableMarl) {// Configure Marl
             SR_CORE_TRACE("Initializing Marl");
@@ -967,7 +968,8 @@ namespace sunrise {
         style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
         //style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
     }
-    inline bool Application::imguiValid() {
+
+    bool Application::imguiValid() {
         return _imguiValid;
     }
 }

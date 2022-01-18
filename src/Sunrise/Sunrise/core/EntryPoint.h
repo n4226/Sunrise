@@ -6,7 +6,7 @@
 
 extern sunrise::Application* sunrise::CreateApplication();
 
-#ifdef SR_PLATFORM_WINDOWS
+//#ifdef SR_PLATFORM_WINDOWS
 
 namespace sunrise {
 
@@ -36,4 +36,4 @@ int main(int arc, char** argv) {
 }
 #endif
 
-#endif 
+//#endif

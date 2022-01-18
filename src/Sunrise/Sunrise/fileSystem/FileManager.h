@@ -41,7 +41,7 @@ namespace sunrise {
 		/// DO NOT USE FOR PERFORMANCE SENSATIVE TASKS
 		/// </summary>
 		/// <returns></returns>
-		static std::string loadStringfromFile(std::string& const path);
+		static std::string loadStringfromFile(const std::string& path);
 
 		// errors
 

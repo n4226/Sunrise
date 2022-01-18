@@ -384,7 +384,7 @@ namespace sunrise::gfx {
 
 			//todo this has to be deleted when frame done preoccesing
 
-			GPUStage::RunOptions options = { scene, this, currentPass, window };
+            GPUStage::RunOptions options = { scene, this, static_cast<uint32_t>(currentPass), window };
 
 			auto buff = stage->encode(options);
 #if SR_LOGGING
@@ -402,7 +402,7 @@ namespace sunrise::gfx {
 #if SR_LOGGING
 				renderer->debugObject.beginRegion(firstLevelCMDBuffer, "ImGui Pass", glm::vec4(1, 0.1, 0.2, 1));
 #endif
-				GPUStage::RunOptions options = { scene, this, currentPass, window };
+                GPUStage::RunOptions options = { scene, this, static_cast<uint32_t>(currentPass), window };
 
 				auto imguiBuff = imguiStage->encode(options);
 

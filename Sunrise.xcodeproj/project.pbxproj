@@ -1,0 +1,1357 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		016205DB5DE90A4DE68BC41B /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABD19923BBB6C555A82A4F63 /* Node.cpp */; };
+		0327672B1D10C95DD896DD6B /* GpuStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 956EFC332B980E25ECFE6A73 /* GpuStage.cpp */; };
+		03EDE1561EBA5008228AE796 /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DA2D51EBACAE390BC5DD35E /* Math.cpp */; };
+		045530D8F54C9ECA61501F18 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0609A4C09E568A72CC9D8B00 /* Camera.cpp */; };
+		0C5078AC1E07B89E9375A6EC /* WorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17A7FDF48B9075A6ADDE2434 /* WorldScene.cpp */; };
+		0E3D3E9169888EC357BA74D1 /* VkDebugMarker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B459D759C611174B3B7F0599 /* VkDebugMarker.cpp */; };
+		0F6F179855108D4AA214FDD8 /* SimpleChunkViewerScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9FCD400C6102B272E7AB80 /* SimpleChunkViewerScene.cpp */; };
+		152D8DDD42D815CF437BBC1D /* GPUSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11763C450A40FBF794B56285 /* GPUSelector.cpp */; };
+		1683351DB9EA62CFD1201B5D /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F47D64507BFC3B733A6B485 /* Renderer.cpp */; };
+		16A3E126040B73D8A1056766 /* FrustrumMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B618A7EEC2A35A603D88262E /* FrustrumMath.cpp */; };
+		1814A897A6C5D989024FF6D7 /* DeferredStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6BE6BFFA165B4B185A6B23F /* DeferredStage.cpp */; };
+		1C907737DE4908A98563D577 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3452C9FFE84EE331CA01203F /* Buffer.cpp */; };
+		1DFA8FC1731E73337A682E01 /* ComposableRenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5FF84A49374B757BB0B8E089 /* ComposableRenderPass.cpp */; };
+		205CAD4BE51203BD9980AB8B /* imgui_impl_vulkan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A943EED3F1E32D05150EE513 /* imgui_impl_vulkan.cpp */; };
+		207910E3E7DDCBD572959F23 /* CameraSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84BBE12B722373DD0F1D676B /* CameraSystem.cpp */; };
+		209B1DB3C810B96570D5C3F3 /* FileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6977C75B481A62CDFCFC659B /* FileManager.cpp */; };
+		24A4A98B3489D5BD20FD5FCB /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DBEF673CFA89265C6CFA4B3 /* imgui_widgets.cpp */; };
+		2846C84FECFC1EC1A16AC68F /* WorldClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D0E89D765ADC80988D98017 /* WorldClock.cpp */; };
+		2ED63A8528768C3718F7A0C5 /* GPUComputeStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F83CDED613C5F5F08572C2D /* GPUComputeStage.cpp */; };
+		2F993893DB4FA54508C5FED3 /* SceneRenderCoordinator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CEBBD5B4F5809CD077E7B9B /* SceneRenderCoordinator.cpp */; };
+		3024EBC152A8EEB32EEA7A01 /* WorldSceneRenderCoordinator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D87F89D6CE5A3B93C305C9 /* WorldSceneRenderCoordinator.cpp */; };
+		34BB704F7727BCC12F4E2E8F /* ResourceHeap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 97366397EDAFD7C9E6D819D7 /* ResourceHeap.cpp */; };
+		35CCED49A8EE7A3B09B3BB89 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11E6BCF16D46E1A3AF8A8331 /* Image.cpp */; };
+		380F0D8CEC0B26BECDBD63CC /* BinaryMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5EC62454F9200D4635587294 /* BinaryMesh.cpp */; };
+		389B9B26000056188AB82966 /* ConfigSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD6E6CCE9AD5FF8037CFF30E /* ConfigSystem.cpp */; };
+		39DCED8F696D4C81D5CDFBCF /* StaticMaterialTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E82343B721EDFA69D74949F7 /* StaticMaterialTable.cpp */; };
+		3AA1F3594AEED74B48DBA199 /* uniforms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 842C16012BA1B1B3D466BC41 /* uniforms.cpp */; };
+		4259DB40070F31B2BB7DD980 /* Triangulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98887728E127B55A04536D68 /* Triangulation.cpp */; };
+		431156DF27585F11AB458D1F /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86FC1887B7E01079CAF846C7 /* imgui.cpp */; };
+		45FF5DB3E02352E5904933F3 /* Bezier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9AAB39B1E04F88D9BE881DB /* Bezier.cpp */; };
+		488454436A20917562972A83 /* MaterialManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08CE670B7BEFF3FDDCB5354B /* MaterialManager.cpp */; };
+		49455D6010AA18529B61EBA0 /* MeshPrimatives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9DAE048A74272FA443C6688 /* MeshPrimatives.cpp */; };
+		49FA52CFE02364C1A189C10F /* CRPHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 181F0A77CB1514291C3770B7 /* CRPHolder.cpp */; };
+		4CC69972325DA0A4F5A2AFB2 /* Bimage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67749ADAC175B1CC88BCA91A /* Bimage.cpp */; };
+		4EA392EB7E33F1DDEA94A12B /* VkHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 834F6373BD1A1A25727569B3 /* VkHelpers.cpp */; };
+		4F4D2CA2E284C3D4EDBB42E2 /* GPUGenCommandsPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E163BEA4E55E2DC98B04A2A /* GPUGenCommandsPipeline.cpp */; };
+		519F42A530BC5CD70CC5B8E5 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC44A6D6E52145FD72AB8AD /* Log.cpp */; };
+		51F1A5C99A90E3FBBDBC9C09 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EA35A551DB2D134347309391 /* Application.cpp */; };
+		56663BA985F69A9BF25749E9 /* FloatingOriginSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65E4C6919FAF7D43550ACCD1 /* FloatingOriginSystem.cpp */; };
+		572EAEEDE724899FA419352D /* miscellaneousHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B06ABE15D612B887F4433C55 /* miscellaneousHelpers.cpp */; };
+		58E0FA51CCC97203EF172091 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF8059163D77CB843F9E99 /* Window.cpp */; };
+		5CA29C142157F286D5C69A54 /* MeshRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28B818BC715756EE94830EFC /* MeshRendering.cpp */; };
+		5D2B1A184E22880ABA260858 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8F56380414249326F8949C0 /* Mesh.cpp */; };
+		5D5ED6FE3C017270F0E3753E /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8536A48684D987B8BF2E3AC6 /* Transform.cpp */; };
+		5D995119D09DB24B3510A759 /* TerrainPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8BBEC1EA3CEFB345C70D01 /* TerrainPipeline.cpp */; };
+		64EFA22D7712581F5013906D /* RenderPassManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 06EF04F5AA5632A7C18BEB35 /* RenderPassManager.cpp */; };
+		65A0A58DD9891D3FFBD6CBCD /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 32ADB1D5F93BA947673DD015 /* Engine.cpp */; };
+		6771F2908D19ED02AB4A70D0 /* TerrainQuadTreeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EEEC4D8B8D8270A745E3B18 /* TerrainQuadTreeNode.cpp */; };
+		6B1A563D9E9995AFB693747D /* Dispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 794FF6655EE6FD97222C0CA5 /* Dispatcher.cpp */; };
+		6EB4B2C7FD65E3B958F00107 /* ComputePipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADB6C66F885E0F216C9F0CAF /* ComputePipeline.cpp */; };
+		6EDBBA4F6E9CEFC1D523988F /* GraphicsPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01BEC477235B01A91BD19AB7 /* GraphicsPipeline.cpp */; };
+		6F36117FA30BBBB142EE87BF /* ANewGPUStageSystemDesign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E54ECF47DA332939FD073D87 /* ANewGPUStageSystemDesign.cpp */; };
+		779F3BD9A88333CBBB9B6A19 /* srpch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA2C9AE12052CA938759C121 /* srpch.cpp */; };
+		7857D284CF6D7AF6FBB610C4 /* TerrainQuadTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE05DF8C39512FBE278315CC /* TerrainQuadTree.cpp */; };
+		7C5EC04A305AD97C120D168A /* NetworkManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1C26A9B2B68092A4F2B8F7F2 /* NetworkManager.cpp */; };
+		811CCDF9E5F41D2BB2C1E439 /* GPUStageDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E30291211292F0137EF39F61 /* GPUStageDispatcher.cpp */; };
+		82C405E1B25464D31EB51421 /* PlayerMovementSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E923949D85CEFFB8DB83F89 /* PlayerMovementSystem.cpp */; };
+		842013C3C68C60357EB2D203 /* ImguiRenderPassManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FBFAD2BF639215DEF61636B /* ImguiRenderPassManager.cpp */; };
+		85D1C96B97F47F5D70F5B7AB /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3585D7F3D8ED05A5F022BE33 /* Sampler.cpp */; };
+		8C2DD34924A5C0BB508CB189 /* imgui_impl_glfw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D774D3F17198C92321BEAA31 /* imgui_impl_glfw.cpp */; };
+		8D76BC24E48C649610D4FA64 /* SimlinkMessages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5F87A4C1143CA7EFF75B08C /* SimlinkMessages.cpp */; };
+		91BF928BA1A4BEBD8E1848CB /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA0D40F35BF6DCE5531DEF33 /* Path.cpp */; };
+		92DC90D9ADA8FF8BB1799719 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D80E13CC58F533E587F21 /* imgui_draw.cpp */; };
+		937910965531A208FC4C6ED6 /* TerrainMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25ED0D7ED9E926B0BB9B63BE /* TerrainMeshLoader.cpp */; };
+		96700F13329DCB451D5AC553 /* DeferredPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCADFA3BB67E262DA410A87B /* DeferredPipeline.cpp */; };
+		9B411647B60D84F9B9DE1C87 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434C746FB07482E1B20772AF /* imgui_demo.cpp */; };
+		9BB687D5891E1A8726180E15 /* UIScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7AF5625D878014CF0264E09D /* UIScene.cpp */; };
+		9C49595D0120A88FCDEE6F9D /* UISceneRenderCoordinator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BA9865754AF757E1ABA6A5 /* UISceneRenderCoordinator.cpp */; };
+		9DF0DE2BBF8D1B5DB803B46B /* GPURenderStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF4A133E3162E2543DB6F73 /* GPURenderStage.cpp */; };
+		AA10A37E3A067E30F6FB29BE /* BinaryMeshAttrributes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 080645262DAE3F984BDEC366 /* BinaryMeshAttrributes.cpp */; };
+		AAC08C3FDF8D93F1FF08B27F /* DeferredPassPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5F899F87331A26F925EBBDC7 /* DeferredPassPipeline.cpp */; };
+		B51871DC5C8E0D8E0553181C /* InputHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EB83E246D5AD996223CDC64 /* InputHolder.cpp */; };
+		BB7281EDE91D09DFE9C0B02D /* vmaSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38E8475531B30707BC276D95 /* vmaSettings.cpp */; };
+		BCD78AA7EA821299EB25B8E7 /* Descriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE4D836FF7184321818CA9AF /* Descriptors.cpp */; };
+		C2AD00B1820F9F23AA39FEF1 /* AttributeHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FDD92D982D9190B97F18919 /* AttributeHelpers.cpp */; };
+		C6DB2979BFA5E92B4A1A4FB9 /* RenderSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B0092E19E7FD253B679B121 /* RenderSystem.cpp */; };
+		C736B6D3BC1B10C5DEEF2513 /* ResourceTransferTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76F9DEDB709A308D611B451B /* ResourceTransferTask.cpp */; };
+		CDFA21FBFD8A80ED69EB303B /* TerrainGPUStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8125F63E1DD1615973865A3 /* TerrainGPUStage.cpp */; };
+		D03E9C71F1DAD9A3EA5172B1 /* ImGuiVulkanContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2689899258A258B864F66D9 /* ImGuiVulkanContainer.cpp */; };
+		D14A54334532CBE567807A73 /* imgui_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D059039B96E6FB0D04E921DB /* imgui_tables.cpp */; };
+		D4B1A8E7BA48B0197D8DBF27 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B78F724F11908941D8D7808F /* FileSystem.cpp */; };
+		D72B13F13276642320A84A31 /* ImGuiStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8845219BA3B920B2FA98059 /* ImGuiStage.cpp */; };
+		D7DBC7FB1D7D3DAD6A81AE3B /* TrianglePipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A5862D83A54762F50BCE0BC3 /* TrianglePipeline.cpp */; };
+		D82CE514B749FF4693535B54 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF9D74FC422B3EEEAB03E33C /* Box.cpp */; };
+		DA2DCB8BEA7AAF7DE86779CB /* vma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5815B413FF8B4FC5A8505A53 /* vma.cpp */; };
+		DA65339D09F5928F765641DD /* GPUStagesRenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C745E16501109817B66BE7A5 /* GPUStagesRenderPass.cpp */; };
+		E08B1BB10E35A3A30ED949F1 /* WindowCameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7CEE001975B8BFCB002D2659 /* WindowCameraController.cpp */; };
+		E3BB45ADDC86055F66FA6BED /* VaribleIndexAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8036F1F5B3B63167CBB01035 /* VaribleIndexAllocator.cpp */; };
+		E67F4EF780D937E9BD119D37 /* Stage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89CCC37F27ADC431FF2C09BF /* Stage.cpp */; };
+		EF64489822E3880A3ADD66D8 /* TerrainSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D158E460B6EFEB927A34FAA0 /* TerrainSystem.cpp */; };
+		F28C41C7B444D3395B5FA007 /* MeshBuffers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACC8138F60C42CC1427669CF /* MeshBuffers.cpp */; };
+		F47CED234FC83D553DFA2363 /* IndexAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AAE440B2C6583FDA1D3724B /* IndexAllocator.cpp */; };
+		FACF4E171D535109F994DC57 /* SingalPassRenderPassManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6110C33FF1069DF1ADFB497F /* SingalPassRenderPassManager.cpp */; };
+		FB28E822EF28319474134662 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66762D6AAA89FE9C9E5B83AA /* Scene.cpp */; };
+		FE10D983E10C5FB5F624CFC3 /* WorldTerrainPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F11F52BA134AB1D7A35E36B /* WorldTerrainPipeline.cpp */; };
+		FFF0EA76D74415A850B180B6 /* BinaryFileType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FEF119E6753CC90F20B9FDE /* BinaryFileType.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		001D809D9A77698FD6AFCEDD /* GpuStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GpuStage.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GpuStage.h"; sourceTree = "<group>"; };
+		01BEC477235B01A91BD19AB7 /* GraphicsPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicsPipeline.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/GraphicsPipeline.cpp; sourceTree = "<group>"; };
+		01C0C71F5D20EBD19F648D5F /* RenderPassManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RenderPassManager.h; path = src/Sunrise/Sunrise/graphics/vulkan/RenderPassManager.h; sourceTree = "<group>"; };
+		05B68ADD7A10CFCFF7F4591D /* environment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = environment.h; path = src/Sunrise/Sunrise/core/environment.h; sourceTree = "<group>"; };
+		0609A4C09E568A72CC9D8B00 /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Camera.cpp; path = src/Sunrise/Sunrise/scene/Camera.cpp; sourceTree = "<group>"; };
+		06EF04F5AA5632A7C18BEB35 /* RenderPassManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPassManager.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/RenderPassManager.cpp; sourceTree = "<group>"; };
+		080645262DAE3F984BDEC366 /* BinaryMeshAttrributes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryMeshAttrributes.cpp; path = src/Sunrise/Sunrise/fileFormats/binary/BinaryMeshAttrributes.cpp; sourceTree = "<group>"; };
+		08CE670B7BEFF3FDDCB5354B /* MaterialManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MaterialManager.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/MaterialManager.cpp; sourceTree = "<group>"; };
+		0AD864F30478B6A5F4F9CB33 /* WorldSceneRenderCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WorldSceneRenderCoordinator.h; path = src/Sunrise/Sunrise/world/rendering/WorldSceneRenderCoordinator.h; sourceTree = "<group>"; };
+		0AED5B61AE548913C58A41A1 /* StaticMaterialTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = StaticMaterialTable.h; path = src/Sunrise/Sunrise/world/materials/StaticMaterialTable.h; sourceTree = "<group>"; };
+		0C9FCD400C6102B272E7AB80 /* SimpleChunkViewerScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleChunkViewerScene.cpp; path = src/Sunrise/Sunrise/world/simpleChunkViewerScene/SimpleChunkViewerScene.cpp; sourceTree = "<group>"; };
+		0CC15C5D6821810FAA65229D /* Sampler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sampler.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Sampler.h; sourceTree = "<group>"; };
+		0CEBBD5B4F5809CD077E7B9B /* SceneRenderCoordinator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SceneRenderCoordinator.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.cpp; sourceTree = "<group>"; };
+		111534B0F0324EE2CC3BAAF0 /* Transform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = src/Sunrise/Sunrise/scene/Transform.h; sourceTree = "<group>"; };
+		11763C450A40FBF794B56285 /* GPUSelector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GPUSelector.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/GPUSelector.cpp; sourceTree = "<group>"; };
+		11E6BCF16D46E1A3AF8A8331 /* Image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Image.cpp; sourceTree = "<group>"; };
+		1213F448A83D063A69A36288 /* BinaryFileType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryFileType.h; path = src/Sunrise/Sunrise/fileFormats/binary/BinaryFileType.h; sourceTree = "<group>"; };
+		14019285B5EB2E77AD1240C5 /* Bezier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Bezier.h; path = src/Sunrise/Sunrise/math/paths/Bezier.h; sourceTree = "<group>"; };
+		1546C643826ED4B58401C483 /* Window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Window.h; path = src/Sunrise/Sunrise/core/Window.h; sourceTree = "<group>"; };
+		17A7FDF48B9075A6ADDE2434 /* WorldScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldScene.cpp; path = src/Sunrise/Sunrise/world/WorldScene.cpp; sourceTree = "<group>"; };
+		181F0A77CB1514291C3770B7 /* CRPHolder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CRPHolder.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/CRPHolder.cpp; sourceTree = "<group>"; };
+		1891C3D9525C7A8B07B7CA19 /* Descriptors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Descriptors.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Descriptors.h; sourceTree = "<group>"; };
+		1AAE440B2C6583FDA1D3724B /* IndexAllocator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IndexAllocator.cpp; path = src/Sunrise/Sunrise/memory/IndexAllocator.cpp; sourceTree = "<group>"; };
+		1C26A9B2B68092A4F2B8F7F2 /* NetworkManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NetworkManager.cpp; path = src/Sunrise/Sunrise/networking/NetworkManager.cpp; sourceTree = "<group>"; };
+		1D0E89D765ADC80988D98017 /* WorldClock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldClock.cpp; path = "src/Sunrise/Sunrise/world/date+Time/WorldClock.cpp"; sourceTree = "<group>"; };
+		1DD800BE792350F0675536FE /* atmScat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = atmScat.h; path = src/Sunrise/Sunrise/graphics/shaders/headers/lighting/atmScat.h; sourceTree = "<group>"; };
+		1E163BEA4E55E2DC98B04A2A /* GPUGenCommandsPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GPUGenCommandsPipeline.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/gpuDriven/GPUGenCommandsPipeline.cpp; sourceTree = "<group>"; };
+		1E1A45B90F11B3AB7B1533F9 /* FileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FileSystem.h; path = src/Sunrise/Sunrise/fileSystem/FileSystem.h; sourceTree = "<group>"; };
+		1F07995B9361DE4D1145679B /* Application.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Application.h; path = src/Sunrise/Sunrise/core/Application.h; sourceTree = "<group>"; };
+		241C2BE91DBC7D9B0E3D9229 /* SingalPassRenderPassManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SingalPassRenderPassManager.h; path = src/Sunrise/Sunrise/graphics/vulkan/SingalPassRenderPassManager.h; sourceTree = "<group>"; };
+		25ED0D7ED9E926B0BB9B63BE /* TerrainMeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainMeshLoader.cpp; path = src/Sunrise/Sunrise/world/terrain/TerrainMeshLoader.cpp; sourceTree = "<group>"; };
+		28B818BC715756EE94830EFC /* MeshRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MeshRendering.cpp; path = src/Sunrise/Sunrise/math/mesh/MeshRendering.cpp; sourceTree = "<group>"; };
+		2DBEF673CFA89265C6CFA4B3 /* imgui_widgets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_widgets.cpp; path = vendor/imgui/imgui_widgets.cpp; sourceTree = "<group>"; };
+		2FF0116F788F4FA19BBB07AF /* Dispatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Dispatcher.h; path = src/Sunrise/Sunrise/dependencyManagment/Dispatcher.h; sourceTree = "<group>"; };
+		32ADB1D5F93BA947673DD015 /* Engine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Engine.cpp; path = src/Sunrise/Sunrise/core/Engine.cpp; sourceTree = "<group>"; };
+		3452C9FFE84EE331CA01203F /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Buffer.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Buffer.cpp; sourceTree = "<group>"; };
+		3585D7F3D8ED05A5F022BE33 /* Sampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Sampler.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Sampler.cpp; sourceTree = "<group>"; };
+		38E8475531B30707BC276D95 /* vmaSettings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vmaSettings.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vmaSettings.cpp; sourceTree = "<group>"; };
+		3A21393FA74947B1A8DC377F /* Engine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Engine.h; path = src/Sunrise/Sunrise/core/Engine.h; sourceTree = "<group>"; };
+		3AFB23CBFFB07A3DB41F220B /* RenderSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RenderSystem.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/RenderSystem.h; sourceTree = "<group>"; };
+		3BA355A9AF8BCD5BD1D97BE9 /* Stage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Stage.h; path = src/Sunrise/Sunrise/dependencyManagment/Stage.h; sourceTree = "<group>"; };
+		4000F72F9C87FBA1252AB56F /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h; sourceTree = "<group>"; };
+		434C746FB07482E1B20772AF /* imgui_demo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_demo.cpp; path = vendor/imgui/imgui_demo.cpp; sourceTree = "<group>"; };
+		45BA9865754AF757E1ABA6A5 /* UISceneRenderCoordinator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UISceneRenderCoordinator.cpp; path = src/Sunrise/Sunrise/scene/included/UISceneRenderCoordinator.cpp; sourceTree = "<group>"; };
+		46D87F89D6CE5A3B93C305C9 /* WorldSceneRenderCoordinator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldSceneRenderCoordinator.cpp; path = src/Sunrise/Sunrise/world/rendering/WorldSceneRenderCoordinator.cpp; sourceTree = "<group>"; };
+		46F052D360D9B5051C5FC913 /* ComposableRenderPass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ComposableRenderPass.h; path = src/Sunrise/Sunrise/graphics/vulkan/ComposableRenderPass.h; sourceTree = "<group>"; };
+		472EBBC3577B9FB555686A03 /* ImGuiVulkanContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImGuiVulkanContainer.h; path = src/Sunrise/Sunrise/graphics/imGui/ImGuiVulkanContainer.h; sourceTree = "<group>"; };
+		484319AF95A60FE10BC50FEF /* Math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Math.h; path = src/Sunrise/Sunrise/Math.h; sourceTree = "<group>"; };
+		4B342CDBF2A9C88D9B6ED31B /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Image.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Image.h; sourceTree = "<group>"; };
+		4D5EA2AE59E95520D4CE20EE /* InputHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = InputHolder.h; path = src/Sunrise/Sunrise/core/input/InputHolder.h; sourceTree = "<group>"; };
+		4DA2D51EBACAE390BC5DD35E /* Math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Math.cpp; path = src/Sunrise/Sunrise/math/Math.cpp; sourceTree = "<group>"; };
+		4F939ADC614ADACED6B8C91C /* NetworkManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NetworkManager.h; path = src/Sunrise/Sunrise/networking/NetworkManager.h; sourceTree = "<group>"; };
+		4FAF8059163D77CB843F9E99 /* Window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Window.cpp; path = src/Sunrise/Sunrise/core/Window.cpp; sourceTree = "<group>"; };
+		520B7F85965A24F7D8815DC5 /* core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = core.h; path = src/Sunrise/Sunrise/core/core.h; sourceTree = "<group>"; };
+		521B846F8BE63B2141418AAF /* GPUSelector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPUSelector.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/GPUSelector.h; sourceTree = "<group>"; };
+		56278BA3B028A295776F99E3 /* VkDebugMarker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VkDebugMarker.h; path = src/Sunrise/Sunrise/debuging/VkDebugMarker.h; sourceTree = "<group>"; };
+		5815B413FF8B4FC5A8505A53 /* vma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vma.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp; sourceTree = "<group>"; };
+		59407A99520B3A4BDC7FA0D9 /* ComputePipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ComputePipeline.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/ComputePipeline.h; sourceTree = "<group>"; };
+		59B32DCDEF29ECFF5DC6440D /* memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = memory.h; path = src/Sunrise/Sunrise/memory.h; sourceTree = "<group>"; };
+		59D5CA353128F567AA966075 /* ImguiRenderPassManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImguiRenderPassManager.h; path = src/Sunrise/Sunrise/graphics/vulkan/ImguiRenderPassManager.h; sourceTree = "<group>"; };
+		5A651303B46629F57BAD2143 /* ImGuiStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImGuiStage.h; path = src/Sunrise/Sunrise/graphics/imGui/ImGuiStage.h; sourceTree = "<group>"; };
+		5B8BBEC1EA3CEFB345C70D01 /* TerrainPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainPipeline.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/TerrainPipeline.cpp; sourceTree = "<group>"; };
+		5CB012E5693AC557E41F9125 /* FileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FileManager.h; path = src/Sunrise/Sunrise/fileSystem/FileManager.h; sourceTree = "<group>"; };
+		5EBEA8A73611D3D9AF7F3EE7 /* vk_mem_alloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vk_mem_alloc.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vk_mem_alloc.h; sourceTree = "<group>"; };
+		5EC62454F9200D4635587294 /* BinaryMesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryMesh.cpp; path = src/Sunrise/Sunrise/fileFormats/binary/BinaryMesh.cpp; sourceTree = "<group>"; };
+		5F0C10BD8532406FEC3936FD /* Sunrise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sunrise.h; path = src/Sunrise.h; sourceTree = "<group>"; };
+		5F899F87331A26F925EBBDC7 /* DeferredPassPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DeferredPassPipeline.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/DeferredPassPipeline.cpp; sourceTree = "<group>"; };
+		5FF84A49374B757BB0B8E089 /* ComposableRenderPass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ComposableRenderPass.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/ComposableRenderPass.cpp; sourceTree = "<group>"; };
+		602E16E54D95A997EA8F9D25 /* RenderContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RenderContext.h; path = src/Sunrise/Sunrise/graphics/vulkan/RenderContext.h; sourceTree = "<group>"; };
+		6110C33FF1069DF1ADFB497F /* SingalPassRenderPassManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SingalPassRenderPassManager.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/SingalPassRenderPassManager.cpp; sourceTree = "<group>"; };
+		62B598CCAB54D6FECE808F0C /* pbr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pbr.h; path = src/Sunrise/Sunrise/graphics/shaders/headers/lighting/pbr.h; sourceTree = "<group>"; };
+		65E4C6919FAF7D43550ACCD1 /* FloatingOriginSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FloatingOriginSystem.cpp; path = src/Sunrise/Sunrise/world/systems/FloatingOriginSystem.cpp; sourceTree = "<group>"; };
+		65FEF9FF2AB45071DF22F83F /* VaribleIndexAllocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VaribleIndexAllocator.h; path = src/Sunrise/Sunrise/memory/VaribleIndexAllocator.h; sourceTree = "<group>"; };
+		66762D6AAA89FE9C9E5B83AA /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Scene.cpp; path = src/Sunrise/Sunrise/scene/Scene.cpp; sourceTree = "<group>"; };
+		66A8455D76F5294F74E1F39D /* GPURenderStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPURenderStage.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPURenderStage.h"; sourceTree = "<group>"; };
+		67749ADAC175B1CC88BCA91A /* Bimage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Bimage.cpp; path = src/Sunrise/Sunrise/fileFormats/binary/Bimage.cpp; sourceTree = "<group>"; };
+		68C0E6A102E4DBD3B30ABCE1 /* WorldClock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WorldClock.h; path = "src/Sunrise/Sunrise/world/date+Time/WorldClock.h"; sourceTree = "<group>"; };
+		696977825A60E574C66465C2 /* networking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = networking.h; path = src/Sunrise/Sunrise/networking/networking.h; sourceTree = "<group>"; };
+		6977C75B481A62CDFCFC659B /* FileManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FileManager.cpp; path = src/Sunrise/Sunrise/fileSystem/FileManager.cpp; sourceTree = "<group>"; };
+		6A1768530D7E960524B44E93 /* PlayerMovementSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayerMovementSystem.h; path = src/Sunrise/Sunrise/world/systems/PlayerMovementSystem.h; sourceTree = "<group>"; };
+		6B0092E19E7FD253B679B121 /* RenderSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RenderSystem.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/RenderSystem.cpp; sourceTree = "<group>"; };
+		6F2A1663A8F4CD155E501CA3 /* WindowCameraController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WindowCameraController.h; path = src/Sunrise/Sunrise/world/systems/WindowCameraController.h; sourceTree = "<group>"; };
+		6F47D64507BFC3B733A6B485 /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.cpp; sourceTree = "<group>"; };
+		6F5C0B937BE6BE05F6CB89D3 /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = math.h; path = src/Sunrise/Sunrise/graphics/shaders/headers/math.h; sourceTree = "<group>"; };
+		6FF4A133E3162E2543DB6F73 /* GPURenderStage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GPURenderStage.cpp; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPURenderStage.cpp"; sourceTree = "<group>"; };
+		71DD830B14CBA9BDA3F1894B /* srpch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = srpch.h; path = src/srpch.h; sourceTree = "<group>"; };
+		72554D94569C55C6DA8983D4 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Scene.h; path = src/Sunrise/Sunrise/scene/Scene.h; sourceTree = "<group>"; };
+		76F9DEDB709A308D611B451B /* ResourceTransferTask.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ResourceTransferTask.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/resources/ResourceTransferTask.cpp; sourceTree = "<group>"; };
+		7860E4F65DF7EC28213CFB36 /* SimlinkMessages.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimlinkMessages.h; path = src/Sunrise/Sunrise/world/simlink/SimlinkMessages.h; sourceTree = "<group>"; };
+		794FF6655EE6FD97222C0CA5 /* Dispatcher.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Dispatcher.cpp; path = src/Sunrise/Sunrise/dependencyManagment/Dispatcher.cpp; sourceTree = "<group>"; };
+		7AF5625D878014CF0264E09D /* UIScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UIScene.cpp; path = src/Sunrise/Sunrise/scene/included/UIScene.cpp; sourceTree = "<group>"; };
+		7B2F5AA39CCB97D5954230E3 /* AttributeHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AttributeHelpers.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/AttributeHelpers.h; sourceTree = "<group>"; };
+		7CEE001975B8BFCB002D2659 /* WindowCameraController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WindowCameraController.cpp; path = src/Sunrise/Sunrise/world/systems/WindowCameraController.cpp; sourceTree = "<group>"; };
+		7F45F6F7F06897E9A62F4537 /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Log.h; path = src/Sunrise/Sunrise/core/Log.h; sourceTree = "<group>"; };
+		8036F1F5B3B63167CBB01035 /* VaribleIndexAllocator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VaribleIndexAllocator.cpp; path = src/Sunrise/Sunrise/memory/VaribleIndexAllocator.cpp; sourceTree = "<group>"; };
+		834F6373BD1A1A25727569B3 /* VkHelpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VkHelpers.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/VkHelpers.cpp; sourceTree = "<group>"; };
+		842C16012BA1B1B3D466BC41 /* uniforms.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uniforms.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/resources/uniforms.cpp; sourceTree = "<group>"; };
+		84BBE12B722373DD0F1D676B /* CameraSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CameraSystem.cpp; path = src/Sunrise/Sunrise/world/systems/CameraSystem.cpp; sourceTree = "<group>"; };
+		8536A48684D987B8BF2E3AC6 /* Transform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Transform.cpp; path = src/Sunrise/Sunrise/scene/Transform.cpp; sourceTree = "<group>"; };
+		857CF2183872FBCA89955858 /* ConfigSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigSystem.h; path = src/Sunrise/Sunrise/configuration/ConfigSystem.h; sourceTree = "<group>"; };
+		861A74ADC886C11F80AD32ED /* TrianglePipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrianglePipeline.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/TrianglePipeline.h; sourceTree = "<group>"; };
+		86F43C5239EA46048B0CA292 /* MeshPrimatives.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MeshPrimatives.h; path = src/Sunrise/Sunrise/math/mesh/MeshPrimatives.h; sourceTree = "<group>"; };
+		86FC1887B7E01079CAF846C7 /* imgui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui.cpp; path = vendor/imgui/imgui.cpp; sourceTree = "<group>"; };
+		88DEE6E126BFE793FE3E2D21 /* CRPHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRPHolder.h; path = src/Sunrise/Sunrise/graphics/vulkan/CRPHolder.h; sourceTree = "<group>"; };
+		89CCC37F27ADC431FF2C09BF /* Stage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Stage.cpp; path = src/Sunrise/Sunrise/dependencyManagment/Stage.cpp; sourceTree = "<group>"; };
+		8A2EEE0AD2CE2C3CF5F9E44A /* TerrainSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainSystem.h; path = src/Sunrise/Sunrise/world/terrain/TerrainSystem.h; sourceTree = "<group>"; };
+		8D658275405B8C27917DE8B5 /* CameraSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CameraSystem.h; path = src/Sunrise/Sunrise/world/systems/CameraSystem.h; sourceTree = "<group>"; };
+		8EB83E246D5AD996223CDC64 /* InputHolder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = InputHolder.cpp; path = src/Sunrise/Sunrise/core/input/InputHolder.cpp; sourceTree = "<group>"; };
+		8F11F52BA134AB1D7A35E36B /* WorldTerrainPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldTerrainPipeline.cpp; path = src/Sunrise/Sunrise/world/gfxPipelines/WorldTerrainPipeline.cpp; sourceTree = "<group>"; };
+		92C7C8F7E9DD716916260737 /* GPUComputeStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPUComputeStage.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUComputeStage.h"; sourceTree = "<group>"; };
+		956EFC332B980E25ECFE6A73 /* GpuStage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GpuStage.cpp; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GpuStage.cpp"; sourceTree = "<group>"; };
+		95951D7896481A6A0A29EBB8 /* libSunrise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSunrise.a; path = libSunrise.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		97366397EDAFD7C9E6D819D7 /* ResourceHeap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ResourceHeap.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/ResourceHeap.cpp; sourceTree = "<group>"; };
+		97ECC631269DF72382281471 /* ANewGPUStageSystemDesign.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ANewGPUStageSystemDesign.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/ANewGPUStageSystemDesign.h"; sourceTree = "<group>"; };
+		98887728E127B55A04536D68 /* Triangulation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Triangulation.cpp; path = src/Sunrise/Sunrise/math/mesh/Triangulation.cpp; sourceTree = "<group>"; };
+		99FF6A9B3D66984D549C50DB /* FloatingOriginSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FloatingOriginSystem.h; path = src/Sunrise/Sunrise/world/systems/FloatingOriginSystem.h; sourceTree = "<group>"; };
+		9E7516D46CE314C67BC20514 /* GPUGenCommandsPipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPUGenCommandsPipeline.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/gpuDriven/GPUGenCommandsPipeline.h; sourceTree = "<group>"; };
+		9E923949D85CEFFB8DB83F89 /* PlayerMovementSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PlayerMovementSystem.cpp; path = src/Sunrise/Sunrise/world/systems/PlayerMovementSystem.cpp; sourceTree = "<group>"; };
+		9EEEC4D8B8D8270A745E3B18 /* TerrainQuadTreeNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainQuadTreeNode.cpp; path = src/Sunrise/Sunrise/world/terrain/TerrainQuadTreeNode.cpp; sourceTree = "<group>"; };
+		9F3D74BEBA09E370BDDA7AFE /* WorldScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WorldScene.h; path = src/Sunrise/Sunrise/world/WorldScene.h; sourceTree = "<group>"; };
+		9F83CDED613C5F5F08572C2D /* GPUComputeStage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GPUComputeStage.cpp; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUComputeStage.cpp"; sourceTree = "<group>"; };
+		9FBFAD2BF639215DEF61636B /* ImguiRenderPassManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ImguiRenderPassManager.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/ImguiRenderPassManager.cpp; sourceTree = "<group>"; };
+		9FDD92D982D9190B97F18919 /* AttributeHelpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AttributeHelpers.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/AttributeHelpers.cpp; sourceTree = "<group>"; };
+		9FEF119E6753CC90F20B9FDE /* BinaryFileType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryFileType.cpp; path = src/Sunrise/Sunrise/fileFormats/binary/BinaryFileType.cpp; sourceTree = "<group>"; };
+		A15AAE15B1A79207AF945C55 /* MaterialManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MaterialManager.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/MaterialManager.h; sourceTree = "<group>"; };
+		A37395D89772DF4A1C5DF418 /* FrustrumMath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FrustrumMath.h; path = src/Sunrise/Sunrise/math/FrustrumMath.h; sourceTree = "<group>"; };
+		A414BFB163775E238BA1BDF1 /* DeferredPassPipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeferredPassPipeline.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/DeferredPassPipeline.h; sourceTree = "<group>"; };
+		A473FD1D47DB2ACF5F10E35D /* VkHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VkHelpers.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/VkHelpers.h; sourceTree = "<group>"; };
+		A55AF19DFCC0648FAECE7FDD /* Path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Path.h; path = src/Sunrise/Sunrise/math/paths/Path.h; sourceTree = "<group>"; };
+		A5862D83A54762F50BCE0BC3 /* TrianglePipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TrianglePipeline.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/TrianglePipeline.cpp; sourceTree = "<group>"; };
+		A8125F63E1DD1615973865A3 /* TerrainGPUStage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainGPUStage.cpp; path = src/Sunrise/Sunrise/world/rendering/terrain/TerrainGPUStage.cpp; sourceTree = "<group>"; };
+		A8845219BA3B920B2FA98059 /* ImGuiStage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ImGuiStage.cpp; path = src/Sunrise/Sunrise/graphics/imGui/ImGuiStage.cpp; sourceTree = "<group>"; };
+		A8F56380414249326F8949C0 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Mesh.cpp; path = src/Sunrise/Sunrise/math/mesh/Mesh.cpp; sourceTree = "<group>"; };
+		A943EED3F1E32D05150EE513 /* imgui_impl_vulkan.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_impl_vulkan.cpp; path = vendor/imgui/backends/imgui_impl_vulkan.cpp; sourceTree = "<group>"; };
+		A9AAB39B1E04F88D9BE881DB /* Bezier.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Bezier.cpp; path = src/Sunrise/Sunrise/math/paths/Bezier.cpp; sourceTree = "<group>"; };
+		ABD19923BBB6C555A82A4F63 /* Node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Node.cpp; path = src/Sunrise/Sunrise/dependencyManagment/Node.cpp; sourceTree = "<group>"; };
+		AC10F4061D3394F8D2FA4246 /* Box.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Box.h; path = src/Sunrise/Sunrise/math/Box.h; sourceTree = "<group>"; };
+		ACC8138F60C42CC1427669CF /* MeshBuffers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MeshBuffers.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/resources/MeshBuffers.cpp; sourceTree = "<group>"; };
+		AD6E6CCE9AD5FF8037CFF30E /* ConfigSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ConfigSystem.cpp; path = src/Sunrise/Sunrise/configuration/ConfigSystem.cpp; sourceTree = "<group>"; };
+		ADB6C66F885E0F216C9F0CAF /* ComputePipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ComputePipeline.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/ComputePipeline.cpp; sourceTree = "<group>"; };
+		AE72CECFC09584C19996BD0F /* UISceneRenderCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UISceneRenderCoordinator.h; path = src/Sunrise/Sunrise/scene/included/UISceneRenderCoordinator.h; sourceTree = "<group>"; };
+		AF9D74FC422B3EEEAB03E33C /* Box.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Box.cpp; path = src/Sunrise/Sunrise/math/Box.cpp; sourceTree = "<group>"; };
+		B06ABE15D612B887F4433C55 /* miscellaneousHelpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = miscellaneousHelpers.cpp; path = src/Sunrise/Sunrise/miscellaneousHelpers/miscellaneousHelpers.cpp; sourceTree = "<group>"; };
+		B258384AC48214FCF872FE8A /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Mesh.h; path = src/Sunrise/Sunrise/math/mesh/Mesh.h; sourceTree = "<group>"; };
+		B260698B9FC7FC3D3CC1EFCB /* uniforms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = uniforms.h; path = src/Sunrise/Sunrise/graphics/vulkan/resources/uniforms.h; sourceTree = "<group>"; };
+		B2689899258A258B864F66D9 /* ImGuiVulkanContainer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ImGuiVulkanContainer.cpp; path = src/Sunrise/Sunrise/graphics/imGui/ImGuiVulkanContainer.cpp; sourceTree = "<group>"; };
+		B2FE4ECF56657C816D9B350F /* GPUStagesRenderPass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPUStagesRenderPass.h; path = src/Sunrise/Sunrise/graphics/vulkan/GPUStagesRenderPass.h; sourceTree = "<group>"; };
+		B459D759C611174B3B7F0599 /* VkDebugMarker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VkDebugMarker.cpp; path = src/Sunrise/Sunrise/debuging/VkDebugMarker.cpp; sourceTree = "<group>"; };
+		B5A07A410C19EE7305423081 /* GraphicsPipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GraphicsPipeline.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/GraphicsPipeline.h; sourceTree = "<group>"; };
+		B5F87A4C1143CA7EFF75B08C /* SimlinkMessages.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SimlinkMessages.cpp; path = src/Sunrise/Sunrise/world/simlink/SimlinkMessages.cpp; sourceTree = "<group>"; };
+		B618A7EEC2A35A603D88262E /* FrustrumMath.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FrustrumMath.cpp; path = src/Sunrise/Sunrise/math/FrustrumMath.cpp; sourceTree = "<group>"; };
+		B6572EE5D8DB31D7B51CBD25 /* DeferredPipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeferredPipeline.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/GPUStages/DeferredPipeline.h; sourceTree = "<group>"; };
+		B681E5A18DD510D307427BE1 /* ResourceHeap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ResourceHeap.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/ResourceHeap.h; sourceTree = "<group>"; };
+		B78F724F11908941D8D7808F /* FileSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FileSystem.cpp; path = src/Sunrise/Sunrise/fileSystem/FileSystem.cpp; sourceTree = "<group>"; };
+		B941983ECAF8D8304066C67E /* BinaryMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryMesh.h; path = src/Sunrise/Sunrise/fileFormats/binary/BinaryMesh.h; sourceTree = "<group>"; };
+		B9DAE048A74272FA443C6688 /* MeshPrimatives.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MeshPrimatives.cpp; path = src/Sunrise/Sunrise/math/mesh/MeshPrimatives.cpp; sourceTree = "<group>"; };
+		BA0D40F35BF6DCE5531DEF33 /* Path.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Path.cpp; path = src/Sunrise/Sunrise/math/paths/Path.cpp; sourceTree = "<group>"; };
+		BB4BAE681696FE9A04C8E4A8 /* TerrainMeshLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainMeshLoader.h; path = src/Sunrise/Sunrise/world/terrain/TerrainMeshLoader.h; sourceTree = "<group>"; };
+		BCADFA3BB67E262DA410A87B /* DeferredPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DeferredPipeline.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/GPUStages/DeferredPipeline.cpp; sourceTree = "<group>"; };
+		BCB2494270AE627452609F82 /* TerrainQuadTreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainQuadTreeNode.h; path = src/Sunrise/Sunrise/world/terrain/TerrainQuadTreeNode.h; sourceTree = "<group>"; };
+		BE691D4919B46D7B07E65389 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Buffer.h; sourceTree = "<group>"; };
+		C04E87B91B99D7EB09CBBDF9 /* MeshBuffers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MeshBuffers.h; path = src/Sunrise/Sunrise/graphics/vulkan/resources/MeshBuffers.h; sourceTree = "<group>"; };
+		C114DE0BEEBF65FDEF630C4B /* TerrainPipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainPipeline.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/TerrainPipeline.h; sourceTree = "<group>"; };
+		C1D8B55534FA424795BF8395 /* WorldTerrainPipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WorldTerrainPipeline.h; path = src/Sunrise/Sunrise/world/gfxPipelines/WorldTerrainPipeline.h; sourceTree = "<group>"; };
+		C6BE6BFFA165B4B185A6B23F /* DeferredStage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DeferredStage.cpp; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/concrete/DeferredStage.cpp"; sourceTree = "<group>"; };
+		C745E16501109817B66BE7A5 /* GPUStagesRenderPass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GPUStagesRenderPass.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/GPUStagesRenderPass.cpp; sourceTree = "<group>"; };
+		CD57D5F6B2EEDD287633EC36 /* TerrainQuadTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainQuadTree.h; path = src/Sunrise/Sunrise/world/terrain/TerrainQuadTree.h; sourceTree = "<group>"; };
+		CE533E3124CCB2631DF4F471 /* VkAbstractions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VkAbstractions.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/VkAbstractions.h; sourceTree = "<group>"; };
+		CE95AB752896C267EFDDB9B5 /* IndexAllocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IndexAllocator.h; path = src/Sunrise/Sunrise/memory/IndexAllocator.h; sourceTree = "<group>"; };
+		CF9D80E13CC58F533E587F21 /* imgui_draw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_draw.cpp; path = vendor/imgui/imgui_draw.cpp; sourceTree = "<group>"; };
+		D059039B96E6FB0D04E921DB /* imgui_tables.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_tables.cpp; path = vendor/imgui/imgui_tables.cpp; sourceTree = "<group>"; };
+		D158E460B6EFEB927A34FAA0 /* TerrainSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainSystem.cpp; path = src/Sunrise/Sunrise/world/terrain/TerrainSystem.cpp; sourceTree = "<group>"; };
+		D1FC310D75635EBF8C99174D /* TerrainGPUStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainGPUStage.h; path = src/Sunrise/Sunrise/world/rendering/terrain/TerrainGPUStage.h; sourceTree = "<group>"; };
+		D234D204C32C3FF62F2FC044 /* Bimage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Bimage.h; path = src/Sunrise/Sunrise/fileFormats/binary/Bimage.h; sourceTree = "<group>"; };
+		D3572FAA15C37C1CCDE9EDEA /* SimpleChunkViewerScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimpleChunkViewerScene.h; path = src/Sunrise/Sunrise/world/simpleChunkViewerScene/SimpleChunkViewerScene.h; sourceTree = "<group>"; };
+		D774D3F17198C92321BEAA31 /* imgui_impl_glfw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_impl_glfw.cpp; path = vendor/imgui/backends/imgui_impl_glfw.cpp; sourceTree = "<group>"; };
+		DBC44A6D6E52145FD72AB8AD /* Log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = src/Sunrise/Sunrise/core/Log.cpp; sourceTree = "<group>"; };
+		DD454BFF9EFDDD714618AA3F /* miscellaneousHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = miscellaneousHelpers.h; path = src/Sunrise/Sunrise/miscellaneousHelpers/miscellaneousHelpers.h; sourceTree = "<group>"; };
+		DE05DF8C39512FBE278315CC /* TerrainQuadTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainQuadTree.cpp; path = src/Sunrise/Sunrise/world/terrain/TerrainQuadTree.cpp; sourceTree = "<group>"; };
+		E247C527D6470E995B322367 /* UIScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UIScene.h; path = src/Sunrise/Sunrise/scene/included/UIScene.h; sourceTree = "<group>"; };
+		E30291211292F0137EF39F61 /* GPUStageDispatcher.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GPUStageDispatcher.cpp; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUStageDispatcher.cpp"; sourceTree = "<group>"; };
+		E3AD68E9DC78289B66EC8F29 /* DeferredStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeferredStage.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/concrete/DeferredStage.h"; sourceTree = "<group>"; };
+		E54ECF47DA332939FD073D87 /* ANewGPUStageSystemDesign.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ANewGPUStageSystemDesign.cpp; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/ANewGPUStageSystemDesign.cpp"; sourceTree = "<group>"; };
+		E63EB92DE5E19C5F20364F6D /* Node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Node.h; path = src/Sunrise/Sunrise/dependencyManagment/Node.h; sourceTree = "<group>"; };
+		E6946AC53BB84E3743020905 /* SceneRenderCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SceneRenderCoordinator.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h; sourceTree = "<group>"; };
+		E82343B721EDFA69D74949F7 /* StaticMaterialTable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StaticMaterialTable.cpp; path = src/Sunrise/Sunrise/world/materials/StaticMaterialTable.cpp; sourceTree = "<group>"; };
+		EA35A551DB2D134347309391 /* Application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = src/Sunrise/Sunrise/core/Application.cpp; sourceTree = "<group>"; };
+		EBD2E68BFDF59C7DD6F6D4CB /* GPUStageDispatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPUStageDispatcher.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUStageDispatcher.h"; sourceTree = "<group>"; };
+		F4F8C8A68F1CBDD83F429EE6 /* MeshRendering.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MeshRendering.h; path = src/Sunrise/Sunrise/math/mesh/MeshRendering.h; sourceTree = "<group>"; };
+		F714A530B8CD36A25FE80370 /* BinaryMeshAttrributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryMeshAttrributes.h; path = src/Sunrise/Sunrise/fileFormats/binary/BinaryMeshAttrributes.h; sourceTree = "<group>"; };
+		FA08A82306935A9581782663 /* Instrumentor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Instrumentor.h; path = src/Sunrise/Sunrise/debuging/Instrumentor.h; sourceTree = "<group>"; };
+		FA2C9AE12052CA938759C121 /* srpch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = srpch.cpp; path = src/srpch.cpp; sourceTree = "<group>"; };
+		FA596D4A0C8349FC4074338A /* Camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = src/Sunrise/Sunrise/scene/Camera.h; sourceTree = "<group>"; };
+		FB47CC25D5EF14D7BA301265 /* ResourceTransferTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ResourceTransferTask.h; path = src/Sunrise/Sunrise/graphics/vulkan/resources/ResourceTransferTask.h; sourceTree = "<group>"; };
+		FDE9F9550A74ABC785597795 /* base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = base.h; path = src/Sunrise/Sunrise/graphics/shaders/headers/base.h; sourceTree = "<group>"; };
+		FE4D836FF7184321818CA9AF /* Descriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Descriptors.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Descriptors.cpp; sourceTree = "<group>"; };
+		FEEBD04BC1AC30BD1EE10E8B /* EntryPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EntryPoint.h; path = src/Sunrise/Sunrise/core/EntryPoint.h; sourceTree = "<group>"; };
+		FF19AE92993DA3C4496384D2 /* Triangulation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Triangulation.h; path = src/Sunrise/Sunrise/math/mesh/Triangulation.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F3A316E822496ADA7B8AC528 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3E8FC154B01AD9C65F1BFF94 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXGroup section */
+		0519F9421FE667F423B6FF82 /* gfxPipelines */ = {
+			isa = PBXGroup;
+			children = (
+				8F11F52BA134AB1D7A35E36B /* WorldTerrainPipeline.cpp */,
+				C1D8B55534FA424795BF8395 /* WorldTerrainPipeline.h */,
+			);
+			name = gfxPipelines;
+			sourceTree = "<group>";
+		};
+		0CCB395FD036FB110EDA9F9F /* world */ = {
+			isa = PBXGroup;
+			children = (
+				17A7FDF48B9075A6ADDE2434 /* WorldScene.cpp */,
+				9F3D74BEBA09E370BDDA7AFE /* WorldScene.h */,
+				879AD9D6CBAEAB08BF803016 /* date+Time */,
+				0519F9421FE667F423B6FF82 /* gfxPipelines */,
+				7A51D5EABE65A71CB2372C2A /* materials */,
+				9740AB62DB547C94CF2601A2 /* rendering */,
+				310511F4154C1A2699394834 /* simlink */,
+				497B926CF0F12E1E99B638AC /* simpleChunkViewerScene */,
+				2EC53D96130C45C896F973D6 /* systems */,
+				E3544B70C79B53A24B8881B0 /* terrain */,
+			);
+			name = world;
+			sourceTree = "<group>";
+		};
+		102510A5840D8857A65B36E5 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				ACC8138F60C42CC1427669CF /* MeshBuffers.cpp */,
+				C04E87B91B99D7EB09CBBDF9 /* MeshBuffers.h */,
+				76F9DEDB709A308D611B451B /* ResourceTransferTask.cpp */,
+				FB47CC25D5EF14D7BA301265 /* ResourceTransferTask.h */,
+				842C16012BA1B1B3D466BC41 /* uniforms.cpp */,
+				B260698B9FC7FC3D3CC1EFCB /* uniforms.h */,
+			);
+			name = resources;
+			sourceTree = "<group>";
+		};
+		11C84BC93A03047B219E9209 /* Sunrise */ = {
+			isa = PBXGroup;
+			children = (
+				484319AF95A60FE10BC50FEF /* Math.h */,
+				E9C651FF821337B1B05A383F /* configuration */,
+				5DC2A4017F8E5133BC437A41 /* core */,
+				3E030439D379C36B42161A79 /* debuging */,
+				EFF2241D8DD324CF65516A5D /* dependencyManagment */,
+				E10EA187F3387E39272967C7 /* fileFormats */,
+				15A331F9F9EA3A2B7DD76839 /* fileSystem */,
+				802AB8D115A17803843DCF11 /* graphics */,
+				D9A54183FB70EEB5382617C3 /* math */,
+				EBFB18A1395E0ED3AF7D0EE1 /* memory */,
+				59B32DCDEF29ECFF5DC6440D /* memory.h */,
+				AD2DE0FD4751D62FF777B73D /* miscellaneousHelpers */,
+				14AF0BBFF8F613F17CE341FF /* networking */,
+				F49905EBB804C79DF6A86C2B /* scene */,
+				0CCB395FD036FB110EDA9F9F /* world */,
+			);
+			name = Sunrise;
+			sourceTree = "<group>";
+		};
+		14AF0BBFF8F613F17CE341FF /* networking */ = {
+			isa = PBXGroup;
+			children = (
+				1C26A9B2B68092A4F2B8F7F2 /* NetworkManager.cpp */,
+				4F939ADC614ADACED6B8C91C /* NetworkManager.h */,
+				696977825A60E574C66465C2 /* networking.h */,
+			);
+			name = networking;
+			sourceTree = "<group>";
+		};
+		15A331F9F9EA3A2B7DD76839 /* fileSystem */ = {
+			isa = PBXGroup;
+			children = (
+				6977C75B481A62CDFCFC659B /* FileManager.cpp */,
+				5CB012E5693AC557E41F9125 /* FileManager.h */,
+				B78F724F11908941D8D7808F /* FileSystem.cpp */,
+				1E1A45B90F11B3AB7B1533F9 /* FileSystem.h */,
+			);
+			name = fileSystem;
+			sourceTree = "<group>";
+		};
+		1DF602E4C1418C16DC125924 /* vendor */ = {
+			isa = PBXGroup;
+			children = (
+				7FE31CBBF16E352DA06F5AFB /* imgui */,
+			);
+			name = vendor;
+			sourceTree = "<group>";
+		};
+		27F99001156122B3B25B1641 /* renderPipelines */ = {
+			isa = PBXGroup;
+			children = (
+				ADB6C66F885E0F216C9F0CAF /* ComputePipeline.cpp */,
+				59407A99520B3A4BDC7FA0D9 /* ComputePipeline.h */,
+				01BEC477235B01A91BD19AB7 /* GraphicsPipeline.cpp */,
+				B5A07A410C19EE7305423081 /* GraphicsPipeline.h */,
+				CCADB4EDB244BC1F7589CB2D /* concrete */,
+			);
+			name = renderPipelines;
+			sourceTree = "<group>";
+		};
+		2EC53D96130C45C896F973D6 /* systems */ = {
+			isa = PBXGroup;
+			children = (
+				84BBE12B722373DD0F1D676B /* CameraSystem.cpp */,
+				8D658275405B8C27917DE8B5 /* CameraSystem.h */,
+				65E4C6919FAF7D43550ACCD1 /* FloatingOriginSystem.cpp */,
+				99FF6A9B3D66984D549C50DB /* FloatingOriginSystem.h */,
+				9E923949D85CEFFB8DB83F89 /* PlayerMovementSystem.cpp */,
+				6A1768530D7E960524B44E93 /* PlayerMovementSystem.h */,
+				7CEE001975B8BFCB002D2659 /* WindowCameraController.cpp */,
+				6F2A1663A8F4CD155E501CA3 /* WindowCameraController.h */,
+			);
+			name = systems;
+			sourceTree = "<group>";
+		};
+		310511F4154C1A2699394834 /* simlink */ = {
+			isa = PBXGroup;
+			children = (
+				B5F87A4C1143CA7EFF75B08C /* SimlinkMessages.cpp */,
+				7860E4F65DF7EC28213CFB36 /* SimlinkMessages.h */,
+			);
+			name = simlink;
+			sourceTree = "<group>";
+		};
+		3D507D659891D0D76BEC1BA5 /* backends */ = {
+			isa = PBXGroup;
+			children = (
+				D774D3F17198C92321BEAA31 /* imgui_impl_glfw.cpp */,
+				A943EED3F1E32D05150EE513 /* imgui_impl_vulkan.cpp */,
+			);
+			name = backends;
+			sourceTree = "<group>";
+		};
+		3E030439D379C36B42161A79 /* debuging */ = {
+			isa = PBXGroup;
+			children = (
+				FA08A82306935A9581782663 /* Instrumentor.h */,
+				B459D759C611174B3B7F0599 /* VkDebugMarker.cpp */,
+				56278BA3B028A295776F99E3 /* VkDebugMarker.h */,
+			);
+			name = debuging;
+			sourceTree = "<group>";
+		};
+		3ED1E59D3E74C8CF78C97BDD /* renderer */ = {
+			isa = PBXGroup;
+			children = (
+				08CE670B7BEFF3FDDCB5354B /* MaterialManager.cpp */,
+				A15AAE15B1A79207AF945C55 /* MaterialManager.h */,
+				6B0092E19E7FD253B679B121 /* RenderSystem.cpp */,
+				3AFB23CBFFB07A3DB41F220B /* RenderSystem.h */,
+				6F47D64507BFC3B733A6B485 /* Renderer.cpp */,
+				4000F72F9C87FBA1252AB56F /* Renderer.h */,
+				0CEBBD5B4F5809CD077E7B9B /* SceneRenderCoordinator.cpp */,
+				E6946AC53BB84E3743020905 /* SceneRenderCoordinator.h */,
+			);
+			name = renderer;
+			sourceTree = "<group>";
+		};
+		451845023EDA017478D90342 /* mesh */ = {
+			isa = PBXGroup;
+			children = (
+				A8F56380414249326F8949C0 /* Mesh.cpp */,
+				B258384AC48214FCF872FE8A /* Mesh.h */,
+				B9DAE048A74272FA443C6688 /* MeshPrimatives.cpp */,
+				86F43C5239EA46048B0CA292 /* MeshPrimatives.h */,
+				28B818BC715756EE94830EFC /* MeshRendering.cpp */,
+				F4F8C8A68F1CBDD83F429EE6 /* MeshRendering.h */,
+				98887728E127B55A04536D68 /* Triangulation.cpp */,
+				FF19AE92993DA3C4496384D2 /* Triangulation.h */,
+			);
+			name = mesh;
+			sourceTree = "<group>";
+		};
+		497B926CF0F12E1E99B638AC /* simpleChunkViewerScene */ = {
+			isa = PBXGroup;
+			children = (
+				0C9FCD400C6102B272E7AB80 /* SimpleChunkViewerScene.cpp */,
+				D3572FAA15C37C1CCDE9EDEA /* SimpleChunkViewerScene.h */,
+			);
+			name = simpleChunkViewerScene;
+			sourceTree = "<group>";
+		};
+		5775D4184366DFCA959E7A58 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D2FB44D175E96B83050F4B11 /* Sunrise */,
+				5F0C10BD8532406FEC3936FD /* Sunrise.h */,
+				FA2C9AE12052CA938759C121 /* srpch.cpp */,
+				71DD830B14CBA9BDA3F1894B /* srpch.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		5A72F951C79B07C3C92DF791 /* vulkan */ = {
+			isa = PBXGroup;
+			children = (
+				181F0A77CB1514291C3770B7 /* CRPHolder.cpp */,
+				88DEE6E126BFE793FE3E2D21 /* CRPHolder.h */,
+				5FF84A49374B757BB0B8E089 /* ComposableRenderPass.cpp */,
+				46F052D360D9B5051C5FC913 /* ComposableRenderPass.h */,
+				8DC889959DADB5C78A213FD5 /* GPU Stages */,
+				C745E16501109817B66BE7A5 /* GPUStagesRenderPass.cpp */,
+				B2FE4ECF56657C816D9B350F /* GPUStagesRenderPass.h */,
+				9FBFAD2BF639215DEF61636B /* ImguiRenderPassManager.cpp */,
+				59D5CA353128F567AA966075 /* ImguiRenderPassManager.h */,
+				602E16E54D95A997EA8F9D25 /* RenderContext.h */,
+				06EF04F5AA5632A7C18BEB35 /* RenderPassManager.cpp */,
+				01C0C71F5D20EBD19F648D5F /* RenderPassManager.h */,
+				6110C33FF1069DF1ADFB497F /* SingalPassRenderPassManager.cpp */,
+				241C2BE91DBC7D9B0E3D9229 /* SingalPassRenderPassManager.h */,
+				F3323C854E92613790D602C5 /* generalAbstractions */,
+				27F99001156122B3B25B1641 /* renderPipelines */,
+				3ED1E59D3E74C8CF78C97BDD /* renderer */,
+				102510A5840D8857A65B36E5 /* resources */,
+			);
+			name = vulkan;
+			sourceTree = "<group>";
+		};
+		5DC2A4017F8E5133BC437A41 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				EA35A551DB2D134347309391 /* Application.cpp */,
+				1F07995B9361DE4D1145679B /* Application.h */,
+				32ADB1D5F93BA947673DD015 /* Engine.cpp */,
+				3A21393FA74947B1A8DC377F /* Engine.h */,
+				FEEBD04BC1AC30BD1EE10E8B /* EntryPoint.h */,
+				DBC44A6D6E52145FD72AB8AD /* Log.cpp */,
+				7F45F6F7F06897E9A62F4537 /* Log.h */,
+				4FAF8059163D77CB843F9E99 /* Window.cpp */,
+				1546C643826ED4B58401C483 /* Window.h */,
+				520B7F85965A24F7D8815DC5 /* core.h */,
+				05B68ADD7A10CFCFF7F4591D /* environment.h */,
+				90D4306701F6D159B7BD7EA7 /* input */,
+			);
+			name = core;
+			sourceTree = "<group>";
+		};
+		5E8EE608CFB186FA85783448 /* paths */ = {
+			isa = PBXGroup;
+			children = (
+				A9AAB39B1E04F88D9BE881DB /* Bezier.cpp */,
+				14019285B5EB2E77AD1240C5 /* Bezier.h */,
+				BA0D40F35BF6DCE5531DEF33 /* Path.cpp */,
+				A55AF19DFCC0648FAECE7FDD /* Path.h */,
+			);
+			name = paths;
+			sourceTree = "<group>";
+		};
+		7A51D5EABE65A71CB2372C2A /* materials */ = {
+			isa = PBXGroup;
+			children = (
+				E82343B721EDFA69D74949F7 /* StaticMaterialTable.cpp */,
+				0AED5B61AE548913C58A41A1 /* StaticMaterialTable.h */,
+			);
+			name = materials;
+			sourceTree = "<group>";
+		};
+		7E74B1E4C2888316B65A0824 /* binary */ = {
+			isa = PBXGroup;
+			children = (
+				67749ADAC175B1CC88BCA91A /* Bimage.cpp */,
+				D234D204C32C3FF62F2FC044 /* Bimage.h */,
+				9FEF119E6753CC90F20B9FDE /* BinaryFileType.cpp */,
+				1213F448A83D063A69A36288 /* BinaryFileType.h */,
+				5EC62454F9200D4635587294 /* BinaryMesh.cpp */,
+				B941983ECAF8D8304066C67E /* BinaryMesh.h */,
+				080645262DAE3F984BDEC366 /* BinaryMeshAttrributes.cpp */,
+				F714A530B8CD36A25FE80370 /* BinaryMeshAttrributes.h */,
+			);
+			name = binary;
+			sourceTree = "<group>";
+		};
+		7FE31CBBF16E352DA06F5AFB /* imgui */ = {
+			isa = PBXGroup;
+			children = (
+				3D507D659891D0D76BEC1BA5 /* backends */,
+				86FC1887B7E01079CAF846C7 /* imgui.cpp */,
+				434C746FB07482E1B20772AF /* imgui_demo.cpp */,
+				CF9D80E13CC58F533E587F21 /* imgui_draw.cpp */,
+				D059039B96E6FB0D04E921DB /* imgui_tables.cpp */,
+				2DBEF673CFA89265C6CFA4B3 /* imgui_widgets.cpp */,
+			);
+			name = imgui;
+			sourceTree = "<group>";
+		};
+		802AB8D115A17803843DCF11 /* graphics */ = {
+			isa = PBXGroup;
+			children = (
+				F9FC7FE58C8A49D7F562EE25 /* imGui */,
+				EA79804341DEF335F3ED0E83 /* shaders */,
+				5A72F951C79B07C3C92DF791 /* vulkan */,
+			);
+			name = graphics;
+			sourceTree = "<group>";
+		};
+		879AD9D6CBAEAB08BF803016 /* date+Time */ = {
+			isa = PBXGroup;
+			children = (
+				1D0E89D765ADC80988D98017 /* WorldClock.cpp */,
+				68C0E6A102E4DBD3B30ABCE1 /* WorldClock.h */,
+			);
+			name = "date+Time";
+			sourceTree = "<group>";
+		};
+		8DC889959DADB5C78A213FD5 /* GPU Stages */ = {
+			isa = PBXGroup;
+			children = (
+				E54ECF47DA332939FD073D87 /* ANewGPUStageSystemDesign.cpp */,
+				97ECC631269DF72382281471 /* ANewGPUStageSystemDesign.h */,
+				9F83CDED613C5F5F08572C2D /* GPUComputeStage.cpp */,
+				92C7C8F7E9DD716916260737 /* GPUComputeStage.h */,
+				6FF4A133E3162E2543DB6F73 /* GPURenderStage.cpp */,
+				66A8455D76F5294F74E1F39D /* GPURenderStage.h */,
+				E30291211292F0137EF39F61 /* GPUStageDispatcher.cpp */,
+				EBD2E68BFDF59C7DD6F6D4CB /* GPUStageDispatcher.h */,
+				956EFC332B980E25ECFE6A73 /* GpuStage.cpp */,
+				001D809D9A77698FD6AFCEDD /* GpuStage.h */,
+				BBB533F7CD6C73E942DA6237 /* concrete */,
+			);
+			name = "GPU Stages";
+			sourceTree = "<group>";
+		};
+		90D4306701F6D159B7BD7EA7 /* input */ = {
+			isa = PBXGroup;
+			children = (
+				8EB83E246D5AD996223CDC64 /* InputHolder.cpp */,
+				4D5EA2AE59E95520D4CE20EE /* InputHolder.h */,
+			);
+			name = input;
+			sourceTree = "<group>";
+		};
+		9740AB62DB547C94CF2601A2 /* rendering */ = {
+			isa = PBXGroup;
+			children = (
+				46D87F89D6CE5A3B93C305C9 /* WorldSceneRenderCoordinator.cpp */,
+				0AD864F30478B6A5F4F9CB33 /* WorldSceneRenderCoordinator.h */,
+				B8E9C55DD3B6340FD786CB9D /* terrain */,
+			);
+			name = rendering;
+			sourceTree = "<group>";
+		};
+		9BBC2E60101673528DF9FCA0 /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				FDE9F9550A74ABC785597795 /* base.h */,
+				D4EC0FBFB38EAB316870ADFF /* lighting */,
+				6F5C0B937BE6BE05F6CB89D3 /* math.h */,
+			);
+			name = headers;
+			sourceTree = "<group>";
+		};
+		A6C936B49B3FADE6EA134CF4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				95951D7896481A6A0A29EBB8 /* libSunrise.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AD2DE0FD4751D62FF777B73D /* miscellaneousHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				B06ABE15D612B887F4433C55 /* miscellaneousHelpers.cpp */,
+				DD454BFF9EFDDD714618AA3F /* miscellaneousHelpers.h */,
+			);
+			name = miscellaneousHelpers;
+			sourceTree = "<group>";
+		};
+		B8E9C55DD3B6340FD786CB9D /* terrain */ = {
+			isa = PBXGroup;
+			children = (
+				A8125F63E1DD1615973865A3 /* TerrainGPUStage.cpp */,
+				D1FC310D75635EBF8C99174D /* TerrainGPUStage.h */,
+			);
+			name = terrain;
+			sourceTree = "<group>";
+		};
+		BBB533F7CD6C73E942DA6237 /* concrete */ = {
+			isa = PBXGroup;
+			children = (
+				C6BE6BFFA165B4B185A6B23F /* DeferredStage.cpp */,
+				E3AD68E9DC78289B66EC8F29 /* DeferredStage.h */,
+			);
+			name = concrete;
+			sourceTree = "<group>";
+		};
+		C78ACD895A96267BA2CB1BC9 /* Sunrise */ = {
+			isa = PBXGroup;
+			children = (
+				5775D4184366DFCA959E7A58 /* src */,
+				1DF602E4C1418C16DC125924 /* vendor */,
+				A6C936B49B3FADE6EA134CF4 /* Products */,
+			);
+			name = Sunrise;
+			sourceTree = "<group>";
+		};
+		CC831371DCCFF763DABCC1B1 /* gpuDriven */ = {
+			isa = PBXGroup;
+			children = (
+				1E163BEA4E55E2DC98B04A2A /* GPUGenCommandsPipeline.cpp */,
+				9E7516D46CE314C67BC20514 /* GPUGenCommandsPipeline.h */,
+			);
+			name = gpuDriven;
+			sourceTree = "<group>";
+		};
+		CCADB4EDB244BC1F7589CB2D /* concrete */ = {
+			isa = PBXGroup;
+			children = (
+				5F899F87331A26F925EBBDC7 /* DeferredPassPipeline.cpp */,
+				A414BFB163775E238BA1BDF1 /* DeferredPassPipeline.h */,
+				D6998BAFE6E66FA1E4D339EF /* GPUStages */,
+				5B8BBEC1EA3CEFB345C70D01 /* TerrainPipeline.cpp */,
+				C114DE0BEEBF65FDEF630C4B /* TerrainPipeline.h */,
+				A5862D83A54762F50BCE0BC3 /* TrianglePipeline.cpp */,
+				861A74ADC886C11F80AD32ED /* TrianglePipeline.h */,
+				CC831371DCCFF763DABCC1B1 /* gpuDriven */,
+			);
+			name = concrete;
+			sourceTree = "<group>";
+		};
+		D2FB44D175E96B83050F4B11 /* Sunrise */ = {
+			isa = PBXGroup;
+			children = (
+				11C84BC93A03047B219E9209 /* Sunrise */,
+			);
+			name = Sunrise;
+			sourceTree = "<group>";
+		};
+		D4EC0FBFB38EAB316870ADFF /* lighting */ = {
+			isa = PBXGroup;
+			children = (
+				1DD800BE792350F0675536FE /* atmScat.h */,
+				62B598CCAB54D6FECE808F0C /* pbr.h */,
+			);
+			name = lighting;
+			sourceTree = "<group>";
+		};
+		D6998BAFE6E66FA1E4D339EF /* GPUStages */ = {
+			isa = PBXGroup;
+			children = (
+				BCADFA3BB67E262DA410A87B /* DeferredPipeline.cpp */,
+				B6572EE5D8DB31D7B51CBD25 /* DeferredPipeline.h */,
+			);
+			name = GPUStages;
+			sourceTree = "<group>";
+		};
+		D9A54183FB70EEB5382617C3 /* math */ = {
+			isa = PBXGroup;
+			children = (
+				AF9D74FC422B3EEEAB03E33C /* Box.cpp */,
+				AC10F4061D3394F8D2FA4246 /* Box.h */,
+				B618A7EEC2A35A603D88262E /* FrustrumMath.cpp */,
+				A37395D89772DF4A1C5DF418 /* FrustrumMath.h */,
+				4DA2D51EBACAE390BC5DD35E /* Math.cpp */,
+				451845023EDA017478D90342 /* mesh */,
+				5E8EE608CFB186FA85783448 /* paths */,
+			);
+			name = math;
+			sourceTree = "<group>";
+		};
+		E10EA187F3387E39272967C7 /* fileFormats */ = {
+			isa = PBXGroup;
+			children = (
+				7E74B1E4C2888316B65A0824 /* binary */,
+			);
+			name = fileFormats;
+			sourceTree = "<group>";
+		};
+		E3544B70C79B53A24B8881B0 /* terrain */ = {
+			isa = PBXGroup;
+			children = (
+				25ED0D7ED9E926B0BB9B63BE /* TerrainMeshLoader.cpp */,
+				BB4BAE681696FE9A04C8E4A8 /* TerrainMeshLoader.h */,
+				DE05DF8C39512FBE278315CC /* TerrainQuadTree.cpp */,
+				CD57D5F6B2EEDD287633EC36 /* TerrainQuadTree.h */,
+				9EEEC4D8B8D8270A745E3B18 /* TerrainQuadTreeNode.cpp */,
+				BCB2494270AE627452609F82 /* TerrainQuadTreeNode.h */,
+				D158E460B6EFEB927A34FAA0 /* TerrainSystem.cpp */,
+				8A2EEE0AD2CE2C3CF5F9E44A /* TerrainSystem.h */,
+			);
+			name = terrain;
+			sourceTree = "<group>";
+		};
+		E9C651FF821337B1B05A383F /* configuration */ = {
+			isa = PBXGroup;
+			children = (
+				AD6E6CCE9AD5FF8037CFF30E /* ConfigSystem.cpp */,
+				857CF2183872FBCA89955858 /* ConfigSystem.h */,
+			);
+			name = configuration;
+			sourceTree = "<group>";
+		};
+		EA79804341DEF335F3ED0E83 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				9BBC2E60101673528DF9FCA0 /* headers */,
+			);
+			name = shaders;
+			sourceTree = "<group>";
+		};
+		EBFB18A1395E0ED3AF7D0EE1 /* memory */ = {
+			isa = PBXGroup;
+			children = (
+				1AAE440B2C6583FDA1D3724B /* IndexAllocator.cpp */,
+				CE95AB752896C267EFDDB9B5 /* IndexAllocator.h */,
+				8036F1F5B3B63167CBB01035 /* VaribleIndexAllocator.cpp */,
+				65FEF9FF2AB45071DF22F83F /* VaribleIndexAllocator.h */,
+			);
+			name = memory;
+			sourceTree = "<group>";
+		};
+		EFF2241D8DD324CF65516A5D /* dependencyManagment */ = {
+			isa = PBXGroup;
+			children = (
+				794FF6655EE6FD97222C0CA5 /* Dispatcher.cpp */,
+				2FF0116F788F4FA19BBB07AF /* Dispatcher.h */,
+				ABD19923BBB6C555A82A4F63 /* Node.cpp */,
+				E63EB92DE5E19C5F20364F6D /* Node.h */,
+				89CCC37F27ADC431FF2C09BF /* Stage.cpp */,
+				3BA355A9AF8BCD5BD1D97BE9 /* Stage.h */,
+			);
+			name = dependencyManagment;
+			sourceTree = "<group>";
+		};
+		F3323C854E92613790D602C5 /* generalAbstractions */ = {
+			isa = PBXGroup;
+			children = (
+				9FDD92D982D9190B97F18919 /* AttributeHelpers.cpp */,
+				7B2F5AA39CCB97D5954230E3 /* AttributeHelpers.h */,
+				3452C9FFE84EE331CA01203F /* Buffer.cpp */,
+				BE691D4919B46D7B07E65389 /* Buffer.h */,
+				FE4D836FF7184321818CA9AF /* Descriptors.cpp */,
+				1891C3D9525C7A8B07B7CA19 /* Descriptors.h */,
+				11763C450A40FBF794B56285 /* GPUSelector.cpp */,
+				521B846F8BE63B2141418AAF /* GPUSelector.h */,
+				11E6BCF16D46E1A3AF8A8331 /* Image.cpp */,
+				4B342CDBF2A9C88D9B6ED31B /* Image.h */,
+				97366397EDAFD7C9E6D819D7 /* ResourceHeap.cpp */,
+				B681E5A18DD510D307427BE1 /* ResourceHeap.h */,
+				3585D7F3D8ED05A5F022BE33 /* Sampler.cpp */,
+				0CC15C5D6821810FAA65229D /* Sampler.h */,
+				CE533E3124CCB2631DF4F471 /* VkAbstractions.h */,
+				834F6373BD1A1A25727569B3 /* VkHelpers.cpp */,
+				A473FD1D47DB2ACF5F10E35D /* VkHelpers.h */,
+				5EBEA8A73611D3D9AF7F3EE7 /* vk_mem_alloc.h */,
+				5815B413FF8B4FC5A8505A53 /* vma.cpp */,
+				38E8475531B30707BC276D95 /* vmaSettings.cpp */,
+			);
+			name = generalAbstractions;
+			sourceTree = "<group>";
+		};
+		F49905EBB804C79DF6A86C2B /* scene */ = {
+			isa = PBXGroup;
+			children = (
+				0609A4C09E568A72CC9D8B00 /* Camera.cpp */,
+				FA596D4A0C8349FC4074338A /* Camera.h */,
+				66762D6AAA89FE9C9E5B83AA /* Scene.cpp */,
+				72554D94569C55C6DA8983D4 /* Scene.h */,
+				8536A48684D987B8BF2E3AC6 /* Transform.cpp */,
+				111534B0F0324EE2CC3BAAF0 /* Transform.h */,
+				FFF1EFDC121BCC8E460CB61C /* included */,
+			);
+			name = scene;
+			sourceTree = "<group>";
+		};
+		F9FC7FE58C8A49D7F562EE25 /* imGui */ = {
+			isa = PBXGroup;
+			children = (
+				A8845219BA3B920B2FA98059 /* ImGuiStage.cpp */,
+				5A651303B46629F57BAD2143 /* ImGuiStage.h */,
+				B2689899258A258B864F66D9 /* ImGuiVulkanContainer.cpp */,
+				472EBBC3577B9FB555686A03 /* ImGuiVulkanContainer.h */,
+			);
+			name = imGui;
+			sourceTree = "<group>";
+		};
+		FFF1EFDC121BCC8E460CB61C /* included */ = {
+			isa = PBXGroup;
+			children = (
+				7AF5625D878014CF0264E09D /* UIScene.cpp */,
+				E247C527D6470E995B322367 /* UIScene.h */,
+				45BA9865754AF757E1ABA6A5 /* UISceneRenderCoordinator.cpp */,
+				AE72CECFC09584C19996BD0F /* UISceneRenderCoordinator.h */,
+			);
+			name = included;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3CF3265EDFE14D106F072C9E /* Sunrise */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E1DE5F471084B33969C60D87 /* Build configuration list for PBXNativeTarget "Sunrise" */;
+			buildPhases = (
+				638A97889230EB7AEB7245C8 /* Resources */,
+				CD37B0DFFBDE04D1551F5F1F /* Sources */,
+				F3A316E822496ADA7B8AC528 /* Frameworks */,
+				3E8FC154B01AD9C65F1BFF94 /* Embed Libraries */,
+				9607AE3710C85E8F00CD1376 /* Postbuild */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Sunrise;
+			productName = Sunrise;
+			productReference = 95951D7896481A6A0A29EBB8 /* libSunrise.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "Sunrise" */;
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 1;
+			mainGroup = C78ACD895A96267BA2CB1BC9 /* Sunrise */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3CF3265EDFE14D106F072C9E /* libSunrise.a */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		638A97889230EB7AEB7245C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9607AE3710C85E8F00CD1376 /* Postbuild */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Postbuild;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\necho on\ncp -f ../Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../bin/Debug-macosx-universal/FlightSimTerrainSystem\nfi\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\necho on\ncp -f ../Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../bin/Release-macosx-universal/FlightSimTerrainSystem\nfi\nif [ \"${CONFIGURATION}\" = \"Dist\" ]; then\necho on\ncp -f ../Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../bin/Dist-macosx-universal/FlightSimTerrainSystem\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CD37B0DFFBDE04D1551F5F1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				389B9B26000056188AB82966 /* ConfigSystem.cpp in Sources */,
+				51F1A5C99A90E3FBBDBC9C09 /* Application.cpp in Sources */,
+				65A0A58DD9891D3FFBD6CBCD /* Engine.cpp in Sources */,
+				519F42A530BC5CD70CC5B8E5 /* Log.cpp in Sources */,
+				58E0FA51CCC97203EF172091 /* Window.cpp in Sources */,
+				B51871DC5C8E0D8E0553181C /* InputHolder.cpp in Sources */,
+				0E3D3E9169888EC357BA74D1 /* VkDebugMarker.cpp in Sources */,
+				6B1A563D9E9995AFB693747D /* Dispatcher.cpp in Sources */,
+				016205DB5DE90A4DE68BC41B /* Node.cpp in Sources */,
+				E67F4EF780D937E9BD119D37 /* Stage.cpp in Sources */,
+				4CC69972325DA0A4F5A2AFB2 /* Bimage.cpp in Sources */,
+				FFF0EA76D74415A850B180B6 /* BinaryFileType.cpp in Sources */,
+				380F0D8CEC0B26BECDBD63CC /* BinaryMesh.cpp in Sources */,
+				AA10A37E3A067E30F6FB29BE /* BinaryMeshAttrributes.cpp in Sources */,
+				209B1DB3C810B96570D5C3F3 /* FileManager.cpp in Sources */,
+				D4B1A8E7BA48B0197D8DBF27 /* FileSystem.cpp in Sources */,
+				D72B13F13276642320A84A31 /* ImGuiStage.cpp in Sources */,
+				D03E9C71F1DAD9A3EA5172B1 /* ImGuiVulkanContainer.cpp in Sources */,
+				49FA52CFE02364C1A189C10F /* CRPHolder.cpp in Sources */,
+				1DFA8FC1731E73337A682E01 /* ComposableRenderPass.cpp in Sources */,
+				6F36117FA30BBBB142EE87BF /* ANewGPUStageSystemDesign.cpp in Sources */,
+				2ED63A8528768C3718F7A0C5 /* GPUComputeStage.cpp in Sources */,
+				9DF0DE2BBF8D1B5DB803B46B /* GPURenderStage.cpp in Sources */,
+				811CCDF9E5F41D2BB2C1E439 /* GPUStageDispatcher.cpp in Sources */,
+				0327672B1D10C95DD896DD6B /* GpuStage.cpp in Sources */,
+				1814A897A6C5D989024FF6D7 /* DeferredStage.cpp in Sources */,
+				DA65339D09F5928F765641DD /* GPUStagesRenderPass.cpp in Sources */,
+				842013C3C68C60357EB2D203 /* ImguiRenderPassManager.cpp in Sources */,
+				64EFA22D7712581F5013906D /* RenderPassManager.cpp in Sources */,
+				FACF4E171D535109F994DC57 /* SingalPassRenderPassManager.cpp in Sources */,
+				C2AD00B1820F9F23AA39FEF1 /* AttributeHelpers.cpp in Sources */,
+				1C907737DE4908A98563D577 /* Buffer.cpp in Sources */,
+				BCD78AA7EA821299EB25B8E7 /* Descriptors.cpp in Sources */,
+				152D8DDD42D815CF437BBC1D /* GPUSelector.cpp in Sources */,
+				35CCED49A8EE7A3B09B3BB89 /* Image.cpp in Sources */,
+				34BB704F7727BCC12F4E2E8F /* ResourceHeap.cpp in Sources */,
+				85D1C96B97F47F5D70F5B7AB /* Sampler.cpp in Sources */,
+				4EA392EB7E33F1DDEA94A12B /* VkHelpers.cpp in Sources */,
+				DA2DCB8BEA7AAF7DE86779CB /* vma.cpp in Sources */,
+				BB7281EDE91D09DFE9C0B02D /* vmaSettings.cpp in Sources */,
+				6EB4B2C7FD65E3B958F00107 /* ComputePipeline.cpp in Sources */,
+				6EDBBA4F6E9CEFC1D523988F /* GraphicsPipeline.cpp in Sources */,
+				AAC08C3FDF8D93F1FF08B27F /* DeferredPassPipeline.cpp in Sources */,
+				96700F13329DCB451D5AC553 /* DeferredPipeline.cpp in Sources */,
+				5D995119D09DB24B3510A759 /* TerrainPipeline.cpp in Sources */,
+				D7DBC7FB1D7D3DAD6A81AE3B /* TrianglePipeline.cpp in Sources */,
+				4F4D2CA2E284C3D4EDBB42E2 /* GPUGenCommandsPipeline.cpp in Sources */,
+				488454436A20917562972A83 /* MaterialManager.cpp in Sources */,
+				C6DB2979BFA5E92B4A1A4FB9 /* RenderSystem.cpp in Sources */,
+				1683351DB9EA62CFD1201B5D /* Renderer.cpp in Sources */,
+				2F993893DB4FA54508C5FED3 /* SceneRenderCoordinator.cpp in Sources */,
+				F28C41C7B444D3395B5FA007 /* MeshBuffers.cpp in Sources */,
+				C736B6D3BC1B10C5DEEF2513 /* ResourceTransferTask.cpp in Sources */,
+				3AA1F3594AEED74B48DBA199 /* uniforms.cpp in Sources */,
+				D82CE514B749FF4693535B54 /* Box.cpp in Sources */,
+				16A3E126040B73D8A1056766 /* FrustrumMath.cpp in Sources */,
+				03EDE1561EBA5008228AE796 /* Math.cpp in Sources */,
+				5D2B1A184E22880ABA260858 /* Mesh.cpp in Sources */,
+				49455D6010AA18529B61EBA0 /* MeshPrimatives.cpp in Sources */,
+				5CA29C142157F286D5C69A54 /* MeshRendering.cpp in Sources */,
+				4259DB40070F31B2BB7DD980 /* Triangulation.cpp in Sources */,
+				45FF5DB3E02352E5904933F3 /* Bezier.cpp in Sources */,
+				91BF928BA1A4BEBD8E1848CB /* Path.cpp in Sources */,
+				F47CED234FC83D553DFA2363 /* IndexAllocator.cpp in Sources */,
+				E3BB45ADDC86055F66FA6BED /* VaribleIndexAllocator.cpp in Sources */,
+				572EAEEDE724899FA419352D /* miscellaneousHelpers.cpp in Sources */,
+				7C5EC04A305AD97C120D168A /* NetworkManager.cpp in Sources */,
+				045530D8F54C9ECA61501F18 /* Camera.cpp in Sources */,
+				FB28E822EF28319474134662 /* Scene.cpp in Sources */,
+				5D5ED6FE3C017270F0E3753E /* Transform.cpp in Sources */,
+				9BB687D5891E1A8726180E15 /* UIScene.cpp in Sources */,
+				9C49595D0120A88FCDEE6F9D /* UISceneRenderCoordinator.cpp in Sources */,
+				0C5078AC1E07B89E9375A6EC /* WorldScene.cpp in Sources */,
+				2846C84FECFC1EC1A16AC68F /* WorldClock.cpp in Sources */,
+				FE10D983E10C5FB5F624CFC3 /* WorldTerrainPipeline.cpp in Sources */,
+				39DCED8F696D4C81D5CDFBCF /* StaticMaterialTable.cpp in Sources */,
+				3024EBC152A8EEB32EEA7A01 /* WorldSceneRenderCoordinator.cpp in Sources */,
+				CDFA21FBFD8A80ED69EB303B /* TerrainGPUStage.cpp in Sources */,
+				8D76BC24E48C649610D4FA64 /* SimlinkMessages.cpp in Sources */,
+				0F6F179855108D4AA214FDD8 /* SimpleChunkViewerScene.cpp in Sources */,
+				207910E3E7DDCBD572959F23 /* CameraSystem.cpp in Sources */,
+				56663BA985F69A9BF25749E9 /* FloatingOriginSystem.cpp in Sources */,
+				82C405E1B25464D31EB51421 /* PlayerMovementSystem.cpp in Sources */,
+				E08B1BB10E35A3A30ED949F1 /* WindowCameraController.cpp in Sources */,
+				937910965531A208FC4C6ED6 /* TerrainMeshLoader.cpp in Sources */,
+				7857D284CF6D7AF6FBB610C4 /* TerrainQuadTree.cpp in Sources */,
+				6771F2908D19ED02AB4A70D0 /* TerrainQuadTreeNode.cpp in Sources */,
+				EF64489822E3880A3ADD66D8 /* TerrainSystem.cpp in Sources */,
+				779F3BD9A88333CBBB9B6A19 /* srpch.cpp in Sources */,
+				8C2DD34924A5C0BB508CB189 /* imgui_impl_glfw.cpp in Sources */,
+				205CAD4BE51203BD9980AB8B /* imgui_impl_vulkan.cpp in Sources */,
+				431156DF27585F11AB458D1F /* imgui.cpp in Sources */,
+				9B411647B60D84F9B9DE1C87 /* imgui_demo.cpp in Sources */,
+				92DC90D9ADA8FF8BB1799719 /* imgui_draw.cpp in Sources */,
+				D14A54334532CBE567807A73 /* imgui_tables.cpp in Sources */,
+				24A4A98B3489D5BD20FD5FCB /* imgui_widgets.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		174BD86569D203573C1666A5 /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/srpch.h;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SR_PLATFORM_MACOS,
+					SR_BUILD_DLL,
+					SR_DIST,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/VulkanSDK/1.2.154.1/Lib",
+					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
+					"vendor/marl-main/marl-main/build/Release",
+				);
+				OBJROOT = "../bin-int/Dist-macosx-universal/Sunrise";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lvulkan-1",
+					"-lmarl",
+				);
+				SYMROOT = "../bin/Dist-macosx-universal/Sunrise";
+				USER_HEADER_SEARCH_PATHS = (
+					src,
+					src/Sunrise,
+					vendor/spdlog/include,
+					"C:/VulkanSDK/1.2.154.1/Include",
+					"vendor/glm-master",
+					"vendor/marl-main/marl-main/include",
+					vendor/stb,
+					"vendor/mango-master/mango-master/include",
+					vendor/libigl/include,
+					vendor/HTTPRequest/include,
+					vendor/httplib/include,
+					vendor/rapidjson/include,
+					vendor/libguarded/src,
+					vendor/nlohmann/include,
+					vendor/date/include,
+					vendor/entt/single_include,
+					vendor/imgui,
+					"vendor/asio-1.18.1/include",
+					"vendor/CGAL-5.3/include",
+					vendor/boost_1_76_0,
+					vendor/eigen,
+					/usr/local/include,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
+				);
+			};
+			name = Dist;
+		};
+		28C788C78408DC3957632707 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				CONFIGURATION_BUILD_DIR = "../bin/Release-macosx-universal/Sunrise";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = Sunrise;
+			};
+			name = Release;
+		};
+		2E84968D5E16657F3923A4CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				CONFIGURATION_BUILD_DIR = "../bin/Debug-macosx-universal/Sunrise";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = Sunrise;
+			};
+			name = Debug;
+		};
+		39C68838DD12116AF7E2DE78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/srpch.h;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SR_PLATFORM_MACOS,
+					SR_BUILD_DLL,
+					SR_DEBUG,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/VulkanSDK/1.2.154.1/Lib",
+					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
+					"vendor/marl-main/marl-main/build/Debug",
+				);
+				OBJROOT = "../bin-int/Debug-macosx-universal/Sunrise";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lvulkan-1",
+					"-lmarl",
+				);
+				SYMROOT = "../bin/Debug-macosx-universal/Sunrise";
+				USER_HEADER_SEARCH_PATHS = (
+					src,
+					src/Sunrise,
+					vendor/spdlog/include,
+					"C:/VulkanSDK/1.2.154.1/Include",
+					"vendor/glm-master",
+					"vendor/marl-main/marl-main/include",
+					vendor/stb,
+					"vendor/mango-master/mango-master/include",
+					vendor/libigl/include,
+					vendor/HTTPRequest/include,
+					vendor/httplib/include,
+					vendor/rapidjson/include,
+					vendor/libguarded/src,
+					vendor/nlohmann/include,
+					vendor/date/include,
+					vendor/entt/single_include,
+					vendor/imgui,
+					"vendor/asio-1.18.1/include",
+					"vendor/CGAL-5.3/include",
+					vendor/boost_1_76_0,
+					vendor/eigen,
+					/usr/local/include,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
+				);
+			};
+			name = Debug;
+		};
+		B9F150725E43EE24707C36B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = src/srpch.h;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SR_PLATFORM_MACOS,
+					SR_BUILD_DLL,
+					SR_RELEASE,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/VulkanSDK/1.2.154.1/Lib",
+					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
+					"vendor/marl-main/marl-main/build/Release",
+				);
+				OBJROOT = "../bin-int/Release-macosx-universal/Sunrise";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-lvulkan-1",
+					"-lmarl",
+				);
+				SYMROOT = "../bin/Release-macosx-universal/Sunrise";
+				USER_HEADER_SEARCH_PATHS = (
+					src,
+					src/Sunrise,
+					vendor/spdlog/include,
+					"C:/VulkanSDK/1.2.154.1/Include",
+					"vendor/glm-master",
+					"vendor/marl-main/marl-main/include",
+					vendor/stb,
+					"vendor/mango-master/mango-master/include",
+					vendor/libigl/include,
+					vendor/HTTPRequest/include,
+					vendor/httplib/include,
+					vendor/rapidjson/include,
+					vendor/libguarded/src,
+					vendor/nlohmann/include,
+					vendor/date/include,
+					vendor/entt/single_include,
+					vendor/imgui,
+					"vendor/asio-1.18.1/include",
+					"vendor/CGAL-5.3/include",
+					vendor/boost_1_76_0,
+					vendor/eigen,
+					/usr/local/include,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
+				);
+			};
+			name = Release;
+		};
+		C2505A3AEA8B12ECD226A07A /* Dist */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				CONFIGURATION_BUILD_DIR = "../bin/Dist-macosx-universal/Sunrise";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = Sunrise;
+			};
+			name = Dist;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "Sunrise" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				39C68838DD12116AF7E2DE78 /* Debug */,
+				B9F150725E43EE24707C36B2 /* Release */,
+				174BD86569D203573C1666A5 /* Dist */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E1DE5F471084B33969C60D87 /* Build configuration list for PBXNativeTarget "libSunrise.a" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E84968D5E16657F3923A4CD /* Debug */,
+				28C788C78408DC3957632707 /* Release */,
+				C2505A3AEA8B12ECD226A07A /* Dist */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+};
+rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

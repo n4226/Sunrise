@@ -123,7 +123,7 @@ namespace sunrise {
 
 	void TerrainSystem::invalidateDescriptors()
 	{
-		SR_CORE_CRITICAL("{} not updatedf for gpu passes ",__FUNCSIG__);
+		SR_CORE_CRITICAL("{} not updatedf for gpu passes ",SR_FUNC_SIG);
 //#if RenderMode == RenderModeCPU2
 //		{
 //			auto cmdsValid = drawCommandsValid.lock();

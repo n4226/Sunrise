@@ -5,7 +5,7 @@ project "Sunrise"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -29,7 +29,7 @@ project "Sunrise"
 		--"C:/code/visual studio/FSTS/Sunrise/vendor/mango-master/mango-master/build/vs2019/x64/Debug",
 		"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 		"C:/VulkanSDK/1.2.154.1/Lib",
-		"vendor/bin/glfw/windows/glfw-3.3.2.bin.WIN64/glfw-3.3.2.bin.WIN64/lib-vc2019",
+		
 		"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64",
 	}
 	
@@ -40,7 +40,6 @@ project "Sunrise"
 		--"mango",
 		"vulkan-1",
 		"marl",
-		"GFSDK_Aftermath_Lib.x64"
 	}
 
 	includedirs {
@@ -61,10 +60,10 @@ project "Sunrise"
 		"vendor/date/include",
 		"vendor/entt/single_include",
 		"vendor/imgui/",
-		"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/include",
 		"vendor/asio-1.18.1/include",
 		"vendor/CGAL-5.3/include",
 		"vendor/boost_1_76_0",
+		"vendor/eigen"
 	}	
 
 	postbuildcommands {
@@ -84,6 +83,34 @@ project "Sunrise"
 			"SR_BUILD_DLL"
 		}
 
+		libdirs {
+			"vendor/bin/glfw/windows/glfw-3.3.2.bin.WIN64/glfw-3.3.2.bin.WIN64/lib-vc2019",
+		}
+
+		links {
+			"GFSDK_Aftermath_Lib.x64"
+		}
+		includedirs {
+			"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/include",
+		}
+
+	filter "system:macosx"
+
+		defines {
+			"SR_PLATFORM_MACOS",
+			"SR_BUILD_DLL"
+		}
+		pchheader "src/srpch.h" 
+		includedirs {
+			"/usr/local/include",
+			"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
+			--"/Users/michaelbaron/code/FSTS/Sunrise/vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include"
+		}
+		xcodebuildsettings { ["ALWAYS_SEARCH_USER_PATHS"] = "YES" }
+
+		libdirs {
+			"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
+		}
 
 	filter "configurations:Debug"
 		defines "SR_DEBUG"
