@@ -37,12 +37,12 @@ namespace sunrise {
 
 			// aftermath
 
-			static void VkDebug::gpuCrashDumpCallback(
+            static void gpuCrashDumpCallback(
 				const void* pGpuCrashDump,
 				const uint32_t gpuCrashDumpSize,
 				void* pUserData);
 
-			void VkDebug::onCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize);
+            void onCrashDump(const void* pGpuCrashDump, const uint32_t gpuCrashDumpSize);
 
 			vk::Device device;
 		};

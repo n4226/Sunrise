@@ -40,7 +40,7 @@ namespace sunrise {
 		if (!fs.good()) {
 			//abort
 			SR_CORE_ERROR("binary write to file failed");
-			throw FileManager::FileNotFoundError;
+			throw FileManager::FileNotFoundError();
 		}
 
 		encode(decodedItem, fs);
@@ -56,7 +56,7 @@ namespace sunrise {
 		if (!fs.good()) {
 			//abort
 			SR_CORE_ERROR("binary read from file failed");
-			throw FileManager::FileNotFoundError;
+			throw FileManager::FileNotFoundError();
 		}
 		
 		auto data = decode(fs);

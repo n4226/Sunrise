@@ -5,7 +5,7 @@
 #include "Sunrise/Sunrise/core/Window.h"
 
 namespace sunrise::gfx {
-	inline CRPHolder::CRPHolder(const ComposableRenderPass::CreateOptions& wholeOptions, const HolderOptions& spacificOptions, Renderer* renderer)
+    CRPHolder::CRPHolder(const ComposableRenderPass::CreateOptions& wholeOptions, const HolderOptions& spacificOptions, Renderer* renderer)
 		: renderer(renderer), frameOptions(wholeOptions), holderOptions(spacificOptions)
 	{
 		PROFILE_FUNCTION;
@@ -20,7 +20,7 @@ namespace sunrise::gfx {
 	/// <param name="pass"></param>
 	/// <returns>the CRP object and the pass within it</returns>
 
-	inline std::pair<ComposableRenderPass*, size_t> CRPHolder::renderPass(size_t pass) {
+	 std::pair<ComposableRenderPass*, size_t> CRPHolder::renderPass(size_t pass) {
 		SR_ASSERT(pass < renderpasses.size());
 		return std::make_pair(renderpasses[pass], 0);
 	}
@@ -158,7 +158,7 @@ namespace sunrise::gfx {
 	/// <param name="window"></param>
 	/// <returns></returns>
 
-	inline Image* CRPHolder::getImage(size_t globalIndex, Window* window)
+    Image* CRPHolder::getImage(size_t globalIndex, Window* window)
 	{
 		SR_ASSERT(globalIndex != frameOptions.presentedAttachment);
 		auto image = images[window][(globalIndex > frameOptions.presentedAttachment) ? globalIndex - 1 : globalIndex];
@@ -166,7 +166,7 @@ namespace sunrise::gfx {
 		return image;
 	}
 
-	inline vk::Framebuffer CRPHolder::getFrameBuffer(size_t pass,const Window* window, size_t surfaceIndex) const {
+    vk::Framebuffer CRPHolder::getFrameBuffer(size_t pass,const Window* window, size_t surfaceIndex) const {
 		return frameBuffers[pass].find(window)->second[surfaceIndex];
 	}
 

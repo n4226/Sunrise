@@ -2,10 +2,16 @@
 #include "ConfigSystem.h"
 #include "../fileSystem/FileManager.h"
 
+#include "Sunrise/core/Window.h"
 
-#define GLFW_EXPOSE_NATIVE_WIN32
+//#ifdef SR_PLATFORM_WINDOWS
+//#define GLFW_EXPOSE_NATIVE_WIN32
+//#elif defined(SR_PLATFORM_MACOS)
+//#define GLFW_EXPOSE_NATIVE_COCOA
+//#endif
+//
 #include <GLFW/glfw3.h>
-#include <GLFW/glfw3native.h>
+//#include <GLFW/glfw3native.h>
 
 namespace sunrise {
     
@@ -47,13 +53,14 @@ namespace sunrise {
 
         auto data = config->toJson();
 
-        {
-            std::ofstream out;
-            out.open(filePath, std::fstream::out);
-            //out.open(file, std::fstream::out);
-            out << std::setw(4) << data << std::endl;
-            out.close();
-        }
+        FileManager::saveStringToFile(data.dump(4), filePath);
+//        {
+//            std::ofstream out;
+//            out.open(filePath, std::fstream::out);
+//            //out.open(file, std::fstream::out);
+//            out << std::setw(4) << data << std::endl;
+//            out.close();
+//        }
     }
 
     void ConfigSystem::resetToDefault()
@@ -72,7 +79,11 @@ namespace sunrise {
         config->windows[0].size = glm::ivec2(1920, 1080);
         config->windows[0].size = glm::vec2(0.5, 0.5);
 
-
+        config->cameras = {};
+        config->cameras.resize(1);
+        config->cameras[0].offset = {};
+        config->cameras[0].rotAngleDeg = {};
+        config->cameras[0].rotAxis = {};
 
     }
 
@@ -119,7 +130,7 @@ The sunrise engine uses user modifiable config files with several file extension
             std::string line;
 
             line += "- ";
-            line += glfwGetWin32Monitor(monitors[i]);
+            line +=  Window::getNativeMonitorName(monitors[i]);
             line += "\n";
 
             monitorNames += line;
@@ -171,7 +182,7 @@ The sunrise engine uses user modifiable config files with several file extension
         std::vector<json> jcams;
         jcams.resize(cameras.size());
 
-        for (size_t i = 0; i < windows.size(); i++) {
+        for (size_t i = 0; i < cameras.size(); i++) {
             jcams[i]["offset"]["x"] = cameras[i].offset.x;
             jcams[i]["offset"]["y"] = cameras[i].offset.y;
             jcams[i]["offset"]["z"] = cameras[i].offset.z;

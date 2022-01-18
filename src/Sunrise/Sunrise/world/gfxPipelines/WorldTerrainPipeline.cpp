@@ -11,6 +11,7 @@ namespace sunrise {
 	gfx::GraphicsPipelineOptions sunrise::WorldTerrainPipeline::makeDeff()
 	{
 		PROFILE_FUNCTION;
+        
 		using namespace gfx;
 		auto pipeOptions = sunrise::gfx::GraphicsPipelineOptions();
 

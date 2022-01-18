@@ -136,7 +136,7 @@ namespace sunrise {
 
 		VkDeviceAddress vertIndex;
 		// one per sub mesh
-		std::vector<VkDeviceAddress> indIndicies;
+		std::vector<size_t> indIndicies;
 		size_t vertCount;
 		std::vector<size_t> indCounts;
 		size_t totalIndCount;

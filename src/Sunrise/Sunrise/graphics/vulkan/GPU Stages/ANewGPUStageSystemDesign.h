@@ -16,7 +16,7 @@
 
 */
 
-
+#if 0
 namespace testGPUStages {
 
 
@@ -179,3 +179,4 @@ namespace testGPUStages {
 
 }
 
+#endif

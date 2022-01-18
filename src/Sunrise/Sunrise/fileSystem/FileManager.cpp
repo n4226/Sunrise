@@ -104,7 +104,7 @@ namespace sunrise {
 	}
 
 	//TODO: make this faster
-	std::string FileManager::loadStringfromFile(std::string& const path)
+	std::string FileManager::loadStringfromFile(const std::string& path)
 	{
 		std::ifstream t(path);
 		if (!t.is_open())

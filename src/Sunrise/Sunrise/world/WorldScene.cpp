@@ -69,6 +69,7 @@ namespace sunrise {
 
 		ImGui::Text("World Scene Settings");
 
+        glm::vec3 playerLLA = this->playerLLA;
 		std::array<float,3> llaPos = {playerLLA.x, playerLLA.y, playerLLA.z};
 
 		if (ImGui::InputFloat3("LLA Position", llaPos.data(), "%.5f")) {
@@ -82,6 +83,7 @@ namespace sunrise {
 		}
 
 		//sunPos
+        glm::vec3 sunLL = this->sunLL;
 		std::array<float, 2> sun = { sunLL.x, sunLL.y };
 		if (ImGui::SliderFloat2("Sun Pos", sun.data(), -180.f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
 			sunLL.x = sun[0];

@@ -2,6 +2,9 @@
 
 #include "srpch.h"
 
+//https://lists.apple.com/archives/xcode-users/2005/Jul/msg00565.html
+// __attribute__((visibility("default")))
+
 #ifdef SR_PLATFORM_WINDOWS
 	// SR_DYNAMIC_BUILD does not excist but could be added in future to export required symbols again
 	// TODO: fix but now this is requred
@@ -15,20 +18,30 @@
 	#else
 		#define SUNRISE_API
 	#endif
+#elif defined(SR_PLATFORM_MACOS)
+    #ifdef SR_BUILD_DLL
+        #define SUNRISE_API __attribute__((visibility("default")))
+    #else
+        #define SUNRISE_API
+    #endif
 #else
-#error Windows is currently the only supported platform
+#error platform not supported
 #endif 
 
 #ifdef SR_DEBUG
-#if defined(SR_PLATFORM_WINDOWS)
-#define SR_DEBUGBREAK() __debugbreak()
-#elif defined(SR_PLATFORM_LINUX)
-#include <signal.h>
-#define SR_DEBUGBREAK() raise(SIGTRAP)
-#else
-#error "Platform doesn't support debugbreak yet!"
-#endif
-#define SR_ENABLE_ASSERTS
+    #if defined(SR_PLATFORM_WINDOWS)
+        #define SR_DEBUGBREAK() __debugbreak()
+    #elif defined(SR_PLATFORM_LINUX)
+        #include <signal.h>
+        #define SR_DEBUGBREAK() raise(SIGTRAP)
+    #elif defined(SR_PLATFORM_MACOS)
+        #include <signal.h>
+        #define SR_DEBUGBREAK() raise(SIGTRAP)
+    #else
+        #error "Platform doesn't support debugbreak yet!"
+    #endif
+
+    #define SR_ENABLE_ASSERTS
 #else
 #define SR_DEBUGBREAK()
 #endif

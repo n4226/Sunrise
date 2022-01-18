@@ -9,14 +9,28 @@ namespace sunrise::math {
 	/// </summary>
 	struct SUNRISE_API Box
 	{
-		constexpr Box();
-		constexpr Box(glm::dvec2 start, glm::dvec2 size);
-
+		constexpr Box()
+            : start(0), size(0)
+        {
+        }
+        
+        constexpr Box(glm::dvec2 start, glm::dvec2 size)
+            : start(start), size(size)
+        {
+        }
+        
 		glm::dvec2 start, size;
 
-		constexpr glm::dvec2 getEnd() const;
-		constexpr glm::dvec2 getCenter() const;
-
+        constexpr glm::dvec2 getEnd() const
+        {
+            return start + size;
+        }
+        
+        constexpr glm::dvec2 getCenter() const
+        {
+            return start + (size * 0.5);
+        }
+        
 		constexpr bool contains(glm::dvec2 point) const;
 		bool containsAny(std::vector<glm::dvec2>& points) const;
 		bool containsAny(std::vector<glm::dvec2>&& points) const;

@@ -4,8 +4,10 @@
 #include "Sunrise/Sunrise/core/Application.h"
 #include "Sunrise/Sunrise/fileSystem/FileManager.h"
 
+#ifdef SR_USE_AFTERMATH
 #include "GFSDK_Aftermath.h"
 #include "GFSDK_Aftermath_GpuCrashDump.h"
+#endif
 
 namespace sunrise::gfx {
 
@@ -94,12 +96,14 @@ namespace sunrise::gfx {
 
 	void VkDebug::initAftermath()
 	{
+#ifdef SR_USE_AFTERMATH
 		// after this call this object can not be copied or moved TODO: fix this by unregistering and re registring
 		GFSDK_Aftermath_EnableGpuCrashDumps(
 			GFSDK_Aftermath_Version_API,
 			GFSDK_Aftermath_GpuCrashDumpWatchedApiFlags_Vulkan, 0, gpuCrashDumpCallback, 0, 0, this);
 
 		aftermathActive = true;
+#endif
 	}
 
 

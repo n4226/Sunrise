@@ -1,6 +1,7 @@
 #pragma once
 
 #include "srpch.h"
+#include "../../Math.h"
 
 namespace sunrise::math
 {
