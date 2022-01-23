@@ -23,7 +23,6 @@
 		205CAD4BE51203BD9980AB8B /* imgui_impl_vulkan.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A943EED3F1E32D05150EE513 /* imgui_impl_vulkan.cpp */; };
 		207910E3E7DDCBD572959F23 /* CameraSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84BBE12B722373DD0F1D676B /* CameraSystem.cpp */; };
 		209B1DB3C810B96570D5C3F3 /* FileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6977C75B481A62CDFCFC659B /* FileManager.cpp */; };
-		24A4A98B3489D5BD20FD5FCB /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DBEF673CFA89265C6CFA4B3 /* imgui_widgets.cpp */; };
 		2846C84FECFC1EC1A16AC68F /* WorldClock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D0E89D765ADC80988D98017 /* WorldClock.cpp */; };
 		2ED63A8528768C3718F7A0C5 /* GPUComputeStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F83CDED613C5F5F08572C2D /* GPUComputeStage.cpp */; };
 		2F993893DB4FA54508C5FED3 /* SceneRenderCoordinator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CEBBD5B4F5809CD077E7B9B /* SceneRenderCoordinator.cpp */; };
@@ -35,7 +34,6 @@
 		39DCED8F696D4C81D5CDFBCF /* StaticMaterialTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E82343B721EDFA69D74949F7 /* StaticMaterialTable.cpp */; };
 		3AA1F3594AEED74B48DBA199 /* uniforms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 842C16012BA1B1B3D466BC41 /* uniforms.cpp */; };
 		4259DB40070F31B2BB7DD980 /* Triangulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98887728E127B55A04536D68 /* Triangulation.cpp */; };
-		431156DF27585F11AB458D1F /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 86FC1887B7E01079CAF846C7 /* imgui.cpp */; };
 		45FF5DB3E02352E5904933F3 /* Bezier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9AAB39B1E04F88D9BE881DB /* Bezier.cpp */; };
 		488454436A20917562972A83 /* MaterialManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08CE670B7BEFF3FDDCB5354B /* MaterialManager.cpp */; };
 		49455D6010AA18529B61EBA0 /* MeshPrimatives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9DAE048A74272FA443C6688 /* MeshPrimatives.cpp */; };
@@ -69,10 +67,8 @@
 		8C2DD34924A5C0BB508CB189 /* imgui_impl_glfw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D774D3F17198C92321BEAA31 /* imgui_impl_glfw.cpp */; };
 		8D76BC24E48C649610D4FA64 /* SimlinkMessages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5F87A4C1143CA7EFF75B08C /* SimlinkMessages.cpp */; };
 		91BF928BA1A4BEBD8E1848CB /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA0D40F35BF6DCE5531DEF33 /* Path.cpp */; };
-		92DC90D9ADA8FF8BB1799719 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D80E13CC58F533E587F21 /* imgui_draw.cpp */; };
 		937910965531A208FC4C6ED6 /* TerrainMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25ED0D7ED9E926B0BB9B63BE /* TerrainMeshLoader.cpp */; };
 		96700F13329DCB451D5AC553 /* DeferredPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCADFA3BB67E262DA410A87B /* DeferredPipeline.cpp */; };
-		9B411647B60D84F9B9DE1C87 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 434C746FB07482E1B20772AF /* imgui_demo.cpp */; };
 		9BB687D5891E1A8726180E15 /* UIScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7AF5625D878014CF0264E09D /* UIScene.cpp */; };
 		9C49595D0120A88FCDEE6F9D /* UISceneRenderCoordinator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45BA9865754AF757E1ABA6A5 /* UISceneRenderCoordinator.cpp */; };
 		9DF0DE2BBF8D1B5DB803B46B /* GPURenderStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF4A133E3162E2543DB6F73 /* GPURenderStage.cpp */; };
@@ -86,7 +82,6 @@
 		C736B6D3BC1B10C5DEEF2513 /* ResourceTransferTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76F9DEDB709A308D611B451B /* ResourceTransferTask.cpp */; };
 		CDFA21FBFD8A80ED69EB303B /* TerrainGPUStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8125F63E1DD1615973865A3 /* TerrainGPUStage.cpp */; };
 		D03E9C71F1DAD9A3EA5172B1 /* ImGuiVulkanContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2689899258A258B864F66D9 /* ImGuiVulkanContainer.cpp */; };
-		D14A54334532CBE567807A73 /* imgui_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D059039B96E6FB0D04E921DB /* imgui_tables.cpp */; };
 		D4B1A8E7BA48B0197D8DBF27 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B78F724F11908941D8D7808F /* FileSystem.cpp */; };
 		D72B13F13276642320A84A31 /* ImGuiStage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8845219BA3B920B2FA98059 /* ImGuiStage.cpp */; };
 		D7DBC7FB1D7D3DAD6A81AE3B /* TrianglePipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A5862D83A54762F50BCE0BC3 /* TrianglePipeline.cpp */; };
@@ -104,19 +99,6 @@
 		FE10D983E10C5FB5F624CFC3 /* WorldTerrainPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F11F52BA134AB1D7A35E36B /* WorldTerrainPipeline.cpp */; };
 		FFF0EA76D74415A850B180B6 /* BinaryFileType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FEF119E6753CC90F20B9FDE /* BinaryFileType.cpp */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		3E8FC154B01AD9C65F1BFF94 /* Embed Libraries */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Libraries";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		001D809D9A77698FD6AFCEDD /* GpuStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GpuStage.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GpuStage.h"; sourceTree = "<group>"; };
@@ -151,7 +133,6 @@
 		241C2BE91DBC7D9B0E3D9229 /* SingalPassRenderPassManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SingalPassRenderPassManager.h; path = src/Sunrise/Sunrise/graphics/vulkan/SingalPassRenderPassManager.h; sourceTree = "<group>"; };
 		25ED0D7ED9E926B0BB9B63BE /* TerrainMeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainMeshLoader.cpp; path = src/Sunrise/Sunrise/world/terrain/TerrainMeshLoader.cpp; sourceTree = "<group>"; };
 		28B818BC715756EE94830EFC /* MeshRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MeshRendering.cpp; path = src/Sunrise/Sunrise/math/mesh/MeshRendering.cpp; sourceTree = "<group>"; };
-		2DBEF673CFA89265C6CFA4B3 /* imgui_widgets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_widgets.cpp; path = vendor/imgui/imgui_widgets.cpp; sourceTree = "<group>"; };
 		2FF0116F788F4FA19BBB07AF /* Dispatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Dispatcher.h; path = src/Sunrise/Sunrise/dependencyManagment/Dispatcher.h; sourceTree = "<group>"; };
 		32ADB1D5F93BA947673DD015 /* Engine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Engine.cpp; path = src/Sunrise/Sunrise/core/Engine.cpp; sourceTree = "<group>"; };
 		3452C9FFE84EE331CA01203F /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Buffer.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/Buffer.cpp; sourceTree = "<group>"; };
@@ -161,7 +142,6 @@
 		3AFB23CBFFB07A3DB41F220B /* RenderSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RenderSystem.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/RenderSystem.h; sourceTree = "<group>"; };
 		3BA355A9AF8BCD5BD1D97BE9 /* Stage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Stage.h; path = src/Sunrise/Sunrise/dependencyManagment/Stage.h; sourceTree = "<group>"; };
 		4000F72F9C87FBA1252AB56F /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h; sourceTree = "<group>"; };
-		434C746FB07482E1B20772AF /* imgui_demo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_demo.cpp; path = vendor/imgui/imgui_demo.cpp; sourceTree = "<group>"; };
 		45BA9865754AF757E1ABA6A5 /* UISceneRenderCoordinator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UISceneRenderCoordinator.cpp; path = src/Sunrise/Sunrise/scene/included/UISceneRenderCoordinator.cpp; sourceTree = "<group>"; };
 		46D87F89D6CE5A3B93C305C9 /* WorldSceneRenderCoordinator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldSceneRenderCoordinator.cpp; path = src/Sunrise/Sunrise/world/rendering/WorldSceneRenderCoordinator.cpp; sourceTree = "<group>"; };
 		46F052D360D9B5051C5FC913 /* ComposableRenderPass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ComposableRenderPass.h; path = src/Sunrise/Sunrise/graphics/vulkan/ComposableRenderPass.h; sourceTree = "<group>"; };
@@ -221,7 +201,6 @@
 		857CF2183872FBCA89955858 /* ConfigSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConfigSystem.h; path = src/Sunrise/Sunrise/configuration/ConfigSystem.h; sourceTree = "<group>"; };
 		861A74ADC886C11F80AD32ED /* TrianglePipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrianglePipeline.h; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/TrianglePipeline.h; sourceTree = "<group>"; };
 		86F43C5239EA46048B0CA292 /* MeshPrimatives.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MeshPrimatives.h; path = src/Sunrise/Sunrise/math/mesh/MeshPrimatives.h; sourceTree = "<group>"; };
-		86FC1887B7E01079CAF846C7 /* imgui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui.cpp; path = vendor/imgui/imgui.cpp; sourceTree = "<group>"; };
 		88DEE6E126BFE793FE3E2D21 /* CRPHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CRPHolder.h; path = src/Sunrise/Sunrise/graphics/vulkan/CRPHolder.h; sourceTree = "<group>"; };
 		89CCC37F27ADC431FF2C09BF /* Stage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Stage.cpp; path = src/Sunrise/Sunrise/dependencyManagment/Stage.cpp; sourceTree = "<group>"; };
 		8A2EEE0AD2CE2C3CF5F9E44A /* TerrainSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainSystem.h; path = src/Sunrise/Sunrise/world/terrain/TerrainSystem.h; sourceTree = "<group>"; };
@@ -230,7 +209,7 @@
 		8F11F52BA134AB1D7A35E36B /* WorldTerrainPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldTerrainPipeline.cpp; path = src/Sunrise/Sunrise/world/gfxPipelines/WorldTerrainPipeline.cpp; sourceTree = "<group>"; };
 		92C7C8F7E9DD716916260737 /* GPUComputeStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPUComputeStage.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUComputeStage.h"; sourceTree = "<group>"; };
 		956EFC332B980E25ECFE6A73 /* GpuStage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GpuStage.cpp; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GpuStage.cpp"; sourceTree = "<group>"; };
-		95951D7896481A6A0A29EBB8 /* libSunrise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSunrise.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		95951D7896481A6A0A29EBB8 /* libSunrise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSunrise.a; path = libSunrise.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		97366397EDAFD7C9E6D819D7 /* ResourceHeap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ResourceHeap.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/ResourceHeap.cpp; sourceTree = "<group>"; };
 		97ECC631269DF72382281471 /* ANewGPUStageSystemDesign.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ANewGPUStageSystemDesign.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/ANewGPUStageSystemDesign.h"; sourceTree = "<group>"; };
 		98887728E127B55A04536D68 /* Triangulation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Triangulation.cpp; path = src/Sunrise/Sunrise/math/mesh/Triangulation.cpp; sourceTree = "<group>"; };
@@ -288,8 +267,6 @@
 		CD57D5F6B2EEDD287633EC36 /* TerrainQuadTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainQuadTree.h; path = src/Sunrise/Sunrise/world/terrain/TerrainQuadTree.h; sourceTree = "<group>"; };
 		CE533E3124CCB2631DF4F471 /* VkAbstractions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VkAbstractions.h; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/VkAbstractions.h; sourceTree = "<group>"; };
 		CE95AB752896C267EFDDB9B5 /* IndexAllocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IndexAllocator.h; path = src/Sunrise/Sunrise/memory/IndexAllocator.h; sourceTree = "<group>"; };
-		CF9D80E13CC58F533E587F21 /* imgui_draw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_draw.cpp; path = vendor/imgui/imgui_draw.cpp; sourceTree = "<group>"; };
-		D059039B96E6FB0D04E921DB /* imgui_tables.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_tables.cpp; path = vendor/imgui/imgui_tables.cpp; sourceTree = "<group>"; };
 		D158E460B6EFEB927A34FAA0 /* TerrainSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TerrainSystem.cpp; path = src/Sunrise/Sunrise/world/terrain/TerrainSystem.cpp; sourceTree = "<group>"; };
 		D1FC310D75635EBF8C99174D /* TerrainGPUStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TerrainGPUStage.h; path = src/Sunrise/Sunrise/world/rendering/terrain/TerrainGPUStage.h; sourceTree = "<group>"; };
 		D234D204C32C3FF62F2FC044 /* Bimage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Bimage.h; path = src/Sunrise/Sunrise/fileFormats/binary/Bimage.h; sourceTree = "<group>"; };
@@ -328,6 +305,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3E8FC154B01AD9C65F1BFF94 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXGroup section */
 		0519F9421FE667F423B6FF82 /* gfxPipelines */ = {
@@ -608,11 +598,6 @@
 			isa = PBXGroup;
 			children = (
 				3D507D659891D0D76BEC1BA5 /* backends */,
-				86FC1887B7E01079CAF846C7 /* imgui.cpp */,
-				434C746FB07482E1B20772AF /* imgui_demo.cpp */,
-				CF9D80E13CC58F533E587F21 /* imgui_draw.cpp */,
-				D059039B96E6FB0D04E921DB /* imgui_tables.cpp */,
-				2DBEF673CFA89265C6CFA4B3 /* imgui_widgets.cpp */,
 			);
 			name = imgui;
 			sourceTree = "<group>";
@@ -652,13 +637,6 @@
 				BBB533F7CD6C73E942DA6237 /* concrete */,
 			);
 			name = "GPU Stages";
-			sourceTree = "<group>";
-		};
-		8F9FF323A157331516C52163 /* thirdPartyLibs */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = thirdPartyLibs;
 			sourceTree = "<group>";
 		};
 		90D4306701F6D159B7BD7EA7 /* input */ = {
@@ -911,7 +889,6 @@
 				5A651303B46629F57BAD2143 /* ImGuiStage.h */,
 				B2689899258A258B864F66D9 /* ImGuiVulkanContainer.cpp */,
 				472EBBC3577B9FB555686A03 /* ImGuiVulkanContainer.h */,
-				8F9FF323A157331516C52163 /* thirdPartyLibs */,
 			);
 			name = imGui;
 			sourceTree = "<group>";
@@ -954,21 +931,14 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			attributes = {
-			};
 			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "Sunrise" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = en;
 			hasScannedForEncodings = 1;
-			knownRegions = (
-				en,
-				Base,
-			);
 			mainGroup = C78ACD895A96267BA2CB1BC9 /* Sunrise */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3CF3265EDFE14D106F072C9E /* Sunrise */,
+				3CF3265EDFE14D106F072C9E /* libSunrise.a */,
 			);
 		};
 /* End PBXProject section */
@@ -996,7 +966,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\necho on\ncp -f ../Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../bin/Debug-macosx-universal/FlightSimTerrainSystem\nfi\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\necho on\ncp -f ../Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../bin/Release-macosx-universal/FlightSimTerrainSystem\nfi\nif [ \"${CONFIGURATION}\" = \"Dist\" ]; then\necho on\ncp -f ../Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../bin/Dist-macosx-universal/FlightSimTerrainSystem\nfi";
+			shellScript = "set -e\nif [ \"${CONFIGURATION}\" = \"Debug\" ]; then\necho on\ncp -f ../../extern/Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../../bin/Debug-macosx-x86_64/SunriseWorldMeshGen\nfi\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\necho on\ncp -f ../../extern/Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../../bin/Release-macosx-x86_64/SunriseWorldMeshGen\nfi\nif [ \"${CONFIGURATION}\" = \"Dist\" ]; then\necho on\ncp -f ../../extern/Sunrise/vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll ../../bin/Dist-macosx-x86_64/SunriseWorldMeshGen\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1096,21 +1066,21 @@
 				779F3BD9A88333CBBB9B6A19 /* srpch.cpp in Sources */,
 				8C2DD34924A5C0BB508CB189 /* imgui_impl_glfw.cpp in Sources */,
 				205CAD4BE51203BD9980AB8B /* imgui_impl_vulkan.cpp in Sources */,
-				431156DF27585F11AB458D1F /* imgui.cpp in Sources */,
-				9B411647B60D84F9B9DE1C87 /* imgui_demo.cpp in Sources */,
-				92DC90D9ADA8FF8BB1799719 /* imgui_draw.cpp in Sources */,
-				D14A54334532CBE567807A73 /* imgui_tables.cpp in Sources */,
-				24A4A98B3489D5BD20FD5FCB /* imgui_widgets.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		174BD86569D203573C1666A5 /* Dist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
@@ -1127,29 +1097,54 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = (
-					"C:/code/visual",
-					"studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 					"C:/VulkanSDK/1.2.154.1/Lib",
 					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
 					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
 					"vendor/marl-main/marl-main/build/Release",
 				);
-				OBJROOT = "../bin-int/Dist-macosx-universal/Sunrise";
+				OBJROOT = "../../bin-int/Dist-macosx-x86_64/Sunrise";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lvulkan-1",
 					"-lmarl",
 				);
-				SYMROOT = "../bin/Dist-macosx-universal/Sunrise";
-				USER_HEADER_SEARCH_PATHS = "src src/Sunrise vendor/spdlog/include C:/VulkanSDK/1.2.154.1/Include vendor/glm-master vendor/marl-main/marl-main/include vendor/stb vendor/mango-master/mango-master/include vendor/libigl/include vendor/HTTPRequest/include vendor/httplib/include vendor/rapidjson/include vendor/libguarded/src vendor/nlohmann/include vendor/date/include vendor/entt/single_include vendor/imgui vendor/asio-1.18.1/include vendor/CGAL-5.3/include vendor/boost_1_76_0 vendor/eigen /usr/local/include vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include";
+				SYMROOT = "../../bin/Dist-macosx-x86_64/Sunrise";
+				USER_HEADER_SEARCH_PATHS = (
+					src,
+					src/Sunrise,
+					vendor/spdlog/include,
+					"C:/VulkanSDK/1.2.154.1/Include",
+					"vendor/glm-master",
+					"vendor/marl-main/marl-main/include",
+					vendor/stb,
+					"vendor/mango-master/mango-master/include",
+					vendor/libigl/include,
+					vendor/HTTPRequest/include,
+					vendor/httplib/include,
+					vendor/rapidjson/include,
+					vendor/libguarded/src,
+					vendor/nlohmann/include,
+					vendor/date/include,
+					vendor/entt/single_include,
+					vendor/imgui,
+					"vendor/asio-1.18.1/include",
+					"vendor/CGAL-5.3/include",
+					vendor/boost_1_76_0,
+					vendor/eigen,
+					/usr/local/include,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
+				);
 			};
 			name = Dist;
 		};
 		28C788C78408DC3957632707 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				CONFIGURATION_BUILD_DIR = "../bin/Release-macosx-universal/Sunrise";
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				CONFIGURATION_BUILD_DIR = "../../bin/Release-macosx-x86_64/Sunrise";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
 				INSTALL_PATH = /usr/local/lib;
@@ -1160,8 +1155,10 @@
 		2E84968D5E16657F3923A4CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				CONFIGURATION_BUILD_DIR = "../bin/Debug-macosx-universal/Sunrise";
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				CONFIGURATION_BUILD_DIR = "../../bin/Debug-macosx-x86_64/Sunrise";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
 				INSTALL_PATH = /usr/local/lib;
@@ -1172,7 +1169,9 @@
 		39C68838DD12116AF7E2DE78 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
@@ -1191,28 +1190,53 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = (
-					"C:/code/visual",
-					"studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 					"C:/VulkanSDK/1.2.154.1/Lib",
 					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
 					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
 					"vendor/marl-main/marl-main/build/Debug",
 				);
-				OBJROOT = "../bin-int/Debug-macosx-universal/Sunrise";
+				OBJROOT = "../../bin-int/Debug-macosx-x86_64/Sunrise";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lvulkan-1",
 					"-lmarl",
 				);
-				SYMROOT = "../bin/Debug-macosx-universal/Sunrise";
-				USER_HEADER_SEARCH_PATHS = "src src/Sunrise vendor/spdlog/include C:/VulkanSDK/1.2.154.1/Include vendor/glm-master vendor/marl-main/marl-main/include vendor/stb vendor/mango-master/mango-master/include vendor/libigl/include vendor/HTTPRequest/include vendor/httplib/include vendor/rapidjson/include vendor/libguarded/src vendor/nlohmann/include vendor/date/include vendor/entt/single_include vendor/imgui vendor/asio-1.18.1/include vendor/CGAL-5.3/include vendor/boost_1_76_0 vendor/eigen /usr/local/include vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include";
+				SYMROOT = "../../bin/Debug-macosx-x86_64/Sunrise";
+				USER_HEADER_SEARCH_PATHS = (
+					src,
+					src/Sunrise,
+					vendor/spdlog/include,
+					"C:/VulkanSDK/1.2.154.1/Include",
+					"vendor/glm-master",
+					"vendor/marl-main/marl-main/include",
+					vendor/stb,
+					"vendor/mango-master/mango-master/include",
+					vendor/libigl/include,
+					vendor/HTTPRequest/include,
+					vendor/httplib/include,
+					vendor/rapidjson/include,
+					vendor/libguarded/src,
+					vendor/nlohmann/include,
+					vendor/date/include,
+					vendor/entt/single_include,
+					vendor/imgui,
+					"vendor/asio-1.18.1/include",
+					"vendor/CGAL-5.3/include",
+					vendor/boost_1_76_0,
+					vendor/eigen,
+					/usr/local/include,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
+				);
 			};
 			name = Debug;
 		};
 		B9F150725E43EE24707C36B2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
@@ -1229,29 +1253,54 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = (
-					"C:/code/visual",
-					"studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 					"C:/VulkanSDK/1.2.154.1/Lib",
 					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
 					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
 					"vendor/marl-main/marl-main/build/Release",
 				);
-				OBJROOT = "../bin-int/Release-macosx-universal/Sunrise";
+				OBJROOT = "../../bin-int/Release-macosx-x86_64/Sunrise";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lvulkan-1",
 					"-lmarl",
 				);
-				SYMROOT = "../bin/Release-macosx-universal/Sunrise";
-				USER_HEADER_SEARCH_PATHS = "src src/Sunrise vendor/spdlog/include C:/VulkanSDK/1.2.154.1/Include vendor/glm-master vendor/marl-main/marl-main/include vendor/stb vendor/mango-master/mango-master/include vendor/libigl/include vendor/HTTPRequest/include vendor/httplib/include vendor/rapidjson/include vendor/libguarded/src vendor/nlohmann/include vendor/date/include vendor/entt/single_include vendor/imgui vendor/asio-1.18.1/include vendor/CGAL-5.3/include vendor/boost_1_76_0 vendor/eigen /usr/local/include vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include";
+				SYMROOT = "../../bin/Release-macosx-x86_64/Sunrise";
+				USER_HEADER_SEARCH_PATHS = (
+					src,
+					src/Sunrise,
+					vendor/spdlog/include,
+					"C:/VulkanSDK/1.2.154.1/Include",
+					"vendor/glm-master",
+					"vendor/marl-main/marl-main/include",
+					vendor/stb,
+					"vendor/mango-master/mango-master/include",
+					vendor/libigl/include,
+					vendor/HTTPRequest/include,
+					vendor/httplib/include,
+					vendor/rapidjson/include,
+					vendor/libguarded/src,
+					vendor/nlohmann/include,
+					vendor/date/include,
+					vendor/entt/single_include,
+					vendor/imgui,
+					"vendor/asio-1.18.1/include",
+					"vendor/CGAL-5.3/include",
+					vendor/boost_1_76_0,
+					vendor/eigen,
+					/usr/local/include,
+					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
+				);
 			};
 			name = Release;
 		};
 		C2505A3AEA8B12ECD226A07A /* Dist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				CONFIGURATION_BUILD_DIR = "../bin/Dist-macosx-universal/Sunrise";
+				ALWAYS_SEARCH_USER_PATHS = (
+					YES,
+				);
+				CONFIGURATION_BUILD_DIR = "../../bin/Dist-macosx-x86_64/Sunrise";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
 				INSTALL_PATH = /usr/local/lib;
@@ -1272,7 +1321,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		E1DE5F471084B33969C60D87 /* Build configuration list for PBXNativeTarget "Sunrise" */ = {
+		E1DE5F471084B33969C60D87 /* Build configuration list for PBXNativeTarget "libSunrise.a" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2E84968D5E16657F3923A4CD /* Debug */,
@@ -1283,6 +1332,6 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-	};
-	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+};
+rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
 }
