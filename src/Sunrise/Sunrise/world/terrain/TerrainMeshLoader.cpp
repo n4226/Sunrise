@@ -261,9 +261,12 @@ namespace sunrise {
 
 	void TerrainMeshLoader::removeDrawChunk(TerrainQuadTreeNode* node, bool inJob)
 	{
-		PROFILE_FUNCTION
+        PROFILE_FUNCTION;
+        
+        // to make sure func is idempotent
+        if (!node->hasdraw) return;
 
-			auto drawObjects = terrainSystem->drawObjects.lock();
+        auto drawObjects = terrainSystem->drawObjects.lock();
 		//printf("%d before \n", drawObjects->size());
 		node->hasdraw = false;
 		auto draw = (*drawObjects)[node];

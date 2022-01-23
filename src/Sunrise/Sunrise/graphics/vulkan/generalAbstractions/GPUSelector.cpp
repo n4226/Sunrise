@@ -77,7 +77,9 @@ namespace sunrise::gfx {
 
 
 		QueueFamilyIndices indices;
+        std::vector<uint32_t> backupTransferIndices;
 
+        
 		int i = 0;
 		for (const auto& queueFamily : queueFamilies) {
 
@@ -90,17 +92,28 @@ namespace sunrise::gfx {
 				indices.graphicsFamily = i;
 
 				indices.presentFamily = i;
+                
+                if (queueFamily.queueFlags & VK_QUEUE_TRANSFER_BIT) {
+                    backupTransferIndices.push_back(i);
+                }
 			}
 			else if (queueFamily.queueFlags & VK_QUEUE_TRANSFER_BIT) {
 				indices.resourceTransferFamily = i;
 			}
 
+            
+            
 			if (presentSupport) {
 			}
 
 			i++;
 		}
 
+        //TODO: make more robost and maybe chose didferent gueew from graphics
+        if (!indices.resourceTransferFamily.has_value()) {
+            indices.resourceTransferFamily = backupTransferIndices[0];
+        }
+        
 		return indices;
 	}
 

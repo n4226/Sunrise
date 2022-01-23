@@ -102,8 +102,14 @@
 /// 100,000
 #define maxModelUniformDescriptorArrayCount 100'000
 
+//TODO: fix max material stuff
+#ifdef SR_PLATFORM_MACOS
+#define maxMaterialTextureDescriptorArrayCount 16
+#else
 /// 100,000
 #define maxMaterialTextureDescriptorArrayCount 100'000
+#endif
+
 /// normally 10,000
 #define FLOATING_ORIGIN_SNAP_DISTANCE 100'000
 

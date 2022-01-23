@@ -112,7 +112,7 @@ namespace sunrise::gfx {
 	DescriptorPool::DescriptorPool(vk::Device device,CreateOptions&& options)
 		: device(device)
 	{
-		std::vector<vk::DescriptorPoolSize> poolSizes;
+        std::vector<vk::DescriptorPoolSize> poolSizes{};
 		poolSizes.reserve(options.typeSizes.size());
 
 		for (auto size : options.typeSizes) {
@@ -131,7 +131,10 @@ namespace sunrise::gfx {
 
 		// there should be a set per swap image per physical window
 		poolInfo.maxSets = options.maxSets;
+        poolInfo.pNext = nullptr;
 
+        
+        
 		vkItem = device.createDescriptorPool(poolInfo);
 	}
 
@@ -152,7 +155,7 @@ namespace sunrise::gfx {
 		device.freeDescriptorSets(vkItem, rawSets);
 	}
 
-	std::vector<DescriptorSet*> DescriptorPool::allocate(std::vector<vk::DescriptorSetLayout>&& layouts)
+	std::vector<DescriptorSet*> DescriptorPool::allocate(const std::vector<vk::DescriptorSetLayout>& layouts, const std::vector<uint32_t>& varibleArrayLengths)
 	{
 		std::vector<DescriptorSet*> sets;
 
@@ -162,6 +165,15 @@ namespace sunrise::gfx {
 		allocInfo.descriptorSetCount = static_cast<uint32_t>(layouts.size());
 		allocInfo.pSetLayouts = layouts.data();
 
+        
+        //for descriptor instancing varible array
+        vk::DescriptorSetVariableDescriptorCountAllocateInfo varibleInfo{};
+        varibleInfo.pNext = nullptr;
+        varibleInfo.descriptorSetCount = varibleArrayLengths.size();
+        varibleInfo.pDescriptorCounts = varibleArrayLengths.data();
+        
+        allocInfo.pNext = &varibleInfo;
+        
 		//TODO: assuming one to one relationship betwseen layout array and returned sets in terms of index - docs are not clear about this
 		auto rawSets = device.allocateDescriptorSets(allocInfo);
 
@@ -170,29 +182,12 @@ namespace sunrise::gfx {
 			sets.push_back(new DescriptorSet(rawSets[i],layoutData[layouts[i]]));
 		}
 
+        
+        
+        
 		return sets;
 	}
 
-	std::vector<DescriptorSet*> DescriptorPool::allocate(std::vector<vk::DescriptorSetLayout> layouts)
-	{
-		std::vector<DescriptorSet*> sets;
-
-		vk::DescriptorSetAllocateInfo allocInfo;
-
-		allocInfo.descriptorPool = vkItem;
-		allocInfo.descriptorSetCount = static_cast<uint32_t>(layouts.size());
-		allocInfo.pSetLayouts = layouts.data();
-
-		//TODO: assuming one to one relationship betwseen layout array and returned sets in terms of index - docs are not clear about this
-		auto rawSets = device.allocateDescriptorSets(allocInfo);
-
-		sets.reserve(rawSets.size());
-		for (size_t i = 0; i < rawSets.size(); i++) {
-			sets.push_back(new DescriptorSet(rawSets[i], layoutData[layouts[i]]));
-		}
-
-		return sets;
-	}
 
 	//NOTE: this should be very efficent as it is in main render path
 	void DescriptorPool::update(std::vector<UpdateOperation>&& ops)

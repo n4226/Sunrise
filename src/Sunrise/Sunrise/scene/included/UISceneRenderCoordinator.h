@@ -1,7 +1,6 @@
 #pragma once
 
 
-class UISceneRenderCoordinator
-{
+class UISceneRenderCoordinator {
 };
 

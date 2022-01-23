@@ -10,8 +10,8 @@ namespace sunrise {
 	class SUNRISE_API Scene
 	{
 	public:
-		Scene(Application* app);
-		Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool sceneControlsCoordLifecycle = false);
+		Scene(Application* app, bool inControlOfCoordinatorLifecycle = true);
+		Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool inControlOfCoordinatorLifecycle = false);
 		virtual ~Scene();
 
 		virtual void load() = 0;

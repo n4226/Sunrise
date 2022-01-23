@@ -166,7 +166,6 @@ namespace sunrise {
 
 
 			ImGuiStage* imguiStage;
-
 		};
 
 

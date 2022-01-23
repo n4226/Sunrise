@@ -58,8 +58,13 @@ namespace sunrise {
 	}
 	void Engine::run()
 	{
-		//TODO: Add back runtime profiling 
-		//Instrumentor::Get().BeginSession("Run", "instruments_Run.profile");
+		//TODO: Add back runtime profiling
+        
+        bool startProfiling = false;
+        
+        if (startProfiling)
+            app->startProfileSession();
+            //Instrumentor::Get().BeginSession("Run", "instruments_Run.profile");
 		{
 			PROFILE_FUNCTION;
 
@@ -68,7 +73,7 @@ namespace sunrise {
 				auto noApp = dynamic_cast<sunrise::NO_APPLICATION*>(app);
 				if (noApp != nullptr) {
 					SR_CORE_WARN("running in no application mode -- only basic operations will be available");
-					Instrumentor::Get().EndSession();
+					//Instrumentor::Get().EndSession();
 					return;
 				}
 				else {

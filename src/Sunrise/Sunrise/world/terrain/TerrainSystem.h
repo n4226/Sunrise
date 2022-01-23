@@ -84,6 +84,10 @@ namespace sunrise {
 
 		//async resources
 		marl::Ticket::Queue ticketQueue;
+        
+        /// true when the big tree update task is running
+        /// needed for teardown
+        libguarded::shared_guarded<bool> treeUpdateJobActive = libguarded::shared_guarded<bool>(false);
 
 		// temp resources
 		std::set<TerrainQuadTreeNode*> toSplit = {};
@@ -91,6 +95,7 @@ namespace sunrise {
 		std::set<TerrainQuadTreeNode*> toDestroyDraw = {};
 		std::set<TerrainQuadTreeNode*> toDrawDraw = {};
 
+        
 #pragma endregion
 
 #pragma region Tree Traversal and Updating Methods

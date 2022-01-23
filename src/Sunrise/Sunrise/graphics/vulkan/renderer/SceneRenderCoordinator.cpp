@@ -20,7 +20,10 @@ namespace sunrise::gfx {
 
 	SceneRenderCoordinator::~SceneRenderCoordinator()
 	{
-
+        if (imguiStage)
+            delete imguiStage;
+        
+        //deleting stages is done in super class
 	}
 
 	void SceneRenderCoordinator::createPasses()

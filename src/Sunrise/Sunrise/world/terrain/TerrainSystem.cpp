@@ -76,13 +76,41 @@ namespace sunrise {
 	/*	for (auto pool : cmdBufferPools)
 			for (auto spool : pool)
 				app.renderers[0]->device.destroyCommandPool(spool);*/
+        
+        // if job updating tree is running block until complete to avoid major problems
+        
+       
+        //TODO: abstract this wait type thing to function - also used in terraingpupass
+        while (true) {
+            {
+                auto threadRunning = treeUpdateJobActive.lock();
+
+                // todo: make this waiting much better
+                if (!(*threadRunning)) {
+                    break;
+                }
+            }
+            SR_CORE_INFO("sleeping waiting for terrain sys encode job on remote thread to finish");
+            
+#ifdef SR_PLATFORM_MACOS
+            sleep(1);
+#else
+            Sleep(1);
+#endif
+        }
+        
+        // remove all draw objects;
+        for( auto chunk : tree.rootNodes) {
+            meshLoader.removeDrawChunk(chunk);
+        }
+        
 	}
 
 	void TerrainSystem::CreateRenderResources()
 	{
 		PROFILE_FUNCTION;
 
-		SR_CORE_TRACE("Creating Terrain System resources");
+//		SR_CORE_TRACE("Creating Terrain System resources");
 
 //
 //		cmdBufferPools.resize(app.renderers[0]->windows.size());
@@ -214,6 +242,11 @@ namespace sunrise {
 
 			//auto ticket = ticketQueue.take();
 
+            {
+                auto threadRunning = treeUpdateJobActive.lock();
+                *threadRunning = true;
+            }
+            
 			marl::schedule([this]() {
 				PROFILE_SCOPE("create draw draw job");
 					//MarlSafeTicketLock lock(ticket);
@@ -280,6 +313,12 @@ namespace sunrise {
 					*shouldRunLoop = true;
 					destroyAwaitingNodes = true;
 				}
+                
+                //for cleanup let main thread know job is not running
+                {
+                    auto threadRunning = treeUpdateJobActive.lock();
+                    *threadRunning = false;
+                }
 			});
 
 		}

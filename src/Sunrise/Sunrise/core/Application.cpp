@@ -14,6 +14,8 @@
 #include "backends/imgui_impl_vulkan.h"
 #include "backends/imgui_impl_glfw.h"
 
+#include <stdio.h>
+
 namespace sunrise {
 
     using namespace gfx;
@@ -69,11 +71,10 @@ namespace sunrise {
                 SR_CORE_TRACE("Initializing File System");
 
                 FileSystem::initilize();
-
             }
 
             if (config.wantsWindows) {
-                SR_CORE_TRACE("Initializing Configuration system");
+                SR_CORE_TRACE("Initializing Configuration system at path {}",FileManager::engineConfigDir());
                 configSystem.readFromDisk();
                 configSystem.writeHelpDoc();
             }
@@ -352,10 +353,21 @@ namespace sunrise {
         if (!config.wantsWindows || !config.vulkan) return;
 
         //TODO: fix this. see line below
-        SR_CORE_ERROR("deallocation of application objects (windows, renderers, devices, etc) not performed");
-
+        SR_CORE_ERROR("deallocation of application objects (windows, renderers, devices, etc) not performed correctly");
+        
+        //unload all scenes and cleasr acosiated render recourses
+        for (auto scene: loadedScenes) {
+            unloadScene(scene);
+            delete scene;
+        }
+        
+        
+        for (auto renderer : renderers) {
+            delete renderer;
+        }
+        
+        
         vk::DynamicLoader dl;
-
 
         auto dldid = vk::DispatchLoaderDynamic(instance, dl.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr"));
 
@@ -445,7 +457,7 @@ namespace sunrise {
         //return;
         //drawView();
 
-        if (!config.wantsWindows || !config.vulkan) return;
+        if (!config.wantsWindows || !config.vulkan || loadedScenes.size() == 0) return;
 
         // run application updates
         mousePosFrameDelta = mousePos - lastFrameMosPos;
@@ -496,6 +508,7 @@ namespace sunrise {
 
         ImGui::BeginMainMenuBar();
 
+        static bool timingView;
 
         if (ImGui::BeginMenu("File"))
         {
@@ -514,11 +527,23 @@ namespace sunrise {
         {
             ImGui::Separator();
 
-            static bool profiling = false;
+            static bool profiling = this->profiling;
             if (ImGui::MenuItem("Profile", "ctr+alt+p",&profiling)) {
-                
+                if (profiling) {
+                    startProfileSession();
+                }else {
+                    endProfileSession();
+                }
             }
+            
+            if (ImGui::MenuItem("Hot Reload Scene"))
+                hotReloadScene();
 
+            
+            ImGui::MenuItem("Timing View", "", &timingView);
+            
+            
+            
             ImGui::EndMenu();
         }
 
@@ -526,6 +551,45 @@ namespace sunrise {
 
         ImGui::EndMainMenuBar();
 
+        
+        if (timingView) {
+            ImGui::Begin("Frame Time");
+//            ImGui::Text("%f",);
+            
+            static std::vector<float> frames;
+            static int max_fps = 1000;
+            
+            int fps = (1/loadedScenes[0]->deltaTime);
+
+            //Get frames
+            if (frames.size() > 100) //Max seconds to show
+            {
+                for (size_t i = 1; i < frames.size(); i++)
+                {
+                    frames[i-1] = frames[i];
+                }
+                frames[frames.size() - 1] = fps;
+            }
+            else
+            {
+                frames.push_back(fps);
+            }
+//
+//            ImGui::Begin("FPS Graph", &active, flags);
+            
+//            char text[20];
+//            std::sprintf_s(text, 20, "Frames: %d", fps);
+            ImGui::Text("Frames: %d", fps);
+            
+            ImGui::PlotHistogram("Framerate", frames.data(), frames.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
+                if (ImGui::SliderInt("Max FPS", &max_fps, -1, 2000, NULL))
+                {
+//                    time->SetMaxFPS(max_fps);
+                }
+            
+            ImGui::End();
+        }
+        
     }
 
 
@@ -630,7 +694,7 @@ namespace sunrise {
             return index - physicalDevices.begin();
         }
 
-        SR_CORE_TRACE("goint to get queue family indicies");
+        SR_CORE_TRACE("going to get queue family indicies");
         auto loc_queueFamilyIndices = GPUSelector::gpuQueueFamilies(physicalDevice, windows[window]->surface);
 
 #if SR_SingleQueueForRenderDoc_onlyCreateOne
@@ -708,7 +772,7 @@ namespace sunrise {
         // devie extensions
         std::vector<const char*> extensionNames = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-#if !SR_RenderDocCompatible && VK_GPUDriven
+#if !SR_RenderDocCompatible && VK_GPUDriven && !SR_PLATFORM_MACOS
             VK_NV_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME
 #endif
         };
@@ -972,4 +1036,23 @@ namespace sunrise {
     bool Application::imguiValid() {
         return _imguiValid;
     }
+
+    bool Application::isProfiling() {
+        return profiling;
+    }
+    void Application::startProfileSession() {
+        if (profiling) return;
+        profiling = true;
+        Instrumentor::Get().BeginSession("Run", "instruments_Run.profile");
+    }
+    
+    void Application::endProfileSession() {
+        if (profiling)
+            Instrumentor::Get().EndSession();
+        profiling = false;
+    }
+
 }
+
+
+

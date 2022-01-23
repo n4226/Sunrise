@@ -20,7 +20,8 @@ namespace sunrise {
 	{
 	public:
 		MaterialManager(gfx::Renderer& renderer);
-
+        ~MaterialManager();
+        
 		void loadStaticEarth();
 
 		void loadMat(std::string& matRootPath, const char* matFolder);
@@ -53,7 +54,7 @@ namespace sunrise {
 			;
 		std::vector<gfx::ResourceTransferer::Task> pendingTasks = {};
 		std::vector<gfx::ResourceTransferer::Task> pendingGFXTasks = {};
-
+        
 		std::tuple<gfx::Buffer*, gfx::Image*> loadTex(const char* path, const char* name);
 
 		glm::uint32 FinishLoadingTexture(std::tuple<gfx::Buffer*, gfx::Image*> texture);

@@ -24,7 +24,16 @@ namespace sunrise::gfx {
 		pfnCmdDebugMarkerBegin = (PFN_vkCmdDebugMarkerBeginEXT)dldid.vkGetDeviceProcAddr(device, "vkCmdDebugMarkerBeginEXT");
 		pfnCmdDebugMarkerEnd = (PFN_vkCmdDebugMarkerEndEXT)dldid.vkGetDeviceProcAddr(device, "vkCmdDebugMarkerEndEXT");
 		pfnCmdDebugMarkerInsert = (PFN_vkCmdDebugMarkerInsertEXT)dldid.vkGetDeviceProcAddr(device, "vkCmdDebugMarkerInsertEXT");
+        
+#ifdef SR_PLATFORM_MACOS
+        SR_CORE_WARN("VK Debug being partly disabled for macOS (see VkDebugMarker.cpp for details)");
+#endif
 	}
+
+
+    VkDebug::~VkDebug() {
+    }
+
 
 	void VkDebug::nameObject(size_t handle, vk::DebugReportObjectTypeEXT objectType,const char* name) const
 	{
@@ -54,6 +63,7 @@ namespace sunrise::gfx {
 
 	void VkDebug::beginRegion(vk::CommandBuffer cmdBuff,const char* name, glm::vec4 color) const
 	{
+#ifndef SR_PLATFORM_MACOS
 		// Check for a valid function pointer
 		if (pfnCmdDebugMarkerBegin) {
 			VkDebugMarkerMarkerInfoEXT markerInfo = {};
@@ -62,14 +72,17 @@ namespace sunrise::gfx {
 			markerInfo.pMarkerName = name;
 			pfnCmdDebugMarkerBegin(static_cast<VkCommandBuffer>(cmdBuff), &markerInfo);
 		}
+#endif
 	}
 
 	void VkDebug::endRegion(vk::CommandBuffer cmdBuff) const
 	{
+#ifndef SR_PLATFORM_MACOS
 		// Check for a valid function pointer
 		if (pfnCmdDebugMarkerEnd) {
 			pfnCmdDebugMarkerEnd(static_cast<VkCommandBuffer>(cmdBuff));
 		}
+#endif
 	}
 
 
@@ -104,7 +117,8 @@ namespace sunrise::gfx {
 
 		aftermathActive = true;
 #endif
-	}
+    }
+
 
 
 

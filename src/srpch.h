@@ -83,6 +83,9 @@
 #include "Sunrise/Sunrise/core/core.h"
 #include "Sunrise/Sunrise/core/environment.h"
 
+//pasted in imgui dependancies
+
+
 // for IntelliSense
 namespace sunrise {
 

@@ -19,7 +19,7 @@ namespace sunrise {
 
 	VaribleIndexAllocator::~VaribleIndexAllocator()
 	{
-
+        SR_CORE_WARN("Varible index allocator destroctor not implimented - leaking objects");
 	}
 
 

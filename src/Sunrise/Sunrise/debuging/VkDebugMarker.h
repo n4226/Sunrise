@@ -9,10 +9,11 @@ namespace sunrise {
 	namespace gfx {
 
 		//TODO: make this work with multi gpu
-		class VkDebug
+		class VkDebug final
 		{
 		public:
 			VkDebug(vk::Device device, Application* app);
+            ~VkDebug();
 
 			// debug report api
 			void nameObject(size_t handle, vk::DebugReportObjectTypeEXT objectType, const char* name) const;

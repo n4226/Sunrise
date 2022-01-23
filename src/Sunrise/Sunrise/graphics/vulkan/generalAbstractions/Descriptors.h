@@ -226,8 +226,7 @@ namespace sunrise::gfx {
 		/// allocates one descriptor set for each layout in the input array of layouts
 		/// </summary>
 		/// <param name="layouts"></param>
-		std::vector<DescriptorSet*> allocate(std::vector<vk::DescriptorSetLayout>&& layouts);
-		std::vector<DescriptorSet*> allocate(std::vector<vk::DescriptorSetLayout> layouts);
+        std::vector<DescriptorSet*> allocate(const std::vector<vk::DescriptorSetLayout>& layouts, const std::vector<uint32_t>& varibleArrayLengths = {});
 
 		// api for spacific sets
 		

@@ -105,6 +105,19 @@
 		FFF0EA76D74415A850B180B6 /* BinaryFileType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FEF119E6753CC90F20B9FDE /* BinaryFileType.cpp */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3E8FC154B01AD9C65F1BFF94 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		001D809D9A77698FD6AFCEDD /* GpuStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GpuStage.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GpuStage.h"; sourceTree = "<group>"; };
 		01BEC477235B01A91BD19AB7 /* GraphicsPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicsPipeline.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/renderPipelines/GraphicsPipeline.cpp; sourceTree = "<group>"; };
@@ -217,7 +230,7 @@
 		8F11F52BA134AB1D7A35E36B /* WorldTerrainPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WorldTerrainPipeline.cpp; path = src/Sunrise/Sunrise/world/gfxPipelines/WorldTerrainPipeline.cpp; sourceTree = "<group>"; };
 		92C7C8F7E9DD716916260737 /* GPUComputeStage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GPUComputeStage.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUComputeStage.h"; sourceTree = "<group>"; };
 		956EFC332B980E25ECFE6A73 /* GpuStage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GpuStage.cpp; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/GpuStage.cpp"; sourceTree = "<group>"; };
-		95951D7896481A6A0A29EBB8 /* libSunrise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSunrise.a; path = libSunrise.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		95951D7896481A6A0A29EBB8 /* libSunrise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSunrise.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		97366397EDAFD7C9E6D819D7 /* ResourceHeap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ResourceHeap.cpp; path = src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/ResourceHeap.cpp; sourceTree = "<group>"; };
 		97ECC631269DF72382281471 /* ANewGPUStageSystemDesign.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ANewGPUStageSystemDesign.h; path = "src/Sunrise/Sunrise/graphics/vulkan/GPU Stages/ANewGPUStageSystemDesign.h"; sourceTree = "<group>"; };
 		98887728E127B55A04536D68 /* Triangulation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Triangulation.cpp; path = src/Sunrise/Sunrise/math/mesh/Triangulation.cpp; sourceTree = "<group>"; };
@@ -315,19 +328,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		3E8FC154B01AD9C65F1BFF94 /* Embed Libraries */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Libraries";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXGroup section */
 		0519F9421FE667F423B6FF82 /* gfxPipelines */ = {
@@ -654,6 +654,13 @@
 			name = "GPU Stages";
 			sourceTree = "<group>";
 		};
+		8F9FF323A157331516C52163 /* thirdPartyLibs */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = thirdPartyLibs;
+			sourceTree = "<group>";
+		};
 		90D4306701F6D159B7BD7EA7 /* input */ = {
 			isa = PBXGroup;
 			children = (
@@ -904,6 +911,7 @@
 				5A651303B46629F57BAD2143 /* ImGuiStage.h */,
 				B2689899258A258B864F66D9 /* ImGuiVulkanContainer.cpp */,
 				472EBBC3577B9FB555686A03 /* ImGuiVulkanContainer.h */,
+				8F9FF323A157331516C52163 /* thirdPartyLibs */,
 			);
 			name = imGui;
 			sourceTree = "<group>";
@@ -946,14 +954,21 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "Sunrise" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+				Base,
+			);
 			mainGroup = C78ACD895A96267BA2CB1BC9 /* Sunrise */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3CF3265EDFE14D106F072C9E /* libSunrise.a */,
+				3CF3265EDFE14D106F072C9E /* Sunrise */,
 			);
 		};
 /* End PBXProject section */
@@ -1091,16 +1106,11 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXVariantGroup section */
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
 		174BD86569D203573C1666A5 /* Dist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = (
-					YES,
-				);
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
@@ -1117,7 +1127,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = (
-					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/code/visual",
+					"studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 					"C:/VulkanSDK/1.2.154.1/Lib",
 					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
 					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
@@ -1130,40 +1141,14 @@
 					"-lmarl",
 				);
 				SYMROOT = "../bin/Dist-macosx-universal/Sunrise";
-				USER_HEADER_SEARCH_PATHS = (
-					src,
-					src/Sunrise,
-					vendor/spdlog/include,
-					"C:/VulkanSDK/1.2.154.1/Include",
-					"vendor/glm-master",
-					"vendor/marl-main/marl-main/include",
-					vendor/stb,
-					"vendor/mango-master/mango-master/include",
-					vendor/libigl/include,
-					vendor/HTTPRequest/include,
-					vendor/httplib/include,
-					vendor/rapidjson/include,
-					vendor/libguarded/src,
-					vendor/nlohmann/include,
-					vendor/date/include,
-					vendor/entt/single_include,
-					vendor/imgui,
-					"vendor/asio-1.18.1/include",
-					"vendor/CGAL-5.3/include",
-					vendor/boost_1_76_0,
-					vendor/eigen,
-					/usr/local/include,
-					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
-				);
+				USER_HEADER_SEARCH_PATHS = "src src/Sunrise vendor/spdlog/include C:/VulkanSDK/1.2.154.1/Include vendor/glm-master vendor/marl-main/marl-main/include vendor/stb vendor/mango-master/mango-master/include vendor/libigl/include vendor/HTTPRequest/include vendor/httplib/include vendor/rapidjson/include vendor/libguarded/src vendor/nlohmann/include vendor/date/include vendor/entt/single_include vendor/imgui vendor/asio-1.18.1/include vendor/CGAL-5.3/include vendor/boost_1_76_0 vendor/eigen /usr/local/include vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include";
 			};
 			name = Dist;
 		};
 		28C788C78408DC3957632707 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = (
-					YES,
-				);
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CONFIGURATION_BUILD_DIR = "../bin/Release-macosx-universal/Sunrise";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1175,9 +1160,7 @@
 		2E84968D5E16657F3923A4CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = (
-					YES,
-				);
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CONFIGURATION_BUILD_DIR = "../bin/Debug-macosx-universal/Sunrise";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1189,9 +1172,7 @@
 		39C68838DD12116AF7E2DE78 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = (
-					YES,
-				);
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
@@ -1210,7 +1191,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = (
-					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/code/visual",
+					"studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 					"C:/VulkanSDK/1.2.154.1/Lib",
 					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
 					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
@@ -1223,40 +1205,14 @@
 					"-lmarl",
 				);
 				SYMROOT = "../bin/Debug-macosx-universal/Sunrise";
-				USER_HEADER_SEARCH_PATHS = (
-					src,
-					src/Sunrise,
-					vendor/spdlog/include,
-					"C:/VulkanSDK/1.2.154.1/Include",
-					"vendor/glm-master",
-					"vendor/marl-main/marl-main/include",
-					vendor/stb,
-					"vendor/mango-master/mango-master/include",
-					vendor/libigl/include,
-					vendor/HTTPRequest/include,
-					vendor/httplib/include,
-					vendor/rapidjson/include,
-					vendor/libguarded/src,
-					vendor/nlohmann/include,
-					vendor/date/include,
-					vendor/entt/single_include,
-					vendor/imgui,
-					"vendor/asio-1.18.1/include",
-					"vendor/CGAL-5.3/include",
-					vendor/boost_1_76_0,
-					vendor/eigen,
-					/usr/local/include,
-					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
-				);
+				USER_HEADER_SEARCH_PATHS = "src src/Sunrise vendor/spdlog/include C:/VulkanSDK/1.2.154.1/Include vendor/glm-master vendor/marl-main/marl-main/include vendor/stb vendor/mango-master/mango-master/include vendor/libigl/include vendor/HTTPRequest/include vendor/httplib/include vendor/rapidjson/include vendor/libguarded/src vendor/nlohmann/include vendor/date/include vendor/entt/single_include vendor/imgui vendor/asio-1.18.1/include vendor/CGAL-5.3/include vendor/boost_1_76_0 vendor/eigen /usr/local/include vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include";
 			};
 			name = Debug;
 		};
 		B9F150725E43EE24707C36B2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = (
-					YES,
-				);
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				CLANG_CXX_LANGUAGE_STANDARD = "c++1z";
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
@@ -1273,7 +1229,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = (
-					"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
+					"C:/code/visual",
+					"studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
 					"C:/VulkanSDK/1.2.154.1/Lib",
 					vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64,
 					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/lib-universal",
@@ -1286,40 +1243,14 @@
 					"-lmarl",
 				);
 				SYMROOT = "../bin/Release-macosx-universal/Sunrise";
-				USER_HEADER_SEARCH_PATHS = (
-					src,
-					src/Sunrise,
-					vendor/spdlog/include,
-					"C:/VulkanSDK/1.2.154.1/Include",
-					"vendor/glm-master",
-					"vendor/marl-main/marl-main/include",
-					vendor/stb,
-					"vendor/mango-master/mango-master/include",
-					vendor/libigl/include,
-					vendor/HTTPRequest/include,
-					vendor/httplib/include,
-					vendor/rapidjson/include,
-					vendor/libguarded/src,
-					vendor/nlohmann/include,
-					vendor/date/include,
-					vendor/entt/single_include,
-					vendor/imgui,
-					"vendor/asio-1.18.1/include",
-					"vendor/CGAL-5.3/include",
-					vendor/boost_1_76_0,
-					vendor/eigen,
-					/usr/local/include,
-					"vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include",
-				);
+				USER_HEADER_SEARCH_PATHS = "src src/Sunrise vendor/spdlog/include C:/VulkanSDK/1.2.154.1/Include vendor/glm-master vendor/marl-main/marl-main/include vendor/stb vendor/mango-master/mango-master/include vendor/libigl/include vendor/HTTPRequest/include vendor/httplib/include vendor/rapidjson/include vendor/libguarded/src vendor/nlohmann/include vendor/date/include vendor/entt/single_include vendor/imgui vendor/asio-1.18.1/include vendor/CGAL-5.3/include vendor/boost_1_76_0 vendor/eigen /usr/local/include vendor/bin/glfw/macos/glfw-3.3.6.bin.MACOS/include";
 			};
 			name = Release;
 		};
 		C2505A3AEA8B12ECD226A07A /* Dist */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = (
-					YES,
-				);
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CONFIGURATION_BUILD_DIR = "../bin/Dist-macosx-universal/Sunrise";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1341,7 +1272,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		E1DE5F471084B33969C60D87 /* Build configuration list for PBXNativeTarget "libSunrise.a" */ = {
+		E1DE5F471084B33969C60D87 /* Build configuration list for PBXNativeTarget "Sunrise" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2E84968D5E16657F3923A4CD /* Debug */,
@@ -1352,6 +1283,6 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-};
-rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
 }

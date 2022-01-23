@@ -3,6 +3,8 @@
 
 void sunrise::FileSystem::initilize() {
 
+    SR_CORE_TRACE("About to launch file system with working directory of {}", FileManager::appWokringDir());
+    
 	SR_CORE_TRACE("Checking if first launch");
 
 	auto firstLaunchPath = FileManager::appConfigDir() + "first.launch";
@@ -11,7 +13,6 @@ void sunrise::FileSystem::initilize() {
 
 	if (firstLaunch) {
 		SR_CORE_INFO("First Launch Detected - Performing First Time Setup");
-
 
 		FileManager::saveStringToFile(
 			"Delete this file to trigger all first time launch tasks on next program start", firstLaunchPath);
@@ -32,7 +33,7 @@ void sunrise::FileSystem::initilize() {
 
 		// other first time setup here
 
-        SR_CORE_ASSERT(FileManager::exists(FileManager::engineConfigDir() + "/global.cfg")); // engine not installed corretly
+        //SR_CORE_ASSERT(FileManager::exists(FileManager::engineConfigDir() + "/global.cfg")); // engine not installed corretly
         
 		SR_CORE_INFO("First Time Stup Copmleted Successfully");
 	}

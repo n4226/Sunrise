@@ -85,7 +85,12 @@ namespace sunrise {
 
 		bool imguiValid();
 
-	protected:
+        void startProfileSession();
+        bool isProfiling();
+        void endProfileSession();
+        
+    protected:
+        bool profiling = false;
 		
 		void configureGLFWEvents();
 

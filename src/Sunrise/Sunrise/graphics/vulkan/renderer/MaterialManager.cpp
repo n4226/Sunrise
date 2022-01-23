@@ -18,6 +18,14 @@ namespace sunrise {
 
 	}
 
+    MaterialManager::~MaterialManager() {
+        for(auto image: images)
+            delete image;
+        
+        for(auto sampler: samplers)
+            delete sampler;
+    }
+
 
 	void MaterialManager::loadStaticEarth()
 	{
@@ -27,6 +35,7 @@ namespace sunrise {
 
 		auto matRootPath = FileManager::engineMaterialDir() + "staticAlloc/";
 
+        
 		// load each static material from disk into buffers then copy to images using resource transfer manager
 
 		// load all mats
@@ -41,9 +50,13 @@ namespace sunrise {
 
 		SR_CORE_TRACE("Copying images to the gpu and generating mip maps");
 
+        SR_CORE_ASSERT(pendingTasks.size() != 0 && "No materials were found");
+        
 		//todo:add this back for mip gen
-		renderer.resouceTransferer->newTask(pendingTasks, []() {
-
+		renderer.resouceTransferer->newTask(pendingTasks, [this]() {
+            for (auto buff: buffers) {
+                delete buff;
+            }
 		}, true);
 		pendingTasks.clear();
 
@@ -185,6 +198,8 @@ namespace sunrise {
 		task.bufferToImageCopyWithTransitionTask = layoutTask;
 
 		pendingTasks.push_back(task);
+        
+        
 	}
 
 	void MaterialManager::addMipMapToTasks(Image* image)
@@ -315,6 +330,8 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
+        SR_CORE_ASSERT(imageIndex < maxMaterialTextureDescriptorArrayCount);
+        
 		VkDescriptorImageInfo imageInfo{};
 		imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 		imageInfo.imageView = image->view;

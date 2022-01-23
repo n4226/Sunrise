@@ -10,6 +10,7 @@
 #include "../../gfxPipelines/WorldTerrainPipeline.h"
 #include "../WorldSceneRenderCoordinator.h"
 #include "../../WorldScene.h"
+#include "../../../world/materials/StaticMaterialTable.h"
 
 
 namespace sunrise {
@@ -39,8 +40,10 @@ namespace sunrise {
 		DescriptorTypeAllocOptions materialTexturesPoolSize{};
 		materialTexturesPoolSize.type = vk::DescriptorType::eCombinedImageSampler;
 		//  this is not the array count 
-		materialTexturesPoolSize.maxNum = 1;
+        materialTexturesPoolSize.maxNum = maxMaterialTextureDescriptorArrayCount * app.maxSwapChainImages;//1;
 
+        
+        //TODO: understand the point of varible descripter arrasy if you still have to pass length
 		descriptorPool = new gfx::DescriptorPool(app.renderers[0]->device, 
 			{ app.maxSwapChainImages * app.renderers[0]->windows.size(),{ globalUniformPoolSize, modelAndMatUniformPoolSize, materialTexturesPoolSize} });
 
@@ -75,7 +78,11 @@ namespace sunrise {
 			for (size_t swap = 0; swap < window->swapChainImages.size(); swap++)
 			{
 				auto pipeline = getConcretePipeline(*window, worldTerrainPipeline);
-				auto des = descriptorPool->allocate(pipeline->descriptorSetLayouts);
+                
+                
+                // aloocating for all static materials
+                //TODO: update to not hardcode 5 textures per material crashes on mac ->// SWtaticMaterialTable::reverseEntries.size()*5
+                auto des = descriptorPool->allocate(pipeline->descriptorSetLayouts, {static_cast<uint32_t>(maxMaterialTextureDescriptorArrayCount)});
 
 				descriptorSets[window].push_back(des[0]);
 
@@ -135,8 +142,18 @@ namespace sunrise {
 
 	void TerrainGPUStage::cleanup()
 	{
+        // does not nees to block until sure all encoding threads have finished because that is the job of the terrain system which spawned them
+        
 		descriptorPool->reset();
 
+        for (size_t i = 0; i < setsOfCMDBuffers; i++)
+        {
+            for (size_t j = 0; j < app.renderers[0]->windows.size(); j++) {
+                for (auto pool: cmdBufferPools[i][j])
+                    app.renderers[0]->device.destroyCommandPool(pool);
+            }
+        }
+        
 		delete descriptorPool;
 	}
 
@@ -280,7 +297,7 @@ namespace sunrise {
 					buffer.drawIndexed(indexCount, 1, indexOffset, it->second.vertIndex, 0);
 				}
 			}
-		}
+		}// TODO: WARN rare crash her on device destruction if truing to aquire a mutex
 #pragma endregion
 		buffer.end();
 

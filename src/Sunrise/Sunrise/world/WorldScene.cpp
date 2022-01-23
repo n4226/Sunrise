@@ -7,6 +7,7 @@
 #include "../core/Application.h"
 #include "../graphics/vulkan/renderer/MaterialManager.h"
 #include "rendering/WorldSceneRenderCoordinator.h"
+#include "../fileSystem/FileManager.h"
 
 namespace sunrise {
 
@@ -23,7 +24,6 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
-		delete coordinator;
 	}
 
 	void WorldScene::load()
@@ -73,24 +73,24 @@ namespace sunrise {
 		std::array<float,3> llaPos = {playerLLA.x, playerLLA.y, playerLLA.z};
 
 		if (ImGui::InputFloat3("LLA Position", llaPos.data(), "%.5f")) {
-			playerLLA.x = llaPos[0];
-			playerLLA.y = llaPos[1];
-			playerLLA.z = llaPos[2];
+			this->playerLLA.x = llaPos[0];
+			this->playerLLA.y = llaPos[1];
+			this->playerLLA.z = llaPos[2];
 		}
 
 		if (ImGui::Button("Reset POS")) {
-			playerLLA = initialPlayerLLA;
+			this->playerLLA = initialPlayerLLA;
 		}
 
 		//sunPos
         glm::vec3 sunLL = this->sunLL;
 		std::array<float, 2> sun = { sunLL.x, sunLL.y };
 		if (ImGui::SliderFloat2("Sun Pos", sun.data(), -180.f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
-			sunLL.x = sun[0];
-			sunLL.y = sun[1];
+			this->sunLL.x = sun[0];
+			this->sunLL.y = sun[1];
 		}
 		if (ImGui::Button("Reset Sun")) {
-			sunLL = initialPlayerLLA;
+			this->sunLL = initialPlayerLLA;
 		}
 
 		ImGui::End();
@@ -102,10 +102,16 @@ namespace sunrise {
 		PROFILE_FUNCTION;
 		Scene::update();
 
-		if (frameNum == 2000) {
-			reloadTerrainInMask();
-		}
+//		if (frameNum == 200) {
+//            char** stats = new char*;
+//            vmaBuildStatsString(app.renderers[0]->allocator, stats, VK_FALSE);
+//            std::string statString(*stats);
+//
+//            FileManager::saveStringToFile(statString, "vmaAlloc.json");
+//		}
 
+        
+        
 		//if (frameNum == 2000) {
 		//	char** stats = new char*;
 		//	vmaBuildStatsString(app.renderers[0]->allocator, stats, VK_TRUE);

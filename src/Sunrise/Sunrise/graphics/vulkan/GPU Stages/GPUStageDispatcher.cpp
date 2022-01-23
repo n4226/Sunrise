@@ -11,6 +11,11 @@ namespace sunrise::gfx {
 
 	GPUStageDispatcher::~GPUStageDispatcher()
 	{
+        for (auto [pass, others]: individualRunDependencies) {
+            pass->cleanup();
+            
+            delete pass;
+        }
 	}
 
 	void GPUStageDispatcher::registerStage(GPUStage* stage, std::vector<GPUStage*>&& runDependencies, std::vector<DependencyOptions>&& runDependencyOptions, std::vector<GPUStage*>&& encodeDependencies)

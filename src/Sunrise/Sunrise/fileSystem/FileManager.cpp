@@ -120,6 +120,11 @@ namespace sunrise {
 		std::string sunriseDirFolder = appConfigDir() + "directory.sunrise";
 		try {
 			auto str = loadStringfromFile(sunriseDirFolder);
+            std::string end = "\n";
+//            if (std::find_end(str.begin(), str.end(), end.begin(), end.end()))
+            if (str[str.size() - 1] == '\n') {
+                str.resize(str.size() - 1);
+            }
 			_baseDir = std::move(str);
 		}
 		catch (...) {

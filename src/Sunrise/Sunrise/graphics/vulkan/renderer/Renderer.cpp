@@ -7,6 +7,7 @@
 #include "Sunrise/Sunrise/world/terrain/TerrainSystem.h"
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
 
+#include "Sunrise/fileSystem/FileManager.h"
 
 #include "backends/imgui_impl_vulkan.h"
 #include "backends/imgui_impl_glfw.h"
@@ -50,7 +51,9 @@ namespace sunrise::gfx {
 	{
 		PROFILE_FUNCTION
 
-
+        
+        device.waitIdle();
+        
 		delete materialManager;
 		delete resouceTransferer;
 
@@ -84,6 +87,28 @@ namespace sunrise::gfx {
 		delete gloablVertAllocator;
 		delete globalModelBufferAllocator;
 
+//        char** stats = new char*;
+//        vmaBuildStatsString(allocator, stats, VK_TRUE);
+//        std::string statString(*stats);
+//        
+//        FileManager::saveStringToFile(statString, "vmaAlloc.json");
+        
+        auto stats = new VmaStats;
+        
+        vmaCalculateStats(allocator, stats);
+        
+        SR_CORE_WARN("{} of unalockated vulkan object bytes",stats->total.usedBytes);
+        
+        //used bytes: 1122043300
+        //used bytes: 0681641380
+        //used bytes: 0094438840
+        //used bytes: 0094438840
+        
+        // delete memory
+        vmaDestroyAllocator(allocator);
+        
+        
+        device.destroy();
 	}
 
 	void Renderer::windowSizeChanged(size_t allWindowIndex)
