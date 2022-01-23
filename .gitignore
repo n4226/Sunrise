@@ -27,9 +27,9 @@
 *.lib
 
 # Executables
-*.exe
-*.out
-*.app
+#*.exe
+#*.out
+#*.app
 
 
 # project spacific
@@ -413,9 +413,9 @@ healthchecksdb
 
 ### macOS ###
 # General
-.DS_Store
-.AppleDouble
-.LSOverride
+*.DS_Store
+*.AppleDouble
+*.LSOverride
 
 # Icon must end with two \r
 Icon
