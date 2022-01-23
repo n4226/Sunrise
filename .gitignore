@@ -137,7 +137,7 @@ StyleCopReport.xml
 *.log
 *.vspscc
 *.vssscc
-.builds
+.buil	
 *.pidb
 *.svclog
 *.scc
@@ -413,7 +413,7 @@ healthchecksdb
 
 ### macOS ###
 # General
-*.DS_Store
+**.DS_Store
 *.AppleDouble
 *.LSOverride
 
@@ -441,3 +441,5 @@ Temporary Items
 .apdisk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos
+
+**.xcodeproj
