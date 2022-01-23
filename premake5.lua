@@ -71,6 +71,8 @@ project "Sunrise"
 
 		-- important: for FSTS project, mainProjDir has to be manuually switched between main program and mesh gen by chosing which set of the varible happens last
 		-- no longer needed for static linking ("{COPYDIR} %{wks.location}/bin/" .. outputdir .. "/Sunrise/ %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
+
+
 		("{COPYFILE} %{sunriseLocation}/vendor/bin//NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64/GFSDK_Aftermath_Lib.x64.dll %{wks.location}/bin/" .. outputdir .. "/%{mainProjDir}/"),
 	}
 

@@ -54,20 +54,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\bin\Debug-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Debug-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Debug-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\bin\Release-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Release-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Release-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
-    <OutDir>..\..\bin\Dist-windows-x86_64\Sunrise\</OutDir>
-    <IntDir>..\..\bin-int\Dist-windows-x86_64\Sunrise\</IntDir>
+    <OutDir>..\bin\Dist-windows-x86_64\Sunrise\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x86_64\Sunrise\</IntDir>
     <TargetName>Sunrise</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -91,11 +91,11 @@
     </Link>
     <Lib>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo on
-copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\SunriseWorldMeshGen</Command>
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Debug-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -104,7 +104,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -121,11 +121,11 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     </Link>
     <Lib>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo on
-copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\SunriseWorldMeshGen</Command>
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Release-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -134,7 +134,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -151,11 +151,11 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     </Link>
     <Lib>
       <AdditionalDependencies>vulkan-1.lib;marl.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\marl-main\marl-main\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo on
-copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\SunriseWorldMeshGen</Command>
+copy /B /Y $(SolutionDir)\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64\GFSDK_Aftermath_Lib.x64.dll $(SolutionDir)\bin\Dist-windows-x86_64\FlightSimTerrainSystem</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -185,11 +185,11 @@ namespace sunrise {
 
         static std::string getNativeMonitorName(GLFWmonitor* monitor) {
         #ifdef SR_PLATFORM_WINDOWS
-                return glfwGetWin32Monitor(monitor)->name
+			return glfwGetWin32Monitor(monitor);
         #elif defined(SR_PLATFORM_MACOS)
-                return std::to_string(glfwGetCocoaMonitor(monitor));
+            return std::to_string(glfwGetCocoaMonitor(monitor));
         #else
-        #error Platform not supported
+			#error Platform not supported
         #endif
         }
 

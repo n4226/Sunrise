@@ -105,7 +105,8 @@ namespace sunrise::gfx {
         //used bytes: 0094438840
         
         // delete memory
-        vmaDestroyAllocator(allocator);
+		// not yet because there are many leaks and this causes program to crash on shutdown
+        //vmaDestroyAllocator(allocator);
         
         
         device.destroy();
