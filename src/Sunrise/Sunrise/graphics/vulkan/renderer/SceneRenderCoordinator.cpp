@@ -28,7 +28,6 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::createPasses()
 	{
-
 	}
 
 
@@ -246,7 +245,8 @@ namespace sunrise::gfx {
 		}
 
 		//Setup ImGui
-		imguiStage = new ImGuiStage(this);
+		if (generateImguiStage)
+			imguiStage = new ImGuiStage(this);
 
 		ImGui::CreateContext();
 
@@ -255,7 +255,7 @@ namespace sunrise::gfx {
 
 		//TODO: move 
 		//see: https://twitter.com/ocornut/status/939547856171659264?lang=en
-		float SCALE = 2.0f;
+		float SCALE = 2.5f;
 		ImFontConfig cfg;
 		cfg.SizePixels = 13 * SCALE;
 		ImGui::GetIO().Fonts->AddFontDefault(&cfg); //don't know what this is -> ->DisplayOffset.y = SCALE;
@@ -399,7 +399,7 @@ namespace sunrise::gfx {
  			renderer->debugObject.endRegion(firstLevelCMDBuffer);
 #endif
 
-			if (stage == lastStage) {
+			if (stage == lastStage && imguiStage) {
 				//draw imgui
 
 #if SR_LOGGING

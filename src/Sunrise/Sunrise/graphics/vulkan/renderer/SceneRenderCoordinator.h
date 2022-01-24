@@ -142,6 +142,13 @@ namespace sunrise {
 			/// </summary>
 			virtual void preEncodeUpdate(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window) {}
 
+
+			/// <summary>
+			/// must be set before buildGraph() is called
+			/// if true imguiStage will be implicitly added after lastStage()
+			/// </summary>
+			bool generateImguiStage = true;
+			ImGuiStage* imguiStage = nullptr;
 		private:
 
 			void loadOrGetRegisteredPipesInAllWindows();
@@ -163,9 +170,6 @@ namespace sunrise {
 			// during frame encoding:
 
 			void startNewPass(int64_t pass, Window& window, vk::CommandBuffer firstLevelCMDBuffer);
-
-
-			ImGuiStage* imguiStage;
 		};
 
 

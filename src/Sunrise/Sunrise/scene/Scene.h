@@ -10,6 +10,11 @@ namespace sunrise {
 	class SUNRISE_API Scene
 	{
 	public:
+		/// <summary>
+		/// for proper initilization, subclsses should set their coordinator in the body of their constructor
+		/// </summary>
+		/// <param name="app"></param>
+		/// <param name="inControlOfCoordinatorLifecycle"></param>
 		Scene(Application* app, bool inControlOfCoordinatorLifecycle = true);
 		Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool inControlOfCoordinatorLifecycle = false);
 		virtual ~Scene();

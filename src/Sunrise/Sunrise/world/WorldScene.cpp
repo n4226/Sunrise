@@ -96,6 +96,17 @@ namespace sunrise {
 		ImGui::End();
 	}
 
+	void WorldScene::onDrawMainMenu()
+	{
+
+		if (ImGui::BeginMenu("World Debug")) {
+
+		//TODO: add debug tool to show loaded materials and their indecies / maybe render their textures
+			ImGui::EndMenu();
+		}
+	}
+
+	
 
 	void WorldScene::update()
 	{

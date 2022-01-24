@@ -40,6 +40,9 @@
     <Filter Include="src\Sunrise\Sunrise\graphics\imGui">
       <UniqueIdentifier>{271DBD11-1359-C07B-7C6B-D87268C66896}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\graphics\imGui\extensions">
+      <UniqueIdentifier>{06184C8C-7288-4E05-3BA7-C88DA7D68606}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\graphics\shaders">
       <UniqueIdentifier>{16C0626D-02A7-2465-ABF7-8A8297BD9DCB}</UniqueIdentifier>
     </Filter>
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiVulkanContainer.h">
       <Filter>src\Sunrise\Sunrise\graphics\imGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\imGui\extensions\ProgressIndicators.h">
+      <Filter>src\Sunrise\Sunrise\graphics\imGui\extensions</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h">
       <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
