@@ -290,7 +290,7 @@ namespace sunrise {
 				for (size_t i = 0; i < it->second.indexCounts.size(); i++)
 				{
 					auto indexCount = it->second.indexCounts[i];
-					auto indexOffset = it->second.indIndicies[i];
+					auto indexOffset = it->second.indIndicies[i]; // index offset is an index count not byte count --
 					//buffer->pushConstants(window.pipelineCreator->pipelineLayout, vk::ShaderStageFlagBits::eFragment, modelUnSize, sizeof(DrawPushData) - modelUnSize, reinterpret_cast<char*>(&(it->second.drawDatas[i])) + modelUnSize);
 
 					buffer.pushConstants(pipeline->pipelineLayout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(gfx::DrawPushData), &it->second.drawDatas[i]);

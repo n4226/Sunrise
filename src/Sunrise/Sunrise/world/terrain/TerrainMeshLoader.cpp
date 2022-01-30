@@ -157,15 +157,17 @@ namespace sunrise {
 
 			// these indicies are in vert count space - meaning 1 = 1 vert not 1 byte
 			vertIndex = renderer->gloablVertAllocator->alloc(vertCount);
+			// indicy buffer indicies are also in index space - meaning 1 = 1 indicy not 1 byte
+			// this is whyc mesh.all... must be divided by size of indicy
 			indIndicies = {};
 			indIndicies.resize(indCounts.size());
-			indIndicies[0] = renderer->gloablIndAllocator->alloc(mesh.AllSubMeshIndiciesSize());
+			indIndicies[0] = renderer->gloablIndAllocator->alloc(mesh.AllSubMeshIndiciesSize() / sizeof(glm::uint32));
 
 			glm::uint32 totalOffset = 0;
 			for (size_t i = 0; i < indCounts.size(); i++)
 			{
 				indIndicies[i] = indIndicies[0] + totalOffset;
-				totalOffset += mesh.indiciesSize(i);
+				totalOffset += mesh.subMeshIndexCounts[i];//mesh.indiciesSize(i);
 			}
 			totalIndCount = totalOffset;
 
@@ -177,7 +179,7 @@ namespace sunrise {
 		}
 		else
 		{
-			PROFILE_SCOPE("loading with pre creating empty mesh");
+			PROFILE_SCOPE("loading with pre creating empty mesh");//todo fix to work with more than 1 submesh
 			
 			auto mesh = preLoadedMesh.mesh;
 

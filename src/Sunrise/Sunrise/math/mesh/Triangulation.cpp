@@ -994,7 +994,7 @@ namespace sunrise::math::mesh {
 	}
 
 
-	MultiPolygon2D bunion(Polygon2D p1, Polygon2D p2)
+	MultiPolygon2D bunion(const MultiPolygon2D& p1,const MultiPolygon2D& p2)
 	{
 		//TODO: stop or figure out how to abstract this geos globa stuff
 		initGEOS(geos_msg_handler, geos_msg_handler);
@@ -1016,15 +1016,29 @@ namespace sunrise::math::mesh {
 		//TODO: stop or figure out how to abstract this geos globa stuff
 		initGEOS(geos_msg_handler, geos_msg_handler);
 
-		/*std::vector<GEOSGeometry*> gpolies;
-
-		for (auto& _p : p) {
-			gpolies.push_back(SRToGEOS(p));
-		}*/
 
 		auto gall = SRToGEOS(p);
 
 		return GEOSMultiPolyToSR(GEOSUnaryUnion(gall));
+	}
+
+	MultiPolygon2D binterseciton(const MultiPolygon2D& p1, const MultiPolygon2D& p2)
+	{
+		//TODO: stop or figure out how to abstract this geos globa stuff
+		initGEOS(geos_msg_handler, geos_msg_handler);
+
+		auto gp1 = SRToGEOS(p1);
+		auto gp2 = SRToGEOS(p2);
+
+		auto result = GEOSIntersection(gp1, gp2);
+
+		//TODO: this memory leaks becasue GEOSgeom type is
+		SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
+
+		if (GEOSGeomTypeId(result) == GEOS_POLYGON)
+			return { GEOSPolyToSR(result) };
+		else
+			return GEOSMultiPolyToSR(result);
 	}
 
 	MultiPolygon2D bDifference(const MultiPolygon2D& p1,const MultiPolygon2D& p2)
@@ -1039,7 +1053,7 @@ namespace sunrise::math::mesh {
 
 
 		//TODO: this memory leaks becasue GEOSgeom type is
-		SR_CORE_INFO("just unioned two polygons and got a {}", GEOSGeomType(result));
+		SR_CORE_INFO("just differenced two polygons and got a {}", GEOSGeomType(result));
 		
 		if (GEOSGeomTypeId(result) == GEOS_POLYGON)
 			return {GEOSPolyToSR(result)};

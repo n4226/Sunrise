@@ -55,10 +55,10 @@ namespace sunrise::math::mesh
 	//SUNRISE_API bMultiPolygon boostFromMesh(Polygon2D p);
 	//SUNRISE_API Polygon2D meshFromBoost(bMultiPolygon p);
 #if 1
-	SUNRISE_API MultiPolygon2D bunion(Polygon2D p1, Polygon2D p2);
+	SUNRISE_API MultiPolygon2D bunion(const MultiPolygon2D& p1,const MultiPolygon2D& p2);
 	SUNRISE_API MultiPolygon2D bunionAll(const MultiPolygon2D& p);
 
-	SUNRISE_API Polygon2D binterseciton(Polygon2D p1, Polygon2D p2);
+	SUNRISE_API MultiPolygon2D binterseciton(const MultiPolygon2D& p1,const MultiPolygon2D& p2);
 	
 	SUNRISE_API bool bDoIntersect(Polygon2D p1, Polygon2D p2);
 	

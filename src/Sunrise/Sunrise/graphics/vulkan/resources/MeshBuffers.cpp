@@ -152,7 +152,7 @@ namespace sunrise::gfx {
 		memcpy(static_cast<char*>(vertBuffer->mappedData) + normalsOffset() + vertIndex * sizeof(glm::vec3), mesh->normalsPtr(), mesh->normalsSize());
 		memcpy(static_cast<char*>(vertBuffer->mappedData) + tangentsOffset() + vertIndex * sizeof(glm::vec3), mesh->tangentsPtr(), mesh->tangentsSize());
 		memcpy(static_cast<char*>(vertBuffer->mappedData) + bitangentsOffset() + vertIndex * sizeof(glm::vec3), mesh->bitangentsPtr(), mesh->bitangentsSize());
-
+		//sets all submeshes since they are contigius in memory of mesh and index buffer
 		memcpy(static_cast<char*>(indexBuffer->mappedData) + indIndex * sizeof(glm::uint32), mesh->indiciesPtr(0), mesh->AllSubMeshIndiciesSize());
 
 		if (mapandUnmap)
