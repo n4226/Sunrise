@@ -38,6 +38,7 @@
 #include "cs_rcu_guarded.h"
 
 #include "../vendor/imgui/imgui.h"
+#include <../vendor/imgui/misc/cpp/imgui_stdlib.h>
 
 // stl
 #include <iostream>
@@ -82,6 +83,8 @@
 
 #include "Sunrise/Sunrise/core/core.h"
 #include "Sunrise/Sunrise/core/environment.h"
+
+#include "Sunrise/helpers/StringHelpers.h"
 
 //pasted in imgui dependancies
 

@@ -40,3 +40,6 @@
 [submodule "vendor/eigen"]
 	path = vendor/eigen
 	url = https://github.com/libigl/eigen
+[submodule "vendor/geos"]
+	path = vendor/geos
+	url = https://github.com/libgeos/geos

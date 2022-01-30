@@ -44,7 +44,7 @@ namespace sunrise {
 			maskedMode = true;
 			//TODO: fix memory leak here
 			tree.leafNodes.clear();
-			CreateTerrainInMask(scene, app);
+			//CreateTerrainInMask(scene, app);
 		}
 
 		//writePendingDrawOobjects();
@@ -56,17 +56,22 @@ namespace sunrise {
 		{
 			auto leaf = new TerrainQuadTreeNode(chunk, nullptr, &tree, 0);
 			tree.leafNodes.insert(leaf);
-			auto mesh = meshLoader.loadMeshPreDrawChunk(leaf, false, !scene.doNotSparslyPopulateMask);
-			if (mesh.binMesh != nullptr || mesh.mesh != nullptr)
-				meshLoader.drawChunk(leaf, mesh, false);
+			toDrawDraw.insert(leaf);
+
+			//auto mesh = meshLoader.loadMeshPreDrawChunk(leaf, false, !scene.doNotSparslyPopulateMask);
+			//if (mesh.binMesh != nullptr || mesh.mesh != nullptr) {
+			//	//meshLoader.drawChunk(leaf, mesh, false);
+			//	toDrawDraw.insert()
+			//}
 		}
-		writePendingDrawOobjects(*app.renderers[0]);
+
+		proccesUpdatedTree();
 	}
 
 	void TerrainSystem::reloadTerrainInMask()
 	{
 		for (auto node : tree.leafNodes)
-			meshLoader.removeDrawChunk(node);
+			toDestroyDraw.insert(node);
 
 		CreateTerrainInMask(scene, scene.app);
 	}
@@ -233,7 +238,27 @@ namespace sunrise {
 
 		// draw in jobs
 
-		if (toDrawDraw.size() > 0)
+		proccesUpdatedTree();
+
+
+
+
+		toSplit.clear();
+
+		//toCombine.clear();
+
+		//if (destroyAwaitingNodes) {
+		//	for (TerrainQuadTreeNode* node : toDestroyDraw) {
+		//		removeDrawChunk(node);
+		//	}
+		//	destroyAwaitingNodes = false;
+		//}
+
+		//writePendingDrawOobjects();
+	}
+
+	void TerrainSystem::proccesUpdatedTree() {
+		if (toDrawDraw.size() > 0 || maskedMode)
 		{
 			{
 				auto shouldRunLoop = safeToModifyChunks.lock();
@@ -242,14 +267,14 @@ namespace sunrise {
 
 			//auto ticket = ticketQueue.take();
 
-            {
-                auto threadRunning = treeUpdateJobActive.lock();
-                *threadRunning = true;
-            }
-            
+			{
+				auto threadRunning = treeUpdateJobActive.lock();
+				*threadRunning = true;
+			}
+
 			marl::schedule([this]() {
 				PROFILE_SCOPE("create draw draw job");
-					//MarlSafeTicketLock lock(ticket);
+				//MarlSafeTicketLock lock(ticket);
 
 				marl::WaitGroup preLoadingWaitGroup(toDrawDraw.size());
 
@@ -257,7 +282,7 @@ namespace sunrise {
 					marl::schedule([this, chunk, preLoadingWaitGroup]() {
 						defer(preLoadingWaitGroup.done());
 						meshLoader.loadMeshPreDrawChunk(chunk, true);
-					});
+						});
 				}
 
 				preLoadingWaitGroup.wait();
@@ -281,7 +306,7 @@ namespace sunrise {
 				// re encode draws
 				// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
 				auto tstage = world->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
-				
+
 				// todo make this more robust
 				for (auto win : app.renderers[0]->windows) {
 					for (size_t surface = 0; surface < win->swapChainImages.size(); surface++)
@@ -291,13 +316,13 @@ namespace sunrise {
 				}
 
 				{ // swaping active command buffers
-					auto activeHandler = tstage->activeBuffer.lock(); 
+					auto activeHandler = tstage->activeBuffer.lock();
 					*activeHandler = (*activeHandler + 1) % TerrainGPUStage::setsOfCMDBuffers;
 				}
 
 				//todo: wait and then calculate when to delete old chunks that should be see below
 				{ //todo fix - don't know that these chunks are still not being used by a drawable
-					
+
 
 					for (TerrainQuadTreeNode* chunk : toCombine) {
 						chunk->combine();
@@ -313,13 +338,13 @@ namespace sunrise {
 					*shouldRunLoop = true;
 					destroyAwaitingNodes = true;
 				}
-                
-                //for cleanup let main thread know job is not running
-                {
-                    auto threadRunning = treeUpdateJobActive.lock();
-                    *threadRunning = false;
-                }
-			});
+
+				//for cleanup let main thread know job is not running
+				{
+					auto threadRunning = treeUpdateJobActive.lock();
+					*threadRunning = false;
+				}
+				});
 
 		}
 		else {
@@ -334,23 +359,7 @@ namespace sunrise {
 			//toCombine.clear();
 			//toDestroyDraw.clear();
 		}
-
-
-
-
-		toSplit.clear();
-		//toCombine.clear();
-
-		//if (destroyAwaitingNodes) {
-		//	for (TerrainQuadTreeNode* node : toDestroyDraw) {
-		//		removeDrawChunk(node);
-		//	}
-		//	destroyAwaitingNodes = false;
-		//}
-
-		//writePendingDrawOobjects();
 	}
-
 
 	double TerrainSystem::threshold(const TerrainQuadTreeNode* node)
 	{

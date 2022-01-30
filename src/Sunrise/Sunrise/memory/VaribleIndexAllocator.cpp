@@ -42,6 +42,14 @@ namespace sunrise {
 		return space->size;
 	}
 
+	void VaribleIndexAllocator::imguiDrawDebug(const std::string& name) {
+
+		//"{} ({})", name, totalSize
+		auto s = fmt::format("{} ({})", name, totalSize);
+		ImGui::Text(s.c_str());
+		ImGui::ProgressBar((float)allocatedSize / totalSize);
+	}
+
 
 	size_t VaribleIndexAllocator::alloc(size_t size)
 	{
@@ -86,9 +94,9 @@ namespace sunrise {
 			addFreeSpace(newSpace);
 
 #if SR_LOGGING
-		auto allocPercent = static_cast<float>(allocatedSize) / (totalSize / 100);
+		/*auto allocPercent = static_cast<float>(allocatedSize) / (totalSize / 100);
 		if (allocPercent > 10)
-			SR_CORE_WARN("varible allocator usage is {}%",allocPercent);
+			SR_CORE_WARN("varible allocator usage is {}%",allocPercent);*/
 #endif
 
 		auto start = space->start;

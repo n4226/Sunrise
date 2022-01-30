@@ -1,9 +1,32 @@
 #include "srpch.h"
 
+//MARK: for earcut to work with glm
+
+
 #include "Triangulation.h"
 
+#include <mapbox/earcut.hpp>
+
+namespace mapbox {
+	namespace util {
+
+		template <>
+		struct nth<0, glm::dvec2> {
+			inline static auto get(const glm::dvec2& t) {
+				return t.x;
+			};
+		};
+		template <>
+		struct nth<1, glm::dvec2> {
+			inline static auto get(const glm::dvec2& t) {
+				return t.y;
+			};
+		};
+	}
+}
+
 // until fix of triangulation with new lib
-#if 0
+#if 0 // now using Geos of booean ops and earcut for triangulation
 //#include <CGAL/draw_triangulation_2.h>
 //CGAL_USE_BASIC_VIEWER
 
@@ -814,6 +837,8 @@ namespace sunrise::math::mesh {
 
 }
 #else
+#include <geos_c.h>
+
 namespace sunrise::math::mesh {
 
 	Box bounds(std::vector<glm::dvec2>& points)
@@ -849,9 +874,210 @@ namespace sunrise::math::mesh {
 	}
 
 
+	void makeOpenIfClosedForCGAL(std::vector<glm::dvec2>& polygon)
+	{
+		if (polygon.size() == 0) return;
 
-	std::pair<TriangulatedMesh*, bool> triangulate(std::vector<std::vector<glm::dvec2>>& polygon) {
-		return std::make_pair(nullptr, false);
+		if (polygon[polygon.size() - 1] == polygon[0])
+			polygon.pop_back();
+	}
+
+	
+	//geos functions
+	static void
+		geos_msg_handler(const char* fmt, ...)
+	{
+		va_list ap;
+		va_start(ap, fmt);
+		vprintf(fmt, ap);
+		va_end(ap);
+	}
+	
+	GEOSGeometry* SRToGEOS(const Polygon2D& p1) {
+		auto coords = GEOSCoordSeq_create(p1.size() + 1, 2);
+
+		for (size_t i = 0; i < p1.size(); i++)
+		{
+			GEOSCoordSeq_setOrdinate(coords, i, 0, p1[i].x);
+			GEOSCoordSeq_setOrdinate(coords, i, 1, p1[i].y);
+		}
+
+		//TODO: asuming open polygo is given
+		GEOSCoordSeq_setOrdinate(coords, p1.size(), 0, p1[0].x);
+		GEOSCoordSeq_setOrdinate(coords, p1.size(), 1, p1[0].y);
+
+		auto ring = GEOSGeom_createLinearRing(coords);
+		return ring;
+	}
+
+	GEOSGeometry* SRToGEOS(const HPolygon2D& p1) {
+
+		SR_CORE_ASSERT(p1.size() > 0);
+		std::vector<GEOSGeometry*> rings{};
+
+		for (auto& ring : p1) {
+			rings.push_back(SRToGEOS(ring));
+		}
+		
+		// shell is first in rings array
+		// holes are the remaining elements
+		auto polygon = GEOSGeom_createPolygon(rings[0], rings.data() + 1,rings.size() - 1);
+
+		return polygon;
+	}
+
+	GEOSGeometry* SRToGEOS(const MultiPolygon2D& p1) {
+
+		std::vector<GEOSGeometry*> polies{};
+
+		for (auto& poly : p1) {
+			polies.push_back(SRToGEOS(poly));
+		}
+
+		auto group = GEOSGeom_createCollection(GEOS_MULTIPOLYGON, polies.data(), polies.size());
+
+		return group;
+	}
+
+
+	Polygon2D GEOSRingToSR(const GEOSGeometry* geometry) {
+		SR_CORE_ASSERT(GEOSGeomTypeId(geometry) == GEOS_LINEARRING);
+
+		Polygon2D result{};
+
+		auto pCount = GEOSGeomGetNumPoints(geometry);
+		auto seq = GEOSGeom_getCoordSeq(geometry);
+
+		for (size_t i = 0; i < pCount; i++)
+		{
+			glm::dvec2 point{};
+			GEOSCoordSeq_getXY(seq, i, &point.x, &point.y);
+			result.push_back(point);
+		}
+		return result;
+	}
+
+	HPolygon2D GEOSPolyToSR(const GEOSGeometry* geometry) {
+		// asuming geometry is a polygon
+		SR_CORE_ASSERT(GEOSGeomTypeId(geometry) == GEOS_POLYGON);
+
+		HPolygon2D result{};
+
+		auto perimiterRing = GEOSGetExteriorRing(geometry);
+
+		result.push_back(GEOSRingToSR(perimiterRing));
+
+		auto numHoles = GEOSGetNumInteriorRings(geometry);
+		result.resize(numHoles + 1);
+
+		for (size_t i = 1; i < result.size(); i++)
+		{
+			result[i] = GEOSRingToSR(GEOSGetInteriorRingN(geometry,i));
+		}
+
+		return result;
+	}
+
+	MultiPolygon2D GEOSMultiPolyToSR(const GEOSGeometry* geometry) {
+		SR_CORE_ASSERT(GEOSGeomTypeId(geometry) == GEOS_MULTIPOLYGON);
+
+		MultiPolygon2D result{};
+
+		auto count = GEOSGetNumGeometries(geometry);
+		
+		for (size_t i = 0; i < count; i++)
+		{
+			result.push_back(GEOSPolyToSR(GEOSGetGeometryN(geometry, i)));
+		}
+
+		return result;
+	}
+
+
+	MultiPolygon2D bunion(Polygon2D p1, Polygon2D p2)
+	{
+		//TODO: stop or figure out how to abstract this geos globa stuff
+		initGEOS(geos_msg_handler, geos_msg_handler);
+
+		auto gp1 = SRToGEOS(p1);
+		auto gp2 = SRToGEOS(p2);
+
+		auto result = GEOSUnion(gp1,gp2);
+
+
+		//TODO: this memory leaks becasue GEOSgeom type is
+		SR_CORE_INFO("just unioned two polygons and got a {}",GEOSGeomType(result));
+
+		return GEOSMultiPolyToSR(result);
+	}
+
+	MultiPolygon2D bunionAll(const MultiPolygon2D& p)
+	{
+		//TODO: stop or figure out how to abstract this geos globa stuff
+		initGEOS(geos_msg_handler, geos_msg_handler);
+
+		/*std::vector<GEOSGeometry*> gpolies;
+
+		for (auto& _p : p) {
+			gpolies.push_back(SRToGEOS(p));
+		}*/
+
+		auto gall = SRToGEOS(p);
+
+		return GEOSMultiPolyToSR(GEOSUnaryUnion(gall));
+	}
+
+	MultiPolygon2D bDifference(const MultiPolygon2D& p1,const MultiPolygon2D& p2)
+	{
+		initGEOS(geos_msg_handler, geos_msg_handler);
+
+
+		auto gp1 = SRToGEOS(p1);
+		auto gp2 = SRToGEOS(p2);
+
+		auto result = GEOSDifference(gp1, gp2);
+
+
+		//TODO: this memory leaks becasue GEOSgeom type is
+		SR_CORE_INFO("just unioned two polygons and got a {}", GEOSGeomType(result));
+		
+		if (GEOSGeomTypeId(result) == GEOS_POLYGON)
+			return {GEOSPolyToSR(result)};
+		else
+		return GEOSMultiPolyToSR(result);
+	}
+
+	std::pair<TriangulatedMesh, bool> triangulate(const HPolygon2D& polygon) {
+
+		TriangulatedMesh mesh;
+
+		//TODO: make sure all sub polygons are open not closed
+
+		mesh.indicies = { mapbox::earcut<uint32_t>(polygon) };
+		
+		for (auto subP : polygon)
+			mesh.verts.insert(mesh.verts.end(), subP.begin(), subP.end());
+
+
+		return std::make_pair(mesh, clockwiseOriented(polygon[0]));
+	}
+
+	
+	bool clockwiseOriented(const Polygon2D& polygon)
+	{
+		//https://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
+		double sum = 0;
+
+		for (size_t i = 0; i < polygon.size(); i++)
+		{
+			auto& p1 = polygon[i];
+			auto p2index = (i == polygon.size() - 1) ? 0 : i + 1;
+			auto& p2 = polygon[p2index];
+
+			sum += (p2.x - p1.x) * (p2.y + p1.y);
+		}
+
+		return sum > 0;
 	}
 }
 #endif

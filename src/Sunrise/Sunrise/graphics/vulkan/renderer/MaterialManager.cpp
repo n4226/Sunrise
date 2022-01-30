@@ -7,6 +7,8 @@
 #include "Sunrise/Sunrise/scene/Scene.h"
 #include "Sunrise/Sunrise/world/rendering/terrain/TerrainGPUStage.h"
 
+#include "backends/imgui_impl_vulkan.h"
+
 namespace sunrise {
 
 	using namespace gfx;
@@ -76,7 +78,10 @@ namespace sunrise {
 
 		//todo simplify string ops to save performance
 
-		auto files = getFilesForMaterial(matRootPath, matFolder, { ".jpg"});
+		auto files = getFilesForMaterial(matRootPath, matFolder, { ".jpg", ".png"});
+
+		//todo replace with engine defined texture not found texture;
+		SR_CORE_ASSERT(files.albedoPath != "");
 
 		if (files.ambientOclusion == "")
 			files.ambientOclusion = files.albedoPath;
@@ -142,6 +147,10 @@ namespace sunrise {
 		pendingGFXTasks.push_back(task);
 	}
 
+	const std::vector<gfx::Image*>& MaterialManager::allImages() {
+		return images;
+	}
+
 
 	MaterialManager::MaterialFiles MaterialManager::getFilesForMaterial(std::string& matRootPath, const char* matFolder, const std::unordered_set<std::string>& suportedFileExtensions)
 	{
@@ -163,7 +172,7 @@ namespace sunrise {
 
 			//albedo
 			if (file.find("albedo") != std::string::npos || file.find("defuse") != std::string::npos 
-				|| file.find("color") != std::string::npos)
+				|| file.find("color") != std::string::npos || file.find("diffuse") != std::string::npos)
 				result.albedoPath = std::move(file);
 			//normal
 			else if (file.find("normal") != std::string::npos)
@@ -226,17 +235,57 @@ namespace sunrise {
 		PROFILE_FUNCTION;
 
 
+		// get path to image cash
+		std::string_view fsPath = path;
+		size_t lastindex = fsPath.find_last_of(".");
+		auto rawname = fsPath.substr(0, lastindex);
+
+		const std::string cashPath = static_cast<std::string>(rawname) + ".bimage";
+
+		// load from cash
+		auto bimage = loadTex_fromCash(cashPath.c_str(), name);
+
+		// if null load now and save to cash
+		if (!bimage) {
+			SR_CORE_TRACE("Culd not find material {} in cash so reading file", name);
+			int texWidth, texHeight, texChannels;
+
+			stbi_uc* pixels;
+			{
+				PROFILE_SCOPE("stbi_load");
+				pixels = stbi_load(path, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);//STBI_default);
+			}
+			VkDeviceSize imageBufferSize = texWidth * texHeight * 4;
+
+			SR_CORE_ASSERT(pixels);
+
+			BimageHeader header{};
+			header.width = texWidth;
+			header.height = texHeight;
+			header.depth = 1;
+
+			auto format = vk::Format::eR8G8B8A8Srgb;
+			header.format = static_cast<VkFormat>(format);
+			header.linearLayout = true;
+
+			bimage = new Bimage(imageBufferSize);
+			*(bimage->header) = header;
+
+			memcpy(bimage->data, pixels, imageBufferSize);
+
+			BimageEncoder encoder{};
+			encoder.writeToFile(*bimage,cashPath.c_str(),true);
+
+		}
+
+		
+
+
 		BufferCreationOptions bufferOptions =
 		{ ResourceStorageType::cpuToGpu, { vk::BufferUsageFlagBits::eTransferSrc }, vk::SharingMode::eConcurrent,
 		{ renderer.queueFamilyIndices.graphicsFamily.value(), renderer.queueFamilyIndices.resourceTransferFamily.value() } };
 
-		int texWidth, texHeight, texChannels;
-
-		stbi_uc* pixels;
-		//mango::u32* pixels;
-		//{
-			//PROFILE_SCOPE("stbi_load");
-		pixels = stbi_load(path, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);//STBI_default);
+		
 
 		// $(SolutionDir)Dependencies\mango - master\mango - master\build\vs2019\x64\Debug\mango.lib
 
@@ -248,15 +297,15 @@ namespace sunrise {
 
 		//}
 
-		assert(pixels != nullptr);
+		assert(bimage != nullptr);
 
-		VkDeviceSize imageBufferSize = texWidth * texHeight * 4;// * texChannels;
+		VkDeviceSize imageBufferSize = bimage->dataSize();//texWidth * texHeight * 4;// * texChannels;
 
 
 
 		auto buff = new Buffer(renderer.device, renderer.allocator, imageBufferSize, bufferOptions);
 
-		buff->tempMapAndWrite(pixels);
+		buff->tempMapAndWrite(bimage->data);
 
 		//stbi_image_free(pixels);
 
@@ -274,12 +323,15 @@ namespace sunrise {
 
 		imageOptions.mipmaps = true;
 
-		imageOptions.format = vk::Format::eR8G8B8A8Srgb;
+		imageOptions.format = bimage->header->vkFormat();//vk::Format::eR8G8B8A8Srgb;
 		//eR8G8Unorm;
 
-		vk::Extent3D imageSize = { static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight),1 };
+		vk::Extent3D imageSize = { static_cast<uint32_t>(bimage->header->width), static_cast<uint32_t>(bimage->header->height),1 };
 
 		auto image = new Image(renderer.device, renderer.allocator, imageSize, imageOptions, vk::ImageAspectFlagBits::eColor);
+
+		// add image to imgui
+		//ImGui_ImplVulkan_Addt
 
 		//image->name("matImage", renderer.debugObject);
 		//renderer.debugObject.nameObject(renderer.device, reinterpret_cast<size_t>(image->vkItem), vk::DebugReportObjectTypeEXT::eImage, "matImage");
@@ -289,6 +341,28 @@ namespace sunrise {
 
 
 	}
+
+	
+	//TODO: remove copy constructing causing deep copy
+	Bimage* MaterialManager::loadTex_fromCash(const char* path, const char* name)
+	{
+		BimageEncoder encoder{};
+
+		if (!FileManager::exists(path)) return nullptr;
+
+		SR_CORE_TRACE("going to load material image {} from cash", name);
+
+		try {
+			auto bimage = new Bimage(encoder.readFromFile(path));
+			return bimage;
+		}
+		catch (const std::exception& e) {
+			SR_CORE_TRACE("image from cash loading failed");
+			return nullptr;
+		}
+	}
+
+
 
 	glm::uint32 MaterialManager::FinishLoadingTexture(std::tuple<Buffer*, Image*> texture)
 	{

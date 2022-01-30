@@ -82,6 +82,9 @@
     <Filter Include="src\Sunrise\Sunrise\graphics\vulkan\resources">
       <UniqueIdentifier>{E7C22ED1-5333-314A-1C52-ABD28881694B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\helpers">
+      <UniqueIdentifier>{FF565158-6B64-7F3E-F44A-7B2960574BF5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\math">
       <UniqueIdentifier>{366C948D-2291-E30D-4BDC-C89D3760E22B}</UniqueIdentifier>
     </Filter>
@@ -144,6 +147,12 @@
     </Filter>
     <Filter Include="vendor\imgui\backends">
       <UniqueIdentifier>{27CEAEAF-933A-6AAA-5C2E-0208C8598C12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\imgui\misc">
+      <UniqueIdentifier>{58F0AC6F-C406-AB05-0D7E-362779D37B8D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\imgui\misc\cpp">
+      <UniqueIdentifier>{2AD6F862-9642-B45D-5F36-4CBBCB61D6C5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -344,6 +353,9 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\helpers\StringHelpers.h">
+      <Filter>src\Sunrise\Sunrise\helpers</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\math\Box.h">
       <Filter>src\Sunrise\Sunrise\math</Filter>
@@ -617,6 +629,9 @@
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\resources</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\helpers\StringHelpers.cpp">
+      <Filter>src\Sunrise\Sunrise\helpers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp">
       <Filter>src\Sunrise\Sunrise\math</Filter>
     </ClCompile>
@@ -742,6 +757,9 @@
     </ClCompile>
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>vendor\imgui\misc\cpp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

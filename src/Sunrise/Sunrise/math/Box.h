@@ -13,6 +13,8 @@ namespace sunrise::math {
             : start(0), size(0)
         {
         }
+
+		Box(const std::string& name);
         
         constexpr Box(glm::dvec2 start, glm::dvec2 size)
             : start(start), size(size)

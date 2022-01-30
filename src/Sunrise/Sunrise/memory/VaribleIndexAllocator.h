@@ -25,6 +25,9 @@ namespace sunrise {
 		const size_t totalSize;
 		size_t allocatedSize = 0;
 
+		void imguiDrawDebug(const std::string& name);
+
+
 	private:
 		
 		struct freeSpace {

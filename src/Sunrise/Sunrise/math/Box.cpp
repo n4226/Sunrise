@@ -1,14 +1,35 @@
+#include "Box.h"
+#include "Box.h"
 #include "srpch.h"
 #include "Box.h"
 
 namespace sunrise::math {
 
         
-    
+    Box::Box(const std::string& name)
+        : start(0), size(0)
+    {
+        auto comps = helpers::split(name, "--");
 
-    
+        SR_CORE_ASSERT(comps.size() == 2);
 
-    
+        auto sOrigin = helpers::split(comps[0], "_")[0].substr(1);
+        sOrigin = sOrigin.substr(0, sOrigin.length() - 1);
+
+        auto origin = helpers::split(sOrigin, ",");
+
+
+        SR_CORE_ASSERT(origin.size() == 2);
+        start = glm::dvec2(std::stod(origin[0]), std::stod(origin[1]));
+
+        auto sSize = helpers::split(comps[1], "_")[0].substr(1);
+        sSize = sSize.substr(0, sSize.length() - 1);
+
+        auto bsize = helpers::split(sSize, ",");
+
+        SR_CORE_ASSERT(bsize.size() == 2);
+        this->size = glm::dvec2(std::stod(bsize[0]), std::stod(bsize[1]));
+    }
 
     constexpr bool Box::contains(glm::dvec2 point) const
     {

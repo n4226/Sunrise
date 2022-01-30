@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "../generalAbstractions/VkAbstractions.h"
 #include "../resources/ResourceTransferTask.h"
+#include "Sunrise/fileFormats/binary/Bimage.h"
 
 namespace sunrise {
 
@@ -26,6 +27,7 @@ namespace sunrise {
 
 		void loadMat(std::string& matRootPath, const char* matFolder);
 
+		const std::vector<gfx::Image*>& allImages();
 
 	private:
 
@@ -56,6 +58,14 @@ namespace sunrise {
 		std::vector<gfx::ResourceTransferer::Task> pendingGFXTasks = {};
         
 		std::tuple<gfx::Buffer*, gfx::Image*> loadTex(const char* path, const char* name);
+		/// <summary>
+		/// path is to perspacetive cash image
+		/// returns null if not found or could not load
+		/// </summary>
+		/// <param name="path"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		Bimage* loadTex_fromCash(const char* path, const char* name);
 
 		glm::uint32 FinishLoadingTexture(std::tuple<gfx::Buffer*, gfx::Image*> texture);
 

@@ -16,8 +16,32 @@
 
 namespace sunrise::math::mesh
 {
+	/// <summary>
+	/// basic polygon
+	/// </summary>
 	typedef std::vector<glm::dvec2> Polygon2D;
+	/// <summary>
+	/// a polygon with holes
+	/// </summary>
 	typedef std::vector<Polygon2D> HPolygon2D;
+
+	struct ShadedHPolygon2d {
+
+		HPolygon2D polygon;
+		/// <summary>
+		/// can be global static or chunk defined local which is not implimented yet
+		/// when used for polygon gen stage of multi gpu - this will be used to determin if a polygon is positive or negative space and what otehr polygons it will be combined with
+		/// </summary>
+		uint32_t material;
+	};
+
+	/// <summary>
+	/// a "set" of holed polygons
+	/// </summary>
+	typedef std::vector<HPolygon2D> MultiPolygon2D;
+	typedef std::vector<ShadedHPolygon2d> ShadedMultiPolygon2D;
+
+
 
 	//// boost poly
 	//typedef   boost::geometry::model::d2::point_xy<double> bPoint;
@@ -30,14 +54,15 @@ namespace sunrise::math::mesh
 
 	//SUNRISE_API bMultiPolygon boostFromMesh(Polygon2D p);
 	//SUNRISE_API Polygon2D meshFromBoost(bMultiPolygon p);
-#if 0
-	SUNRISE_API Polygon2D bunion(Polygon2D p1, Polygon2D p2);
+#if 1
+	SUNRISE_API MultiPolygon2D bunion(Polygon2D p1, Polygon2D p2);
+	SUNRISE_API MultiPolygon2D bunionAll(const MultiPolygon2D& p);
 
 	SUNRISE_API Polygon2D binterseciton(Polygon2D p1, Polygon2D p2);
 	
 	SUNRISE_API bool bDoIntersect(Polygon2D p1, Polygon2D p2);
 	
-	SUNRISE_API Polygon2D bDifference(Polygon2D p1, Polygon2D p2);
+	SUNRISE_API MultiPolygon2D bDifference(const MultiPolygon2D& p1,const MultiPolygon2D& p2);
 
 
 	SUNRISE_API Polygon2D bunionSMDifference(Polygon2D p1, Polygon2D p2);
@@ -54,10 +79,12 @@ namespace sunrise::math::mesh
 	/// first polygon is base shape 
 	/// all other polygons are holes 
 	/// 
-	/// the polygon returned is the pol.ygon made up of the first polygon points given
+	/// the polygon returned is the polygon made up of the first polygon points given
+	/// bool true for clockwise
 	/// </summary>
-	SUNRISE_API std::pair<TriangulatedMesh*, bool> triangulate(std::vector<std::vector<glm::dvec2>>& polygon);
+	SUNRISE_API std::pair<TriangulatedMesh, bool> triangulate(const HPolygon2D& polygon);
 
+	SUNRISE_API bool clockwiseOriented(const Polygon2D& polygon);
 
 	SUNRISE_API std::vector<std::vector<glm::dvec2>> differenceBetween(const std::vector<glm::dvec2>& polygon1, const std::vector<glm::dvec2>& polygon2);
 	SUNRISE_API std::vector<std::vector<glm::dvec2>> symmetricDifferenceBetween(const std::vector<glm::dvec2>& polygon1, const std::vector<glm::dvec2>& polygon2);

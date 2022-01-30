@@ -119,6 +119,8 @@ namespace sunrise {
 			bool wantsWindows = true;
 			bool useFileSys = true;
 
+			bool wantsHighThreadPriority = true;
+
 			//MARK: UI
 			bool drawAppDomainUI = true;
 			std::function<void()> addToMainMenu = []() {};

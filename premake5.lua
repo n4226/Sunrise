@@ -21,6 +21,7 @@ project "Sunrise"
 		"src/**.h",
 		"src/**.cpp",
 		"vendor/imgui/*.cpp",
+		"vendor/imgui/misc/cpp/**.cpp",
 		"vendor/imgui/backends/imgui_impl_vulkan.cpp",
 		"vendor/imgui/backends/imgui_impl_glfw.cpp"
 	}
@@ -31,6 +32,8 @@ project "Sunrise"
 		"C:/VulkanSDK/1.2.154.1/Lib",
 		
 		"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64",
+
+		
 	}
 	
 
@@ -40,6 +43,8 @@ project "Sunrise"
 		--"mango",
 		"vulkan-1",
 		"marl",
+		"geos",
+		"geos_c"
 	}
 
 	includedirs {
@@ -63,7 +68,10 @@ project "Sunrise"
 		"vendor/asio-1.18.1/include",
 		"vendor/CGAL-5.3/include",
 		"vendor/boost_1_76_0",
-		"vendor/eigen"
+		"vendor/eigen",
+		"vendor/earcut-hpp/include/",
+		"vendor/geos/capi/",
+		"vendor/geos/include/"
 	}	
 
 	postbuildcommands {
@@ -121,6 +129,7 @@ project "Sunrise"
 
 		libdirs {
 			"vendor/marl-main/marl-main/build/Debug",
+			"vendor/geos/bin/Debug"
 		}
 
 	filter "configurations:Release"
@@ -131,6 +140,7 @@ project "Sunrise"
 
 		libdirs {
 			"vendor/marl-main/marl-main/build/Release",
+			"vendor/geos/bin/Release"
 		}
 
 	filter "configurations:Dist"
@@ -140,6 +150,7 @@ project "Sunrise"
 
 		libdirs {
 			"vendor/marl-main/marl-main/build/Release",
+			"vendor/geos/bin/Release"
 		}
 
 	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp or files:vendor/imgui/**.cpp' }

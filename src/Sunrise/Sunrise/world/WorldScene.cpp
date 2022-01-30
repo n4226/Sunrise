@@ -65,12 +65,12 @@ namespace sunrise {
 
 	void WorldScene::onDrawUI()
 	{
-		ImGui::Begin("World Scene Settings",nullptr,ImGuiWindowFlags_NoCollapse);
+		ImGui::Begin("World Scene Settings", nullptr, ImGuiWindowFlags_NoCollapse);
 
 		ImGui::Text("World Scene Settings");
 
-        glm::vec3 playerLLA = this->playerLLA;
-		std::array<float,3> llaPos = {playerLLA.x, playerLLA.y, playerLLA.z};
+		glm::vec3 playerLLA = this->playerLLA;
+		std::array<float, 3> llaPos = { playerLLA.x, playerLLA.y, playerLLA.z };
 
 		if (ImGui::InputFloat3("LLA Position", llaPos.data(), "%.5f")) {
 			this->playerLLA.x = llaPos[0];
@@ -83,7 +83,7 @@ namespace sunrise {
 		}
 
 		//sunPos
-        glm::vec3 sunLL = this->sunLL;
+		glm::vec3 sunLL = this->sunLL;
 		std::array<float, 2> sun = { sunLL.x, sunLL.y };
 		if (ImGui::SliderFloat2("Sun Pos", sun.data(), -180.f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
 			this->sunLL.x = sun[0];
@@ -94,7 +94,43 @@ namespace sunrise {
 		}
 
 		ImGui::End();
+
+		ImGui::Begin("World Debug");
+
+		ImGui::Separator();
+
+		ImGui::Text("GPU Memory");
+
+
+		for (auto renderer : app.renderers) {
+
+			ImGui::Text("GPU 1");
+
+			renderer->gloablIndAllocator->imguiDrawDebug("Index Alocator");
+
+			ImGui::Spacing();
+
+			renderer->gloablVertAllocator->imguiDrawDebug("Vertex Alocator");
+
+		}
+
+		ImGui::Separator();
+
+		//if (ImGui::BeginChild("Materials")) {
+
+		//	//asymes 2d image
+		//	for (auto image : app.renderers[0]->materialManager->allImages()) {
+		//		ImGui::Text("Image");
+		//		ImGui::Image(image->vkItem, { (float)image->size.width, (float)image->size.depth });
+		//	}
+
+		//	ImGui::EndChild();
+		//}
+
+		ImGui::End();
+
 	}
+
 
 	void WorldScene::onDrawMainMenu()
 	{

@@ -128,7 +128,7 @@ namespace sunrise {
 
 					if (world->app.mouseLeft) {
 						auto mouseDelta = world->app.mousePosFrameDelta * world->deltaTime * sensativity;
-						manualMouseTranslation += mouseDelta;
+						manualMouseTranslation += mouseDelta * world->deltaTime * 40.0;
 					}
 
 					//SR_CORE_INFO("mouseDelta: {},{}", world->app.mousePosFrameDelta.x, world->app.mousePosFrameDelta.y);

@@ -102,6 +102,8 @@ namespace sunrise {
 
 		void processTree();
 		
+		void proccesUpdatedTree();
+
 		double threshold(const TerrainQuadTreeNode* node);
 
 		bool splitFormThreshold(const TerrainQuadTreeNode* node,const glm::dvec3& trackedPos);

@@ -41,7 +41,7 @@ namespace sunrise {
 
 //TODO: add priotrity to other platforms
 #ifdef SR_PLATFORM_WINDOWS
-        {// configure main threaqd priority
+        if (config.wantsHighThreadPriority) {// configure main threaqd priority
             SR_CORE_TRACE("Initializing Proccess Priority");
             auto nativeHandle = GetCurrentThread();
             //SetThreadPriority(nativeHandle, THREAD_PRIORITY_TIME_CRITICAL);

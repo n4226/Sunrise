@@ -133,7 +133,8 @@ namespace sunrise::gfx {
 
 #if SR_RenderDocCompatible
 		// debug tools like renderdocf and nsight graphics have real trouble with huge allocations so they have to be reduced
-		makeGlobalMeshBuffers(vCount / 10, indexCount / 10);
+		//makeGlobalMeshBuffers(vCount / 10, indexCount / 10);
+		makeGlobalMeshBuffers(vCount / 5, indexCount / 5);
 #else
 		makeGlobalMeshBuffers(vCount, indexCount);
 #endif

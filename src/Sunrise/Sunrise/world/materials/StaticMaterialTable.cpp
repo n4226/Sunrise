@@ -5,7 +5,7 @@
 namespace sunrise {
 
 	std::unordered_map<std::string, glm::uint32> StaticMaterialTable::entries = {
-
+		// doenst seem linke anytihg is useing this list currenlty
 			{"ocean1", 0},
 			{"grass1", 1},
 			{"building1", 2},
@@ -19,12 +19,10 @@ namespace sunrise {
 			{0, "ocean1"},
 			{1, "grass1"},
             {2, "building1"},
-            //for time:
-            /*
 			{3, "asphalt1"},
-			*/
-
 			//{4, "concrete1"},
+			//{5, "grass2"},
+			{6, "grass3"},
 	};
 
 }
