@@ -858,7 +858,7 @@ namespace sunrise::math::mesh {
 				max.y = pos.y;
 		}
 
-		SR_CORE_ASSERT(min != glm::dvec2(std::numeric_limits<double>::max()) && max != glm::dvec2(-std::numeric_limits<double>::max()));
+		SR_CORE_ASSERT(points.size() == 0 || (min != glm::dvec2(std::numeric_limits<double>::max()) && max != glm::dvec2(-std::numeric_limits<double>::max())));
 
 		auto result = Box(min, max - min);
 
@@ -958,6 +958,9 @@ namespace sunrise::math::mesh {
 	}
 
 	HPolygon2D GEOSPolyToSR(const GEOSGeometry* geometry) {
+		if (GEOSGeomTypeId(geometry) == GEOS_LINEARRING)
+			return { GEOSRingToSR(geometry) };
+
 		// asuming geometry is a polygon
 		SR_CORE_ASSERT(GEOSGeomTypeId(geometry) == GEOS_POLYGON);
 
@@ -972,13 +975,17 @@ namespace sunrise::math::mesh {
 
 		for (size_t i = 1; i < result.size(); i++)
 		{
-			result[i] = GEOSRingToSR(GEOSGetInteriorRingN(geometry,i));
+			result[i] = GEOSRingToSR(GEOSGetInteriorRingN(geometry,i - 1));
 		}
 
 		return result;
 	}
 
 	MultiPolygon2D GEOSMultiPolyToSR(const GEOSGeometry* geometry) {
+
+		if (GEOSGeomTypeId(geometry) == GEOS_POLYGON)
+			return { GEOSPolyToSR(geometry) };
+
 		SR_CORE_ASSERT(GEOSGeomTypeId(geometry) == GEOS_MULTIPOLYGON);
 
 		MultiPolygon2D result{};
@@ -1006,7 +1013,7 @@ namespace sunrise::math::mesh {
 
 
 		//TODO: this memory leaks becasue GEOSgeom type is
-		SR_CORE_INFO("just unioned two polygons and got a {}",GEOSGeomType(result));
+		//SR_CORE_INFO("just unioned two polygons and got a {}",GEOSGeomType(result));
 
 		return GEOSMultiPolyToSR(result);
 	}
@@ -1019,7 +1026,10 @@ namespace sunrise::math::mesh {
 
 		auto gall = SRToGEOS(p);
 
-		return GEOSMultiPolyToSR(GEOSUnaryUnion(gall));
+		auto result = GEOSUnaryUnion(gall);
+		
+
+		return GEOSMultiPolyToSR(result);
 	}
 
 	MultiPolygon2D binterseciton(const MultiPolygon2D& p1, const MultiPolygon2D& p2)
@@ -1035,14 +1045,16 @@ namespace sunrise::math::mesh {
 		//TODO: this memory leaks becasue GEOSgeom type is
 		SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
 
-		if (GEOSGeomTypeId(result) == GEOS_POLYGON)
-			return { GEOSPolyToSR(result) };
-		else
-			return GEOSMultiPolyToSR(result);
+		
+		return GEOSMultiPolyToSR(result);
 	}
 
 	MultiPolygon2D bDifference(const MultiPolygon2D& p1,const MultiPolygon2D& p2)
 	{
+		// if second is empty than just return first item
+		if (p2.size() == 1 && p2[0].size() == 1 && p2[0][0].size() == 0)
+			return p1;
+
 		initGEOS(geos_msg_handler, geos_msg_handler);
 
 
@@ -1053,11 +1065,8 @@ namespace sunrise::math::mesh {
 
 
 		//TODO: this memory leaks becasue GEOSgeom type is
-		SR_CORE_INFO("just differenced two polygons and got a {}", GEOSGeomType(result));
+		//SR_CORE_INFO("just differenced two polygons and got a {}", GEOSGeomType(result));
 		
-		if (GEOSGeomTypeId(result) == GEOS_POLYGON)
-			return {GEOSPolyToSR(result)};
-		else
 		return GEOSMultiPolyToSR(result);
 	}
 

@@ -47,8 +47,14 @@ layout(binding = 4) uniform UniformBufferObject {
 //#define Hm float(1200)
 //
 //// some function of (lambda) - constant for each type of scatterings
-#define betaR vec3(3.8e-6f, 13.5e-6f, 33.1e-6f)
+// defualts:
+// #define betaR vec3(3.8e-6f, 13.5e-6f, 33.1e-6f)
+// #define betaM vec3(21e-6f)
+
+//from: https://www.shadertoy.com/view/wlBXWK
+#define betaR vec3(5.5e-6, 13.0e-6, 22.4e-6)
 #define betaM vec3(21e-6f)
+
 //
 
 #define earthRadius 6378137
@@ -115,11 +121,12 @@ vec3 computeIncidentLight(
     float tmax,
     vec3 sunDirection)
 {
+
     float t0, t1;
     if (!raySphereIntersect(orig, dir, atmosphereRadius, t0, t1) || t1 < 0) return vec3(0);
     if (t0 > tmin && t0 > 0) tmin = t0;
     if (t1 < tmax) tmax = t1;
-    uint numSamples = 12;//8;//16;
+    uint numSamples = 12;//12;//16;
     uint numSamplesLight = 6;// 8;
     float segmentLength = (tmax - tmin) / numSamples;
     float tCurrent = tmin;
@@ -323,6 +330,8 @@ vec3 calculatePostAtmosphereicScatering(
     vec3 dirTemp = worldSpaceFragPosition.xyz - ubo.camFloatedGloabelPos.xyz;
     vec3 dir =  normalize(dirTemp);
 
+    //#temp to visualize normals
+    //return vec3(1) - dir;
 
     // 
 
@@ -338,7 +347,10 @@ vec3 calculatePostAtmosphereicScatering(
     // }
     // else return vec3(0,0,0.3);
 
-    return computeIncidentLight(orig, dir, 0, tMax, sunDirection);
+    const float epsilon = 0.00001;
+    float tmin = 0 + epsilon;
+
+    return computeIncidentLight(orig, dir, tmin, tMax - epsilon, sunDirection);
 
     //return dir;//vec3(0,0,0.8) * (textPosition.x * 1);
 
@@ -408,9 +420,9 @@ void main() {
 
         color = calculateLighting(uvs,depth,ubo.invertedViewMat,ubo.invertedProjMat,mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos.xyz);
         
-        // float brightness = dot(normalize(normal_sroughness.xyz),normalize(-ubo.sunDir.xyz));
+        float brightness = dot(normalize(normal_sroughness.xyz),normalize(ubo.sunDir.xyz));
         
-        // color = vec3(albedo_metallic.www);
+        //color = vec3(albedo_metallic.xyz);
     }
 
     outColor = vec4(color, 1);
