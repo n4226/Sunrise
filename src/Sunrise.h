@@ -47,6 +47,7 @@
 
 #include "Sunrise/Sunrise/world/WorldScene.h"
 #include "Sunrise/Sunrise/world/simlink/SimlinkMessages.h"
+#include "Sunrise/Sunrise/world/materials/StaticMaterialTable.h"
 
 
 ///////////////////////////////////////// Helpers

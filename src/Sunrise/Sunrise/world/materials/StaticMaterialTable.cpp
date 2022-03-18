@@ -11,6 +11,7 @@ namespace sunrise {
 			{"building1", 2},
 			{"asphalt1", 3},
 			//{"concrete1", 4},
+			{"grass3", 6},
 
 	};
 

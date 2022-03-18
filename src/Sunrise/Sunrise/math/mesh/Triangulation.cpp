@@ -894,6 +894,7 @@ namespace sunrise::math::mesh {
 	}
 	
 	GEOSGeometry* SRToGEOS(const Polygon2D& p1) {
+		SR_CORE_ASSERT(p1.size() > 0);
 		auto coords = GEOSCoordSeq_create(p1.size() + 1, 2);
 
 		for (size_t i = 0; i < p1.size(); i++)
@@ -903,8 +904,10 @@ namespace sunrise::math::mesh {
 		}
 
 		//TODO: asuming open polygo is given
-		GEOSCoordSeq_setOrdinate(coords, p1.size(), 0, p1[0].x);
-		GEOSCoordSeq_setOrdinate(coords, p1.size(), 1, p1[0].y);
+		//if (p1.size() > 0) {
+			GEOSCoordSeq_setOrdinate(coords, p1.size(), 0, p1[0].x);
+			GEOSCoordSeq_setOrdinate(coords, p1.size(), 1, p1[0].y);
+		//}
 
 		auto ring = GEOSGeom_createLinearRing(coords);
 		return ring;
@@ -985,7 +988,9 @@ namespace sunrise::math::mesh {
 
 		if (GEOSGeomTypeId(geometry) == GEOS_POLYGON)
 			return { GEOSPolyToSR(geometry) };
-
+		else if (GEOSGeomTypeId(geometry) == GEOS_POINT)
+			//TODO: maybe make better
+			return {};
 		SR_CORE_ASSERT(GEOSGeomTypeId(geometry) == GEOS_MULTIPOLYGON);
 
 		MultiPolygon2D result{};
@@ -1043,7 +1048,7 @@ namespace sunrise::math::mesh {
 		auto result = GEOSIntersection(gp1, gp2);
 
 		//TODO: this memory leaks becasue GEOSgeom type is
-		SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
+		//SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
 
 		
 		return GEOSMultiPolyToSR(result);
@@ -1052,7 +1057,7 @@ namespace sunrise::math::mesh {
 	MultiPolygon2D bDifference(const MultiPolygon2D& p1,const MultiPolygon2D& p2)
 	{
 		// if second is empty than just return first item
-		if (p2.size() == 1 && p2[0].size() == 1 && p2[0][0].size() == 0)
+		if (p2.size() == 0 || (p2.size() == 1 && p2[0].size() == 1 && p2[0][0].size() == 0))
 			return p1;
 
 		initGEOS(geos_msg_handler, geos_msg_handler);
@@ -1067,6 +1072,10 @@ namespace sunrise::math::mesh {
 		//TODO: this memory leaks becasue GEOSgeom type is
 		//SR_CORE_INFO("just differenced two polygons and got a {}", GEOSGeomType(result));
 		
+		//TODO: make fail more robust
+		if (!result)
+			return p1;
+
 		return GEOSMultiPolyToSR(result);
 	}
 

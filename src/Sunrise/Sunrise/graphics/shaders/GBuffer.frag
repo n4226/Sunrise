@@ -347,7 +347,7 @@ vec3 calculatePostAtmosphereicScatering(
     // }
     // else return vec3(0,0,0.3);
 
-    const float epsilon = 0.00001;
+    const float epsilon = 0.000001;
     float tmin = 0 + epsilon;
 
     return computeIncidentLight(orig, dir, tmin, tMax - epsilon, sunDirection);
@@ -424,6 +424,9 @@ void main() {
         
         //color = vec3(albedo_metallic.xyz);
     }
+
+ // todo add ACES tone mapping in a better place such as post pass
+    color = ACESFitted(color);
 
     outColor = vec4(color, 1);
 }
