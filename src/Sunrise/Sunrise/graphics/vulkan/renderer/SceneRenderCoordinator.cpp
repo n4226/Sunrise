@@ -22,8 +22,8 @@ namespace sunrise::gfx {
 
 	SceneRenderCoordinator::~SceneRenderCoordinator()
 	{
-		for (auto [pipe, stage] : registeredPipes)
-			delete pipe;
+		/*for (auto [pipe, stage] : registeredPipes)
+			delete pipe;*/
 
 		for (auto buffer : uniformBuffers)
 		{
@@ -47,9 +47,12 @@ namespace sunrise::gfx {
 
 	void SceneRenderCoordinator::reset()
 	{
-		for (auto [pipe, stage] : registeredPipes)
-			delete pipe;
+		//does not own them so can not delete them
+		/*	for (auto [pipe, stage] : registeredPipes)
+				delete pipe;*/
+
 		registeredPipes.clear();
+
 		lastStage = nullptr;
 		__tempWholeFrameRenderPassOptions = ComposableRenderPass::CreateOptions();
 		for (auto [stage, others] : individualRunDependencies) {
@@ -57,8 +60,22 @@ namespace sunrise::gfx {
 			delete stage;
 		}
 		individualRunDependencies.clear();
+		individualRunDependencyOptoins.clear();
 		stagesInOrder.clear();
 		passForStage.clear();
+
+		for (auto renderer : app.renderers) {
+
+			auto& des = renderer->materialManager->registeredDescriptors;
+
+			using Item = std::pair<gfx::SceneRenderCoordinator*, std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>*>;
+
+			auto newEnd = std::remove_if(des.begin(), des.end(), [this](auto& item) {
+				return item.first == this;
+			});
+			des.erase(newEnd, des.end());
+		}
+		graphBuilt = false;
 	}
 
 	void SceneRenderCoordinator::createPasses()
@@ -69,7 +86,7 @@ namespace sunrise::gfx {
 	void SceneRenderCoordinator::registerPipeline(VirtualGraphicsPipeline* virtualPipe, GPUStage* forStage)
 	{
 		PROFILE_FUNCTION;
-
+		//coordinator does not own virtual pipelines and so can not delete them
 		virtualPipe->create();
 		registeredPipes.push_back(std::make_pair(virtualPipe,forStage));
 	}
@@ -283,20 +300,24 @@ namespace sunrise::gfx {
 		if (generateImguiStage)
 			imguiStage = new ImGuiStage(this);
 
-		ImGui::CreateContext();
+		if (!imguiInitilized) {
 
-		//this initializes the core structures of imgui
-		generateIMGUIResources(app); //-- Fix for Multi window
+			ImGui::CreateContext();
 
-		//TODO: move 
-		//see: https://twitter.com/ocornut/status/939547856171659264?lang=en
-		float SCALE = 2.5f;
-		ImFontConfig cfg;
-		cfg.SizePixels = 13 * SCALE;
-		ImGui::GetIO().Fonts->AddFontDefault(&cfg); //don't know what this is -> ->DisplayOffset.y = SCALE;
+			//this initializes the core structures of imgui
+			generateIMGUIResources(app); //-- Fix for Multi window
 
-		for (auto window : app.renderers[0]->physicalWindows) {
-			setupIMGUIForWindow(window, app);
+			//TODO: move 
+			//see: https://twitter.com/ocornut/status/939547856171659264?lang=en
+			float SCALE = 2.5f;
+			ImFontConfig cfg;
+			cfg.SizePixels = 13 * SCALE;
+			ImGui::GetIO().Fonts->AddFontDefault(&cfg); //don't know what this is -> ->DisplayOffset.y = SCALE;
+
+			for (auto window : app.renderers[0]->physicalWindows) {
+				setupIMGUIForWindow(window, app);
+			}
+			imguiInitilized = true;
 		}
 	}
 
@@ -493,7 +514,7 @@ namespace sunrise::gfx {
 	{
 		for (auto renderer: app.renderers)
 		{
-			renderer->materialManager->registeredDescriptors.push_back(descriptors);
+			renderer->materialManager->registeredDescriptors.push_back(std::make_pair(this,descriptors));
 		}
 	}
 

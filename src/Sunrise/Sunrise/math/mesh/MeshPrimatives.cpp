@@ -50,6 +50,117 @@ namespace sunrise {
         return square;
     }
 
+	Mesh SUNRISE_API MeshPrimatives::cube()
+	{
+		Mesh cube{};
+
+        cube.verts = {
+            glm::vec3(0, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+			glm::vec3(0, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+		};
+
+        cube.uvs = {
+			glm::vec3(0, 0, 0),
+			glm::vec3(0, 0, 0),
+			glm::vec3(0, 0, 0),
+			glm::vec3(0, 1, 0),
+			glm::vec3(0, 1, 0),
+			glm::vec3(0, 1, 0),
+			glm::vec3(1, 1, 0),
+			glm::vec3(1, 1, 0),
+			glm::vec3(1, 1, 0),
+			glm::vec3(1, 0, 0),
+			glm::vec3(1, 0, 0),
+			glm::vec3(1, 0, 0),
+			glm::vec3(0, 0, 1),
+			glm::vec3(0, 0, 1),
+			glm::vec3(0, 0, 1),
+			glm::vec3(0, 1, 1),
+			glm::vec3(0, 1, 1),
+			glm::vec3(0, 1, 1),
+			glm::vec3(1, 1, 1),
+			glm::vec3(1, 1, 1),
+			glm::vec3(1, 1, 1),
+			glm::vec3(1, 0, 1),
+			glm::vec3(1, 0, 1),
+			glm::vec3(1, 0, 1),
+		};
+
+        cube.normals = {
+			{-1,  0,  0},// < !-- 0 a(faces: 2,4,6)-- >
+	        { 0, -1,  0},//
+	        { 0,  0, -1},//
+	        {-1,  0,  0},// < !-- 3 b(faces: 2,3,6)-- >
+	        { 0,  1,  0},//
+	        { 0,  0, -1},//
+	        { 1,  0,  0},// < !-- 6 c(faces: 1,3,6)-- >
+	        { 0,  1,  0},//
+	        { 0,  0, -1},//
+	        { 1,  0,  0},// < !-- 9 d(faces: 1,4,6)-- >
+	        { 0, -1,  0},//
+	        { 0,  0, -1},//
+	        {-1,  0,  0},// < !-- 12 e(faces: 2,4,5)-- >
+	        { 0, -1,  0},//
+	        { 0,  0,  1},//
+	        {-1,  0,  0},// < !-- 15 f(faces: 2,3,5)-- >
+	        { 0,  1,  0},//
+	        { 0,  0,  1},//
+	        { 1,  0,  0},// < !-- 18 g(faces: 1,3,5)-- >
+	        { 0,  1,  0},//
+	        { 0,  0,  1},//
+	        { 1,  0,  0},// < !-- 21 h(faces: 1,4,5)-- >
+	        { 0, -1,  0},//
+            { 0,  0,  1},//
+		};
+
+        cube.indicies = { {
+			 //< !--Face 1: cghd = cgh + chd-->
+	         6, 18, 21,
+	         6, 21, 9,
+             //< ,!--,Face 2: aefb = aef + afb-- >
+	         0, 12, 15,
+	         0, 15, 3,
+	         //< ,!--,Face 3: gcbf = gcb + gbf-- >
+	         19, 7, 4,
+	         19, 4, 16,
+	         //< ,!--,Face 4: dhea = dhe + dea-- >
+	         10, 22, 13,
+	         10, 13, 1,
+	         //< ,!--,Face 5: hgfe = hgf + hfe-- >
+	         23, 20, 17,
+	         23, 17, 14,
+	         //< ,!--,Face 6: cdab = cda + cab-- >
+	         8, 11, 2,
+             8, 2 ,5,
+            } };
+
+        cube.calculateTangentsAndBitangents();
+
+		return cube;
+	}
+
 
 
     Basic2DMesh SUNRISE_API MeshPrimatives::Basic2D::screenQuad()

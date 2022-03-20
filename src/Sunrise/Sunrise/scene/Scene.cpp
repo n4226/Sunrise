@@ -2,6 +2,8 @@
 #include "Scene.h"
 
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
+#include "Sunrise/core/Application.h"
+#include "../core/Window.h"
 
 namespace sunrise {
 
@@ -21,6 +23,18 @@ namespace sunrise {
 	{
 		if (inControlOfCoordinatorLifecycle)
 			delete coordinator;
+	}
+
+	void Scene::load()
+	{
+		//TODO: make all windows?
+		//also cameras should be eventually seperated from bieng inside windows and owned by scene allowing multiple cameras per monityr - working with render coordinator to have multi camera per view or have camera render to texture
+		for (size_t i = 0; i < app.windows.size(); i++)
+		{
+			auto window = app.windows[i];
+
+			window->camera.transform.reset();
+		}
 	}
 
 	void Scene::lateLoad()
@@ -68,6 +82,8 @@ namespace sunrise {
 			sys->cleanup();
 			delete sys;
 		}
+		systems.clear();
+		registry.clear();
 	}
 
 }

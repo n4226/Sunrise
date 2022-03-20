@@ -20,7 +20,7 @@ namespace sunrise {
 		Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool inControlOfCoordinatorLifecycle = false);
 		virtual ~Scene();
 
-		virtual void load() = 0;
+		virtual void load();
 		/// <summary>
 		/// after coordinator is fully initialized
 		/// make sure to call super implimentation before running code when overriding this method
@@ -51,6 +51,8 @@ namespace sunrise {
 		//TODO: wrap entt types
 		//entities
 		entt::registry registry;
+
+		glm::vec2 sunLL{};
 	protected:	
 		bool inControlOfCoordinatorLifecycle = false;
 

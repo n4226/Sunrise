@@ -59,10 +59,11 @@ void main() {
 
     mat3 TBN = mat3(fragModelTangent,fragModelBitangent, fragModelNormal);
     
-    // vec3 worldNormal = fragModelBitangent;
+    vec3 worldNormal = fragModelNormal;
 
     // vec3 worldNormal = (matGeo * vec4(fragModelNormal,0)).xyz; 
-    vec3 worldNormal = (matGeo * vec4(TBN * (normal * vec3(0.6,0.6,1)),0)).xyz;
+    //this was uncommented
+   // vec3 worldNormal = (matGeo * vec4(TBN * (normal * vec3(0.6,0.6,1)),0)).xyz;
 
     outAlbedo_Metallic = vec4(color, metallic);
     outNormal_Roughness = vec4(worldNormal, roughness);

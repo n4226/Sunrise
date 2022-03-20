@@ -44,7 +44,7 @@ namespace sunrise {
 			auto modelIndex = renderer->globalModelBufferAllocator->alloc();
 			auto modelAllocSize = renderer->globalModelBufferAllocator->allocSize;
 
-			renderer->globalModelBufferStaging->tempMapAndWrite(&mtrans, modelIndex, modelAllocSize, true);
+			renderer->globalModelBufferStaging->tempMapAndWrite(&mtrans, modelIndex * modelAllocSize, modelAllocSize, true);
 			
 			gfx::ResourceTransferer::Task transferTask{};
 
@@ -163,7 +163,12 @@ namespace sunrise {
 		for (auto [ent, buff] : meshBuffers) {
 			delete buff;
 		}
+
 		auto renderer = coord->app.renderers[0];
+		for (auto [ent, modelID] : modelUniformIndicies) {
+			renderer->globalModelBufferAllocator->free(modelID);
+		}
+
 
 		delete descriptorPool;
 	}

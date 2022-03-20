@@ -6,6 +6,7 @@ namespace sunrise {
 
 	/// <summary>
 	/// keeps track of indices of entries with an index and fixed size in collection of memory
+	/// //TODO: fix this to actually work and de allocate
 	/// </summary>
 	class SUNRISE_API IndexAllocator
 	{

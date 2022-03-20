@@ -172,6 +172,8 @@ namespace sunrise {
 
 		private:
 
+			bool imguiInitilized = false;
+
 			void loadOrGetRegisteredPipesInAllWindows();
 
 			/// <summary>

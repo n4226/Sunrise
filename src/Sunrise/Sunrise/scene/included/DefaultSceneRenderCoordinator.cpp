@@ -125,7 +125,7 @@ namespace sunrise {
 
 	void DefaultSceneRenderCoordinator::updateSceneUniformBuffer(Window& window)
 	{
-		WorldUniformCreator::updateSceneUniformBuffer(window, { 0,0,0 }, { 0,0,0 }, 100, uniformBuffers);
+		WorldUniformCreator::updateSceneUniformBuffer(window, { scene->sunLL,0 }, { 0,0,0 }, 100, uniformBuffers);
 	}
 
 }

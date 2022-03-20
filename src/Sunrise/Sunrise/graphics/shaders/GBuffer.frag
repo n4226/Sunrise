@@ -408,7 +408,7 @@ void main() {
     if (depth == 1) {
         color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
         // color *= ubo.sunDir.xyz;
-        color.xyz = vec3(0,0.2,0.4);
+        color.xyz = vec3(0,0.2,0.4) * 1.5;
         //albedo_metallic.w = 1;
     }
     else {

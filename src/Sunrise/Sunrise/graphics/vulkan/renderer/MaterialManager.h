@@ -84,7 +84,9 @@ namespace sunrise {
 		gfx::Renderer& renderer;
 
 
-		std::vector<std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>*> registeredDescriptors{};
+		std::vector<std::pair<gfx::SceneRenderCoordinator*, std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>*>> registeredDescriptors{};
+
+		bool staticEarthLoaded = false;
 	};
 
 

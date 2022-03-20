@@ -56,8 +56,12 @@ namespace sunrise {
 		void loadScene(Scene* scene, void* animationProperties);
 		void unloadScene(Scene* scene);
 
+		/// <summary>
+		/// requests a hot freload to be preformed after this frame and before the next
+		/// </summary>
 		void hotReloadScene();
 
+		
 		/// <summary>
 		/// normally just one scene
 		/// </summary>
@@ -98,6 +102,10 @@ namespace sunrise {
 		
 		static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 		static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
+		void _performHoReloadScene();
+		bool pendingHotReload = false;
+
 
 		/// <summary>
 		/// used to prevent context from exiting run until disered

@@ -33,6 +33,18 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
+		if (staticEarthLoaded) {
+			SR_CORE_INFO("Sttic earth textures alread built - just re registering to descriptors");
+
+			for (int i = 0; i < images.size(); i++)
+			{
+				//this could potentially do extra work if descriptors are already built but should not cause other problems
+				addTexToGlobal(images[i], i);
+			}
+
+			return;
+		}
+
 		SR_CORE_INFO("Attempting to load {} Required materials", StaticMaterialTable::entries.size());
 
 		auto matRootPath = FileManager::engineMaterialDir() + "staticAlloc/";
@@ -68,7 +80,7 @@ namespace sunrise {
 			}, true, true);
 		pendingGFXTasks.clear();
 
-
+		staticEarthLoaded = true;
 		SR_CORE_TRACE("Static Material loading complete");
 	}
 
@@ -414,7 +426,7 @@ namespace sunrise {
 		// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
 		//auto tstage = renderer.app.loadedScenes[0]->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
 
-		for (auto set : registeredDescriptors) {
+		for (auto [coord, set]: registeredDescriptors) {
 			for (size_t window = 0; window < renderer.windows.size(); window++) {
 				for (size_t i = 0; i < renderer.app.maxSwapChainImages; i++) {
 					VkWriteDescriptorSet descriptorWrite{};
@@ -432,7 +444,6 @@ namespace sunrise {
 					descriptorWrite.pTexelBufferView = nullptr; // Optional
 
 					renderer.device.updateDescriptorSets({ descriptorWrite }, {});
-
 				}
 			}
 		}

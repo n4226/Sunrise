@@ -415,12 +415,9 @@ namespace sunrise {
 
     void Application::hotReloadScene()
     {
-        SR_CORE_WARN("Scene Hot Reload Initiated");
-        //TODO: fix for multi gpu and multiple scenes
-        windows[0]->device.waitIdle();
-
-        unloadScene(loadedScenes[0]);
-        loadScene(loadedScenes[0], nullptr);
+        SR_CORE_WARN("Scene Hot Reload Initiated. Waiting for end of frame to reload");
+        
+        pendingHotReload = true;
 
     }
 
@@ -470,6 +467,9 @@ namespace sunrise {
         }
         //return;
         //drawView();
+
+        if (pendingHotReload)
+            _performHoReloadScene();
 
         if (!config.wantsWindows || !config.vulkan || loadedScenes.size() == 0) return;
 
@@ -550,9 +550,11 @@ namespace sunrise {
                 }
             }
             
-            if (ImGui::MenuItem("Hot Reload Scene"))
+            if (ImGui::MenuItem("Hot Reload Scene","ctr+r"))
                 hotReloadScene();
 
+            if (getKey(GLFW_KEY_R | GLFW_MOD_CONTROL))
+                hotReloadScene();
             
             ImGui::MenuItem("Timing View", "", &timingView);
             
@@ -925,6 +927,17 @@ namespace sunrise {
         if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             engine->app->mouseRight = action != GLFW_RELEASE;
         }
+    }
+
+    void Application::_performHoReloadScene()
+    {
+        //TODO: fix for multi gpu and multiple scenes
+        windows[0]->device.waitIdle();
+
+        unloadScene(loadedScenes[0]);
+        loadScene(loadedScenes[0], nullptr);
+
+        pendingHotReload = false;
     }
 
     void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
