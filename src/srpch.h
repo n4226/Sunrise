@@ -21,6 +21,8 @@
 
 #include "stb_image.h"
 
+#include <entt/entt.hpp>
+
 //#include "marl/defer.h"
 #include "marl/event.h"
 #include "marl/scheduler.h"

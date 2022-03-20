@@ -8,7 +8,7 @@ namespace sunrise {
 	Scene::Scene(Application* app, bool inControlOfCoordinatorLifecycle)
 		: app(*app), inControlOfCoordinatorLifecycle(inControlOfCoordinatorLifecycle)
 	{
-		coordinator = new gfx::SceneRenderCoordinator(this);
+		coordinator = new DefaultSceneRenderCoordinator(this);
 	}
 
 	Scene::Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool inControlOfCoordinatorLifecycle)
@@ -21,6 +21,18 @@ namespace sunrise {
 	{
 		if (inControlOfCoordinatorLifecycle)
 			delete coordinator;
+	}
+
+	void Scene::lateLoad()
+	{
+		for (System* sys : systems) {
+			sys->scene = this;
+			sys->setup();
+		}
+
+		time = 0;
+		timef = 0;
+
 	}
 
 	void Scene::update()
@@ -40,6 +52,22 @@ namespace sunrise {
 
 		time = newtime;
 		timef = newtimef;
+
+		for (System* sys : systems) {
+			sys->update();
+		}
+
+		for (System* sys : systems) {
+			sys->lateUpdate();
+		}
+	}
+
+	void Scene::unload()
+	{
+		for (System* sys : systems) {
+			sys->cleanup();
+			delete sys;
+		}
 	}
 
 }

@@ -32,6 +32,7 @@ namespace sunrise::gfx {
 		/// Precondition: stage must not already be registered
 		/// 
 		/// TODO: look into makeing these vector parameter types into temporaries again eg std::move or &&
+		/// passes lifecycle ownership to this class - this class will delete stages registered
 		/// </summary>
 		/// <param name="runDependencies">stages that must complete before this stage exicutes each </param>
 		/// <param name="runDependencyOptions"> not one to one related to run dependancies vector, each option is about a resource</param>

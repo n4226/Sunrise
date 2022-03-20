@@ -620,19 +620,23 @@ namespace sunrise {
     void Window::cleanupSwapchain()
     {
 
+        /* dont think therse are still used
         delete gbuffer_albedo_metallic;
         delete gbuffer_normal_roughness;
         delete gbuffer_ao;
         delete depthImage;
+        */
 
-        for (auto framebuffer : swapChainFramebuffers) {
+        //CRPHolder destroys them
+       /* for (auto framebuffer : swapChainFramebuffers) {
             vkDestroyFramebuffer(device, framebuffer, nullptr);
-        }
+        }*/
 
 
-        delete pipelineCreator;
-        delete deferredPass;
-        delete renderPassManager;
+        //delete pipelineCreator;
+        
+        //scene render coordinator owns this object this is just a reference
+        //delete renderPassManager;
             
 
         for (auto imageView : swapChainImageViews) {
@@ -647,23 +651,23 @@ namespace sunrise {
     {
         PROFILE_FUNCTION
 
-            device.waitIdle();
+        device.waitIdle();
 
-        delete deferredPass;
-
-
+        for (auto [vPipe, cPipe] : loadedPipes)
+            delete cPipe;
 
         for (size_t i = 0; i < app.MAX_FRAMES_IN_FLIGHT; i++) {
             device.destroySemaphore(imageAvailableSemaphores[i]);
             device.destroySemaphore(renderFinishedSemaphores[i]);
-            device.destroyFence(inFlightFences[i]);
+			device.destroyFence(inFlightFences[i]);
         }
+        /*for (int i = swapChainImages.size() - 1; i >= 0; i--)
+        {
+			device.destroyFence(imagesInFlight[i]);
+        }*/
 
         cleanupSwapchain();
 
-        vmaDestroyAllocator(renderer->allocator);
-
-        device.destroy();
 
         destroySurface();
         destroyWindow();

@@ -14,9 +14,11 @@ namespace sunrise {
 
 	void WindowCameraController::update()
 	{
-		for (size_t i = 0; i < world->app.windows.size(); i++)
+		auto world = getScene<WorldScene>();
+
+		for (size_t i = 0; i < scene->app.windows.size(); i++)
 		{
-			auto& window = world->app.windows[i];
+			auto& window = scene->app.windows[i];
 
 			auto camTrans = configSystem.global().cameras[i];
 

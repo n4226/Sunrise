@@ -569,6 +569,12 @@ namespace sunrise::gfx {
         definition = makeDeff();
     }
 
+
+	VirtualGraphicsPipeline::~VirtualGraphicsPipeline()
+	{
+
+	}
+
     void VirtualGraphicsPipeline::create()
     {
         definition = makeDeff();
@@ -576,6 +582,8 @@ namespace sunrise::gfx {
 
     GraphicsPipelineOptions VirtualGraphicsPipeline::makeDeff()
     {
-        return GraphicsPipelineOptions();
+        return {};
     }
+
+
 }

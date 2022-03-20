@@ -263,6 +263,10 @@ namespace sunrise::gfx {
 		device.updateDescriptorSets(writes, copies);
 	}
 
+	DescriptorPool::~DescriptorPool()
+	{
+		device.destroy(vkItem);
+	}
 
 
 	DescriptorSet::DescriptorSet(vk::DescriptorSet vkItem, std::vector<DescriptorSetLayoutBinding>* layout)

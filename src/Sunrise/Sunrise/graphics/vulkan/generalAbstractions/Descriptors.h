@@ -200,6 +200,7 @@ namespace sunrise::gfx {
 		};
 
 		DescriptorPool(vk::Device device, CreateOptions&& options);
+		~DescriptorPool();
 
 		vk::DescriptorPool vkItem;
 

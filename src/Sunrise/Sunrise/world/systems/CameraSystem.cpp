@@ -23,6 +23,7 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 		
+		auto world = getScene<WorldScene>();
 
 		world->playerTrans.position = LlatoGeo(world->playerLLA, world->origin, world->terrainSystem->getRadius());
 

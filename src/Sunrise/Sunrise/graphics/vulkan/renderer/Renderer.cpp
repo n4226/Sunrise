@@ -21,16 +21,20 @@ namespace sunrise::gfx {
 	{
 		PROFILE_FUNCTION;
 
+
 		//TODO: check if gpu supports aftermath before doing this
 		debugObject.initAftermath();
 
 		resouceTransferer = new ResourceTransferer(device, *this);
 		//TODO: for multi gpu this maybe should not be owned by a rednerer but the application
 		materialManager = new MaterialManager(*this);
+
 	}
 
 	void Renderer::createAllResources()
 	{
+		printVMAAllocattedStats();
+
 		for (size_t i = 0; i < windows.size(); i++)
 			windows[i]->indexInRenderer = i;
 
@@ -40,11 +44,10 @@ namespace sunrise::gfx {
 			camFrustroms.emplace_back(win->camera.view());
 
 		createRenderResources();
-		//createUniformsAndDescriptors();
 
 		createDynamicRenderCommands();
 
-		
+		printVMAAllocattedStats();
 	}
 
 	Renderer::~Renderer()
@@ -87,29 +90,60 @@ namespace sunrise::gfx {
 		delete gloablVertAllocator;
 		delete globalModelBufferAllocator;
 
+		delete globalMaterialUniformBuffer;
+		delete globalMaterialUniformBufferStaging;
+
 //        char** stats = new char*;
 //        vmaBuildStatsString(allocator, stats, VK_TRUE);
 //        std::string statString(*stats);
 //        
 //        FileManager::saveStringToFile(statString, "vmaAlloc.json");
         
-        auto stats = new VmaStats;
-        
-        vmaCalculateStats(allocator, stats);
-        
-        SR_CORE_WARN("{} of unalockated vulkan object bytes",stats->total.usedBytes);
+		//delete windows
+
+		//TODO: not sure if this is correct for MVR
+		for (auto window : allWindows) {
+			delete window;
+		}
+
+		printVMAAllocattedStats();
+
         
         //used bytes: 1122043300
         //used bytes: 0681641380
         //used bytes: 0094438840
         //used bytes: 0094438840
         
-        // delete memory
-		// not yet because there are many leaks and this causes program to crash on shutdown
-        //vmaDestroyAllocator(allocator);
+		//now:
+		//83867392
+		//83867392
+		//83067136
+		//83067136
+		//83067136
+		//256
+		//0!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :)
+
+		//startup:
+		//8036002304
+
+
+		//zero leak without loading scene :)
+
+        // delete memory - will crash if somethign is still allocated with it
+        vmaDestroyAllocator(allocator);
         
+		//TODO: destryoy descirptors registered to material manager correctly --------------------------------------------------------------------
         
         device.destroy();
+	}
+
+	void Renderer::printVMAAllocattedStats()
+	{
+		auto stats = new VmaStats;
+
+		vmaCalculateStats(allocator, stats);
+
+		SR_CORE_WARN("{} of unalockated vulkan object bytes", stats->total.usedBytes);
 	}
 
 	void Renderer::windowSizeChanged(size_t allWindowIndex)
@@ -117,6 +151,13 @@ namespace sunrise::gfx {
 		//TODO: save performance by only reseting the descriptors for the resized window
 		resetDescriptorPools();
 
+	}
+
+	
+	BufferCreationOptions Renderer::newBufferOptions()
+	{
+		return { ResourceStorageType::cpu,{ }, vk::SharingMode::eConcurrent,
+			{ queueFamilyIndices.graphicsFamily.value(), queueFamilyIndices.resourceTransferFamily.value() } };;
 	}
 
 	void Renderer::createRenderResources()

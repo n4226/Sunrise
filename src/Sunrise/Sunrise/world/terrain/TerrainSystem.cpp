@@ -19,8 +19,8 @@ namespace sunrise {
 
 	using namespace gfx;
 
-	TerrainSystem::TerrainSystem(Application& app, WorldScene& scene, glm::dvec3* origin)
-		: tree(math::dEarthRad), app(app), scene(scene), meshLoader(), origin(origin)
+	TerrainSystem::TerrainSystem(Application& app, glm::dvec3* origin)
+		: tree(math::dEarthRad), app(app), meshLoader(), origin(origin)
 	{
 		PROFILE_FUNCTION;
 		SR_CORE_TRACE("Initializing Terrain System");
@@ -32,8 +32,10 @@ namespace sunrise {
 
 		CreateRenderResources();
 
+		auto world = getScene<WorldScene>();
 
-		if (scene.terrainMask == nullptr) {
+
+		if (world->terrainMask == nullptr) {
 			// initial setup of the base 8 chunks
 			for (TerrainQuadTreeNode* child : tree.leafNodes) {
 				meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
@@ -73,7 +75,9 @@ namespace sunrise {
 		for (auto node : tree.leafNodes)
 			toDestroyDraw.insert(node);
 
-		CreateTerrainInMask(scene, scene.app);
+		auto world = getScene<WorldScene>();
+
+		CreateTerrainInMask(*world, scene->app);
 	}
 
 	TerrainSystem::~TerrainSystem()
@@ -258,6 +262,9 @@ namespace sunrise {
 	}
 
 	void TerrainSystem::proccesUpdatedTree() {
+		auto world = getScene<WorldScene>();
+
+
 		if (toDrawDraw.size() > 0 || maskedMode)
 		{
 			{
@@ -272,7 +279,7 @@ namespace sunrise {
 				*threadRunning = true;
 			}
 
-			marl::schedule([this]() {
+			marl::schedule([this,world]() {
 				PROFILE_SCOPE("create draw draw job");
 				//MarlSafeTicketLock lock(ticket);
 

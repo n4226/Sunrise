@@ -41,6 +41,12 @@ namespace sunrise::gfx {
 	
 	}
 
+
+	void ImGuiVulkanContainer::destroyIMGUIResources(Application& app)
+	{
+		delete descriptorPool;
+	}
+
 	void ImGuiVulkanContainer::setupIMGUIForWindow(Window* window, Application& app)
 	{
 		ImGui_ImplGlfw_InitForVulkan(window->window,true);
@@ -121,15 +127,18 @@ namespace sunrise::gfx {
 		ImGui_ImplVulkan_DestroyFontUploadObjects();
 	}
 
+	void ImGuiVulkanContainer::cleanupIMGUIForWindow(Window* window, Application& app)
+	{
+	}
+
 	void ImGuiVulkanContainer::setupIMGUIForRenderer(Renderer* renderer, Application& app)
 	{
-		//TODO: WARN: imGUi apears to only work with singal gpu
+		//TODO: WARN: imGUi appears to only work with single gpu
 
 		SR_CORE_CRITICAL("{} Not Implimented", SR_FUNC_SIG);
 		SR_CORE_ASSERT(false);
 		
 	}
-
 
 
 

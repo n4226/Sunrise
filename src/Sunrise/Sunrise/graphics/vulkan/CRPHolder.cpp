@@ -14,6 +14,21 @@ namespace sunrise::gfx {
 	}
 
 
+	CRPHolder::~CRPHolder()
+	{
+		for (auto& [win, imgs]:images)
+			for (auto img : imgs)
+				delete img;
+
+		for (auto inner : frameBuffers)
+			for (auto& [win, buffs] : inner)
+				for (auto buff : buffs)
+					renderer->device.destroyFramebuffer(buff);
+
+		for (auto pass : renderpasses)
+			delete pass;
+	}
+
 	/// <summary>
 	/// returns the CRP and the supbass within it to use for a "logical pass"
 	/// </summary>
@@ -327,5 +342,6 @@ namespace sunrise::gfx {
 			
 		}
 	}
+
 
 }

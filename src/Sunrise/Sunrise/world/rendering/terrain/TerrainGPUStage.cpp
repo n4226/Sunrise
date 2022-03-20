@@ -86,7 +86,7 @@ namespace sunrise {
 
 				descriptorSets[window].push_back(des[0]);
 
-				//todo check if it is valid to bind descriptor for a whole buffer in which a shader only uses the first fiew bytes of (not hwole buffer)
+				//todo check if it is valid to bind descriptor for a whole buffer in which a shader only uses the first few bytes of (not whole buffer)
 				VkDescriptorBufferInfo globalUniformBufferInfo{};
 				globalUniformBufferInfo.buffer =  worldCoord->uniformBuffers[window->indexInRenderer][swap]->vkItem;
 				globalUniformBufferInfo.offset = 0;

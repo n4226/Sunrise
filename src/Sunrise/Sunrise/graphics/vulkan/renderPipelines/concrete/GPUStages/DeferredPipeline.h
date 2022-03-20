@@ -7,6 +7,8 @@
 namespace sunrise {
 
 	/// <summary>
+	/// need to change name as this will also be used for netity rendering stage
+	/// 
 	/// this is an abstract comman "deffered" pieleine and gpu stage to be modularaly used
 	/// </summary>
 	class DeferredPipeline: public gfx::VirtualGraphicsPipeline

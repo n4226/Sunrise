@@ -412,26 +412,28 @@ namespace sunrise {
 		imageInfo.sampler = samplers[imageIndex]->vkItem;
 
 		// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
-		auto tstage = renderer.app.loadedScenes[0]->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
+		//auto tstage = renderer.app.loadedScenes[0]->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
 
-		for (size_t window = 0; window < renderer.windows.size(); window++) {
-			for (size_t i = 0; i < renderer.app.maxSwapChainImages; i++) {
-				VkWriteDescriptorSet descriptorWrite{};
-				descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-				// todo find much better system
-				descriptorWrite.dstSet = tstage->descriptorSets.find(renderer.windows[window])->second[i]->vkItem;
-				descriptorWrite.dstBinding = 3;
-				descriptorWrite.dstArrayElement = imageIndex;
+		for (auto set : registeredDescriptors) {
+			for (size_t window = 0; window < renderer.windows.size(); window++) {
+				for (size_t i = 0; i < renderer.app.maxSwapChainImages; i++) {
+					VkWriteDescriptorSet descriptorWrite{};
+					descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+					// todo find much better system
+					descriptorWrite.dstSet = set->find(renderer.windows[window])->second[i]->vkItem;
+					descriptorWrite.dstBinding = 3;
+					descriptorWrite.dstArrayElement = imageIndex;
 
-				descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-				descriptorWrite.descriptorCount = 1;
+					descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+					descriptorWrite.descriptorCount = 1;
 
-				descriptorWrite.pBufferInfo = nullptr; // Optional
-				descriptorWrite.pImageInfo = &imageInfo; // Optional
-				descriptorWrite.pTexelBufferView = nullptr; // Optional
+					descriptorWrite.pBufferInfo = nullptr; // Optional
+					descriptorWrite.pImageInfo = &imageInfo; // Optional
+					descriptorWrite.pTexelBufferView = nullptr; // Optional
 
-				renderer.device.updateDescriptorSets({ descriptorWrite }, {});
+					renderer.device.updateDescriptorSets({ descriptorWrite }, {});
 
+				}
 			}
 		}
 	}

@@ -11,7 +11,7 @@ namespace sunrise::gfx {
 	{
 	public:
 		GPURenderStage(SceneRenderCoordinator* coord,std::string&& name, bool useInternalresources = true);
-		~GPURenderStage();
+		virtual ~GPURenderStage();
 
 
 	protected:
@@ -49,6 +49,7 @@ namespace sunrise::gfx {
 		// called every frame
 		virtual vk::CommandBuffer* encode(RunOptions options) override = 0;
 
+		bool useInternalresources;
 	};
 
 

@@ -9,7 +9,7 @@
 namespace sunrise::gfx {
 
 	GPURenderStage::GPURenderStage(SceneRenderCoordinator* coord, std::string&& name, bool useInternalresources)
-		: GPUStage(coord,std::move(name))
+		: GPUStage(coord,std::move(name)), useInternalresources(useInternalresources)
 	{
 		if (useInternalresources)
 			createRequiredRenderResources();
@@ -18,6 +18,12 @@ namespace sunrise::gfx {
 	GPURenderStage::~GPURenderStage()
 	{
 		//todo destroy resources if useInternalResources
+		if (useInternalresources) {
+
+			for (auto pool : cmdBufferPools)
+				for (auto spool : pool)
+					app.renderers[0]->device.destroyCommandPool(spool);
+		}
 	}
 
 	void GPURenderStage::createRequiredRenderResources()

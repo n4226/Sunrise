@@ -16,7 +16,7 @@ namespace sunrise::gfx {
 	/// </summary>
 	class SUNRISE_API MeshBuffer {
 	public:
-		MeshBuffer(vk::Device device, VmaAllocator allocator, BufferCreationOptions options, Mesh* mesh);
+		MeshBuffer(vk::Device device, VmaAllocator allocator, BufferCreationOptions options,const  Mesh* mesh);
 		MeshBuffer(const MeshBuffer& other) = delete;
 		~MeshBuffer();
 
@@ -24,12 +24,14 @@ namespace sunrise::gfx {
 		/// 
 		/// </summary>
 		/// <param name="mapandUnmap">if true will call map and unmap before and after writing</param>
-		void writeMeshToBuffer(bool mapandUnmap);
-		void bindVerticiesIntoCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t baseBinding);
-		void bindIndiciesIntoCommandBuffer(vk::CommandBuffer commandBuffer);
+		void writeMeshToBuffer(bool mapandUnmap, const Mesh* mesh = nullptr);
+		void bindVerticiesIntoCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t baseBinding, Mesh* mesh = nullptr);
+		void bindIndiciesIntoCommandBuffer(vk::CommandBuffer commandBuffer, Mesh* mesh = nullptr);
+
+		void clearBaseMesh();
 
 		Buffer* buffer;
-		Mesh* baseMesh;
+		const Mesh* baseMesh;
 
 	private:
 	};

@@ -159,6 +159,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h" />
     <ClInclude Include="src\Sunrise.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
@@ -241,6 +243,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\networking\NetworkManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\networking\networking.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Scene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\UIScene.h" />
@@ -264,6 +267,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
@@ -335,6 +340,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\networking\NetworkManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Scene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\UIScene.cpp" />

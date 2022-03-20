@@ -7,6 +7,7 @@
 #include "terrain/TerrainGPUStage.h"
 
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/concrete/DeferredStage.h"
+#include "../../graphics/vulkan/renderer/WorldUniformsCreator.h"
 
 namespace sunrise {
 
@@ -18,9 +19,9 @@ namespace sunrise {
 		WorldSceneRenderCoordinator(WorldScene* scene);
 		~WorldSceneRenderCoordinator();
 
-		virtual void createPasses() override;
+		void createPasses() override;
 
-		void createUniforms();
+		void createUniforms() override;
 	private:
 		friend TerrainGPUStage;
 		friend DeferredStage;
@@ -30,14 +31,10 @@ namespace sunrise {
 		void preEncodeUpdate(gfx::Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window) override;
 
 
-		void updateSceneUniformBuffer(Window& window);
+		void updateSceneUniformBuffer(Window& window) override;
 
 		WorldScene* worldScene;
 
-		// scene uniforms
-		
-		// one per surface
-		std::vector<std::vector<gfx::Buffer*>> uniformBuffers;
 
 	};
 

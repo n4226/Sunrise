@@ -20,6 +20,11 @@ namespace sunrise::gfx {
 	ComposableRenderPass::~ComposableRenderPass()
 	{
 		//TODO: important to handle dismantlement
+
+		//delete vatatchment pointers - renderPasss is deleted in superclass
+
+		for (auto vat : vattachments)
+			delete vat;
 	}
 
 

@@ -28,7 +28,7 @@ namespace sunrise {
 	public:
 
 #pragma region base Methods
-		TerrainSystem(Application& app, WorldScene& scene, glm::dvec3* origin);
+		TerrainSystem(Application& app, glm::dvec3* origin);
 		~TerrainSystem();
 
 		void CreateRenderResources();
@@ -48,7 +48,7 @@ namespace sunrise {
 		Transform* trackedTransform = nullptr;
 		glm::dvec3* origin = nullptr;
 
-		WorldScene& scene;
+		//WorldScene& scene;
 		Application& app;
 
 		//Renderer* renderer;

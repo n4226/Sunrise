@@ -19,6 +19,7 @@ namespace sunrise {
 
 	void PlayerMovementSystem::setup()
 	{
+		auto world = getScene<WorldScene>();
 		sunrise::NetworkManager::CreateOptions netOptions{};
 
 		netOptions.newThread = false;
@@ -48,6 +49,8 @@ namespace sunrise {
 
 	void PlayerMovementSystem::update()
 	{
+		auto world = getScene<WorldScene>();
+		
 		bool con;
 
 
@@ -154,6 +157,9 @@ namespace sunrise {
 	void PlayerMovementSystem::movePlayerAlongCamPath()
 	{
 		PROFILE_FUNCTION;
+		auto world = getScene<WorldScene>();
+
+
 		//static const auto points = cameraPath.CalculateEvenlySpacedPoints(1000, 0.0001, true, Math::dEarthRad);
 
 
@@ -166,7 +172,7 @@ namespace sunrise {
 		}
 
 
-		currentSegmentTime += world->deltaTime;
+		currentSegmentTime += scene->deltaTime;
 
 		//std::cout << cameraPath.getNumSegments() << std::endl;
 
@@ -216,6 +222,8 @@ namespace sunrise {
 
 	void PlayerMovementSystem::rotatePlayerAlongCamPath()
 	{
+		auto world = getScene<WorldScene>();
+
 		auto segment = currentSegment;
 
 		auto segTime = (currentSegmentTime + 0.1);

@@ -7,27 +7,27 @@ namespace sunrise {
 
 	using namespace gfx;
 
-	size_t Mesh::vertsSize()
+	size_t Mesh::vertsSize() const
 	{
 		return verts.size() * sizeof(glm::vec3);
 	}
 
-	size_t Mesh::uvsSize()
+	size_t Mesh::uvsSize() const
 	{
 		return uvs.size() * sizeof(glm::vec2);
 	}
 
-	size_t Mesh::normalsSize()
+	size_t Mesh::normalsSize() const
 	{
 		return normals.size() * sizeof(glm::vec3);
 	}
 
-	size_t Mesh::tangentsSize()
+	size_t Mesh::tangentsSize() const
 	{
 		return tangents.size() * sizeof(glm::vec3);
 	}
 
-	size_t Mesh::bitangentsSize()
+	size_t Mesh::bitangentsSize() const
 	{
 		return bitangents.size() * sizeof(glm::vec3);
 	}
@@ -38,12 +38,12 @@ namespace sunrise {
 	}*/
 
 
-	size_t Mesh::indiciesSize(size_t subMesh)
+	size_t Mesh::indiciesSize(size_t subMesh) const
 	{
 		return (indicies[subMesh].size()) * sizeof(glm::uint32);
 	}
 
-	size_t Mesh::AllSubMeshIndiciesSize() {
+	size_t Mesh::AllSubMeshIndiciesSize() const {
 		size_t total = 0;
 
 		for (size_t i = 0; i < indicies.size(); i++)
@@ -53,37 +53,48 @@ namespace sunrise {
 		return total;
 	}
 
-	size_t Mesh::vertsOffset()
+	size_t Mesh::vertsOffset() const
 	{
 		return 0;
 	}
 
-	size_t Mesh::uvsOffset()
+	size_t Mesh::uvsOffset() const
 	{
 		return vertsOffset() + vertsSize();
 	}
 
-	size_t Mesh::normalsOffset()
+	size_t Mesh::normalsOffset() const
 	{
 		return uvsOffset() + uvsSize();
 	}
 
-	size_t Mesh::tangentsOffset()
+	size_t Mesh::tangentsOffset() const 
 	{
 		return normalsOffset() + normalsSize();
 	}
 
-	size_t Mesh::bitangentsOffset()
+	size_t Mesh::bitangentsOffset() const
 	{
 		return tangentsOffset() + tangentsSize();
 	}
 
-	size_t Mesh::indiciesOffset()
+	size_t Mesh::indiciesOffset() const
 	{
 		return bitangentsOffset() + bitangentsSize();
 	}
 
-	size_t Mesh::fullSize()
+	size_t Mesh::indiciesOffset(int submesh) const
+	{
+		SR_ASSERT(indicies.size() > 0);
+		auto totalSizeBefore = 0;
+		for (size_t i = 0; i < submesh; i++)
+		{
+			totalSizeBefore += indiciesSize(i);
+		}
+		return indiciesOffset() + totalSizeBefore;
+	}
+
+	size_t Mesh::fullSize() const
 	{
 		return indiciesOffset() + AllSubMeshIndiciesSize();
 	}

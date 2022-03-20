@@ -110,9 +110,11 @@ namespace sunrise::gfx {
 	};
 
 
+	//TODO: all instances of this are currenlty being leaked
 	class SUNRISE_API VirtualGraphicsPipeline {
 	public:
 		VirtualGraphicsPipeline();
+		virtual ~VirtualGraphicsPipeline();
 
 		void create();
 

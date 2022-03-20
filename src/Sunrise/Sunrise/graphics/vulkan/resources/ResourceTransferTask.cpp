@@ -50,6 +50,8 @@ namespace sunrise {
 		{
 			ticketQueue.take().wait();
 			device.destroyCommandPool(copyPool);
+			device.destroyCommandPool(gfxPool);
+			device.destroyFence(waitFence);
 		}
 
 

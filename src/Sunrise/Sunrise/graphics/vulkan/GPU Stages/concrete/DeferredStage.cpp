@@ -48,8 +48,6 @@ namespace sunrise {
 	void DeferredStage::lateSetup()
 	{
 		//TODO: label why this has to be done
-		//todo make this better
-		auto worldCoord = dynamic_cast<WorldSceneRenderCoordinator*>(coord);
 		for (auto window : app.renderers[0]->windows)
 		{
 			descriptorSets[window] = {};
@@ -74,7 +72,7 @@ namespace sunrise {
 
 
 				VkDescriptorBufferInfo globalUniformBufferInfo{};
-				globalUniformBufferInfo.buffer = worldCoord->uniformBuffers[window->indexInRenderer][swap]->vkItem;
+				globalUniformBufferInfo.buffer = coord->uniformBuffers[window->indexInRenderer][swap]->vkItem;
 				globalUniformBufferInfo.offset = 0;
 				globalUniformBufferInfo.range = VK_WHOLE_SIZE;
 
@@ -101,7 +99,8 @@ namespace sunrise {
 
 	void DeferredStage::cleanup()
 	{
-
+		delete square;
+		delete meshBuff;
 	}
 
 	vk::CommandBuffer* DeferredStage::encode(RunOptions options)

@@ -35,30 +35,27 @@ namespace sunrise {
 
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
 		//renderer->world = this;
-		terrainSystem = new TerrainSystem(app, *this, &origin);
+		terrainSystem = new TerrainSystem(app, &origin);
 		terrainSystem->trackedTransform = &playerTrans;
-		terrainSystem->world = this;
+		terrainSystem->scene = this;
 
-		dynamic_cast<WorldSceneRenderCoordinator*>(coordinator)->createUniforms();
+		//now this is part of all coordinators and is called internally
+		//dynamic_cast<WorldSceneRenderCoordinator*>(coordinator)->createUniforms();
 
 		/// <summary>
 		/// it is important that the camera systemis befoer floating origin so that floating origin snaps before first frame
 		/// </summary>
-		generalSystems = { new PlayerMovementSystem(), new WindowCameraController(), new CameraSystem(), new FloatingOriginSystem() };
+		systems = { new PlayerMovementSystem(), new WindowCameraController(), new CameraSystem(), new FloatingOriginSystem() };
 
-		for (System* sys : generalSystems) {
-			sys->world = this;
-			sys->setup();
-		}
-
-		time = 0;
-		timef = 0;
-
-		generalSystems[0]->update();
 	}
 
 	void WorldScene::lateLoad()
 	{
+		Scene::lateLoad();
+
+		systems[0]->update();
+
+		//TODO: find better way to do this
 		for (auto ren : app.renderers)
 			ren->materialManager->loadStaticEarth();
 	}
@@ -174,9 +171,7 @@ namespace sunrise {
 		//	vmaFreeStatsString(app.renderers[0]->allocator, *stats);
 		//}
 
-		for (System* sys : generalSystems) {
-			sys->update();
-		}
+		
 
 		terrainSystem->update();
 
@@ -191,14 +186,9 @@ namespace sunrise {
 
 	void WorldScene::unload()
 	{
-
 		delete terrainSystem;
 
-		for (System* sys : generalSystems) {
-			sys->cleanup();
-			delete sys;
-		}
-
+		Scene::unload();
 	} 
 
 	void WorldScene::reloadTerrainInMask()

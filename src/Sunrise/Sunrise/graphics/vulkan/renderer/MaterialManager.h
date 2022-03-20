@@ -17,6 +17,10 @@ namespace sunrise {
 		std::vector<gfx::Image*> aoImages;
 	};
 
+	namespace gfx {
+		class SceneRenderCoordinator;
+	}
+
 	class SUNRISE_API MaterialManager
 	{
 	public:
@@ -29,7 +33,9 @@ namespace sunrise {
 
 		const std::vector<gfx::Image*>& allImages();
 
+
 	private:
+		friend gfx::SceneRenderCoordinator;
 
 		struct MaterialFiles {
 			std::string albedoPath{};
@@ -76,6 +82,9 @@ namespace sunrise {
 
 
 		gfx::Renderer& renderer;
+
+
+		std::vector<std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>*> registeredDescriptors{};
 	};
 
 

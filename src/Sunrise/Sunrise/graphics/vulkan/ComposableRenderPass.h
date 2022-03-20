@@ -92,7 +92,6 @@ namespace sunrise {
 			virtual size_t getSubPassCount() override;
 
 
-			//TODO: do proper delete of reasources
 			~ComposableRenderPass();
 
 

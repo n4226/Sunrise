@@ -465,6 +465,9 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -761,5 +764,8 @@
     <ClCompile Include="vendor\imgui\misc\cpp\imgui_stdlib.cpp">
       <Filter>vendor\imgui\misc\cpp</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp" />
   </ItemGroup>
 </Project>

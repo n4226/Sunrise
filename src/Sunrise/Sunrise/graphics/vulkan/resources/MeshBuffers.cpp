@@ -11,8 +11,8 @@ namespace sunrise::gfx {
 /// <param name="device"></param>
 /// <param name="allocator"></param>
 /// <param name="options"></param>
-/// <param name="mesh"></param>
-	MeshBuffer::MeshBuffer(vk::Device device, VmaAllocator allocator, BufferCreationOptions options, Mesh* mesh)
+/// <param name="mesh">must be non nill so size of buffer can be determind - only derefrenced during initilizer and possibly durring calls to writeMeshToBuffer</param>
+	MeshBuffer::MeshBuffer(vk::Device device, VmaAllocator allocator, BufferCreationOptions options,const Mesh* mesh)
 		: baseMesh(mesh)
 	{
 		auto bufferSize = baseMesh->fullSize();
@@ -25,10 +25,19 @@ namespace sunrise::gfx {
 		delete buffer;
 	}
 
-	void MeshBuffer::writeMeshToBuffer(bool mapandUnmap)
+	void MeshBuffer::writeMeshToBuffer(bool mapandUnmap, const Mesh* mesh)
 	{
+		if (!mesh && !baseMesh)
+			return;
+		auto baseMesh = this->baseMesh;
+		if (mesh)
+			baseMesh = mesh;
+
 		if (mapandUnmap)
 			buffer->mapMemory();
+
+
+
 
 		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->vertsOffset(), baseMesh->verts.data(), baseMesh->vertsSize());
 		memcpy(static_cast<char*>(buffer->mappedData) + baseMesh->uvsOffset(), baseMesh->uvs.data(), baseMesh->uvsSize());
@@ -43,8 +52,14 @@ namespace sunrise::gfx {
 			buffer->unmapMemory();
 	}
 
-	void MeshBuffer::bindVerticiesIntoCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t baseBinding)
+	void MeshBuffer::bindVerticiesIntoCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t baseBinding, Mesh* mesh)
 	{
+		if (!mesh && !baseMesh)
+			return;
+		auto baseMesh = this->baseMesh;
+		if (mesh)
+			baseMesh = mesh;
+
 		commandBuffer.bindVertexBuffers(baseBinding, {
 				buffer->vkItem,
 				buffer->vkItem,
@@ -60,9 +75,20 @@ namespace sunrise::gfx {
 			});
 	}
 
-	void MeshBuffer::bindIndiciesIntoCommandBuffer(vk::CommandBuffer commandBuffer)
+	void MeshBuffer::bindIndiciesIntoCommandBuffer(vk::CommandBuffer commandBuffer, Mesh* mesh)
 	{
+		if (!mesh && !baseMesh)
+			return;
+		auto baseMesh = this->baseMesh;
+		if (mesh)
+			baseMesh = mesh;
+
 		commandBuffer.bindIndexBuffer(buffer->vkItem, baseMesh->indiciesOffset(), vk::IndexType::eUint32);
+	}
+
+	void MeshBuffer::clearBaseMesh()
+	{
+		baseMesh = nullptr;
 	}
 
 

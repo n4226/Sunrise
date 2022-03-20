@@ -34,7 +34,7 @@ namespace sunrise {
 
 		TerrainSystem* terrainSystem;
 
-		std::vector<System*> generalSystems;
+		//std::vector<System*> generalSystems;
 
 		glm::dvec3 origin = glm::dvec3(0, 0, 0);
 

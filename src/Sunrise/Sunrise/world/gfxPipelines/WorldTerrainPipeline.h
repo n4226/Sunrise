@@ -16,7 +16,7 @@ namespace sunrise {
 
 	protected:
 
-		virtual gfx::GraphicsPipelineOptions makeDeff() override;
+		gfx::GraphicsPipelineOptions makeDeff() override;
 
 
 	};

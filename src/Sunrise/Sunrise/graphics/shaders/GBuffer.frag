@@ -337,9 +337,10 @@ vec3 calculatePostAtmosphereicScatering(
 
     float t0, t1, tMax = kInfinity;
     //if the view ray intersects earth set the max to be the distance/time till the surface
-    if (raySphereIntersect(orig, dir, earthRadius, t0, t1) && t1 > 0) {
-        tMax = max(0, t0);
-    }
+    //TODO: un comment this out;;;;;;;
+    // if (raySphereIntersect(orig, dir, earthRadius, t0, t1) && t1 > 0) {
+    //     tMax = max(0, t0);
+    // }
 
     // float at0, at1; // - maybe problem with atmosphere being only visible inside planet is because t1 is less then zero in other func?
     // if (raySphereIntersect(orig,dir,earthRadius,at0, at1) && at1 > 0) {
@@ -407,7 +408,7 @@ void main() {
     if (depth == 1) {
         color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
         // color *= ubo.sunDir.xyz;
-        //color.xyz = vec3(0,0.2,0.4);
+        color.xyz = vec3(0,0.2,0.4);
         //albedo_metallic.w = 1;
     }
     else {

@@ -4,6 +4,11 @@
 
 namespace sunrise {
 
+	//TODO: find bvetter place
+	//TODO: allow differenct sub mesh materials
+	struct MeshRenderer {
+		uint32_t material;
+	};
 
 	struct Transform
 	{

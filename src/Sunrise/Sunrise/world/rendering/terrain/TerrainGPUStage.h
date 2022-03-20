@@ -19,6 +19,7 @@ namespace sunrise {
 
 		vk::CommandBuffer* encode(RunOptions options) override;
 
+		std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>> descriptorSets{};
 	protected:
 		friend gfx::Renderer;
 		friend TerrainSystem;
@@ -62,7 +63,6 @@ namespace sunrise {
 
 		gfx::DescriptorPool* descriptorPool;
 
-		std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>> descriptorSets{};
 
 		WorldSceneRenderCoordinator* worldCoord;
 

@@ -10,12 +10,12 @@ namespace sunrise::gfx {
 	/// 
 	///  Made to work in conjunction with GPU-Stages 
 	/// mangages one or more Composable Render passes for a scene render coordinator 
-	/// weather the underling vulkan code is one rendxer pass with multiple subpasses or multiple renderPasses is an internal implimentation detail 
-	/// which is subject to changse without notice and be different on different machenes but can be queried.
+	/// weather the underling vulkan code is one rendxer pass with multiple subpasses or multiple renderPasses is an internal implementation detail 
+	/// which is subject to changes without notice and be different on different machines but can be queried (more indepth in future).
 	/// 
-	/// owns and create the images for the composable render pass(es)
+	/// owns and create the images for the compensable render pass(es)
 	/// 
-	/// you defin logical passes when creating the object which are then tunred into vk subpases or renderpasses
+	/// you define logical passes when creating the object which are then turned into vk subpases or renderpasses
 	/// 
 	/// //TODO might need to be rethought a little for compute
 	/// 
@@ -31,6 +31,7 @@ namespace sunrise::gfx {
 		struct HolderOptions {
 			size_t passes{};
 			/// <summary>
+			/// define the layouts for each attachment at the start of each pass after the first one
 			/// outer array is passes inner is attachment;
 			/// outer length must = passes - 1 (skipping first stage)
 			/// 
@@ -41,12 +42,17 @@ namespace sunrise::gfx {
 
 
 			/// <summary>
+			/// attachment load operation for each attachment at beginning of each pass (excluding first)
+			/// 
 			/// outer array is passes inner is attachment;
 			/// outer length must = passes - 1 (skipping first stage)
 			/// 
 			/// </summary>
 			std::vector<std::vector<std::pair<vk::AttachmentLoadOp, vk::AttachmentStoreOp>>> attachmentOps{};
+			
 			/// <summary>
+			/// stencil load operation for each attachment at beginning of each pass (excluding first)
+			/// 
 			/// outer array is passes inner is attachment;
 			/// outer length must = passes - 1 (skipping first stage)
 			/// 
@@ -56,6 +62,7 @@ namespace sunrise::gfx {
 
 		CRPHolder(const ComposableRenderPass::CreateOptions& wholeOptions,
 			const HolderOptions& spacificOptions, Renderer* renderer);
+		~CRPHolder();
 
 		bool multipleSubPasses() const { return _multipleSubPasses; }
 

@@ -90,7 +90,7 @@ namespace sunrise {
 			// manager objects
 
 		gfx::RenderPassManager* renderPassManager;
-		gfx::GraphicsPipeline* pipelineCreator;
+		//gfx::GraphicsPipeline* pipelineCreator;
 
 		//// window spacific - will keep here after refactor
 
@@ -132,7 +132,7 @@ namespace sunrise {
 		//Deferred 
 		//Image* deferred_colorAttachment; - right now befoe adding post processing passes the deferred writes directly to swap chain
 
-		gfx::DeferredPass* deferredPass;
+		//gfx::DeferredPass* deferredPass;
 		gfx::GPUGenCommandsPipeline* gpuGenPipe;
 
 		std::unordered_map<const gfx::VirtualGraphicsPipeline*,gfx::GraphicsPipeline*> loadedPipes = {};
@@ -156,7 +156,7 @@ namespace sunrise {
 		/// indicies are window surface inndexes i.e. window.currentSurfaceIndex
 		/// </summary>
 		std::vector<VkFence> imagesInFlight;
-
+		
 		bool framebufferResized = false;
 
 		void recreateSwapchain();

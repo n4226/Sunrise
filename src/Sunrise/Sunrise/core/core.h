@@ -67,6 +67,7 @@ namespace sunrise {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 
+	using Entity = entt::entity;
 }
 
 #include "Engine.h"

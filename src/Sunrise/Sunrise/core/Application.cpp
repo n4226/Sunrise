@@ -143,15 +143,18 @@ namespace sunrise {
             configureGLFWEvents();
         }
 
+
+
         if (loadedScenes.size() > 0)
-        for (size_t i = 0; i < renderers.size(); i++) {
-            SR_CORE_TRACE("Creating Renderer Resources for renderer {}", i);
-            renderers[i]->createAllResources();
-        }
+			for (size_t i = 0; i < renderers.size(); i++) {
+				SR_CORE_TRACE("Creating Renderer Resources for renderer {}", i);
+				renderers[i]->createAllResources();
+			}
 
 
 
         SR_CORE_TRACE("Initializing Scene");
+
 
         //TODO this does not support multiple scenes yet
         Scene* firstScene = loadedScenes[0];
@@ -198,6 +201,8 @@ namespace sunrise {
 
             window->device = devices[deviceIndex];
             window->renderer = renderers[deviceIndex];
+
+            window->renderer->printVMAAllocattedStats();
 
             // if could be in window group hold of on full initilization for now
             if (!window->renderer->supportsMultiViewport)
@@ -340,6 +345,8 @@ namespace sunrise {
 
         SR_CORE_INFO("Shutdown");
 
+
+
         if (context) {
             if (contextThread) {
                 PROFILE_SCOPE("Asio Context Job");
@@ -361,6 +368,9 @@ namespace sunrise {
             delete scene;
         }
         
+        SR_CORE_INFO("after scene unload:");
+		renderers[0]->printVMAAllocattedStats();
+
         
         for (auto renderer : renderers) {
             delete renderer;
@@ -384,7 +394,11 @@ namespace sunrise {
 	void Application::loadScene(Scene* scene, void* animationProperties)
 	{
         SR_CORE_INFO("Loading scene at addr: {}", reinterpret_cast<void*>(scene));
+
         scene->load();
+
+        //might have to be modified for hot reloading a scene
+        scene->coordinator->createUniforms();
         scene->coordinator->createPasses();
 
         scene->coordinator->buildGraph();

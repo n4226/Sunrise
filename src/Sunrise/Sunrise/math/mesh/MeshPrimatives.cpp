@@ -23,12 +23,14 @@ namespace sunrise {
         };
 
         square.normals = {
-            {0,0,0},
-            {0,0,0},
-            {0,0,0},
+            {0,0,1},
+            {0,0,1},
+			{0,0,1},
+			{0,0,1},
         };
         
         square.tangents = {
+            {0,0,0},
             {0,0,0},
             {0,0,0},
             {0,0,0},
@@ -38,9 +40,12 @@ namespace sunrise {
             {0,0,0},
             {0,0,0},
             {0,0,0},
+            {0,0,0},
         };
 
         square.indicies = { {0,1,2,2,3,0} };
+
+        square.calculateTangentsAndBitangents();
 
         return square;
     }

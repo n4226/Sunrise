@@ -8,6 +8,8 @@
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h"
 #include "Sunrise/Sunrise/graphics/vulkan/renderPipelines/GraphicsPipeline.h"
 
+#include "Sunrise/graphics/vulkan/renderer/MaterialManager.h"
+
 #include "backends/imgui_impl_vulkan.h"
 
 namespace sunrise::gfx {
@@ -20,10 +22,43 @@ namespace sunrise::gfx {
 
 	SceneRenderCoordinator::~SceneRenderCoordinator()
 	{
-        if (imguiStage)
+		for (auto [pipe, stage] : registeredPipes)
+			delete pipe;
+
+		for (auto buffer : uniformBuffers)
+		{
+			for (auto sbuffer : buffer)
+				delete sbuffer;
+		}
+		
+		if (imguiStage)
             delete imguiStage;
         
+		for (auto holders : sceneRenderpassHolders)
+			delete holders;
+
+		destroyIMGUIResources(scene->app);
+
+		ImGui::DestroyContext();
+
         //deleting stages is done in super class
+	}
+
+
+	void SceneRenderCoordinator::reset()
+	{
+		for (auto [pipe, stage] : registeredPipes)
+			delete pipe;
+		registeredPipes.clear();
+		lastStage = nullptr;
+		__tempWholeFrameRenderPassOptions = ComposableRenderPass::CreateOptions();
+		for (auto [stage, others] : individualRunDependencies) {
+			stage->cleanup();
+			delete stage;
+		}
+		individualRunDependencies.clear();
+		stagesInOrder.clear();
+		passForStage.clear();
 	}
 
 	void SceneRenderCoordinator::createPasses()
@@ -168,7 +203,7 @@ namespace sunrise::gfx {
 
 
 		CRPHolder::HolderOptions holderOptions{};
-		// see if complex renderpass creation is required
+		// see if complex render pass creation is required
 		if (multipleRenderPasses) {
 
 			holderOptions.passes = 1;
@@ -274,14 +309,6 @@ namespace sunrise::gfx {
 		}
 	}
 
-	void SceneRenderCoordinator::reset()
-	{
-		registeredPipes.clear();
-		lastStage = nullptr;
-		__tempWholeFrameRenderPassOptions = ComposableRenderPass::CreateOptions();
-		stagesInOrder.clear();
-		passForStage.clear();
-	}
 
 	void SceneRenderCoordinator::loadOrGetRegisteredPipesInAllWindows()
 	{
@@ -309,8 +336,9 @@ namespace sunrise::gfx {
 		sceneRenderpassHolders.push_back(new CRPHolder(std::move(__tempWholeFrameRenderPassOptions), holderOptions, app.renderers[0]));
 
 
-		// set renderpass pointer on all windows even owned ones
+		// set render pass pointer on all windows even owned ones
 		for (auto win : app.renderers[0]->allWindows) {
+			//TODO: this object has to be deleted somewhere???!!
 			win->renderPassManager = sceneRenderpassHolders[0]->renderPass(sceneRenderpassHolders[0]->passCount() - 1).first;
 		}
 	}
@@ -456,5 +484,17 @@ namespace sunrise::gfx {
 		firstLevelCMDBuffer.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
 	}
 
+	void SceneRenderCoordinator::preEncodeUpdate(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
+	{
+		updateSceneUniformBuffer(window);
+	}
+
+	void SceneRenderCoordinator::registerForGlobalMaterials(std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>* descriptors)
+	{
+		for (auto renderer: app.renderers)
+		{
+			renderer->materialManager->registeredDescriptors.push_back(descriptors);
+		}
+	}
 
 }

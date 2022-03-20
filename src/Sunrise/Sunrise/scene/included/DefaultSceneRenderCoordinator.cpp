@@ -1,31 +1,18 @@
 #include "srpch.h"
-#include "WorldSceneRenderCoordinator.h"
 
-
-#include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/concrete/DeferredStage.h"
-#include "Sunrise/Sunrise/graphics/vulkan/resources/uniforms.h"
-#include "Sunrise/Sunrise/core/Window.h"
-#include "Sunrise/Sunrise/core/Application.h"
-#include "../WorldScene.h"
-#include"Sunrise/Sunrise/graphics/vulkan/renderPipelines/concrete/GPUStages/DeferredPipeline.h"
-#include "Sunrise/Sunrise/graphics/vulkan/generalAbstractions/GPUSelector.h"
+#include "DefaultSceneRenderCoordinator.h"
+#include "entityRendering/EntityRenderingGPUStage.h"
+#include "../../graphics/vulkan/GPU Stages/concrete/DeferredStage.h"
+#include "../../world/gfxPipelines/WorldTerrainPipeline.h"
+#include "../../graphics/vulkan/renderer/WorldUniformsCreator.h"
+#include "../../graphics/vulkan/renderPipelines/concrete/GPUStages/DeferredPipeline.h"
 
 namespace sunrise {
 
-	WorldSceneRenderCoordinator::WorldSceneRenderCoordinator(WorldScene* scene)
-		: SceneRenderCoordinator(scene), worldScene(scene)
-	{
-	}
 
-	WorldSceneRenderCoordinator::~WorldSceneRenderCoordinator()
+	void sunrise::DefaultSceneRenderCoordinator::createPasses()
 	{
-	
-	}
-	
-	void WorldSceneRenderCoordinator::createPasses()
-	{
-
-
+		
 		//https://stackoverflow.com/questions/8192185/using-stdarray-with-initialization-lists
 		std::vector<GPUStageDispatcher::DependencyOptions> gbuffToDeferredOptions = { {
 			{0, vk::ImageLayout::eColorAttachmentOptimal, vk::AttachmentLoadOp::eClear},
@@ -35,38 +22,24 @@ namespace sunrise {
 			{4, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eLoad}
 		} };
 
-		auto terrainStage = new TerrainGPUStage(this);
+		auto entStage = new EntityRenderingGPUStage(this);
 		auto deferredStage = new DeferredStage(this, { 1,2,3,4 });
 
-		registerPipeline(worldTerrainPipeline,terrainStage);
-		registerPipeline(deferredPipeline,deferredStage);
+		registerPipeline(worldTerrainPipeline, entStage);
+		registerPipeline(deferredPipeline, deferredStage);
 
-		registerForGlobalMaterials(&terrainStage->descriptorSets);
+		registerForGlobalMaterials(&entStage->descriptorSets);
 
+		registerStage(entStage, {}, {}, {});
+		registerStage(deferredStage, { entStage }, std::move(gbuffToDeferredOptions), {});
 
-		registerStage(terrainStage, {}, {}, {});
-		registerStage(deferredStage, { terrainStage }, std::move(gbuffToDeferredOptions), {});
-
+		//setLastStage(entStage);
 		setLastStage(deferredStage);
+
+		generateImguiStage = true;
 	}
 
-
-	void WorldSceneRenderCoordinator::preEncodeUpdate(gfx::Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
-	{
-		SceneRenderCoordinator::preEncodeUpdate(renderer, firstLevelCMDBuffer, frameID, window);
-	}
-
-	void WorldSceneRenderCoordinator::createUniforms()
-	{
-		WorldUniformCreator::createUniforms(app,uniformBuffers);
-	}
-	
-	void WorldSceneRenderCoordinator::updateSceneUniformBuffer(Window& window)
-	{
-		WorldUniformCreator::updateSceneUniformBuffer(window, worldScene->sunLL, -worldScene->origin, worldScene->terrainSystem->getRadius(), uniformBuffers);
-	}
-
-	gfx::ComposableRenderPass::CreateOptions WorldSceneRenderCoordinator::renderpassConfig(vk::Format swapChainFormat)
+	gfx::ComposableRenderPass::CreateOptions sunrise::DefaultSceneRenderCoordinator::renderpassConfig(vk::Format swapChainFormat)
 	{
 		auto deferredA = gfx::ComposableRenderPass::CreateOptions::VAttatchment();
 
@@ -122,7 +95,7 @@ namespace sunrise {
 		//attach2.usage |= vk::ImageUsageFlagBits::eStorage;
 		gbuffer_ao.name = "gBuffer: ao";
 
-		
+
 		auto gbuffer_depth = gfx::ComposableRenderPass::CreateOptions::VAttatchment();
 
 		auto depthBufferFormat =
@@ -139,11 +112,20 @@ namespace sunrise {
 		gbuffer_depth.name = "gBuffer: depth";
 
 
+		//not using defered target currently;
 		gfx::ComposableRenderPass::CreateOptions options = { {deferredA, gbuffer_albedo_metallic, gbuffer_normal_roughness, gbuffer_ao, gbuffer_depth}, 0 };
 
 		return options;
 	}
 
+	void DefaultSceneRenderCoordinator::createUniforms()
+	{
+		WorldUniformCreator::createUniforms(app, uniformBuffers);
+	}
+
+	void DefaultSceneRenderCoordinator::updateSceneUniformBuffer(Window& window)
+	{
+		WorldUniformCreator::updateSceneUniformBuffer(window, { 0,0,0 }, { 0,0,0 }, 100, uniformBuffers);
+	}
 
 }
-

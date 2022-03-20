@@ -9,6 +9,7 @@
 #include "Sunrise/graphics/imGui/ImGuiVulkanContainer.h"
 #include "Sunrise/graphics/imGui/ImGuiStage.h"
 
+
 namespace sunrise {
 
 	class Scene;
@@ -61,7 +62,7 @@ namespace sunrise {
 			virtual ~SceneRenderCoordinator();
 
 			/// <summary>
-			/// called shortly after initilization or scene reload
+			/// called shortly after initialization or scene reload
 			/// this is where the gpu stages should be registered
 			/// </summary>
 			virtual void createPasses();
@@ -89,6 +90,16 @@ namespace sunrise {
 			void registerPipeline(VirtualGraphicsPipeline* virtualPipe, GPUStage* forStage);
 
 			/// <summary>
+			/// pass descriptors owned by a stage - pointer must remain valid after call to funciton
+			/// must be called during create passes function 
+			/// can be called for multiple stages
+			/// 
+			/// undefined if called more than once for same descriptors
+			/// </summary>
+			/// <param name="descriptors"></param>
+			void registerForGlobalMaterials(std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>* descriptors);
+
+			/// <summary>
 			/// must be called once before before the createPasses funciton exits
 			/// if called multiple times results are undefined
 			/// </summary>
@@ -101,7 +112,7 @@ namespace sunrise {
 			ComposableRenderPass::CreateOptions wholeFrameRenderPassOptions;
 
 			/// <summary>
-			/// kciks off all load time things that need to hapen
+			/// kicks off all load time things that need to hapen
 			/// </summary>
 			void buildGraph();
 
@@ -123,15 +134,21 @@ namespace sunrise {
 			/// </summary>
 			void reset();
 
+			//scene uniform Buffers - subclasses of this class are in charge of uniform buffers
+			// one per surface
+			std::vector<std::vector<gfx::Buffer*>> uniformBuffers;
+
 		protected:
 			friend Window;
+			friend Application;
+
 			std::vector<std::pair<VirtualGraphicsPipeline*, GPUStage*>> registeredPipes{};
 			ComposableRenderPass::CreateOptions __tempWholeFrameRenderPassOptions;
 
 			
 
 			/// <summary>
-			/// his is guaranteed to be called after the createPasses funciton is called 
+			/// his is guaranteed to be called after the createPasses function is called 
 			/// </summary>
 			/// <param name="swapChainFormat">the format the display(s) are expecting, with multiuple windows if formats are different value is undifined</param>
 			/// <returns></returns>
@@ -140,7 +157,7 @@ namespace sunrise {
 			/// <summary>
 			/// allows subclass to perform any actions before frame encoding
 			/// </summary>
-			virtual void preEncodeUpdate(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window) {}
+			virtual void preEncodeUpdate(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window);
 
 
 			/// <summary>
@@ -149,6 +166,10 @@ namespace sunrise {
 			/// </summary>
 			bool generateImguiStage = true;
 			ImGuiStage* imguiStage = nullptr;
+
+			virtual void createUniforms() {};
+			virtual void updateSceneUniformBuffer(Window& window) {};
+
 		private:
 
 			void loadOrGetRegisteredPipesInAllWindows();
@@ -190,3 +211,4 @@ namespace sunrise {
 }
 }
 
+#include "Sunrise/scene/included/DefaultSceneRenderCoordinator.h"

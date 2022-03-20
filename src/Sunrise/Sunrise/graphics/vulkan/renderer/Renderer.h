@@ -41,10 +41,20 @@ namespace sunrise {
 			void createAllResources();
 			~Renderer();
 
+			void printVMAAllocattedStats();
+
 			void beforeRenderScene();
 			void renderFrame(Window& window);
 
 			void windowSizeChanged(size_t allWindowIndex);
+
+
+			/// <summary>
+			/// sets the correct sharing and queue options on the object
+			///	MAKE SURE TO SET THE CORRECT STORAGE AND USAGE FLAGS
+			/// </summary>
+			/// <returns></returns>
+			BufferCreationOptions newBufferOptions();
 
 #pragma endregion
 

@@ -14,8 +14,11 @@ namespace sunrise::gfx {
 	public:
 
 		void generateIMGUIResources(Application& app);
+		void destroyIMGUIResources(Application& app);
 
 		void setupIMGUIForWindow(Window* window, Application& app);
+		void cleanupIMGUIForWindow(Window* window, Application& app);
+
 		void setupIMGUIForRenderer(Renderer* renderer, Application& app);
 
 	protected:
