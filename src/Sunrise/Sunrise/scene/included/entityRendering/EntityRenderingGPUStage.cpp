@@ -16,11 +16,22 @@ namespace sunrise {
 
 	void EntityRenderingGPUStage::setup()
 	{
+		loadMeshResources();
+
+		//TODO: have to destryo buffers etc for entity when it is destryoyed ---
+
+		createDescriptorPool();
+
+	}
+
+	void EntityRenderingGPUStage::loadMeshResources()
+{
 		auto renderer = coord->app.renderers[0];
 
 		auto& reg = coord->scene->registry;
 
 		auto view = reg.view<Mesh, Transform, MeshRenderer>();
+
 
 		gfx::BufferCreationOptions options = renderer->newBufferOptions();
 
@@ -31,34 +42,13 @@ namespace sunrise {
 		for (auto [ent, mesh, transform, meshRender] : view.each()) {
 			//create mesh buffer from mesh
 
-			auto meshBuff = new gfx::MeshBuffer(renderer->device,renderer->allocator,options,&mesh);
+			auto meshBuff = new gfx::MeshBuffer(renderer->device, renderer->allocator, options, &mesh);
 			meshBuff->clearBaseMesh();
 			meshBuff->writeMeshToBuffer(true, &mesh);
-			meshBuffers.emplace(std::make_pair(ent,meshBuff));
+			meshBuffers.emplace(std::make_pair(ent, meshBuff));
 
+			CreateTransformInGlobal(renderer, ent, transform);
 
-			gfx::ModelUniforms mtrans;
-			mtrans.model = transform.matrix();
-
-
-			auto modelIndex = renderer->globalModelBufferAllocator->alloc();
-			auto modelAllocSize = renderer->globalModelBufferAllocator->allocSize;
-
-			renderer->globalModelBufferStaging->tempMapAndWrite(&mtrans, modelIndex * modelAllocSize, modelAllocSize, true);
-			
-			gfx::ResourceTransferer::Task transferTask{};
-
-			transferTask.type = gfx::ResourceTransferer::bufferTransfers;
-			transferTask.bufferTransferTask.srcBuffer = renderer->globalModelBufferStaging->vkItem;
-			transferTask.bufferTransferTask.dstBuffer = renderer->globalModelBuffers[renderer->gpuActiveGlobalModelBuffer]->vkItem;
-			transferTask.bufferTransferTask.regions = { { modelIndex * modelAllocSize, modelIndex * modelAllocSize,modelAllocSize} };
-			
-			//have to copy that to actual buff line above
-
-			renderer->resouceTransferer->newTask({ transferTask }, [] {});
-
-
-			modelUniformIndicies.emplace(std::make_pair(ent, modelIndex));
 
 			//auto transformBuff = new gfx::Buffer(renderer->device, renderer->allocator, sizeof(glm::mat4),options);
 			//auto mat = transform.matrix();
@@ -66,9 +56,38 @@ namespace sunrise {
 
 			//transBuffers.insert(std::make_pair(ent, transformBuff));
 		}
+	}
 
-		createDescriptorPool();
+	void EntityRenderingGPUStage::CreateTransformInGlobal(gfx::Renderer* renderer, Entity ent,const Transform& transform)
+	{
 
+		gfx::ModelUniforms mtrans;
+		mtrans.model = transform.matrix();
+
+
+		auto modelIndex = renderer->globalModelBufferAllocator->alloc();
+
+		updateModelUniform(renderer, mtrans, modelIndex, ent);
+	}
+
+	void EntityRenderingGPUStage::updateModelUniform(gfx::Renderer* renderer, gfx::ModelUniforms mtrans, size_t modelIndex, Entity ent)
+	{
+		auto modelAllocSize = renderer->globalModelBufferAllocator->allocSize;
+
+		renderer->globalModelBufferStaging->tempMapAndWrite(&mtrans, modelIndex * modelAllocSize, modelAllocSize, true);
+
+		gfx::ResourceTransferer::Task transferTask{};
+
+		transferTask.type = gfx::ResourceTransferer::bufferTransfers;
+		transferTask.bufferTransferTask.srcBuffer = renderer->globalModelBufferStaging->vkItem;
+		transferTask.bufferTransferTask.dstBuffer = renderer->globalModelBuffers[renderer->gpuActiveGlobalModelBuffer]->vkItem;
+		transferTask.bufferTransferTask.regions = { { modelIndex * modelAllocSize, modelIndex * modelAllocSize,modelAllocSize } };
+
+		renderer->resouceTransferer->newTask({ transferTask }, [] {});
+
+
+		modelUniformIndicies.emplace(std::make_pair(ent, modelIndex));
+		modelMatricies.emplace(std::make_pair(ent, mtrans.model));
 	}
 
 	void EntityRenderingGPUStage::lateSetup()
@@ -214,6 +233,13 @@ namespace sunrise {
 				auto model = modelUniformIndicies.at(ent);
 				auto material = renderer.material;
 
+
+				//if transform updated update buffer - does not support dynamic meshes yet
+				//add ability to declare as static meaning this is not done at runtime and batching could potentially be done
+				//TODO: have to use staging mesh buffer so that potential flickering is rmeoved ------------------------------------
+				if (modelMatricies.at(ent) != transform.matrix()) {
+					updateModelUniform(app.renderers[0], { transform.matrix() }, model, ent);
+				}
 				meshBuff->bindVerticiesIntoCommandBuffer(*cmdBuff, 0,&mesh);
 				meshBuff->bindIndiciesIntoCommandBuffer(*cmdBuff, &mesh);
 

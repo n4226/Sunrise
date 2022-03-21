@@ -57,13 +57,22 @@ void main() {
     // remape normals to correct domain
     normal = normal * 2.0 - 1.0;   
 
-    mat3 TBN = mat3(fragModelTangent,fragModelBitangent, fragModelNormal);
-    
-    vec3 worldNormal = fragModelNormal;
+    //normal = vec3(0,0,1);
 
-    // vec3 worldNormal = (matGeo * vec4(fragModelNormal,0)).xyz; 
+
+    //TODO: remove minus on bitang ? - the bitangents ahe been inverted in the way they are now generated
+    mat3 TBN = mat3(fragModelTangent, fragModelBitangent, fragModelNormal);
+    
+    //vec3 worldNormal = fragModelNormal;
+
+    //vec3 worldNormal = (matGeo * vec4(fragModelNormal,0)).xyz; 
+    //color = vec3(uvs.x,uvs.y,1);
+
+    //vec3 worldNormal = (matGeo * vec4(fragModelBitangent,0)).xyz;//TBN * normal,0)).xyz;
+    
+    vec3 worldNormal = (matGeo * vec4(TBN * normal,0)).xyz;
     //this was uncommented
-   // vec3 worldNormal = (matGeo * vec4(TBN * (normal * vec3(0.6,0.6,1)),0)).xyz;
+    //vec3 worldNormal = (matGeo * vec4(TBN * (normal * vec3(0.6,0.6,1)),0)).xyz;
 
     outAlbedo_Metallic = vec4(color, metallic);
     outNormal_Roughness = vec4(worldNormal, roughness);

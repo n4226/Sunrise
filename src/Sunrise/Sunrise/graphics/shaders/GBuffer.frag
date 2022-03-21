@@ -408,7 +408,7 @@ void main() {
     if (depth == 1) {
         color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
         // color *= ubo.sunDir.xyz;
-        color.xyz = vec3(0,0.2,0.4) * 1.5;
+        color.xyz = vec3(0,0.2,0.4) * 1; 
         //albedo_metallic.w = 1;
     }
     else {
@@ -421,9 +421,8 @@ void main() {
 
         color = calculateLighting(uvs,depth,ubo.invertedViewMat,ubo.invertedProjMat,mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos.xyz);
         
-        float brightness = dot(normalize(normal_sroughness.xyz),normalize(ubo.sunDir.xyz));
-        
-        //color = vec3(albedo_metallic.xyz);
+        //float brightness = dot(normalize(normal_sroughness.xyz),normalize(ubo.sunDir.xyz));
+        //color = vec3(normal_sroughness.xyz) * max(brightness,0);
     }
 
  // todo add ACES tone mapping in a better place such as post pass

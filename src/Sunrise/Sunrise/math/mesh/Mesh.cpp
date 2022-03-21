@@ -179,7 +179,7 @@ namespace sunrise {
 				const glm::vec3& n = normals[a];
 				const glm::vec3& t = tan1[a];
 
-				// Gram-Schmidt orthogonalize
+				// Gram-Schmidt orthogonalized
 				tangents[a] = glm::normalize(t - n * glm::dot(n, t));
 
 				//????????
@@ -189,7 +189,8 @@ namespace sunrise {
 
 			for (size_t v = 0; v < verts.size(); v++)
 			{
-				bitangents[v] = glm::cross(normals[v], tangents[v]);
+				//i dont know why - is needed but tbn matrix was messed up without this
+				bitangents[v] = -glm::cross(normals[v], tangents[v]);
 			}
 
 		}
