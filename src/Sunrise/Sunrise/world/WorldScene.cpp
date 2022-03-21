@@ -35,15 +35,14 @@ namespace sunrise {
 
 		//renderer = new Renderer(window.device, window.physicalDevice, window);
 		//renderer->world = this;
-		terrainSystem = new TerrainSystem(app, &origin);
+		terrainSystem = new TerrainSystem(app, this, &origin);
 		terrainSystem->trackedTransform = &playerTrans;
-		terrainSystem->scene = this;
 
 		//now this is part of all coordinators and is called internally
 		//dynamic_cast<WorldSceneRenderCoordinator*>(coordinator)->createUniforms();
 
 		/// <summary>
-		/// it is important that the camera systemis befoer floating origin so that floating origin snaps before first frame
+		/// it is important that the camera systems befoer floating origin so that floating origin snaps before first frame
 		/// </summary>
 		systems = { new PlayerMovementSystem(), new WindowCameraController(), new CameraSystem(), new FloatingOriginSystem() };
 

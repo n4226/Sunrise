@@ -98,7 +98,7 @@ namespace sunrise::math::mesh
 	/// </summary>
 	/// <param name="polygon"></param>
 	/// <returns></returns>
-	SUNRISE_API void makeOpenIfClosedForCGAL(std::vector<glm::dvec2>& polygon);
+	SUNRISE_API void makeOpenIfClosedForCGAL(Polygon2D& polygon);
 
 #else
 	struct SUNRISE_API TriangulatedMesh

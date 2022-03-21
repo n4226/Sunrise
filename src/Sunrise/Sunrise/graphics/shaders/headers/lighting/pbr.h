@@ -254,7 +254,7 @@ vec3 calculateLighting(
 
     sunLight.type = 1;
     sunLight.direction = sunDir;
-    sunLight.intensity = vec3(4);//vec3(8);
+    sunLight.intensity = vec3(7);//vec3(4);//vec3(8);
 
     //return vec3(3);
     //return worldSpaceFragPosition.xyz;

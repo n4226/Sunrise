@@ -29,7 +29,10 @@ namespace sunrise {
 	template<typename SceneType>
 	SceneType* sunrise::System::getScene()
 	{
-		SceneType *sc = dynamic_cast<SceneType *>(scene);
+		if (!scene) {
+			throw std::logic_error("scene object null");
+		}
+		SceneType *sc = dynamic_cast<SceneType*>(scene);
 		if (sc != nullptr)
 		{
 			return sc;

@@ -22,29 +22,32 @@ namespace sunrise {
 		auto world = getScene<WorldScene>();
 		sunrise::NetworkManager::CreateOptions netOptions{};
 
-		netOptions.newThread = false;
-		netOptions.type = sunrise::NetworkManager::Type::server;
-		netOptions.udpBufferSize = sizeof(sunrise::SimlinkMessages::simpleUpdate);
-		netOptions.deferServerStart = true;
+		if (mode == MovementMode::Simlink) {
+			netOptions.newThread = false;
+			netOptions.type = sunrise::NetworkManager::Type::server;
+			netOptions.udpBufferSize = sizeof(sunrise::SimlinkMessages::simpleUpdate);
+			netOptions.deferServerStart = true;
 
-		networkManager = new sunrise::NetworkManager(netOptions, *world->app.context);
+			networkManager = new sunrise::NetworkManager(netOptions, *world->app.context);
 
-		networkManager->registerUDPMessageCalback(std::function([this](const sunrise::SimlinkMessages::simpleUpdate& data) {
-			//SR_INFO("got a simpleUpdate: position: ({}, {}, {})", data.lla.x, data.lla.y, data.lla.z);
-			{
-				auto handle = updateStreamed.lock();
+			networkManager->registerUDPMessageCalback(std::function([this](const sunrise::SimlinkMessages::simpleUpdate& data) {
+				//SR_INFO("got a simpleUpdate: position: ({}, {}, {})", data.lla.x, data.lla.y, data.lla.z);
+				{
+					auto handle = updateStreamed.lock();
 
-				(*handle) = data;
-				hasConnection = true;
-			}
-			}));
+					(*handle) = data;
+					hasConnection = true;
+				}
+				}));
 
-		networkManager->startServer();
+			networkManager->startServer();
+		}
 	}
 
 	void PlayerMovementSystem::cleanup()
 	{
-		delete networkManager;
+		if (networkManager)
+			delete networkManager;
 	}
 
 	void PlayerMovementSystem::update()

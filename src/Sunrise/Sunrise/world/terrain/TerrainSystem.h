@@ -28,7 +28,7 @@ namespace sunrise {
 	public:
 
 #pragma region base Methods
-		TerrainSystem(Application& app, glm::dvec3* origin);
+		TerrainSystem(Application& app, Scene* scene, glm::dvec3* origin);
 		~TerrainSystem();
 
 		void CreateRenderResources();

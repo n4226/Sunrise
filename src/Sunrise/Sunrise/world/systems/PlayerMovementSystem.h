@@ -21,10 +21,11 @@ namespace sunrise {
 
 		enum class MovementMode
 		{
-			Path,Manual
+			Path,Manual,Simlink
 		};
 	private:
 
+		//TODO: set to simlink to sink to xplane
 		MovementMode mode = MovementMode::Manual;
 
 		bool hasConnection = false;
@@ -101,7 +102,7 @@ namespace sunrise {
 
 		libguarded::shared_guarded<SimlinkMessages::simpleUpdate> updateStreamed = libguarded::shared_guarded<SimlinkMessages::simpleUpdate>(SimlinkMessages::simpleUpdate());
 
-		sunrise::NetworkManager* networkManager;
+		sunrise::NetworkManager* networkManager = nullptr;
 	};
 
 }

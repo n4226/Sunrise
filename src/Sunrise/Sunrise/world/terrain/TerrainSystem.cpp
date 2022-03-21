@@ -19,13 +19,15 @@ namespace sunrise {
 
 	using namespace gfx;
 
-	TerrainSystem::TerrainSystem(Application& app, glm::dvec3* origin)
+	TerrainSystem::TerrainSystem(Application& app, Scene* scene, glm::dvec3* origin)
 		: tree(math::dEarthRad), app(app), meshLoader(), origin(origin)
 	{
 		PROFILE_FUNCTION;
 		SR_CORE_TRACE("Initializing Terrain System");
 
 			//TODO: fix for multi gpu to use multiple renderers
+
+		this->scene = scene;
 
 		meshLoader.renderer = app.renderers[0];
 		meshLoader.terrainSystem = this;

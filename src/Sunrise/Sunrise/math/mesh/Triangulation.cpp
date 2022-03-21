@@ -874,7 +874,7 @@ namespace sunrise::math::mesh {
 	}
 
 
-	void makeOpenIfClosedForCGAL(std::vector<glm::dvec2>& polygon)
+	void makeOpenIfClosedForCGAL(Polygon2D& polygon)
 	{
 		if (polygon.size() == 0) return;
 
@@ -1031,8 +1031,25 @@ namespace sunrise::math::mesh {
 
 		auto gall = SRToGEOS(p);
 
+		char* reason;
+		GEOSGeometry* location;
+		char valid = GEOSisValidDetail(gall, GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE, &reason, &location);
+		if (valid == 0)
+			SR_CORE_INFO("valid: {}, reason: {}, locationType {}", (int)valid,reason,GEOSGeomTypeId(location));
+
+		if (valid == 0) {
+			auto gall2 = GEOSMakeValid(gall);
+			GEOSFree(gall);
+			gall = gall2;
+		}
+
+
+		valid = GEOSisValidDetail(gall, GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE, &reason, &location);
+		SR_CORE_INFO("valid: {}, reason: ?, locationType: ?", (int)valid);
+
 		auto result = GEOSUnaryUnion(gall);
 		
+		SR_CORE_INFO("after unary union type == {}", GEOSGeomTypeId(result));
 
 		return GEOSMultiPolyToSR(result);
 	}
