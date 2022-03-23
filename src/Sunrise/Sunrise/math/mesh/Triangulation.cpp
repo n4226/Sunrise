@@ -895,9 +895,15 @@ namespace sunrise::math::mesh {
 	
 	GEOSGeometry* SRToGEOS(const Polygon2D& p1) {
 		SR_CORE_ASSERT(p1.size() > 0);
-		auto coords = GEOSCoordSeq_create(p1.size() + 1, 2);
+		//make open if closed
+		auto count = p1.size();
+		if (p1[p1.size() - 1] == p1[0]) {
+			count -= 1;
+		}
+		auto coords = GEOSCoordSeq_create(count + 1, 2);
 
-		for (size_t i = 0; i < p1.size(); i++)
+
+		for (size_t i = 0; i < count; i++)
 		{
 			GEOSCoordSeq_setOrdinate(coords, i, 0, p1[i].x);
 			GEOSCoordSeq_setOrdinate(coords, i, 1, p1[i].y);
@@ -905,8 +911,8 @@ namespace sunrise::math::mesh {
 
 		//TODO: asuming open polygo is given
 		//if (p1.size() > 0) {
-			GEOSCoordSeq_setOrdinate(coords, p1.size(), 0, p1[0].x);
-			GEOSCoordSeq_setOrdinate(coords, p1.size(), 1, p1[0].y);
+			GEOSCoordSeq_setOrdinate(coords, count, 0, p1[0].x);
+			GEOSCoordSeq_setOrdinate(coords, count, 1, p1[0].y);
 		//}
 
 		auto ring = GEOSGeom_createLinearRing(coords);
@@ -991,7 +997,12 @@ namespace sunrise::math::mesh {
 		else if (GEOSGeomTypeId(geometry) == GEOS_POINT)
 			//TODO: maybe make better
 			return {};
-		SR_CORE_ASSERT(GEOSGeomTypeId(geometry) == GEOS_MULTIPOLYGON);
+		auto type = GEOSGeomTypeId(geometry);
+		SR_INFO("possible unknown type id of {}", type);
+		//SR_ASSERT(GEOSGeomTypeId(geometry) == GEOS_MULTIPOLYGON);
+		if (GEOSGeomTypeId(geometry) != GEOS_MULTIPOLYGON) {
+			throw std::runtime_error("wrong type");
+		}
 
 		MultiPolygon2D result{};
 
@@ -1044,12 +1055,12 @@ namespace sunrise::math::mesh {
 		}
 
 
-		valid = GEOSisValidDetail(gall, GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE, &reason, &location);
-		SR_CORE_INFO("valid: {}, reason: ?, locationType: ?", (int)valid);
+		//valid = GEOSisValidDetail(gall, GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE, &reason, &location);
+		//SR_CORE_INFO("valid: {}, reason: ?, locationType: ?", (int)valid);
 
 		auto result = GEOSUnaryUnion(gall);
 		
-		SR_CORE_INFO("after unary union type == {}", GEOSGeomTypeId(result));
+		//SR_CORE_INFO("after unary union type == {}", GEOSGeomTypeId(result));
 
 		return GEOSMultiPolyToSR(result);
 	}
@@ -1065,7 +1076,7 @@ namespace sunrise::math::mesh {
 		auto result = GEOSIntersection(gp1, gp2);
 
 		//TODO: this memory leaks becasue GEOSgeom type is
-		//SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
+		SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
 
 		
 		return GEOSMultiPolyToSR(result);
@@ -1074,7 +1085,7 @@ namespace sunrise::math::mesh {
 	MultiPolygon2D bDifference(const MultiPolygon2D& p1,const MultiPolygon2D& p2)
 	{
 		// if second is empty than just return first item
-		if (p2.size() == 0 || (p2.size() == 1 && p2[0].size() == 1 && p2[0][0].size() == 0))
+		if (p2.size() == 0 || (p2.size() == 1 && p2[0].size() == 0) || (p2.size() == 1 && p2[0].size() == 1 && p2[0][0].size() == 0))
 			return p1;
 
 		initGEOS(geos_msg_handler, geos_msg_handler);

@@ -36,7 +36,13 @@ namespace sunrise::math {
 		constexpr bool contains(glm::dvec2 point) const;
 		bool containsAny(std::vector<glm::dvec2>& points) const;
 		bool containsAny(std::vector<glm::dvec2>&& points) const;
+		bool containsALL(const std::vector<glm::dvec2>& points) const;
 		constexpr bool overlaps(Box other) const;
+		//constexpr bool contains(Box other) const;
+		//constexpr bool overlapsDontCountTouching(Box other) const;
+
+		constexpr std::array<Box, 4> children();
+
 		//constexpr bool contains(Box other) const;
 
 		std::vector<glm::dvec2> polygon() const;

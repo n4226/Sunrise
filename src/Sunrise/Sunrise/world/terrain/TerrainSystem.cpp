@@ -265,6 +265,7 @@ namespace sunrise {
 
 	void TerrainSystem::proccesUpdatedTree() {
 		auto world = getScene<WorldScene>();
+		auto noSparclyPop = world->doNotSparslyPopulateMask;
 
 
 		if (toDrawDraw.size() > 0 || maskedMode)
@@ -281,16 +282,16 @@ namespace sunrise {
 				*threadRunning = true;
 			}
 
-			marl::schedule([this,world]() {
+			marl::schedule([this,world,noSparclyPop]() {
 				PROFILE_SCOPE("create draw draw job");
 				//MarlSafeTicketLock lock(ticket);
 
 				marl::WaitGroup preLoadingWaitGroup(toDrawDraw.size());
 
 				for (TerrainQuadTreeNode* chunk : toDrawDraw) {
-					marl::schedule([this, chunk, preLoadingWaitGroup]() {
+					marl::schedule([this, chunk, preLoadingWaitGroup,noSparclyPop]() {
 						defer(preLoadingWaitGroup.done());
-						meshLoader.loadMeshPreDrawChunk(chunk, true);
+						meshLoader.loadMeshPreDrawChunk(chunk, true,maskedMode && !noSparclyPop);
 						});
 				}
 

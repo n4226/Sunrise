@@ -62,6 +62,18 @@ namespace sunrise::math {
         return false;
     }
 
+
+	bool Box::containsALL(const std::vector<glm::dvec2>& points) const
+	{
+		for (size_t i = 0; i < points.size(); i++)
+		{
+			if (!contains(points[i]))
+				return false;
+		}
+		return true;
+	}
+
+
     // see https://www.geeksforgeeks.org/find-two-rectangles-overlap/
     constexpr bool Box::overlaps(Box other) const
     {
@@ -80,6 +92,7 @@ namespace sunrise::math {
 
 
     }
+
 
 
     //bool Box::contains(Box other)
@@ -102,6 +115,16 @@ namespace sunrise::math {
     {
         return "(" + std::to_string(start.x) + "," + std::to_string(start.y) + ")" + "_origin--" + "(" + std::to_string(size.x) + "," + std::to_string(size.y) + ")" + "_size";
     }
+
+	constexpr std::array<sunrise::math::Box, 4> Box::children()
+	{
+        auto halfSize = size / 2.0;
+		Box lowerLeft (start, halfSize);
+		Box lowerRight(start + glm::dvec2(0, halfSize.y), halfSize);
+		Box upperLeft (start + glm::dvec2(halfSize.x, 0), halfSize);
+		Box upperRight(start +                  halfSize, halfSize);
+        return { lowerLeft,lowerRight,upperLeft,upperRight };
+	}
 
     std::ostream& operator<<(std::ostream& strm, const Box& a)
     {
