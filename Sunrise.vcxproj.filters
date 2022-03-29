@@ -468,6 +468,8 @@
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -767,5 +769,7 @@
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.cpp" />
   </ItemGroup>
 </Project>

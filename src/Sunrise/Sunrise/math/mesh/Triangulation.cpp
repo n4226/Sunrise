@@ -948,6 +948,19 @@ namespace sunrise::math::mesh {
 		return group;
 	}
 
+	std::vector<int> printOutGeometryCollectionContents(const GEOSGeometry* geometry) {
+
+		auto count = GEOSGetNumGeometries(geometry);
+		auto types = std::vector<int>(count);
+
+		for (int i = 0; i < count ; i++)
+		{
+			auto geom = GEOSGetGeometryN(geometry, i);
+			types[i] = GEOSGeomTypeId(geom);
+			//SR_WARN("geometry group item {}, is of type {}", i, types[i]);
+		}
+		return types;
+	}
 
 	Polygon2D GEOSRingToSR(const GEOSGeometry* geometry) {
 		SR_CORE_ASSERT(GEOSGeomTypeId(geometry) == GEOS_LINEARRING);
@@ -997,12 +1010,28 @@ namespace sunrise::math::mesh {
 		else if (GEOSGeomTypeId(geometry) == GEOS_POINT)
 			//TODO: maybe make better
 			return {};
-		auto type = GEOSGeomTypeId(geometry);
-		SR_INFO("possible unknown type id of {}", type);
-		//SR_ASSERT(GEOSGeomTypeId(geometry) == GEOS_MULTIPOLYGON);
-		if (GEOSGeomTypeId(geometry) != GEOS_MULTIPOLYGON) {
-			throw std::runtime_error("wrong type");
+		//auto type = GEOSGeomTypeId(geometry);
+		//SR_INFO("possible unknown type id of {}", type);
+
+		if (GEOSGeomTypeId(geometry) == GEOS_GEOMETRYCOLLECTION) {
+			auto types = printOutGeometryCollectionContents(geometry);
+			//find first polygon and use that instead
+			auto poly = std::find_if(types.begin(), types.end(), [](auto type) {
+				return type == GEOS_POLYGON;
+			});
+			if (poly != types.end()) {
+				auto index = poly - types.begin();
+				return GEOSMultiPolyToSR(GEOSGetGeometryN(geometry, index));
+			}
+			if (types.size() == 0)
+				return { {} };
+			SR_DEBUGBREAK();
 		}
+
+		SR_ASSERT(GEOSGeomTypeId(geometry) == GEOS_MULTIPOLYGON);
+		/*if (GEOSGeomTypeId(geometry) != GEOS_MULTIPOLYGON) {
+			throw std::runtime_error("wrong type");
+		}*/
 
 		MultiPolygon2D result{};
 
@@ -1067,6 +1096,8 @@ namespace sunrise::math::mesh {
 
 	MultiPolygon2D binterseciton(const MultiPolygon2D& p1, const MultiPolygon2D& p2)
 	{
+		if (p2.size() == 0 || (p2.size() == 1 && p2[0].size() == 0) || (p2.size() == 1 && p2[0].size() == 1 && p2[0][0].size() == 0))
+			return { {{}} };
 		//TODO: stop or figure out how to abstract this geos globa stuff
 		initGEOS(geos_msg_handler, geos_msg_handler);
 
@@ -1076,7 +1107,7 @@ namespace sunrise::math::mesh {
 		auto result = GEOSIntersection(gp1, gp2);
 
 		//TODO: this memory leaks becasue GEOSgeom type is
-		SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
+		//SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
 
 		
 		return GEOSMultiPolyToSR(result);

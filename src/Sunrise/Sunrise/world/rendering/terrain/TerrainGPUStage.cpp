@@ -43,7 +43,7 @@ namespace sunrise {
         materialTexturesPoolSize.maxNum = maxMaterialTextureDescriptorArrayCount * app.maxSwapChainImages;//1;
 
         
-        //TODO: understand the point of varible descripter arrasy if you still have to pass length
+        //TODO: understand the point of variable descriptor arrays if you still have to pass length
 		descriptorPool = new gfx::DescriptorPool(app.renderers[0]->device, 
 			{ app.maxSwapChainImages * app.renderers[0]->windows.size(),{ globalUniformPoolSize, modelAndMatUniformPoolSize, materialTexturesPoolSize} });
 

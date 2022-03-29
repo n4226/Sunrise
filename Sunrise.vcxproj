@@ -159,6 +159,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h" />
     <ClInclude Include="src\Sunrise.h" />
@@ -267,6 +269,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />

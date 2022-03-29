@@ -67,6 +67,9 @@ namespace sunrise {
 	///		
 	///		virtual windows are being created and subwindows are being put in currently at the part where renderer descriptors have to be fixed to deal with input attatchments for gbuffer and defered stage to work with multiple layers
 	/// 
+	/// 
+	/// windows have render targets and arent targets because virtual windows don t have their own but references
+	/// 
 	/// </summary>
 	class SUNRISE_API Window
 	{
@@ -84,7 +87,7 @@ namespace sunrise {
 		/// </summary>
 		size_t globalIndex;
 
-		//// application spacific - will move to other class after refactor - not sure about render pass manager yet
+		//// application specific - will move to other class after refactor - not sure about render pass manager yet
 
 
 			// manager objects
@@ -92,7 +95,7 @@ namespace sunrise {
 		gfx::RenderPassManager* renderPassManager;
 		//gfx::GraphicsPipeline* pipelineCreator;
 
-		//// window spacific - will keep here after refactor
+		//// window specific - will keep here after refactor
 
 
 		/// <summary>

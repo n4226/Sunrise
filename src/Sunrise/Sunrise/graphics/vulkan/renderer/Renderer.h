@@ -20,7 +20,7 @@ namespace sunrise {
 		class SUNRISE_API RenderResourceTracker {
 		public:
 			/// <summary>
-			/// callled in main rander loop so any non trivial actions should be cojmpleted on a worker thread
+			/// called in main render loop so any non trivial actions should be completed on a worker thread
 			/// </summary>
 			/// <param name="window"></param>
 			/// <param name="surface"></param>
@@ -67,18 +67,18 @@ namespace sunrise {
 			QueueFamilyIndices& queueFamilyIndices;
 
 			/// <summary>
-			/// ?? look into exact specs of this array
+			/// ?? look into exact specs of this array - I bleive it is top level windows - i.e physical if not in gorup and a virtual for each group - basically all unowned windows
 			/// </summary>
 			std::vector<Window*> windows;
 			/// <summary>
 			/// includes _owned windows
-			/// Order is not garnteed to be the same as windows
+			/// Order is not guaranteed to be the same as windows
 			/// </summary>
 			std::vector<Window*> allWindows;
 
 			/// <summary>
 			/// just windows that are !_virtual
-			/// Order is not garnteed to be the same as windows
+			/// Order is not guaranteed to be the same as windows
 			/// </summary>
 			std::vector<Window*> physicalWindows;
 
