@@ -308,6 +308,7 @@ namespace sunrise {
 
                 continue; 
             }
+            //TODO: needs to be implimented?
         dispandGroup: ;
 
         }
@@ -503,13 +504,17 @@ namespace sunrise {
         renderers[0]->beforeRenderScene();
 
         // draw view - this should be able to be done all in parallel
-        for (size_t i = 0; i < windows.size(); i++)
+        for (size_t i = 0; i < renderers[0]->windows.size(); i++)
         {
             PROFILE_SCOPE("Loop of Window render loop");
-            if (windows[i]->_owned) continue;
-            if (windows[i]->getDrawable() == true) continue;
-            renderers[0]->renderFrame(*windows[i]);
-            windows[i]->presentDrawable();
+
+            auto window = renderers[0]->windows[i];
+
+            //Should never happen
+            if (window->_owned) continue;
+            if (window->getDrawable() == true) continue;
+            renderers[0]->renderFrame(*window);
+            window->presentDrawable();
         }
 
         currentFrameID++;
@@ -752,11 +757,16 @@ namespace sunrise {
 
         bool multiViewportAvailable = false;
 
+        //TODO: i dont think multi viewport is what i thought it is - nvidea MVR Rendering
+        //VK_NV_VIEWPORT_ARRAY2 is what i want
         if (supportedFeatures.multiViewport == VK_TRUE) {
             requestedDeviceFeatures.multiViewport = VK_TRUE;
-            multiViewportAvailable = true;
+            //multiViewportAvailable = true;
         }
 
+        if (supportedFeatures.geometryShader == VK_TRUE) {
+            requestedDeviceFeatures.geometryShader = VK_TRUE;
+        }
 
         VkPhysicalDeviceDescriptorIndexingFeatures desIndexingFeatures{};
         desIndexingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES;
@@ -783,6 +793,10 @@ namespace sunrise {
             {
                 debugExtAvailable = true;
             }
+            if (!strcmp(ext.extensionName, VK_NV_VIEWPORT_ARRAY2_EXTENSION_NAME)) {
+                multiViewportAvailable = true;
+                //TODO: do better way of varifying all required features for this are available - geometry shaders and multple viewports
+            }
         }
 
         // devie extensions
@@ -795,6 +809,10 @@ namespace sunrise {
 
         if (debugExtAvailable) {
             extensionNames.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
+        }
+
+        if (multiViewportAvailable) {
+            extensionNames.push_back(VK_NV_VIEWPORT_ARRAY2_EXTENSION_NAME);
         }
 
         SR_CORE_INFO("creating logical device with the following extensions: ");

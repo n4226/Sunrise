@@ -39,6 +39,11 @@ namespace sunrise {
 		auto meshAttributeDes = Basic2DMesh::getAttributeDescriptions();
 		pipeOptions.attributeDescriptions = std::vector(meshAttributeDes.begin(), meshAttributeDes.end());
 
+		pipeOptions.enablePushConstants = true;
+		pipeOptions.pushConstantOffset = 0;
+		pipeOptions.pushConstantSize = sizeof(uint32_t);
+		pipeOptions.pushConstantStages = vk::ShaderStageFlagBits::eVertex;
+
 		return pipeOptions;
 	}
 

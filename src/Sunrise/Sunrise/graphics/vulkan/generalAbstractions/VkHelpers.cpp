@@ -58,8 +58,8 @@ namespace sunrise::gfx::vkHelpers {
 		createInfo.subresourceRange.aspectMask = VkImageAspectFlags(options.aspectFlags);
 		createInfo.subresourceRange.baseMipLevel = 0;
 		createInfo.subresourceRange.levelCount = options.mipLevels;
-		createInfo.subresourceRange.baseArrayLayer = 0;
-		createInfo.subresourceRange.layerCount = 1;
+		createInfo.subresourceRange.baseArrayLayer = options.startLayer;
+		createInfo.subresourceRange.layerCount = options.layerCount;
 
 		return device.createImageView({ createInfo });
 	}

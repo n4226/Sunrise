@@ -51,48 +51,56 @@ namespace sunrise {
 		for (auto window : app.renderers[0]->windows)
 		{
 			descriptorSets[window] = {};
-			for (size_t swap = 0; swap < window->swapChainImages.size(); swap++)
+			for (int childI = 0; childI < (window->isVirtual() ? window->numSubWindows() : 1); childI++)
 			{
-				auto pipeline = getConcretePipeline(*window, deferredPipeline);
-				auto des = descriptorPool->allocate(pipeline->descriptorSetLayouts);
+				for (size_t swap = 0; swap < window->numSwapImages(); swap++)
+				{
+					auto pipeline = getConcretePipeline(*window, deferredPipeline);
+					auto des = descriptorPool->allocate(pipeline->descriptorSetLayouts);
 
-				descriptorSets[window].push_back(des[0]);
+					descriptorSets[window].push_back(des[0]);
 
-				vk::DescriptorImageInfo imageInfo1 = { inputImageSampler->vkItem ,
-					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAlbedoMetalicIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
+					uint32_t layer = childI;
 
-				vk::DescriptorImageInfo imageInfo2 = { inputImageSampler->vkItem ,
-					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffNormalSpecularIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
+					vk::DescriptorImageInfo imageInfo1 = { inputImageSampler->vkItem ,
+						app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAlbedoMetalicIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
 
-				vk::DescriptorImageInfo imageInfo3 = { inputImageSampler->vkItem ,
-					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAoIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
+					vk::DescriptorImageInfo imageInfo2 = { inputImageSampler->vkItem ,
+						app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffNormalSpecularIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
 
-				vk::DescriptorImageInfo imageInfo4 = { inputImageSampler->vkItem ,
-					app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffDepthIndex,window)->view,vk::ImageLayout::eShaderReadOnlyOptimal };
+					vk::DescriptorImageInfo imageInfo3 = { inputImageSampler->vkItem ,
+						app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAoIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
 
-
-				VkDescriptorBufferInfo globalUniformBufferInfo{};
-				globalUniformBufferInfo.buffer = coord->uniformBuffers[window->indexInRenderer][swap]->vkItem;
-				globalUniformBufferInfo.offset = 0;
-				globalUniformBufferInfo.range = VK_WHOLE_SIZE;
-
-				gfx::DescriptorPool::UpdateOperation updateOp1 = { gfx::DescriptorPool::UpdateOperation::Type::write,
-					des[0]->makeBinding(0),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo1) };
-
-				gfx::DescriptorPool::UpdateOperation updateOp2 = { gfx::DescriptorPool::UpdateOperation::Type::write,
-					des[0]->makeBinding(1),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo2) };
-
-				gfx::DescriptorPool::UpdateOperation updateOp3 = { gfx::DescriptorPool::UpdateOperation::Type::write,
-					des[0]->makeBinding(2),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo3) };
-
-				gfx::DescriptorPool::UpdateOperation updateOp4 = { gfx::DescriptorPool::UpdateOperation::Type::write,
-					des[0]->makeBinding(3),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo4) };
+					vk::DescriptorImageInfo imageInfo4 = { inputImageSampler->vkItem ,
+						app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffDepthIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
 
 
-				gfx::DescriptorPool::UpdateOperation sceneUniformsUpdateOp = { gfx::DescriptorPool::UpdateOperation::Type::write,
-					des[0]->makeBinding(4),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(globalUniformBufferInfo) };
+					VkDescriptorBufferInfo globalUniformBufferInfo{};
+					globalUniformBufferInfo.buffer = coord->uniformBuffers[window->indexInRenderer][swap]->vkItem;
+					globalUniformBufferInfo.offset = 0;
+					globalUniformBufferInfo.range = VK_WHOLE_SIZE;
 
-				descriptorPool->update({ updateOp1, updateOp2, updateOp3, updateOp4, sceneUniformsUpdateOp });
+					//this is the dcescriptor array's index not images which is why it should be zero
+					uint32_t dstArrayLayerStart = 0;
+
+					gfx::DescriptorPool::UpdateOperation updateOp1 = { gfx::DescriptorPool::UpdateOperation::Type::write,
+						des[0]->makeBinding(0),dstArrayLayerStart,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo1) };
+
+					gfx::DescriptorPool::UpdateOperation updateOp2 = { gfx::DescriptorPool::UpdateOperation::Type::write,
+						des[0]->makeBinding(1),dstArrayLayerStart,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo2) };
+
+					gfx::DescriptorPool::UpdateOperation updateOp3 = { gfx::DescriptorPool::UpdateOperation::Type::write,
+						des[0]->makeBinding(2),dstArrayLayerStart,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo3) };
+
+					gfx::DescriptorPool::UpdateOperation updateOp4 = { gfx::DescriptorPool::UpdateOperation::Type::write,
+						des[0]->makeBinding(3),dstArrayLayerStart,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(imageInfo4) };
+
+
+					gfx::DescriptorPool::UpdateOperation sceneUniformsUpdateOp = { gfx::DescriptorPool::UpdateOperation::Type::write,
+						des[0]->makeBinding(4),0,1, gfx::DescriptorPool::UpdateOperation::ReferenceType(globalUniformBufferInfo) };
+
+					descriptorPool->update({ updateOp1, updateOp2, updateOp3, updateOp4, sceneUniformsUpdateOp });
+				}
 			}
 		}
 	}
@@ -112,14 +120,21 @@ namespace sunrise {
 
 		auto pipeline = getConcretePipeline(options.window, deferredPipeline);
 
-		buff->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, 
-			pipeline->pipelineLayout, 0,
-			{ descriptorSets[&options.window][options.window.currentSurfaceIndex]->vkItem, }, {});
-
 		meshBuff->bindVerticiesIntoCommandBuffer(*buff, 0);
 		meshBuff->bindIndiciesIntoCommandBuffer(*buff);
 
-		buff->drawIndexed(square->indicies.size(), 1, 0, 0, 0);
+		for (uint32_t childI = 0; childI < (options.window.isVirtual() ? options.window.numSubWindows() : 1); childI++)
+		{
+
+			buff->bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
+				pipeline->pipelineLayout, 0,
+				{ descriptorSets[&options.window][((size_t)childI * options.window.numSwapImages()) + options.window.currentSurfaceIndex]->vkItem,}, {});
+
+			buff->pushConstants(pipeline->pipelineLayout, vk::ShaderStageFlagBits::eVertex, 0, sizeof(uint32_t), &childI);
+
+			buff->drawIndexed(square->indicies.size(), 1, 0, 0, 0);
+
+		}
 
 		buff->end();
 

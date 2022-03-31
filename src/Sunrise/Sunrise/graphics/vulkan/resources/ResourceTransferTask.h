@@ -44,6 +44,35 @@ namespace sunrise {
 				std::vector<vk::BufferCopy> regions;
 			};
 
+			struct ImageTransferTask {
+				VkImage src;
+				/// <summary>
+				/// layout before the transition
+				/// </summary>
+				vk::ImageLayout srcLayout;
+				/// <summary>
+				/// layout after the transition - defualt is do no trnasiion after copy
+				/// </summary>
+				vk::ImageLayout postSRCLayout = vk::ImageLayout::eTransferSrcOptimal;
+				uint32_t srcMipLevelCount = 1;
+				vk::ImageAspectFlags srcImageAspectMask = vk::ImageAspectFlagBits::eColor;
+
+
+				VkImage dst;
+				/// <summary>
+				/// layout before the transition
+				/// </summary>
+				vk::ImageLayout dstLayout;
+				/// <summary>
+				/// layout after the transition  - defualt is do no trnasiion after copy
+				/// </summary>
+				vk::ImageLayout postDSTLayout = vk::ImageLayout::eTransferDstOptimal;
+				uint32_t dstMipLevelCount = 1;
+				vk::ImageAspectFlags dstImageAspectMask = vk::ImageAspectFlagBits::eColor;
+
+				std::vector<vk::ImageCopy> regions;
+			};
+
 			struct ImageLayoutTransitionTask {
 				vk::ImageLayout oldLayout{};
 				vk::ImageLayout newLayout{};
@@ -51,6 +80,8 @@ namespace sunrise {
 				//vk::AccessFlags dstAccessMask;
 				uint32_t baseMipLevel = 0;
 				uint32_t mipLevelCount = 1;
+				uint32_t baseLayer = 0;
+				uint32_t layerCount = 1;
 				VkImage image;
 				vk::ImageAspectFlags imageAspectMask = {};
 			};
@@ -136,8 +167,16 @@ namespace sunrise {
 			/// <param name="ticket"></param>
 			void performTask(std::vector<Task> tasks, marl::Ticket ticket, std::function<void()> completionHandler, bool requiresGfxQueue);
 
+			//allow others to use resource op wrappers
+		public:
 
 			void performBufferTransferTask(ResourceTransferer::BufferTransferTask& t, vk::CommandBuffer cmdBuffer);
+			/// <summary>
+			/// performs necessary layout transitions before and after
+			/// </summary>
+			/// <param name="t"></param>
+			/// <param name="cmdBuffer"></param>
+			void performImageTransferTask(const ResourceTransferer::ImageTransferTask& t, vk::CommandBuffer cmdBuffer);
 
 			void performBufferToImageCopyWithTransitionTask(ResourceTransferer::BufferToImageCopyWithTransitionTask& t, vk::CommandBuffer cmdBuffer);
 			void performImageLayoutTransitionTask(ResourceTransferer::ImageLayoutTransitionTask& t, vk::CommandBuffer cmdBuffer);

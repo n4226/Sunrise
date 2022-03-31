@@ -50,75 +50,23 @@ namespace sunrise {
 
                 window->createSwapchain();
                 window->createSwapchainImageViews();
+
+				//window->prepareImagesInFlightArray();
+				window->createSyncObjects();
             }
 
             swapchainExtent = subWindows[0]->swapchainExtent;
             swapchainImageFormat = subWindows[0]->swapchainImageFormat;
 
+            createSwapchainImageViews();
         }
         else {
             createSwapchain();
             createSwapchainImageViews();
 
         }
-
-        // temporary for splititng between legacy world system and neo CRP (composable rener pass) system
-        //WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
-
-
-        // make graphics pipeline
-
-
-     /*   if (world != nullptr)
-        {
-            createFrameBufferImages();
-            renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-            if (_virtual) {
-                renderPassManager->multiViewport = true;
-                renderPassManager->multiViewCount = subWindows.size();
-            }
-
-            renderPassManager->createMainRenderPass();
-        }
-        */
         
-
-//        if (world != nullptr) {
-//            pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
-//
-//            pipelineCreator->createPipeline();
-//
-//            //TODO: find better way to abstract use of multiple windows with different shaders 
-//        
-//            // create deferred pipeline
-//
-//            deferredPass = new DeferredPass(device, { swapchainExtent }, *renderPassManager);
-//
-//            deferredPass->createPipeline();
-//
-//#if RenderMode == RenderModeGPU
-//            gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
-//#endif
-//            worldLoadedPipes.push_back(pipelineCreator);
-//            worldLoadedPipes.push_back(deferredPass);
-//
-//            createFramebuffers();
-//        }
-
-        createSemaphores();
-
-        //if (!_virtual && world != nullptr)
-        //    SetupImgui();
-        //else if (world != nullptr) {
-        //    // give pointers of grphics pipelines and renderpass to subwindows
-        //    for (size_t i = 0; i < subWindows.size(); i++)
-        //    {
-        //        subWindows[i]->pipelineCreator = pipelineCreator;
-        //        subWindows[i]->renderPassManager = renderPassManager;
-        //        subWindows[i]->deferredPass = deferredPass;
-        //        subWindows[i]->gpuGenPipe = gpuGenPipe;
-        //    }
-        //}
+		createSyncObjects();
 
     }
 
@@ -292,6 +240,9 @@ namespace sunrise {
 
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
+        if (_owned)
+            createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+
         // this is what needs to change if allowing suport for different presentation and drawing queues
         createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
         createInfo.queueFamilyIndexCount = 0; // Optional
@@ -321,13 +272,43 @@ namespace sunrise {
 
     void Window::createSwapchainImageViews()
     {
-        PROFILE_FUNCTION
-            swapChainImageViews.resize(swapChainImages.size());
+        PROFILE_FUNCTION;
 
-        for (size_t i = 0; i < swapChainImages.size(); i++) {
+        if (_virtual) {
+            //also need to create images
+
+            virtualSwapImages.resize(numSwapImages());
+
+            for (int i = 0; i < numSwapImages() ; i++)
+            {
+				ImageCreationOptions createOptions;
+
+				createOptions.sharingMode = vk::SharingMode::eExclusive;
+				createOptions.storage = ResourceStorageType::gpu;
+				createOptions.usage = vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransferSrc;
+
+				createOptions.type = vk::ImageType::e2D;
+				createOptions.layout = vk::ImageLayout::eUndefined;
+				createOptions.tilling = vk::ImageTiling::eOptimal;
+                createOptions.layers = numSubWindows();
+
+                createOptions.format = vk::Format(swapchainImageFormat);
+
+                auto image = new gfx::Image(renderer->device, renderer->allocator, { swapchainExtent.width,swapchainExtent.height,1 }, createOptions, vk::ImageAspectFlagBits::eColor);
+                virtualSwapImages[i] = image;
+            }
+        }
+
+        swapChainImageViews.resize(numSwapImages());
+
+
+        for (size_t i = 0; i < numSwapImages(); i++) {
             VkImageViewCreateInfo createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            createInfo.image = swapChainImages[i];
+            if (_virtual)
+                createInfo.image = virtualSwapImages[i]->vkItem;
+            else
+                createInfo.image = swapChainImages[i];
 
             createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
             createInfo.format = swapchainImageFormat;
@@ -448,22 +429,26 @@ namespace sunrise {
         }
     }
 
-    void Window::createSemaphores()
+    void Window::createSyncObjects()
     {
-        PROFILE_FUNCTION
+        PROFILE_FUNCTION;
 
-            imageAvailableSemaphores.resize(app.MAX_FRAMES_IN_FLIGHT);
+        imageAvailableSemaphores.resize(app.MAX_FRAMES_IN_FLIGHT);
         renderFinishedSemaphores.resize(app.MAX_FRAMES_IN_FLIGHT);
         inFlightFences.resize(app.MAX_FRAMES_IN_FLIGHT);
-        imagesInFlight.resize(swapChainImages.size(), VK_NULL_HANDLE);
+        prepareImagesInFlightArray();
+
 
         vk::SemaphoreCreateInfo semaphoreInfo{};
         vk::FenceCreateInfo fenceInfo{};
         fenceInfo.flags = vk::FenceCreateFlagBits::eSignaled;
         for (size_t i = 0; i < app.MAX_FRAMES_IN_FLIGHT; i++) {
-            imageAvailableSemaphores[i] = device.createSemaphore(semaphoreInfo);
-            renderFinishedSemaphores[i] = device.createSemaphore(semaphoreInfo);
-            inFlightFences[i] = device.createFence(fenceInfo);
+            if (!_virtual) {
+                imageAvailableSemaphores[i] = device.createSemaphore(semaphoreInfo);
+            }
+            if (!_owned)
+                renderFinishedSemaphores[i] = device.createSemaphore(semaphoreInfo);
+                inFlightFences[i] = device.createFence(fenceInfo);
         }
     }
 
@@ -602,17 +587,30 @@ namespace sunrise {
     {
         SR_ASSERT(_virtual);
 
+        subWindow->owner = this;
         subWindows.push_back(subWindow);
     }
 
-    bool Window::shouldClose()
+	size_t Window::numSubWindows()
+	{
+        if (!_virtual)
+            return 0;
+        else
+            return subWindows.size();
+	}
+
+	bool Window::shouldClose()
     {
         if (!_virtual) {
             if (!_owned && glfwWindowShouldClose(window))
                 return true;
         }
         else {
-            return false;
+            for each (auto child in subWindows)
+            {
+                if (child->shouldClose())
+                    return true;
+            }
         }
         return false;
     }
@@ -687,17 +685,62 @@ namespace sunrise {
     }
 
 
-    bool Window::getDrawable()
+    bool Window::getDrawable(bool* outReleaseDrawable)
     {
         PROFILE_FUNCTION;
 
-        // this is to wait for inflight frame to finish
-        // if cpu gets to far ahead, will wait here until an inflight frame finishes
-        vkWaitForFences(device, 1, &inFlightFences[app.currentFrame], VK_TRUE, UINT64_MAX);
+        if (!_owned) {
+			// this is to wait for inflight frame to finish
+		    // if cpu gets to far ahead, will wait here until an inflight frame finishes
+			vkWaitForFences(device, 1, &inFlightFences[app.currentFrame], VK_TRUE, UINT64_MAX);
 
-        renderer->frameReleased(app.currentFrame);
+			renderer->frameReleased(app.currentFrame);
+        }
 
-        auto index = device.acquireNextImageKHR(swapChain, UINT64_MAX, imageAvailableSemaphores[app.currentFrame], nullptr);
+        //if virtual - need to acquire swap image for each monitor in group
+        //this will populate each child window with it's current swap image so that coordinator can copy into them
+        if (_virtual) {
+            bool fail = false;
+            bool releaseDrawable = false;
+
+            for (int i = 0; i < numSubWindows() ; i++)
+            {
+                bool release = false;
+                if (subWindows[i]->getDrawable(&release))
+                    fail = true;
+                if (i == 0)
+                    releaseDrawable = release;
+            }
+
+            //give a "fake" current surface id to this virtual window so that systems that allocate resources per surface can do so
+            //it shouldnt mater that this surface id does not mean anything in relaiton to it's subwindows
+            //currentSurfaceIndex = (currentSurfaceIndex + 1) % numSwapImages();
+            //need to fake by having same index as first sub window
+            currentSurfaceIndex = subWindows[0]->currentSurfaceIndex;
+
+            if (releaseDrawable)
+                renderer->drawableReleased(this, currentSurfaceIndex);
+
+            return fail;
+        }
+
+
+        SR_CORE_ASSERT(!_virtual);
+
+        VkSemaphore semaphore; 
+        VkFence fence; 
+
+        //not needed
+        //if (_owned) {
+        //    semaphore = owner->imageAvailableSemaphores[app.currentFrame];
+        //    fence = owner->inFlightFences[app.currentFrame];
+        //}
+        //else {
+            semaphore = imageAvailableSemaphores[app.currentFrame];
+            fence = inFlightFences[app.currentFrame];
+        //}
+
+        auto index = device.acquireNextImageKHR(swapChain, UINT64_MAX, semaphore, nullptr);
         //cout << "current index = " << index.value << endl;
         currentSurfaceIndex = index.value;
 
@@ -705,7 +748,7 @@ namespace sunrise {
         if (index.result == vk::Result::eErrorOutOfDateKHR)
         {
             recreateSwapchain();
-            return 1;
+            return true;
         }
         else if (static_cast<int>(index.result) < 0) {//(index.result != vk::Result::eSuccess && index.result != vk::Result::eSuboptimalKHR) {
            // throw std::runtime_error("failed to acquire swap chain image");
@@ -717,30 +760,68 @@ namespace sunrise {
             //todo consider using get fence and doing other work on this thread instead of waiting
             vkWaitForFences(device, 1, &imagesInFlight[currentSurfaceIndex], VK_TRUE, UINT64_MAX);
 
-            renderer->drawableReleased(this, currentSurfaceIndex);
+            if (!_owned)
+                renderer->drawableReleased(this, currentSurfaceIndex);
+            else if (outReleaseDrawable)
+                *outReleaseDrawable = true;
         }
 
         // Mark the image as now being in use by this frame
-        imagesInFlight[currentSurfaceIndex] = inFlightFences[app.currentFrame];
+        imagesInFlight[currentSurfaceIndex] = fence;
 
-        return 0;
+        return false;
     }
 
     void Window::presentDrawable()
     {
         PROFILE_FUNCTION;
+
+    /*    if (_virtual) {
+
+            for each(auto win in subWindows)
+                win->presentDrawable();
+
+            return;
+        }*/
+
         // present frame on screen
+        //SR_CORE_ASSERT(!_virtual);
 
         vk::PresentInfoKHR presentInfo{};
 
-        std::vector<vk::Semaphore> signalSemaphores = { renderFinishedSemaphores[app.currentFrame] };
+        std::vector<vk::Semaphore> waitSemaphors = { renderFinishedSemaphores[app.currentFrame] };
 
-        presentInfo.setWaitSemaphores(signalSemaphores);
+        //if owned use the virtual window's render finished semaphore since that is what was used as result of submiting render commands to queue
+       /* if (_owned) {
+            waitSemaphors[0] = owner->renderFinishedSemaphores[app.currentFrame];
+        }*/
+      /*  if (_virtual) {
 
-        vk::SwapchainKHR swapChains[] = { swapChain };
-        presentInfo.swapchainCount = 1;
-        presentInfo.pSwapchains = swapChains;
-        presentInfo.pImageIndices = &currentSurfaceIndex;
+        }*/
+
+
+        presentInfo.setWaitSemaphores(waitSemaphors);
+
+        std::vector<vk::SwapchainKHR> swapChains = {}; 
+        std::vector<uint32_t> surfaceIndicies = {};
+        swapChains.reserve(4);
+        surfaceIndicies.reserve(4);
+
+        if (_virtual) {
+            for each (auto child in subWindows)
+            {
+                swapChains.push_back(child->swapChain);
+                surfaceIndicies.push_back(child->currentSurfaceIndex);
+            }
+        }
+        else {
+            swapChains.push_back(swapChain);
+            surfaceIndicies.push_back(currentSurfaceIndex);
+        }
+
+        presentInfo.swapchainCount = swapChains.size();
+        presentInfo.pSwapchains = swapChains.data();
+        presentInfo.pImageIndices = surfaceIndicies.data();
 
         presentInfo.pResults = nullptr; // Optional
 
@@ -758,7 +839,19 @@ namespace sunrise {
     }
 
 
-    void Window::destroyWindow()
+	size_t Window::numSwapImages()
+	{
+        //TODO: assuming group has windows all with same swap image count - should asert this more promenently in future
+        if (_virtual) {
+            SR_CORE_ASSERT(subWindows.size() > 0);
+            return subWindows[0]->swapChainImages.size();
+        }
+        else {
+            return swapChainImages.size();
+        }
+	}
+
+	void Window::destroyWindow()
     {
         PROFILE_FUNCTION;
 

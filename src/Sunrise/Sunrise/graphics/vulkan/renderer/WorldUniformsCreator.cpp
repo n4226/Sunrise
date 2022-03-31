@@ -13,14 +13,22 @@ namespace sunrise {
 
 		auto renderer = window.renderer;
 
-		auto globalIndex = window.globalIndex;
-		auto& camera = window.camera;
+		auto winIndex = window.indexInRenderer;
+		//auto& camera = window.isVirtual() ? window.subWindows[0]->camera : window.camera;
+
+		auto count = window.isVirtual() ? window.subWindows.size() : 1;
+		//TODO: pass matricides for each sub window	
 
 		SceneUniforms uniforms;
+		for (int i = 0; i < count; i++)
+		{
+			auto& refWindow = window.isVirtual() ? *window.subWindows[i] : window;
+			auto& refCamera = refWindow.camera;
 
-		uniforms.viewProjection = camera.viewProjection(window.swapchainExtent.width, window.swapchainExtent.height);
+			uniforms.viewProjection[i] = refCamera.viewProjection(refWindow.swapchainExtent.width, refWindow.swapchainExtent.height);
+		}
 
-		auto buffer = uniformBuffers[globalIndex][window.currentSurfaceIndex];
+		auto buffer = uniformBuffers[winIndex][window.currentSurfaceIndex];
 
 		buffer->mapMemory();
 
@@ -28,21 +36,30 @@ namespace sunrise {
 
 		PostProcessEarthDatAndUniforms postUniforms;
 
-		// in floated origin (after float)
-		postUniforms.camFloatedGloabelPos = glm::vec4(camera.transform.position, 1);
-		glm::qua<glm::float32> sunRot = glm::angleAxis(glm::radians(45.f), glm::vec3(0, 1, 0));
+		for (int i = 0; i < count; i++)
+		{
+			auto& refWindow = window.isVirtual() ? *window.subWindows[i] : window;
+			auto& refCamera = refWindow.camera;
+
+			// in floated origin (after float)
+			postUniforms.camFloatedGloabelPos[i] = glm::vec4(refCamera.transform.position, 1);
+			glm::qua<glm::float32> sunRot = glm::angleAxis(glm::radians(45.f), glm::vec3(0, 1, 0));
+
+
+
+			postUniforms.viewMat[i] = refCamera.view();
+			postUniforms.projMat[i] = refCamera.projection(window.swapchainExtent.width, window.swapchainExtent.height);
+			postUniforms.invertedViewMat[i] = glm::inverse(refCamera.view());
+			postUniforms.invertedProjMat[i] = glm::inverse(refCamera.projection(window.swapchainExtent.width, window.swapchainExtent.height));
+
+		}
 
 		//todo abstract this out
 		postUniforms.sunDir =
 			//glm::angleAxis(glm::radians(sin(scene->timef * 0.1f) * 80.f), glm::vec3(-1, 0, 0)) *
 			glm::vec4(glm::normalize(math::LlatoGeo(sunLLA, glm::dvec3(0), earchRadius)), 0);
-
 		postUniforms.earthCenter = glm::vec4(static_cast<glm::vec3>((earthCenter)), 1);
 
-		postUniforms.viewMat = camera.view();
-		postUniforms.projMat = camera.projection(window.swapchainExtent.width, window.swapchainExtent.height);
-		postUniforms.invertedViewMat = glm::inverse(camera.view());
-		postUniforms.invertedProjMat = glm::inverse(camera.projection(window.swapchainExtent.width, window.swapchainExtent.height));
 		postUniforms.renderTargetSize.x = window.swapchainExtent.width;
 		postUniforms.renderTargetSize.y = window.swapchainExtent.height;
 
@@ -51,7 +68,8 @@ namespace sunrise {
 		buffer->unmapMemory();
 
 		//todo abstract this somewhere else
-		renderer->camFrustroms[globalIndex] = std::move(math::Frustum(uniforms.viewProjection));
+		// TODO: fix for virtual windows
+		//renderer->camFrustroms[globalIndex] = std::move(math::Frustum(uniforms.viewProjection));
 	}
 
 	void WorldUniformCreator::createUniforms(Application& app, std::vector<std::vector<gfx::Buffer*>>& uniformBuffers)
@@ -69,7 +87,8 @@ namespace sunrise {
 
 		BufferCreationOptions uniformOptions = { ResourceStorageType::cpuToGpu,{ vk::BufferUsageFlagBits::eUniformBuffer }, vk::SharingMode::eExclusive };
 
-		uniformBuffers.resize(renderer->physicalWindows.size());
+		//for virtual windows there will just be data for cams in sub windows
+		uniformBuffers.resize(renderer->windows.size());
 
 
 		for (size_t i = 0; i < uniformBuffers.size(); i++) {

@@ -200,6 +200,77 @@ namespace sunrise {
 			cmdBuffer.copyBuffer(t.srcBuffer, t.dstBuffer, t.regions);
 		}
 
+		void ResourceTransferer::performImageTransferTask(const ResourceTransferer::ImageTransferTask& t, vk::CommandBuffer cmdBuffer)
+		{
+			//this funciton does not yet support more than one regionss
+			//- see spots where this array is referenced with the 0 index to see wht
+			SR_CORE_ASSERT(t.regions.size() == 1);
+
+			//transform src
+			if (t.srcLayout != vk::ImageLayout::eTransferSrcOptimal) {
+				ImageLayoutTransitionTask layoutTask;
+				layoutTask.image = t.src;
+				layoutTask.imageAspectMask = t.srcImageAspectMask;
+				layoutTask.oldLayout = t.srcLayout;
+				layoutTask.newLayout = vk::ImageLayout::eTransferSrcOptimal;
+				layoutTask.baseMipLevel = 0;
+				layoutTask.mipLevelCount = t.srcMipLevelCount;
+				layoutTask.baseLayer = t.regions[0].srcSubresource.baseArrayLayer;
+				layoutTask.layerCount = t.regions[0].srcSubresource.layerCount;
+
+				performImageLayoutTransitionTask(layoutTask, cmdBuffer);
+			}
+
+			//transform dst
+			if (t.dstLayout != vk::ImageLayout::eTransferDstOptimal) {
+				ImageLayoutTransitionTask layoutTask;
+				layoutTask.image = t.dst;
+				layoutTask.imageAspectMask = t.dstImageAspectMask;
+				layoutTask.oldLayout = t.dstLayout;
+				layoutTask.newLayout = vk::ImageLayout::eTransferDstOptimal;
+				layoutTask.baseMipLevel = 0;
+				layoutTask.mipLevelCount = t.dstMipLevelCount;
+				layoutTask.baseLayer = t.regions[0].dstSubresource.baseArrayLayer;
+				layoutTask.layerCount = t.regions[0].dstSubresource.layerCount;
+
+				performImageLayoutTransitionTask(layoutTask, cmdBuffer);
+			}
+
+			cmdBuffer.copyImage(t.src, vk::ImageLayout::eTransferSrcOptimal, t.dst, vk::ImageLayout::eTransferDstOptimal, t.regions);
+
+			//transform src
+			if (t.postSRCLayout != vk::ImageLayout::eTransferSrcOptimal) {
+				ImageLayoutTransitionTask layoutTask;
+				layoutTask.image = t.src;
+				layoutTask.imageAspectMask = t.srcImageAspectMask;
+				layoutTask.oldLayout = vk::ImageLayout::eTransferSrcOptimal;
+				layoutTask.newLayout = t.postSRCLayout;
+				layoutTask.baseMipLevel = 0;
+				layoutTask.mipLevelCount = t.srcMipLevelCount;
+				layoutTask.baseLayer = t.regions[0].srcSubresource.baseArrayLayer;
+				layoutTask.layerCount = t.regions[0].srcSubresource.layerCount;
+
+				performImageLayoutTransitionTask(layoutTask, cmdBuffer);
+			}
+
+			//transform dst
+			if (t.postDSTLayout != vk::ImageLayout::eTransferDstOptimal)  {
+				ImageLayoutTransitionTask layoutTask;
+				layoutTask.image = t.dst;
+				layoutTask.imageAspectMask = t.dstImageAspectMask;
+				layoutTask.oldLayout = vk::ImageLayout::eTransferDstOptimal;
+				layoutTask.newLayout = t.postDSTLayout;
+				layoutTask.baseMipLevel = 0;
+				layoutTask.mipLevelCount = t.dstMipLevelCount;
+				layoutTask.baseLayer = t.regions[0].dstSubresource.baseArrayLayer;
+				layoutTask.layerCount = t.regions[0].dstSubresource.layerCount;
+
+				performImageLayoutTransitionTask(layoutTask, cmdBuffer);
+			}
+
+
+		}
+
 		void ResourceTransferer::performBufferToImageCopyWithTransitionTask(ResourceTransferer::BufferToImageCopyWithTransitionTask& t, vk::CommandBuffer cmdBuffer)
 		{
 
@@ -262,8 +333,8 @@ namespace sunrise {
 			barrier.subresourceRange.aspectMask = t.imageAspectMask;
 			barrier.subresourceRange.baseMipLevel = t.baseMipLevel;
 			barrier.subresourceRange.levelCount = t.mipLevelCount;
-			barrier.subresourceRange.baseArrayLayer = 0;
-			barrier.subresourceRange.layerCount = 1;
+			barrier.subresourceRange.baseArrayLayer = t.baseLayer;
+			barrier.subresourceRange.layerCount = t.layerCount;
 
 			vk::PipelineStageFlags sourceStage;
 			vk::PipelineStageFlags destinationStage;
@@ -292,8 +363,32 @@ namespace sunrise {
 
 				destinationStage = vk::PipelineStageFlagBits::eTransfer;//vk::PipelineStageFlagBits::eFragmentShader;
 			}
+			else if (t.oldLayout == vk::ImageLayout::ePresentSrcKHR && t.newLayout == vk::ImageLayout::eTransferSrcOptimal) {
+				//todo: IS THIS OK
+				barrier.srcAccessMask = vk::AccessFlagBits::eColorAttachmentWrite;
+				barrier.dstAccessMask = vk::AccessFlagBits::eTransferRead;
+				sourceStage = vk::PipelineStageFlagBits::eAllCommands;
+				destinationStage = vk::PipelineStageFlagBits::eTransfer;
+			}
+			else if (t.oldLayout == vk::ImageLayout::ePresentSrcKHR && t.newLayout == vk::ImageLayout::eTransferDstOptimal) {
+				//todo: IS THIS OK
+				barrier.srcAccessMask = vk::AccessFlagBits::eColorAttachmentWrite;
+				barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
+				sourceStage = vk::PipelineStageFlagBits::eAllCommands;
+				destinationStage = vk::PipelineStageFlagBits::eTransfer;
+			}
+			else if (t.oldLayout == vk::ImageLayout::eTransferDstOptimal && t.newLayout == vk::ImageLayout::ePresentSrcKHR) {
+				//todo: IS THIS OK
+				barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+				//this is probably wrong acces but i dont know what to do for a swap chian acces
+				barrier.dstAccessMask = vk::AccessFlagBits::eTransferRead;
+				sourceStage = vk::PipelineStageFlagBits::eTransfer;
+				//this is probably wrong acces but i dont know what to do for a swap chian stage
+				destinationStage = vk::PipelineStageFlagBits::eAllCommands;
+			}
 			else {
 				throw std::invalid_argument("unsupported layout transition!");
+				return;
 			}
 
 			//barrier.srcAccessMask = srcAccessMask; // TODO

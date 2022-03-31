@@ -125,6 +125,8 @@ namespace sunrise::gfx {
 
 				if (i == spacificOptions.passes - 1) { // if the last pass
 																 // the final layout (the layout to transtion to at the end of the renderpass) should be the original final user defined layout
+					//todo: in future to save two unecacry layout transitions, if a virtual window, final should be transfer src optimal
+					
 					AttachOptions.finalLayout = wholeOptions.attatchments[attach].finalLayout;
 				}
 				else {
@@ -219,10 +221,10 @@ namespace sunrise::gfx {
 			createOptions.tilling = vk::ImageTiling::eOptimal;
 
 			createOptions.layers = 1;
-			if (multiViewport)
-				createOptions.layers = multiViewCount;
+			if (window->isVirtual())
+				createOptions.layers = window->numSubWindows();
 
-			// for each virtual attachment (in the first pass) create all images exept the one for the swapchain
+			// for each virtual attachment (in the first pass) create all images except the one for the swapchain
 			for (size_t i = 0; i < frameOptions.attatchments.size(); i++)
 			{
 				// skip the swap image
@@ -274,7 +276,7 @@ namespace sunrise::gfx {
 
 
 				// swapImage is the swap chain image index
-				for (size_t swapImage = 0; swapImage < window->swapChainImageViews.size(); swapImage++) { 
+				for (size_t swapImage = 0; swapImage < window->numSwapImages(); swapImage++) { 
 					// see renderpass.cpp for info on order of attachments
 					std::vector<vk::ImageView> attachments = {};
 					attachments.reserve(passOptions[pass].attatchments.size());
@@ -294,6 +296,7 @@ namespace sunrise::gfx {
 
 						if (gloablAttachIndex == frameOptions.presentedAttachment) {
 
+							
 							auto imageView = window->swapChainImageViews[swapImage];
 
 #if SR_VK_OBJECT_NAMES
@@ -321,8 +324,10 @@ namespace sunrise::gfx {
 					framebufferInfo.pAttachments = attachments.data();
 					framebufferInfo.width = window->swapchainExtent.width;
 					framebufferInfo.height = window->swapchainExtent.height;
-					//todo: change for multi viewport rendering
 					framebufferInfo.layers = 1;
+
+					if (window->isVirtual())
+						framebufferInfo.layers = window->numSubWindows();
 
 					auto frameBuffer = renderer->device.createFramebuffer(framebufferInfo);
 

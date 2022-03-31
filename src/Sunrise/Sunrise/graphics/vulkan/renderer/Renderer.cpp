@@ -38,9 +38,15 @@ namespace sunrise::gfx {
 		for (size_t i = 0; i < windows.size(); i++)
 			windows[i]->indexInRenderer = i;
 
+		for (size_t i = 0; i < allWindows.size(); i++)
+			allWindows[i]->allIndexInRenderer = i;
+
+		for (size_t i = 0; i < physicalWindows.size(); i++)
+			physicalWindows[i]->physicalIndexInRenderer = i;
+
 		// setup camera frustrums
-		camFrustroms.reserve(allWindows.size());
-		for (auto win : allWindows)
+		camFrustroms.reserve(physicalWindows.size());
+		for (auto win : physicalWindows)
 			camFrustroms.emplace_back(win->camera.view());
 
 		createRenderResources();
@@ -357,6 +363,7 @@ namespace sunrise::gfx {
 
 		
 		auto coord = app.loadedScenes[0]->coordinator;
+		//needs to do special coping if this is a virtual window
 		coord->encodePassesForFrame(this, cmdBuff, app.currentFrameID, window);
 
 		
@@ -372,8 +379,24 @@ namespace sunrise::gfx {
 	{
 		vk::SubmitInfo submitInfo{};
 
-		std::vector<vk::Semaphore> waitSemaphores = { window.imageAvailableSemaphores[app.currentFrame] };
+		std::vector<vk::Semaphore> waitSemaphores = {};
+		waitSemaphores.reserve(4);
+
+		if (window.isVirtual()) {
+			for each (auto child in window.subWindows)
+			{
+				waitSemaphores.push_back(child->imageAvailableSemaphores[app.currentFrame]);
+			}
+		}
+		else {
+			waitSemaphores.push_back(window.imageAvailableSemaphores[app.currentFrame]);
+		}
+
 		std::vector<vk::PipelineStageFlags> waitStages = { vk::PipelineStageFlags(vk::PipelineStageFlagBits::eColorAttachmentOutput) };
+
+		if (window.isVirtual())
+			waitStages.push_back(vk::PipelineStageFlagBits::eTransfer);
+
 		submitInfo.waitSemaphoreCount = waitSemaphores.size();
 		submitInfo.pWaitSemaphores = waitSemaphores.data();
 		submitInfo.setWaitDstStageMask(waitStages);
@@ -384,7 +407,7 @@ namespace sunrise::gfx {
 		std::vector<vk::Semaphore> signalSemaphores = { window.renderFinishedSemaphores[app.currentFrame] };
 		submitInfo.setSignalSemaphores(signalSemaphores);
 
-
+			 
 
 		vkResetFences(device, 1, &window.inFlightFences[app.currentFrame]);
 

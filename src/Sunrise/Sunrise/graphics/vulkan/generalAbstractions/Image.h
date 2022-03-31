@@ -29,6 +29,8 @@ namespace sunrise::gfx {
 		vk::Format format;
 		vk::ImageAspectFlags aspectFlags;
 		uint32_t mipLevels = 1;
+		uint32_t layerCount = 1;
+		uint32_t startLayer = 0;
 	};
 
 	class SUNRISE_API Image
@@ -38,6 +40,8 @@ namespace sunrise::gfx {
 		Image(const Image& othter) = delete;
 		Image(vk::Device device, VmaAllocator allocator, vk::Extent3D size, ImageCreationOptions options, vk::ImageAspectFlags aspectFlags);
 		~Image();
+
+		vk::ImageView createView(uint32_t layers, uint32_t startLayer);
 
 		void name(const char* name, const VkDebug& debugObject) const;
 
@@ -51,6 +55,11 @@ namespace sunrise::gfx {
 	private:
 		VmaAllocator allocator;
 		vk::Device device;
+
+		std::vector<vk::ImageView> allocatedViews;
+
+		ImageCreationOptions options;
+		vk::ImageAspectFlags aspectFlags;
 	};
 
 

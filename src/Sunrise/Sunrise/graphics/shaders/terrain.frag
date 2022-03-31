@@ -32,6 +32,7 @@ layout(binding = 2) buffer a_MaterialUniforms {
 layout(binding = 3) uniform sampler2D textures[];
 
 
+//layout(location = 0) in vec3 TBNMatrix;
 layout(location = 0) in vec3 fragModelNormal;
 layout(location = 1) in vec3 fragModelTangent;
 layout(location = 2) in vec3 fragModelBitangent;

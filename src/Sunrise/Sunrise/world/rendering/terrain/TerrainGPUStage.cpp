@@ -71,11 +71,11 @@ namespace sunrise {
 		for (auto window : renderer->windows)
 		{
 			setUsedBySurface.insert(std::make_pair(window, std::vector<size_t>()));
-			setUsedBySurface.at(window).resize(window->swapChainImages.size());
+			setUsedBySurface.at(window).resize(window->numSwapImages());
 
 
 			descriptorSets[window] = {};
-			for (size_t swap = 0; swap < window->swapChainImages.size(); swap++)
+			for (size_t swap = 0; swap < window->numSwapImages(); swap++)
 			{
 				auto pipeline = getConcretePipeline(*window, worldTerrainPipeline);
                 
@@ -125,7 +125,7 @@ namespace sunrise {
 
 		// encode commands buffs with empty commands
 		for (auto win : app.renderers[0]->windows) {
-			for (size_t surface = 0; surface < win->swapChainImages.size(); surface++)
+			for (size_t surface = 0; surface < win->numSwapImages(); surface++)
 			{
 				reEncodeBuffer(*win, surface);
 			}

@@ -319,7 +319,7 @@ namespace sunrise {
 
 				// todo make this more robust
 				for (auto win : app.renderers[0]->windows) {
-					for (size_t surface = 0; surface < win->swapChainImages.size(); surface++)
+					for (size_t surface = 0; surface < win->numSwapImages(); surface++)
 					{
 						tstage->reEncodeBuffer(*win, surface);
 					}

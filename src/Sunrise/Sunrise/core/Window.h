@@ -27,9 +27,12 @@
 namespace sunrise {
 
 	class WorldScene;
+	class WorldUniformCreator;
 	namespace gfx {
 		class Renderer;
 		class GPUGenCommandsPipeline;
+		class SceneRenderCoordinator;
+
 	}
 	class Application;
 
@@ -102,7 +105,7 @@ namespace sunrise {
 		/// 
 		/// </summary>
 		/// <returns>weather to abort the frame</returns>
-		bool getDrawable();
+		bool getDrawable(bool* outReleaseDrawable = nullptr);
 		void presentDrawable();
 
 		Camera camera;
@@ -111,12 +114,15 @@ namespace sunrise {
 
 		// Swap Chain
 
+		size_t numSwapImages();
 		vk::SwapchainKHR swapChain = nullptr;
 		std::vector<VkImage> swapChainImages;
 		VkFormat swapchainImageFormat;
 		VkExtent2D swapchainExtent;
+		///if virtual, swapchain images and views are manually created with as many layers as needed
 		std::vector<vk::ImageView> swapChainImageViews;
 		std::vector<VkFramebuffer> swapChainFramebuffers;
+		std::vector<gfx::Image*> virtualSwapImages;
 
 		/* Manualy created Frame Buffer Images */
 
@@ -181,6 +187,7 @@ namespace sunrise {
 		bool _owned = false;
 
 		void addSubWindow(Window* subWindow);
+		size_t numSubWindows();
 
 		bool shouldClose();
 
@@ -199,6 +206,11 @@ namespace sunrise {
         
 	private:
 
+		//TODO: fix this
+		friend WorldUniformCreator;
+		friend gfx::Renderer;
+		friend gfx::SceneRenderCoordinator;
+
 		bool _virtual;
 		bool _primary = false;
 
@@ -206,6 +218,11 @@ namespace sunrise {
 		/// only valid for virtual windows
 		/// </summary>
 		std::vector<Window*> subWindows;
+
+		/// <summary>
+		/// if owned window this is it's parent virtual window
+		/// </summary>
+		Window* owner = nullptr;
 
 		void cleanupSwapchain();
 
@@ -227,7 +244,12 @@ namespace sunrise {
 
 		void createFramebuffers();
 
-		void createSemaphores();
+		void createSyncObjects();
+
+		void prepareImagesInFlightArray()
+		{
+			imagesInFlight.resize(swapChainImages.size(), VK_NULL_HANDLE);
+		}
 
         void SetupImgui();
 

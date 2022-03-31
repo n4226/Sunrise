@@ -102,8 +102,9 @@ namespace sunrise::gfx {
 
 		//TODO: make this linked with render passes
 		//TODO: make better api for multiviewport
-		bool multiViewport = false;
-		size_t multiViewCount = 1;
+		//depricated will be done automatically on a per window basis
+	/*	bool multiViewport = false;
+		size_t multiViewCount = 1;*/
 
 		Renderer* renderer;
 
@@ -134,7 +135,7 @@ namespace sunrise::gfx {
 		std::vector<ComposableRenderPass*> renderpasses{};
 
 		/// <summary>
-		/// one for each supbass and onowned window, and window surface, the last one is also referenced by the respective window
+		/// one for each supbass and unowned window, and window surface, the last one is also referenced by the respective window
 		/// outer array is pass index, map is the window, inner array is window surface index
 		/// outer = pass
 		/// map = window

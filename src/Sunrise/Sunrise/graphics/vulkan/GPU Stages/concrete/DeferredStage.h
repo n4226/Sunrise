@@ -36,6 +36,11 @@ namespace sunrise {
 
 		gfx::DescriptorPool* descriptorPool;
 
+		/// <summary>
+		/// for normal windows - outer map = windows, inner array = surfaces
+		/// for virtual windows - outer map same but inner array = surfaces * children i.e first (surface count) represent child one's surfaces
+		///	they dont directly reference surfaces but instead reference the fact that for virtual iwndows the post porccesing will have to happen once per child window and hence will need descriptors for each
+		/// </summary>
 		std::unordered_map<Window*, std::vector<gfx::DescriptorSet*>> descriptorSets{};
 
 		gfx::Sampler* inputImageSampler;

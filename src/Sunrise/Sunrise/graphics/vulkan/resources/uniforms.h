@@ -11,18 +11,19 @@ namespace sunrise::gfx {
     };
 
     struct SceneUniforms {
-        glm::mat4 viewProjection;
+        //if no MVR than just first index is used
+        glm::mat4 viewProjection[4];
     };
 
     struct PostProcessEarthDatAndUniforms {
-        glm::mat4 invertedViewMat;
-        glm::mat4 invertedProjMat;
-        glm::mat4 viewMat;
-        glm::mat4 projMat;
+        glm::mat4 invertedViewMat[4];
+        glm::mat4 invertedProjMat[4];
+        glm::mat4 viewMat[4];
+        glm::mat4 projMat[4];
+        glm::vec4 camFloatedGloabelPos[4];
 
         glm::vec4 earthCenter;
         glm::vec4 sunDir;
-        glm::vec4 camFloatedGloabelPos;
         glm::ivec2 renderTargetSize;
     };
 

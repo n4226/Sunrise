@@ -7,7 +7,7 @@ namespace sunrise::gfx {
 
 
 	Image::Image(vk::Device device, VmaAllocator allocator, vk::Extent3D size, ImageCreationOptions options, vk::ImageAspectFlags aspectFlags)
-		: size(size), allocator(allocator), device(device)
+		: size(size), allocator(allocator), device(device), options(options), aspectFlags(aspectFlags)
 	{
 
 		vk::ImageCreateInfo imageInfo{};
@@ -58,13 +58,24 @@ namespace sunrise::gfx {
 
 		vmaCreateImage(allocator, &c_imageInfo, &allocInfo, &vkItem, &allocation, nullptr);
 
-		ImageViewCreationOptions viewOptions = { vk::ImageViewType::e2D, options.format, aspectFlags, mipLevels };
+		ImageViewCreationOptions viewOptions = { vk::ImageViewType::e2D, options.format, aspectFlags, mipLevels, options.layers,0 };
 
 		view = vkHelpers::createImageView(device, vkItem, viewOptions);
 	}
 
+	vk::ImageView Image::createView(uint32_t layers, uint32_t startLayer)
+	{
+		ImageViewCreationOptions viewOptions = { vk::ImageViewType::e2D, options.format, aspectFlags, mipLevels, layers,startLayer };
+		auto view = vkHelpers::createImageView(device, vkItem, viewOptions);
+		allocatedViews.push_back(view);
+		return view;
+	}
+
 	Image::~Image()
 	{
+		for each (auto v in allocatedViews)
+			device.destroyImageView(v);
+
 		device.destroyImageView(view);
 		vmaDestroyImage(allocator, vkItem, allocation);
 	}

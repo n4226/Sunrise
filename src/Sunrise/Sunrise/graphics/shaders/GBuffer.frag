@@ -2,7 +2,7 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_KHR_vulkan_glsl : enable
 #extension GL_GOOGLE_include_directive : enable
-
+#extension GL_NV_viewport_array2: enable
 
 //#include "headers/lighting/atmScat.h"
 #include "headers/lighting/pbr.h"
@@ -11,17 +11,17 @@
 //TODO: move this back to binding 4 when depth buffer added back
 layout(binding = 4) uniform UniformBufferObject {
 // global uniforms
-    mat4 viewProjection;
+    mat4 viewProjection[4];
 
     // post uniforms
-    mat4 invertedViewMat;
-    mat4 invertedProjMat;
-    mat4 viewMat;
-    mat4 projMat;
+    mat4 invertedViewMat[4];
+    mat4 invertedProjMat[4];
+    mat4 viewMat[4];
+    mat4 projMat[4];
+    vec4 camFloatedGloabelPos[4];
 
     vec4 earthCenter;
     vec4 sunDir;
-    vec4 camFloatedGloabelPos;
     ivec2 renderTargetSize;
 } ubo;
 
@@ -221,7 +221,7 @@ vec3 calculatePostAtmosphereicScatering(
     vec4 clipSFPos = vec4(ndc, 1.0, 1.0);
 
     vec4 viewSFPosition = 
-        ubo.invertedProjMat * ubo.invertedViewMat * clipSFPos;
+        ubo.invertedProjMat[gl_Layer] * ubo.invertedViewMat[gl_Layer] * clipSFPos;
 
     viewSFPosition /= viewSFPosition.w;
 
@@ -319,15 +319,15 @@ vec3 calculatePostAtmosphereicScatering(
 
 
      vec4 viewSpaceFragPosition =
-        ubo.invertedProjMat * clipSpaceFragPos;
+        ubo.invertedProjMat[gl_Layer] * clipSpaceFragPos;
     
     // perspective division
     viewSpaceFragPosition /= viewSpaceFragPosition.w;
 
     vec4 worldSpaceFragPosition =
-        ubo.invertedViewMat * viewSpaceFragPosition;
+        ubo.invertedViewMat[gl_Layer] * viewSpaceFragPosition;
 
-    vec3 dirTemp = worldSpaceFragPosition.xyz - ubo.camFloatedGloabelPos.xyz;
+    vec3 dirTemp = worldSpaceFragPosition.xyz - ubo.camFloatedGloabelPos[gl_Layer].xyz;
     vec3 dir =  normalize(dirTemp);
 
     //#temp to visualize normals
@@ -406,7 +406,7 @@ void main() {
 
     //TODO: remove this to render the actual scene
     if (depth == 1) {
-        color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos.xyz - ubo.earthCenter.xyz,ubo.viewMat,ubo.sunDir.xyz);
+        color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos[gl_Layer].xyz - ubo.earthCenter.xyz,ubo.viewMat[gl_Layer],ubo.sunDir.xyz);
         // color *= ubo.sunDir.xyz;
         //color.xyz = vec3(0,0.2,0.4) * 1; 
         //albedo_metallic.w = 1;
@@ -418,8 +418,8 @@ void main() {
         mat.metallic = albedo_metallic.w;
         mat.ao = ao.x;
         mat.roughness = normal_sroughness.w;
-
-        color = calculateLighting(uvs,depth,ubo.invertedViewMat,ubo.invertedProjMat,mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos.xyz);
+        
+        color = calculateLighting(uvs,depth,ubo.invertedViewMat[gl_Layer],ubo.invertedProjMat[gl_Layer],mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos[gl_Layer].xyz);
         
         //float brightness = dot(normalize(normal_sroughness.xyz),normalize(ubo.sunDir.xyz));
         //color = vec3(normal_sroughness.xyz) * max(brightness,0);

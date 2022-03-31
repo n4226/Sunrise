@@ -286,8 +286,9 @@ namespace sunrise::gfx {
 			holderOptions.passStartLayout = {};
 		}
 		// create render pass(es)
+		//why go throush scene when this is self?
 		scene->coordinator->createRenderpasses(holderOptions);
-
+		
 		graphBuilt = true;
 
 		loadOrGetRegisteredPipesInAllWindows();
@@ -458,7 +459,8 @@ namespace sunrise::gfx {
 
 				auto imguiBuff = imguiStage->encode(options);
 
-				firstLevelCMDBuffer.executeCommands(*imguiBuff);
+				//cuaing multi monitor vulkan errors
+				//firstLevelCMDBuffer.executeCommands(*imguiBuff);
 
 #if SR_LOGGING
 				renderer->debugObject.endRegion(firstLevelCMDBuffer);
@@ -471,6 +473,45 @@ namespace sunrise::gfx {
 		if (inARenderPass)
 			firstLevelCMDBuffer.endRenderPass();
 
+		//if virtual window do necacary copying
+
+		if (window.isVirtual()) {
+
+			auto layout = vk::ImageLayout::ePresentSrcKHR; //TODO: this needs to be set correclty based on what is set in renderpasss attachment options - and if crpholder changes to recognize that virtual windows want tranfersrc than work with that too
+
+			for (uint32_t i = 0; i < window.numSubWindows() ; i++)
+			{
+				auto child = window.subWindows[i];
+				//copy layer i into sub window i's swap image
+
+				ResourceTransferer::ImageTransferTask task{};
+
+				task.src = window.virtualSwapImages[window.currentSurfaceIndex]->vkItem;
+				task.srcLayout = layout;
+				task.postSRCLayout = vk::ImageLayout::eTransferSrcOptimal;
+				
+				task.dst = child->swapChainImages[child->currentSurfaceIndex];
+				task.dstLayout = vk::ImageLayout::eUndefined;
+				task.postDSTLayout = vk::ImageLayout::ePresentSrcKHR;
+
+				vk::ImageCopy region;
+				region.srcSubresource = { vk::ImageAspectFlagBits::eColor,0,i,1 };
+				region.srcOffset = vk::Offset3D{ 0,0,0 };
+
+				region.dstSubresource = { vk::ImageAspectFlagBits::eColor,0,0,1 };
+				region.dstOffset = vk::Offset3D{ 0,0,0 };
+
+				region.extent.width = window.swapchainExtent.width;
+				region.extent.height = window.swapchainExtent.height;
+				region.extent.depth = 1;
+
+				task.regions = { region };
+
+				renderer->resouceTransferer->performImageTransferTask(task, firstLevelCMDBuffer);
+
+				//layout = vk::ImageLayout::eTransferSrcOptimal;
+			}
+		}
 
 	}
 
@@ -479,7 +520,6 @@ namespace sunrise::gfx {
 		PROFILE_FUNCTION;
 
 		auto passInfo = sceneRenderpassHolders[0]->renderPass(pass);
-
 
 		vk::RenderPassBeginInfo renderPassInfo{};
 
