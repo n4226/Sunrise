@@ -3,7 +3,12 @@
 #include "srpch.h"
 #include <GLFW/glfw3.h>
 
+namespace sunrise {
+	class Window;
+}
+
 namespace sunrise::gfx {
+
 
 
 	struct SUNRISE_API SwapChainSupportDetails {
@@ -30,7 +35,7 @@ namespace sunrise::gfx {
 	class SUNRISE_API GPUSelector
 	{
 	public:
-		static vk::PhysicalDevice primaryGPU(vk::Instance instance, vk::SurfaceKHR surface);
+		static vk::PhysicalDevice primaryGPU(vk::Instance instance, const Window* window);
 
 		static QueueFamilyIndices gpuQueueFamilies(vk::PhysicalDevice device, vk::SurfaceKHR surface);
 
@@ -45,8 +50,9 @@ namespace sunrise::gfx {
 		static vk::Format findSupportedFormat(vk::PhysicalDevice phdevice, const std::vector<vk::Format>& candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features);
 
 	private:
-		static bool gpuSutable(const vk::PhysicalDevice device, vk::SurfaceKHR surface);
+		static bool gpuSutable(const vk::PhysicalDevice device,const Window* window);
 
+		static bool WindowsVarifiedCorrectGPUForMonitor(vk::PhysicalDevice device, const Window* window);
 	};
 
 

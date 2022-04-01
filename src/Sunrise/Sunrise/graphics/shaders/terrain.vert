@@ -79,10 +79,10 @@ void main() {
     //}
 
     
-    gl_ViewportIndex = 1;
+    // gl_ViewportIndex = 1;
     // gl_ViewportMask[0] = 2;
-    // gl_Layer = 0;
-    gl_Position = ubo.viewProjection[1] * modelUniform.data[drawData.modelIndex].model * vec4(inPosition, 1.0);
+    gl_Layer = 0;
+    gl_Position = ubo.viewProjection[0] * modelUniform.data[drawData.modelIndex].model * vec4(inPosition, 1.0);
 }
 
 //was in config - was getting weird freeing resources error wiht second window (not using mvr)
@@ -96,6 +96,20 @@ void main() {
         "y": 0.4
       },
       "group": 1,
+      "size": {
+        "x": 1920,
+        "y": 1080
+      }
+    }
+    ,
+    {
+      "mode": "Windowed",
+      "monitor": "\\\\.\\DISPLAY19\\Monitor0",
+      "monitorLocalPostion": {
+        "x": 0.7,
+        "y": 0.4
+      },
+      "group": 0,
       "size": {
         "x": 1920,
         "y": 1080

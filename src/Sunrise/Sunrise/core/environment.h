@@ -4,6 +4,7 @@
 
 #define SR_PROFILING 1
 #define SR_PROFILING_LITE 0
+#define SR_PROFILE_WITH_OPTICK 1
 #define SR_VALIDATION 1
 
 #define SR_MULTI_THREADED_PROFILING 1
@@ -27,15 +28,26 @@
  #endif
 
 #if SR_PROFILING && SR_DEBUG
+//try to reduce calls to profile scope
+#define PROFILE_SCOPE(name) OPTICK_EVENT_DYNAMIC(name)
+#define PROFILE_FUNCTION OPTICK_EVENT()
+#define PROFILE_SCOPE_LEVEL2(name) OPTICK_EVENT_DYNAMIC(name)
+#define PROFILE_FUNCTION_LEVEL2 OPTICK_EVENT()
+#if SR_PROFILE_WITH_OPTICK
+#else
 #define PROFILE_SCOPE(name) InstrumentationTimer timer##__line__(name);
 #define PROFILE_FUNCTION PROFILE_SCOPE(SR_FUNC_SIG)
 #define PROFILE_SCOPE_LEVEL2(name) InstrumentationTimer timer##__line__(name);
 #define PROFILE_FUNCTION_LEVEL2 PROFILE_SCOPE_LEVEL2(SR_FUNC_SIG)
+#endif
 #elif SR_PROFILING_LITE
+#if SR_PROFILE_WITH_OPTICK
+#else
 #define PROFILE_SCOPE(name)
 #define PROFILE_FUNCTION
 #define PROFILE_SCOPE_LEVEL2(name) InstrumentationTimer timer##__line__(name);
 #define PROFILE_FUNCTION_LEVEL2 PROFILE_SCOPE_LEVEL2(SR_FUNC_SIG)
+#endif
 #else
 #define PROFILE_SCOPE(name)
 #define PROFILE_FUNCTION 

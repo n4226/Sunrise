@@ -503,9 +503,8 @@ namespace sunrise {
 
         auto& windowConfig = configSystem.global().windows[globalIndex];
 
-        auto monitor = getMonitorFromNativeName(windowConfig.monitor);
+        monitor = getMonitorFromNativeName(windowConfig.monitor);
         SR_CORE_INFO("creating window {} on monitor {}", globalIndex, getNativeMonitorName(monitor));
-
 
 
         makeWindwWithMode(windowConfig, monitor);
@@ -825,7 +824,12 @@ namespace sunrise {
 
         presentInfo.pResults = nullptr; // Optional
 
+#if SR_PROFILE_WITH_OPTICK
+        //the vulkan impl for optick doesnt use this pointer at all
+        //OPTICK_GPU_FLIP(nullptr);
+#endif
         auto result = renderer->deviceQueues.presentation.presentKHR(&presentInfo);
+
 
         if (result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR || framebufferResized)
         {

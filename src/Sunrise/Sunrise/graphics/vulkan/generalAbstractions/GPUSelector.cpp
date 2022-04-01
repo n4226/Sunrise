@@ -1,6 +1,20 @@
 #include "srpch.h"
 #include "GPUSelector.h"
 
+#include "Sunrise/core/Window.h"
+
+#include "dxgi.h"
+#include <GLFW/glfw3.h>
+
+#include <locale>
+#include <codecvt>
+
+#pragma comment(lib, "d3d11.lib")
+//#pragma comment(lib, "d3dx10.lib")
+#pragma comment(lib, "dxgi.lib")
+//#pragma comment(lib, "dxerr.lib")
+#pragma comment(lib, "windowscodecs.lib")
+
 namespace sunrise::gfx {
 
 
@@ -9,7 +23,7 @@ namespace sunrise::gfx {
 		return graphicsFamily.has_value() && presentFamily.has_value() && resourceTransferFamily.has_value();
 	}
 
-	vk::PhysicalDevice GPUSelector::primaryGPU(vk::Instance instance, vk::SurfaceKHR surface)
+	vk::PhysicalDevice GPUSelector::primaryGPU(vk::Instance instance, const Window* window)
 	{
 		PROFILE_FUNCTION;
 		uint32_t deviceCount = 0;
@@ -25,24 +39,40 @@ namespace sunrise::gfx {
 
 		for (uint32_t i = 0; i < deviceCount; i++)
 		{
-			auto device = vk::PhysicalDevice(devices.at(i));
 
-			if (gpuSutable(device, surface)) {
-				SR_CORE_TRACE("this gpu ({}) is sutable", device);
+			VkPhysicalDeviceProperties props;
+			vkGetPhysicalDeviceProperties(devices.at(i), &props);
+
+			SR_CORE_TRACE("gpu {} is a {}, id: ({})", i, props.deviceName, props.deviceID);
+		}
+
+		for (uint32_t i = 0; i < deviceCount; i++)
+		{
+			auto device = vk::PhysicalDevice(devices.at(i));
+			
+			VkPhysicalDeviceProperties props;
+			vkGetPhysicalDeviceProperties(devices.at(i),&props);
+
+			SR_CORE_TRACE("checking if {} is sutable, location: ({})", props.deviceName, device);
+
+			if (gpuSutable(device, window)) {
+				SR_CORE_TRACE("this gpu, {} ({}) is sutable", props.deviceName, device);
 				return device;
 			}
 		}
 		return vk::PhysicalDevice(devices[0]);
 	}
 
-	bool GPUSelector::gpuSutable(const vk::PhysicalDevice device, vk::SurfaceKHR surface)
+	bool GPUSelector::gpuSutable(const vk::PhysicalDevice device, const Window* window)
 	{
 		PROFILE_FUNCTION;
 
-		SR_CORE_TRACE("determining if this gpu ({}) is sutable",device);
-		VkPhysicalDeviceProperties deviceProperties;
+		SR_CORE_TRACE("determining if this gpu ({}) is sutable", device);
+		VkPhysicalDeviceProperties2 deviceProperties = vk::PhysicalDeviceProperties2();
+		VkPhysicalDeviceIDProperties deviceIds = vk::PhysicalDeviceIDProperties();
+		deviceProperties.pNext = &deviceIds;
+		vkGetPhysicalDeviceProperties2(device, &deviceProperties);
 		VkPhysicalDeviceFeatures deviceFeatures;
-		vkGetPhysicalDeviceProperties(device, &deviceProperties);
 		vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
 
 		uint32_t extensionCount;
@@ -53,16 +83,99 @@ namespace sunrise::gfx {
 
 		// add check for required extensions here later
 
-		auto families = gpuQueueFamilies(device, surface);
+		auto families = gpuQueueFamilies(device, window->surface);
 
 		bool swapChainAdequate = false;
-		SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device, surface);
+		SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device, window->surface);
 		swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
 
-		bool sutable = deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU &&
+		bool sutable = deviceProperties.properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU &&
 			deviceFeatures.geometryShader && families.isComplete() && swapChainAdequate;
 
-		return sutable;
+
+		//TODO: support failback for other platforms
+		//have to determine if this gpu is directly connected to the monitor displaying the surface - need to discurage user from dragging windows accross windows whuich are on different gpus
+
+		/*steps - 
+		*/
+	
+
+		bool directConnection = WindowsVarifiedCorrectGPUForMonitor(device, window);
+
+
+
+		//TODO: impliment rank system for gpu to make sure if no descrete gpu is connected to monitor direclty it still works and other situations
+		return sutable && directConnection;
+	}
+
+
+	bool GPUSelector::WindowsVarifiedCorrectGPUForMonitor(vk::PhysicalDevice device, const Window* window)
+	{
+		VkPhysicalDeviceProperties2 deviceProperties = vk::PhysicalDeviceProperties2();
+		VkPhysicalDeviceIDProperties deviceIds = vk::PhysicalDeviceIDProperties();
+		deviceProperties.pNext = &deviceIds;
+		vkGetPhysicalDeviceProperties2(device, &deviceProperties);
+
+		auto vkWindowHWMD = glfwGetWin32Window(window->window);
+		auto vKMintor = MonitorFromWindow(vkWindowHWMD, MONITOR_DEFAULTTONULL);
+
+		LUID vkDeviceLUID = *(PLUID)deviceIds.deviceLUID;
+
+
+		IDXGIFactory* pFactory = NULL;
+
+		CreateDXGIFactory1(__uuidof(IDXGIFactory), (void**)&pFactory);
+
+		UINT i = 0;
+		IDXGIAdapter* pAdapter;
+		std::vector <IDXGIAdapter*> vAdapters;
+		while (pFactory->EnumAdapters(i, &pAdapter) != DXGI_ERROR_NOT_FOUND)
+		{
+			vAdapters.push_back(pAdapter);
+			++i;
+		}
+
+		//TODO: stop memory leak of dx objects - use defer
+		//defer(xxxxx)
+
+		for (UINT i = 0; i < vAdapters.size(); i++) {
+
+
+			UINT j = 0;
+			IDXGIOutput* pOutput;
+			while (vAdapters[i]->EnumOutputs(j, &pOutput) != DXGI_ERROR_NOT_FOUND)
+			{
+				DXGI_OUTPUT_DESC des;
+				pOutput->GetDesc(&des);
+
+				//need to check if this monitor is the one for the requested window 
+				//- than need to check if this device is the vk one to varify the gpu is correct f or window
+				auto correct = des.Monitor == vKMintor;
+				if (correct) {
+#if SR_LOGGING
+					std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+					std::string narrow = converter.to_bytes(des.DeviceName);
+					SR_CORE_TRACE("{}, is correct mointor: {}", narrow, correct);
+#endif
+
+					DXGI_ADAPTER_DESC gpuDes;
+					vAdapters[i]->GetDesc(&gpuDes);
+
+					auto deviceLUID = gpuDes.AdapterLuid;
+
+					if (vkDeviceLUID.LowPart == deviceLUID.LowPart && vkDeviceLUID.HighPart == deviceLUID.HighPart) {
+						SR_CORE_TRACE("found matching gpu, {}", deviceProperties.properties.deviceName);
+						return true;
+					}
+
+
+
+				}
+
+				++j;
+			}
+		}
+		return false;
 	}
 
 	QueueFamilyIndices GPUSelector::gpuQueueFamilies(vk::PhysicalDevice device, vk::SurfaceKHR surface)

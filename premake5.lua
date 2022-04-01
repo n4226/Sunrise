@@ -23,7 +23,9 @@ project "Sunrise"
 		"vendor/imgui/*.cpp",
 		"vendor/imgui/misc/cpp/**.cpp",
 		"vendor/imgui/backends/imgui_impl_vulkan.cpp",
-		"vendor/imgui/backends/imgui_impl_glfw.cpp"
+		"vendor/imgui/backends/imgui_impl_glfw.cpp",
+
+		"vendor/optick/src/*.cpp",
 	}
 
 	libdirs {
@@ -71,7 +73,8 @@ project "Sunrise"
 		"vendor/eigen",
 		"vendor/earcut-hpp/include/",
 		"vendor/geos/capi/",
-		"vendor/geos/include/"
+		"vendor/geos/include/",
+		"vendor/DirectX/Inc",
 	}	
 
 	postbuildcommands {
@@ -98,7 +101,8 @@ project "Sunrise"
 		}
 
 		links {
-			"GFSDK_Aftermath_Lib.x64"
+			"GFSDK_Aftermath_Lib.x64",
+			"DirectXTK"
 		}
 		includedirs {
 			"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/include",
@@ -129,7 +133,8 @@ project "Sunrise"
 
 		libdirs {
 			"vendor/marl-main/marl-main/build/Debug",
-			"vendor/geos/bin/Debug"
+			"vendor/geos/bin/Debug",
+			"vendor/DirectX/Bin/Windows10_2022/x64/Debug"
 		}
 
 	filter "configurations:Release"
@@ -140,7 +145,8 @@ project "Sunrise"
 
 		libdirs {
 			"vendor/marl-main/marl-main/build/Release",
-			"vendor/geos/bin/Release"
+			"vendor/geos/bin/Release",
+			"vendor/DirectX/Bin/Windows10_2022/x64/Release"
 		}
 
 	filter "configurations:Dist"
@@ -150,8 +156,9 @@ project "Sunrise"
 
 		libdirs {
 			"vendor/marl-main/marl-main/build/Release",
-			"vendor/geos/bin/Release"
+			"vendor/geos/bin/Release",
+			"vendor/DirectX/Bin/Windows10_2022/x64/Release"
 		}
 
-	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp or files:vendor/imgui/**.cpp' }
+	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp or files:vendor/imgui/**.cpp or files:vendor/optick/src/**.cpp' }
 		flags {"NoPCH"}

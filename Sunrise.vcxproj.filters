@@ -79,6 +79,9 @@
     <Filter Include="src\Sunrise\Sunrise\graphics\vulkan\renderer">
       <UniqueIdentifier>{83A5EC37-6FB8-EC90-18A2-C97D049489DE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets">
+      <UniqueIdentifier>{D042B507-BC02-46AC-2520-2EB711FF58BE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\graphics\vulkan\resources">
       <UniqueIdentifier>{E7C22ED1-5333-314A-1C52-ABD28881694B}</UniqueIdentifier>
     </Filter>
@@ -108,6 +111,9 @@
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\scene\included">
       <UniqueIdentifier>{913320FD-7D6F-2367-E681-3B5ED2DCCB81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sunrise\Sunrise\scene\included\entityRendering">
+      <UniqueIdentifier>{BBB3FDDC-A747-F384-100C-4D39FCBE2D77}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\world">
       <UniqueIdentifier>{B48DDE40-2050-12CB-6900-A157D501EBA8}</UniqueIdentifier>
@@ -153,6 +159,12 @@
     </Filter>
     <Filter Include="vendor\imgui\misc\cpp">
       <UniqueIdentifier>{2AD6F862-9642-B45D-5F36-4CBBCB61D6C5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\optick">
+      <UniqueIdentifier>{CCD11319-3892-8F4F-01CD-D8CC6D4CD42B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\optick\src">
+      <UniqueIdentifier>{E3951B3F-4FAC-19D5-9823-A5F60479EA5C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -345,6 +357,15 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\resources</Filter>
     </ClInclude>
@@ -408,11 +429,17 @@
     <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.h">
+      <Filter>src\Sunrise\Sunrise\scene\included</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\UIScene.h">
       <Filter>src\Sunrise\Sunrise\scene\included</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.h">
       <Filter>src\Sunrise\Sunrise\scene\included</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h">
+      <Filter>src\Sunrise\Sunrise\scene\included\entityRendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h">
       <Filter>src\Sunrise\Sunrise\world</Filter>
@@ -465,11 +492,6 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -625,6 +647,15 @@
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\resources</Filter>
     </ClCompile>
@@ -685,11 +716,17 @@
     <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp">
       <Filter>src\Sunrise\Sunrise\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.cpp">
+      <Filter>src\Sunrise\Sunrise\scene\included</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\UIScene.cpp">
       <Filter>src\Sunrise\Sunrise\scene\included</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.cpp">
       <Filter>src\Sunrise\Sunrise\scene\included</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp">
+      <Filter>src\Sunrise\Sunrise\scene\included\entityRendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp">
       <Filter>src\Sunrise\Sunrise\world</Filter>
@@ -766,10 +803,32 @@
     <ClCompile Include="vendor\imgui\misc\cpp\imgui_stdlib.cpp">
       <Filter>vendor\imgui\misc\cpp</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.cpp" />
+    <ClCompile Include="vendor\optick\src\optick_capi.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_core.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_gpu.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_gpu.d3d12.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_gpu.vulkan.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_message.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_miniz.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_serialization.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_server.cpp">
+      <Filter>vendor\optick\src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -460,7 +460,7 @@ namespace sunrise::gfx {
 				auto imguiBuff = imguiStage->encode(options);
 
 				//cuaing multi monitor vulkan errors
-				//firstLevelCMDBuffer.executeCommands(*imguiBuff);
+				firstLevelCMDBuffer.executeCommands(*imguiBuff);
 
 #if SR_LOGGING
 				renderer->debugObject.endRegion(firstLevelCMDBuffer);

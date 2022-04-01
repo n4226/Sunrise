@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\earcut-hpp\include;vendor\geos\capi;vendor\geos\include;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\earcut-hpp\include;vendor\geos\capi;vendor\geos\include;vendor\DirectX\Inc;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -90,8 +90,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;marl.lib;geos.lib;geos_c.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Debug;vendor\geos\bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;marl.lib;geos.lib;geos_c.lib;GFSDK_Aftermath_Lib.x64.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Debug;vendor\geos\bin\Debug;vendor\DirectX\Bin\Windows10_2022\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo on
@@ -104,7 +104,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\earcut-hpp\include;vendor\geos\capi;vendor\geos\include;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\earcut-hpp\include;vendor\geos\capi;vendor\geos\include;vendor\DirectX\Inc;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -120,8 +120,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;marl.lib;geos.lib;geos_c.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Release;vendor\geos\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;marl.lib;geos.lib;geos_c.lib;GFSDK_Aftermath_Lib.x64.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Release;vendor\geos\bin\Release;vendor\DirectX\Bin\Windows10_2022\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo on
@@ -134,7 +134,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <PrecompiledHeaderFile>srpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SR_PLATFORM_WINDOWS;SR_BUILD_DLL;SR_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\earcut-hpp\include;vendor\geos\capi;vendor\geos\include;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Sunrise;vendor\spdlog\include;C:\VulkanSDK\1.2.154.1\Include;vendor\glm-master;vendor\marl-main\marl-main\include;vendor\stb;vendor\mango-master\mango-master\include;vendor\libigl\include;vendor\HTTPRequest\include;vendor\httplib\include;vendor\rapidjson\include;vendor\libguarded\src;vendor\nlohmann\include;vendor\date\include;vendor\entt\single_include;vendor\imgui;vendor\asio-1.18.1\include;vendor\CGAL-5.3\include;vendor\boost_1_76_0;vendor\eigen;vendor\earcut-hpp\include;vendor\geos\capi;vendor\geos\include;vendor\DirectX\Inc;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -150,8 +150,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;marl.lib;geos.lib;geos_c.lib;GFSDK_Aftermath_Lib.x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Release;vendor\geos\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;marl.lib;geos.lib;geos_c.lib;GFSDK_Aftermath_Lib.x64.lib;DirectXTK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\visual studio\GPUObjectsV6\Dependencies\mango-master\mango-master\build\Debug;C:\VulkanSDK\1.2.154.1\Lib;vendor\bin\NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090\lib\x64;vendor\bin\glfw\windows\glfw-3.3.2.bin.WIN64\glfw-3.3.2.bin.WIN64\lib-vc2019;vendor\marl-main\marl-main\build\Release;vendor\geos\bin\Release;vendor\DirectX\Bin\Windows10_2022\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>echo on
@@ -159,10 +159,6 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h" />
     <ClInclude Include="src\Sunrise.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
@@ -226,6 +222,9 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\RenderSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.h" />
@@ -245,11 +244,12 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\networking\NetworkManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\networking\networking.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Camera.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Scene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\Transform.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\UIScene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.h" />
@@ -269,10 +269,6 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\srpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Application.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\core\Engine.cpp" />
@@ -326,6 +322,9 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\RenderSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\RenderTarget.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\renderTergets\WindowRenderTarget.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\MeshBuffers.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.cpp" />
@@ -344,11 +343,12 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\miscellaneousHelpers\miscellaneousHelpers.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\networking\NetworkManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Camera.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Scene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\Transform.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\DefaultSceneRenderCoordinator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\UIScene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.cpp" />
@@ -390,6 +390,33 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="vendor\imgui\misc\cpp\imgui_stdlib.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_capi.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_core.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_gpu.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_gpu.d3d12.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_gpu.vulkan.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_message.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_miniz.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_serialization.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\optick\src\optick_server.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>

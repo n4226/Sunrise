@@ -429,6 +429,7 @@ namespace sunrise {
         //worldScene->updateScene();
 
         while (shouldLoop()) {
+            OPTICK_FRAME("MainThread");
             runLoopIteration();
         }
 
@@ -694,6 +695,20 @@ namespace sunrise {
         auto renderer =
             new Renderer(*this, devices[index], physicalDevices[index], allocators[index], windows, deviceQueues[index], queueFamilyIndices[index],debugObjects[index]);
 
+
+		//profiling 
+#if SR_PROFILE_WITH_OPTICK
+        //todo: varify no douplicates in these arrays
+        std::vector<VkQueue> queues = { renderer->deviceQueues.graphics };// , renderer->deviceQueues.resourceTransfer};
+        std::vector<uint32_t> queueIndicies = { *renderer->queueFamilyIndices.graphicsFamily };
+        //queueIndicies.push_back(*renderer->queueFamilyIndices.resourceTransferFamily);
+        VkDevice device = renderer->device;
+        VkPhysicalDevice phDevice = renderer->physicalDevice;   
+        SR_ASSERT(queues.size() == queueIndicies.size());
+        OPTICK_GPU_INIT_VULKAN(&device, &phDevice, queues.data(),queueIndicies.data(),queues.size(), nullptr);
+#endif
+
+
         renderer->supportsMultiViewport = deviceInfos[index]->supportsMultiViewport;
 
         renderers.push_back(renderer);
@@ -707,7 +722,7 @@ namespace sunrise {
 
         PROFILE_FUNCTION;
 
-        auto physicalDevice = GPUSelector::primaryGPU(instance, windows[window]->surface);
+        auto physicalDevice = GPUSelector::primaryGPU(instance, windows[window]);
 
         auto index = std::find(physicalDevices.begin(), physicalDevices.end(), physicalDevice);
 

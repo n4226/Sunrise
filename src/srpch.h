@@ -42,6 +42,8 @@
 #include "../vendor/imgui/imgui.h"
 #include <../vendor/imgui/misc/cpp/imgui_stdlib.h>
 
+#include <../vendor/optick/src/optick.h>
+
 // stl
 #include <iostream>
 #include <memory>

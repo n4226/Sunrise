@@ -111,6 +111,7 @@ namespace sunrise {
 		Camera camera;
 
 		GLFWwindow* window = nullptr;
+		GLFWmonitor* monitor = nullptr;
 
 		// Swap Chain
 

@@ -43,3 +43,9 @@
 [submodule "vendor/geos"]
 	path = vendor/geos
 	url = https://github.com/libgeos/geos
+[submodule "vendor/optick"]
+	path = vendor/optick
+	url = https://github.com/bombomby/optick
+[submodule "vendor/DirectX"]
+	path = vendor/DirectX
+	url = https://github.com/microsoft/DirectXTK
