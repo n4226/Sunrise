@@ -15,8 +15,8 @@
 namespace sunrise::gfx {
 
 
-	SceneRenderCoordinator::SceneRenderCoordinator(Scene* scene)
-		: scene(scene), app(scene->app)
+	SceneRenderCoordinator::SceneRenderCoordinator(Scene* scene, Renderer* renderer)
+		: scene(scene), app(scene->app), renderer(renderer)
 	{
 	}
 
@@ -64,17 +64,18 @@ namespace sunrise::gfx {
 		stagesInOrder.clear();
 		passForStage.clear();
 
-		for (auto renderer : app.renderers) {
-
+		{
 			auto& des = renderer->materialManager->registeredDescriptors;
 
 			using Item = std::pair<gfx::SceneRenderCoordinator*, std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>*>;
 
 			auto newEnd = std::remove_if(des.begin(), des.end(), [this](auto& item) {
 				return item.first == this;
-			});
+				});
 			des.erase(newEnd, des.end());
+
 		}
+
 		graphBuilt = false;
 	}
 
@@ -206,7 +207,7 @@ namespace sunrise::gfx {
 			vk::Format swapChainFormat = vk::Format::eUndefined;
 
 			//TODO check if windows array is jsut unowned windows
-			for (auto win : app.renderers[0]->windows) {
+			for (auto win : renderer->windows) {
 				vk::Format winFormat = static_cast<vk::Format>(win->swapchainImageFormat);
 				SR_ASSERT(!(swapChainFormat != vk::Format::eUndefined && winFormat != swapChainFormat));
 				swapChainFormat = winFormat;
@@ -287,7 +288,7 @@ namespace sunrise::gfx {
 		}
 		// create render pass(es)
 		//why go throush scene when this is self?
-		scene->coordinator->createRenderpasses(holderOptions);
+		createRenderpasses(holderOptions);
 		
 		graphBuilt = true;
 
@@ -301,7 +302,9 @@ namespace sunrise::gfx {
 		if (generateImguiStage)
 			imguiStage = new ImGuiStage(this);
 
+		//TODO: fix for MultiGPU
 		if (!imguiInitilized) {
+			if (renderer != app.renderers[0]) return;
 
 			ImGui::CreateContext();
 
@@ -315,9 +318,10 @@ namespace sunrise::gfx {
 			cfg.SizePixels = 13 * SCALE;
 			ImGui::GetIO().Fonts->AddFontDefault(&cfg); //don't know what this is -> ->DisplayOffset.y = SCALE;
 
-			for (auto window : app.renderers[0]->physicalWindows) {
-				setupIMGUIForWindow(window, app);
-			}
+			//for (auto window : renderer->physicalWindows) {
+			//TODO: fix ui to work on multi window
+				setupIMGUIForWindow(renderer->physicalWindows[0], app);
+			//}
 			imguiInitilized = true;
 		}
 	}
@@ -337,7 +341,7 @@ namespace sunrise::gfx {
 		PROFILE_FUNCTION;
 
 		// loop through all top level windows: virtual or onowned
-		for (auto window : app.renderers[0]->windows) {
+		for (auto window : renderer->windows) {
 			//TODO: check if window already has same virtual pipeLoaded
 			for (auto pipe : registeredPipes) {
 				auto pass = passForStage[pipe.second];
@@ -355,11 +359,11 @@ namespace sunrise::gfx {
 	{
 		PROFILE_FUNCTION;
 
-		sceneRenderpassHolders.push_back(new CRPHolder(std::move(__tempWholeFrameRenderPassOptions), holderOptions, app.renderers[0]));
+		sceneRenderpassHolders.push_back(new CRPHolder(std::move(__tempWholeFrameRenderPassOptions), holderOptions, renderer));
 
 
 		// set render pass pointer on all windows even owned ones
-		for (auto win : app.renderers[0]->allWindows) {
+		for (auto win : renderer->allWindows) {
 			//TODO: this object has to be deleted somewhere???!!
 			win->renderPassManager = sceneRenderpassHolders[0]->renderPass(sceneRenderpassHolders[0]->passCount() - 1).first;
 		}
@@ -367,7 +371,7 @@ namespace sunrise::gfx {
 
 
 
-	void SceneRenderCoordinator::encodePassesForFrame(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
+	void SceneRenderCoordinator::encodePassesForFrame(vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
 	{
 		PROFILE_FUNCTION;
 		/* Steps
@@ -392,7 +396,7 @@ namespace sunrise::gfx {
 		*/
 
 		// subclass can run code before encoding
-		preEncodeUpdate(renderer,firstLevelCMDBuffer,frameID,window);
+		preEncodeUpdate(firstLevelCMDBuffer,frameID,window);
 
 		int64_t currentPass = -1;
 
@@ -448,8 +452,8 @@ namespace sunrise::gfx {
 #if SR_LOGGING
  			renderer->debugObject.endRegion(firstLevelCMDBuffer);
 #endif
-
-			if (stage == lastStage && imguiStage) {
+			//todo fix limitnign ui to first window and gpu
+			if (stage == lastStage && imguiStage && renderer == app.renderers[0] && window.globalIndex == 0) {
 				//draw imgui
 
 #if SR_LOGGING
@@ -545,17 +549,14 @@ namespace sunrise::gfx {
 		firstLevelCMDBuffer.beginRenderPass(&renderPassInfo, vk::SubpassContents::eSecondaryCommandBuffers);
 	}
 
-	void SceneRenderCoordinator::preEncodeUpdate(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
+	void SceneRenderCoordinator::preEncodeUpdate(vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
 	{
 		updateSceneUniformBuffer(window);
 	}
 
 	void SceneRenderCoordinator::registerForGlobalMaterials(std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>* descriptors)
 	{
-		for (auto renderer: app.renderers)
-		{
-			renderer->materialManager->registeredDescriptors.push_back(std::make_pair(this,descriptors));
-		}
+		renderer->materialManager->registeredDescriptors.push_back(std::make_pair(this,descriptors));
 	}
 
 }

@@ -18,7 +18,7 @@ namespace sunrise::gfx {
 		createInfo.setQueueFamilyIndices(options.queueFamilieIndicies);
 
 		//TODO: switch to use only c struct from the beginning to save perfromance 
-		VkBufferCreateInfo cCreateInfo = createInfo;
+		VkBufferCreateInfo cCreateInfo = static_cast<VkBufferCreateInfo>(createInfo);
 
 		//vkItem = device.createBuffer(createInfo);
 

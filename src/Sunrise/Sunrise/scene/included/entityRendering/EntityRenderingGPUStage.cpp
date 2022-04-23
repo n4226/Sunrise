@@ -26,7 +26,7 @@ namespace sunrise {
 
 	void EntityRenderingGPUStage::loadMeshResources()
 {
-		auto renderer = coord->app.renderers[0];
+		auto renderer = coord->renderer;
 
 		auto& reg = coord->scene->registry;
 
@@ -101,7 +101,7 @@ namespace sunrise {
 	void EntityRenderingGPUStage::AllocateDescriptors()
 	{
 
-		auto renderer = app.renderers[0];
+		auto renderer = coord->renderer;
 		for (auto window : renderer->windows)
 		{
 			descriptorSets[window] = {};
@@ -173,8 +173,8 @@ namespace sunrise {
 
 
 		//TODO: understand the point of variable descriptor arrays if you still have to pass length
-		descriptorPool = new gfx::DescriptorPool(app.renderers[0]->device,
-			{ app.maxSwapChainImages * app.renderers[0]->windows.size(),{ globalUniformPoolSize, modelAndMatUniformPoolSize, materialTexturesPoolSize} });
+		descriptorPool = new gfx::DescriptorPool(coord->renderer->device,
+			{ app.maxSwapChainImages * coord->renderer->windows.size(),{ globalUniformPoolSize, modelAndMatUniformPoolSize, materialTexturesPoolSize} });
 	}
 
 	void EntityRenderingGPUStage::cleanup()
@@ -183,7 +183,7 @@ namespace sunrise {
 			delete buff;
 		}
 
-		auto renderer = coord->app.renderers[0];
+		auto renderer = coord->renderer;
 		for (auto [ent, modelID] : modelUniformIndicies) {
 			renderer->globalModelBufferAllocator->free(modelID);
 		}
@@ -238,7 +238,7 @@ namespace sunrise {
 				//add ability to declare as static meaning this is not done at runtime and batching could potentially be done
 				//TODO: have to use staging mesh buffer so that potential flickering is rmeoved ------------------------------------
 				if (modelMatricies.at(ent) != transform.matrix()) {
-					updateModelUniform(app.renderers[0], { transform.matrix() }, model, ent);
+					updateModelUniform(coord->renderer, { transform.matrix() }, model, ent);
 				}
 				meshBuff->bindVerticiesIntoCommandBuffer(*cmdBuff, 0,&mesh);
 				meshBuff->bindIndiciesIntoCommandBuffer(*cmdBuff, &mesh);

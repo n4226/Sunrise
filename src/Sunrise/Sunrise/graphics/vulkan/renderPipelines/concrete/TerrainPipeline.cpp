@@ -109,8 +109,8 @@ namespace sunrise::gfx {
 
 
         std::vector<VkPipelineShaderStageCreateInfo> shaderStages = {
-            GraphicsPipeline::createShaderStageInfo(device,vertShaderCode,vk::ShaderStageFlagBits::eVertex),
-            GraphicsPipeline::createShaderStageInfo(device,fragShaderCode,vk::ShaderStageFlagBits::eFragment),
+            static_cast<VkPipelineShaderStageCreateInfo>(GraphicsPipeline::createShaderStageInfo(device,vertShaderCode,vk::ShaderStageFlagBits::eVertex)),
+            static_cast<VkPipelineShaderStageCreateInfo>(GraphicsPipeline::createShaderStageInfo(device,fragShaderCode,vk::ShaderStageFlagBits::eFragment)),
         };
 
         // vertex input 
@@ -163,7 +163,7 @@ namespace sunrise::gfx {
 
         VkRect2D scissor{};
         scissor.offset = { 0, 0 };
-        scissor.extent = swapChainExtent;
+        scissor.extent = static_cast<VkExtent2D>(swapChainExtent);
 
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;

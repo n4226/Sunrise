@@ -4,7 +4,7 @@
 namespace sunrise::gfx {
 
 	//global storage
-	std::unordered_map<vk::DescriptorSetLayout, std::vector<DescriptorSetLayoutBinding>*> layoutData;
+	std::unordered_map<VkDescriptorSetLayout, std::vector<DescriptorSetLayoutBinding>*> layoutData;
 
 	DescriptorSetLayoutBinding::DescriptorSetLayoutBinding(uint32_t bindingIndex, vk::DescriptorType descriptorType, vk::ShaderStageFlags stagesUsedIn)
 		: DescriptorSetLayoutBinding(bindingIndex, descriptorType, 1, stagesUsedIn, nullptr, {})
@@ -96,15 +96,17 @@ namespace sunrise::gfx {
 
 		// create layout
 		auto layout = device.createDescriptorSetLayout(layoutInfo);
-		layoutData[layout] = new std::vector<DescriptorSetLayoutBinding>(options.setLayoutBindings);
+		auto c_layout = static_cast<VkDescriptorSetLayout>(layout);
+		layoutData[c_layout] = new std::vector<DescriptorSetLayoutBinding>(options.setLayoutBindings);
 
 		return layout;
 	}
 
 	void DescriptorSetLayout::Destroy(vk::DescriptorSetLayout layout, vk::Device device)
 	{
-		delete layoutData[layout];
-		layoutData.erase(layout);
+		auto c_layout = static_cast<VkDescriptorSetLayout>(layout);
+		delete layoutData[c_layout];
+		layoutData.erase(c_layout);
 
 		device.destroyDescriptorSetLayout(layout);
 	}

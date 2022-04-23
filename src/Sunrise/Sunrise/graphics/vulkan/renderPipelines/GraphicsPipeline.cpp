@@ -70,7 +70,7 @@ namespace sunrise::gfx {
 
         for (auto shStage : options.shaderStages)
         {
-            shaderStages.push_back(GraphicsPipeline::createShaderStageInfo(device, readFile(shStage.shaderPath), shStage.shaderStage));
+            shaderStages.push_back(static_cast<VkPipelineShaderStageCreateInfo>(GraphicsPipeline::createShaderStageInfo(device, readFile(shStage.shaderPath), shStage.shaderStage)));
         }
 
 
@@ -124,7 +124,7 @@ namespace sunrise::gfx {
 
         VkRect2D scissor{};
         scissor.offset = { 0, 0 };
-        scissor.extent = swapChainExtent;
+        scissor.extent = static_cast<VkExtent2D>(swapChainExtent);
 
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;

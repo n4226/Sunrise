@@ -12,8 +12,8 @@
 
 namespace sunrise {
 
-	WorldSceneRenderCoordinator::WorldSceneRenderCoordinator(WorldScene* scene)
-		: SceneRenderCoordinator(scene), worldScene(scene)
+	WorldSceneRenderCoordinator::WorldSceneRenderCoordinator(WorldScene* scene, gfx::Renderer* renderer)
+		: SceneRenderCoordinator(scene,renderer), worldScene(scene)
 	{
 	}
 
@@ -51,14 +51,14 @@ namespace sunrise {
 	}
 
 
-	void WorldSceneRenderCoordinator::preEncodeUpdate(gfx::Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
+	void WorldSceneRenderCoordinator::preEncodeUpdate(vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window)
 	{
-		SceneRenderCoordinator::preEncodeUpdate(renderer, firstLevelCMDBuffer, frameID, window);
+		SceneRenderCoordinator::preEncodeUpdate(firstLevelCMDBuffer, frameID, window);
 	}
 
 	void WorldSceneRenderCoordinator::createUniforms()
 	{
-		WorldUniformCreator::createUniforms(app,uniformBuffers);
+		WorldUniformCreator::createUniforms(renderer,uniformBuffers);
 	}
 	
 	void WorldSceneRenderCoordinator::updateSceneUniformBuffer(Window& window)
@@ -126,7 +126,7 @@ namespace sunrise {
 		auto gbuffer_depth = gfx::ComposableRenderPass::CreateOptions::VAttatchment();
 
 		auto depthBufferFormat =
-			gfx::GPUSelector::findSupportedFormat(app.renderers[0]->physicalDevice, { vk::Format::eD32Sfloat }, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
+			gfx::GPUSelector::findSupportedFormat(renderer->physicalDevice, { vk::Format::eD32Sfloat }, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
 
 		gbuffer_depth.type = gfx::ComposableRenderPass::CreateOptions::AttatchmentType::Depth;
 		gbuffer_depth.format = depthBufferFormat;

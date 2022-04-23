@@ -396,13 +396,22 @@ namespace sunrise {
 	{
         SR_CORE_INFO("Loading scene at addr: {}", reinterpret_cast<void*>(scene));
 
+        scene->initCoordinators();
+
         scene->load();
 
         //might have to be modified for hot reloading a scene
-        scene->coordinator->createUniforms();
-        scene->coordinator->createPasses();
 
-        scene->coordinator->buildGraph();
+		for (auto renderer : renderers) {
+        
+            auto coord = scene->coordinators.at(renderer);
+
+			coord->createUniforms();
+			coord->createPasses();
+
+			coord->buildGraph();
+        }
+
 
         scene->lateLoad();
 
@@ -411,7 +420,8 @@ namespace sunrise {
     void sunrise::Application::unloadScene(Scene* scene)
     {
         scene->unload();
-        scene->coordinator->reset();
+        for (auto renderer: renderers)
+            scene->coordinators.at(renderer)->reset();
     }
 
     void Application::hotReloadScene()
@@ -502,20 +512,25 @@ namespace sunrise {
             }
         }
 
-        renderers[0]->beforeRenderScene();
-
-        // draw view - this should be able to be done all in parallel
-        for (size_t i = 0; i < renderers[0]->windows.size(); i++)
+        for (int ren = 0; ren < renderers.size(); ren++)
         {
-            PROFILE_SCOPE("Loop of Window render loop");
 
-            auto window = renderers[0]->windows[i];
+            renderers[ren]->beforeRenderScene();
 
-            //Should never happen
-            if (window->_owned) continue;
-            if (window->getDrawable() == true) continue;
-            renderers[0]->renderFrame(*window);
-            window->presentDrawable();
+            // draw view - this should be able to be done all in parallel
+            for (size_t i = 0; i < renderers[ren]->windows.size(); i++)
+            {
+                PROFILE_SCOPE("Loop of Window render loop");
+
+                auto window = renderers[ren]->windows[i];
+
+                //Should never happen
+                if (window->_owned) continue;
+                if (window->getDrawable() == true) continue;
+                renderers[ren]->renderFrame(*window);
+                window->presentDrawable();
+            }
+
         }
 
         currentFrameID++;
@@ -623,11 +638,11 @@ namespace sunrise {
     {
         PROFILE_FUNCTION
             auto appInfo = vk::ApplicationInfo(
-                getName(),//"Flight Sim Terrain System",
+                getName(),
                 VK_MAKE_VERSION(1, 0, 0),
                 "Sunrise",
                 VK_MAKE_VERSION(1, 0, 0),
-                VK_API_VERSION_1_2
+                VK_API_VERSION_1_3 //My GPUs do not currently seem to support vulkan 1.3
             );
 
 
@@ -693,7 +708,7 @@ namespace sunrise {
         // debug object in array is invalid after this copy
         // TODO: fix this because all windows are being added to all devices
         auto renderer =
-            new Renderer(*this, devices[index], physicalDevices[index], allocators[index], windows, deviceQueues[index], queueFamilyIndices[index],debugObjects[index]);
+            new Renderer(*this, devices[index], physicalDevices[index], allocators[index], { windows[windows.size() - 1] }, deviceQueues[index], queueFamilyIndices[index], debugObjects[index]);
 
 
 		//profiling 
@@ -705,7 +720,8 @@ namespace sunrise {
         VkDevice device = renderer->device;
         VkPhysicalDevice phDevice = renderer->physicalDevice;   
         SR_ASSERT(queues.size() == queueIndicies.size());
-        OPTICK_GPU_INIT_VULKAN(&device, &phDevice, queues.data(),queueIndicies.data(),queues.size(), nullptr);
+        if (deviceIndex == 0)
+            OPTICK_GPU_INIT_VULKAN(&device, &phDevice, queues.data(),queueIndicies.data(),queues.size(), nullptr);
 #endif
 
 

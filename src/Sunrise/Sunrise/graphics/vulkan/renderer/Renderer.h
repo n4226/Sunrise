@@ -63,8 +63,10 @@ namespace sunrise {
 			vk::Device device;
 			vk::PhysicalDevice physicalDevice;
 			VmaAllocator allocator;
-			GPUQueues& deviceQueues;
-			QueueFamilyIndices& queueFamilyIndices;
+			//when these were stored as references caused problems with multi gpu
+			GPUQueues deviceQueues;
+			//when these were stored as references caused problems with multi gpu
+			QueueFamilyIndices	 queueFamilyIndices;
 
 			/// <summary>
 			/// ?? look into exact specs of this array - I bleive it is top level windows - i.e physical if not in gorup and a virtual for each group - basically all unowned windows
@@ -137,6 +139,11 @@ namespace sunrise {
 
 			std::vector<math::Frustum> camFrustroms;
 
+
+
+			// handles
+			Application& app;
+
 		private:
 			friend TerrainSystem;
 			friend MaterialManager;
@@ -185,9 +192,6 @@ namespace sunrise {
 			std::vector<std::vector<vk::CommandPool  >> dynamicCommandPools;
 			std::vector<std::vector<vk::CommandBuffer>> dynamicCommandBuffers;
 
-
-			// handles
-			Application& app;
 
 		};
 	}

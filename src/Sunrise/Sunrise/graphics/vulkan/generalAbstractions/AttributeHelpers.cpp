@@ -31,7 +31,7 @@ namespace sunrise::gfx {
 	/// <returns></returns>
 	VkVertexInputAttributeDescription makeVertAttribute(uint32_t binding, uint32_t location, VertexAttributeFormat format, uint32_t offset)
 	{
-		return vk::VertexInputAttributeDescription(location, binding, vk::Format(format), offset);
+		return { location, binding, VkFormat(format), offset };
 	}
 
 }

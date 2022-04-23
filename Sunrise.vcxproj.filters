@@ -357,6 +357,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SharedRendererResources.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClInclude>
@@ -645,6 +648,9 @@
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SceneRenderCoordinator.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\SharedRendererResources.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\WorldUniformsCreator.cpp">

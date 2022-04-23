@@ -35,7 +35,7 @@ namespace sunrise::gfx {
 			(DescriptorPool::CreateOptions::DescriptorTypeAllocOptions)vk::DescriptorPoolSize({ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 }),
 			(DescriptorPool::CreateOptions::DescriptorTypeAllocOptions)vk::DescriptorPoolSize({ VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 })
 		};
-
+		//TODO: fix renderers[0]
 		descriptorPool = new gfx::DescriptorPool(app.renderers[0]->device, { 1000, pool_sizes });
 
 	
@@ -49,6 +49,7 @@ namespace sunrise::gfx {
 
 	void ImGuiVulkanContainer::setupIMGUIForWindow(Window* window, Application& app)
 	{
+
 		ImGui_ImplGlfw_InitForVulkan(window->window,true);
 
 
@@ -120,7 +121,7 @@ namespace sunrise::gfx {
 		auto task = ResourceTransferer::Task{};
 		task.type = ResourceTransferer::TaskType::imguiFontGen;
 
-		app.renderers[0]->resouceTransferer->newTask({ {task} }, []() {
+		renderer->resouceTransferer->newTask({ {task} }, []() {
 
 			}, true, true);
 

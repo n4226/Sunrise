@@ -22,7 +22,7 @@ namespace sunrise::gfx {
 
 			for (auto pool : cmdBufferPools)
 				for (auto spool : pool)
-					app.renderers[0]->device.destroyCommandPool(spool);
+					coord->renderer->device.destroyCommandPool(spool);
 		}
 	}
 
@@ -33,12 +33,12 @@ namespace sunrise::gfx {
 		SR_CORE_TRACE("Creating {} GPU Render Stage resources", name);
 
 
-		cmdBufferPools.resize(app.renderers[0]->windows.size());
-		commandBuffers.resize(app.renderers[0]->windows.size());
+		cmdBufferPools.resize(coord->renderer->windows.size());
+		commandBuffers.resize(coord->renderer->windows.size());
 
-		for (size_t i = 0; i < app.renderers[0]->windows.size(); i++)
+		for (size_t i = 0; i < coord->renderer->windows.size(); i++)
 			vkHelpers::createPoolsAndCommandBufffers
-			(app.renderers[0]->device, cmdBufferPools[i], commandBuffers[i], app.maxSwapChainImages, app.renderers[0]->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
+			(coord->renderer->device, cmdBufferPools[i], commandBuffers[i], app.maxSwapChainImages, coord->renderer->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
 
 	}
 

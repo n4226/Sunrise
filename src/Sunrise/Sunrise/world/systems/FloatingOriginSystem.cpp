@@ -8,7 +8,7 @@
 namespace sunrise {
 
     using namespace gfx;
-
+    //TODO: make this system support multi gpu
     void FloatingOriginSystem::update()
     {
         PROFILE_FUNCTION;

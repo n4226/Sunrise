@@ -42,20 +42,23 @@ namespace sunrise {
 		glm::vec3 aabbMax;
 	};
 
+	/// <summary>
+	/// one per renderer/device
+	/// </summary>
 	class SUNRISE_API TerrainMeshLoader
 	{
 	public:
 		Mesh* createChunkMesh(const TerrainQuadTreeNode& chunk);
 
-	private:
-
-		gfx::Renderer* renderer;
-		TerrainSystem* terrainSystem;
-
 
 		TreeNodeDrawResaourceToCoppy loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob = false, bool diskOnly = false);
 		void drawChunk(TerrainQuadTreeNode* node, TreeNodeDrawResaourceToCoppy preLoadedMesh, bool inJob = false);
 		void removeDrawChunk(TerrainQuadTreeNode* node, bool inJob = false);
+
+		gfx::Renderer* renderer;
+	private:
+
+		TerrainSystem* terrainSystem;
 
 
 		friend TerrainSystem;

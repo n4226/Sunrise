@@ -283,7 +283,7 @@ namespace sunrise::gfx {
 		//auto scene = app.loadedScenes[0];
 
 		for (auto scene : app.loadedScenes)
-			scene->coordinator->drawableReleased(window, appFrame);
+			scene->coordinators.at(this)->drawableReleased(window, appFrame);
 	}
 
 
@@ -362,9 +362,9 @@ namespace sunrise::gfx {
 		//ImGui::Render();
 
 		
-		auto coord = app.loadedScenes[0]->coordinator;
+		auto coord = app.loadedScenes[0]->coordinators.at(this);
 		//needs to do special coping if this is a virtual window
-		coord->encodePassesForFrame(this, cmdBuff, app.currentFrameID, window);
+		coord->encodePassesForFrame(cmdBuff, app.currentFrameID, window);
 
 		
 		// end encoding 

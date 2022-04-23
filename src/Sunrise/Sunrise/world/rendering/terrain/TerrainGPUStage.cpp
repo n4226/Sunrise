@@ -23,6 +23,7 @@ namespace sunrise {
 
 	void TerrainGPUStage::setup()
 	{
+		auto renderer = coord->renderer;
 		using DescriptorTypeAllocOptions = gfx::DescriptorPool::CreateOptions::DescriptorTypeAllocOptions;
 		//gfx::DescriptorPool::CreateOptions::DescriptorTypeAllocOptions sampledImageAllocOptions = { vk::DescriptorType::eSampledImage, app.maxSwapChainImages };
 
@@ -44,18 +45,18 @@ namespace sunrise {
 
         
         //TODO: understand the point of variable descriptor arrays if you still have to pass length
-		descriptorPool = new gfx::DescriptorPool(app.renderers[0]->device, 
-			{ app.maxSwapChainImages * app.renderers[0]->windows.size(),{ globalUniformPoolSize, modelAndMatUniformPoolSize, materialTexturesPoolSize} });
+		descriptorPool = new gfx::DescriptorPool(renderer->device, 
+			{ app.maxSwapChainImages * renderer->windows.size(),{ globalUniformPoolSize, modelAndMatUniformPoolSize, materialTexturesPoolSize} });
 
 
 		for (size_t i = 0; i < setsOfCMDBuffers; i++)
 		{
-			cmdBufferPools[i].resize(app.renderers[0]->windows.size());
-			commandBuffers[i].resize(app.renderers[0]->windows.size());
+			cmdBufferPools[i].resize(renderer->windows.size());
+			commandBuffers[i].resize(renderer->windows.size());
 
-			for (size_t j = 0; j < app.renderers[0]->windows.size(); j++) {
+			for (size_t j = 0; j < renderer->windows.size(); j++) {
 				gfx::vkHelpers::createPoolsAndCommandBufffers
-				(app.renderers[0]->device, cmdBufferPools[i][j], commandBuffers[i][j], app.maxSwapChainImages, app.renderers[0]->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
+				(renderer->device, cmdBufferPools[i][j], commandBuffers[i][j], app.maxSwapChainImages, renderer->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
 				
 			}
 
@@ -67,7 +68,7 @@ namespace sunrise {
 	{
 		selfPass = coord->getPass(this);
 
-		auto renderer = app.renderers[0];
+		auto renderer = coord->renderer;
 		for (auto window : renderer->windows)
 		{
 			setUsedBySurface.insert(std::make_pair(window, std::vector<size_t>()));
@@ -124,7 +125,7 @@ namespace sunrise {
 
 
 		// encode commands buffs with empty commands
-		for (auto win : app.renderers[0]->windows) {
+		for (auto win : coord->renderer->windows) {
 			for (size_t surface = 0; surface < win->numSwapImages(); surface++)
 			{
 				reEncodeBuffer(*win, surface);
@@ -146,11 +147,13 @@ namespace sunrise {
         
 		descriptorPool->reset();
 
+		auto renderer = coord->renderer;
+
         for (size_t i = 0; i < setsOfCMDBuffers; i++)
         {
-            for (size_t j = 0; j < app.renderers[0]->windows.size(); j++) {
+            for (size_t j = 0; j < renderer->windows.size(); j++) {
                 for (auto pool: cmdBufferPools[i][j])
-                    app.renderers[0]->device.destroyCommandPool(pool);
+                    renderer->device.destroyCommandPool(pool);
             }
         }
         
@@ -221,7 +224,7 @@ namespace sunrise {
 
 		// this funciton must not be called if a frame  is currently still inflight with the associteted command buffer
 
-		auto renderer = app.renderers[0];
+		auto renderer = coord->renderer;
 
 		// intentianally locked for whole creation time so that the buffers are never swaped while work is happening
 		auto handle = activeBuffer.lock_shared();

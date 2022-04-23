@@ -9,7 +9,7 @@ namespace sunrise::gfx {
     {
 
         VkPipelineShaderStageCreateInfo shaderStage =
-            GraphicsPipeline::createShaderStageInfo(device, GraphicsPipeline::readFile(shaderFilePath), vk::ShaderStageFlagBits::eCompute);
+            static_cast<VkPipelineShaderStageCreateInfo>(GraphicsPipeline::createShaderStageInfo(device, GraphicsPipeline::readFile(shaderFilePath), vk::ShaderStageFlagBits::eCompute));
 
 
         vk::PipelineLayoutCreateInfo pipelineLayoutInfo{};

@@ -2,7 +2,7 @@
 
 #ifndef VMA_IMPLEMENTATION
 
-//External Dependancies
+//External Dependencies
 
 #define _USE_MATH_DEFINES
 #define GLM_FORCE_RADIANS
@@ -14,6 +14,7 @@
 
 #include "Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vk_mem_alloc.h"
 
+//#include <vulkan/vulkan.h>
 #include <vulkan/vulkan.hpp>
 
 #include <nlohmann/json.hpp>

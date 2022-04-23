@@ -9,26 +9,32 @@ namespace sunrise {
 
 	Scene::Scene(Application* app, bool inControlOfCoordinatorLifecycle)
 		: app(*app), inControlOfCoordinatorLifecycle(inControlOfCoordinatorLifecycle)
-	{
-		coordinator = new DefaultSceneRenderCoordinator(this);
+	{ 
+
+		std::function<gfx::SceneRenderCoordinator* (gfx::Renderer*)> creator = [this](gfx::Renderer* renderer) {
+			return new DefaultSceneRenderCoordinator(this, renderer);
+		};
+
+		coordinatorCreator = creator;
 	}
 
-	Scene::Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool inControlOfCoordinatorLifecycle)
-		: app(*app), coordinator(coordinator), inControlOfCoordinatorLifecycle(inControlOfCoordinatorLifecycle)
+	Scene::Scene(Application* app, gfx::SceneRenderCoordinatorCreator creator, bool inControlOfCoordinatorLifecycle)
+		: app(*app), inControlOfCoordinatorLifecycle(inControlOfCoordinatorLifecycle)
 	{
-
+		coordinatorCreator = creator;
 	}
 
 	Scene::~Scene()
 	{
 		if (inControlOfCoordinatorLifecycle)
-			delete coordinator;
+			for (auto [ren, coordinator] : coordinators)
+				delete coordinator;
 	}
 
 	void Scene::load()
 	{
 		//TODO: make all windows?
-		//also cameras should be eventually seperated from bieng inside windows and owned by scene allowing multiple cameras per monityr - working with render coordinator to have multi camera per view or have camera render to texture
+		//also cameras should be eventually separated from being inside windows and owned by scene allowing multiple cameras per monitor - working with render coordinator to have multi camera per view or have camera render to texture
 		for (size_t i = 0; i < app.windows.size(); i++)
 		{
 			auto window = app.windows[i];
@@ -84,6 +90,15 @@ namespace sunrise {
 		}
 		systems.clear();
 		registry.clear();
+	}
+
+	void Scene::initCoordinators()
+	{
+
+		for (auto renderer : app.renderers) {
+			coordinators.emplace(std::make_pair(renderer, coordinatorCreator(renderer)));
+		}
+
 	}
 
 }

@@ -13,6 +13,7 @@ namespace sunrise {
 
 	TreeNodeDrawResaourceToCoppy TerrainMeshLoader::loadMeshPreDrawChunk(TerrainQuadTreeNode* node, bool inJob,bool diskOnly)
 	{
+		PROFILE_FUNCTION;
 		// get  and encode mesh
 		//TODO store this in a better place which is more effecient
 		const auto Terrain_Chunk_Mesh_Dir = FileManager::engineTerrainChunkDir();//R"(terrain/chunkMeshes/)";
@@ -71,11 +72,12 @@ namespace sunrise {
 
 	void TerrainMeshLoader::drawChunk(TerrainQuadTreeNode* node, TreeNodeDrawResaourceToCoppy preLoadedMesh, bool inJob)
 	{
-		PROFILE_FUNCTION
+		PROFILE_FUNCTION;
 
 			//TODO - probablty more efficiant if all buffer writes were done after the draw objects were cxreatted all at once (in the write draw commands function) to allow single mapping and unmaopping and so on
 			// this would mean that this funciton would have to crateda nother object with temporary object eg mesh and model trans to be writien at the end of the system update
-			if (node->hasdraw) return;
+		//Later me - this was commented out for multi gpu as the same chunk must be loaded multiple times
+		//if (node->hasdraw) return;
 
 		// get thread local buffers for writting to
 
@@ -256,7 +258,7 @@ namespace sunrise {
 		//todo is this syncronoized?
 		node->hasdraw = true;
 
-		auto drawQueue = terrainSystem->pendingDrawObjects.lock();
+		auto drawQueue = terrainSystem->pendingDrawObjects.at(renderer)->lock();
 		(*drawQueue)[node] = drawData;
 
 	}

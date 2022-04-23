@@ -140,7 +140,7 @@ namespace sunrise {
     void Window::recreateSwapchain()
     {
         throw std::runtime_error(
-            "Resizing windows hasbeen disabled to re enable, will need to make it work with multi window / MVR / multi gpu and CRP and scene coordinator");
+            "Resizing windows has been disabled to re enable, will need to make it work with multi window / MVR / multi gpu and CRP and scene coordinator");
         int width = 0, height = 0;
         glfwGetFramebufferSize(window, &width, &height);
         while (width == 0 || height == 0) {
@@ -204,7 +204,7 @@ namespace sunrise {
         PROFILE_FUNCTION;
         SwapChainSupportDetails swapChainSupport = GPUSelector::querySwapChainSupport(renderer->physicalDevice, surface);
 
-        VkSurfaceFormatKHR surfaceFormat = GPUSelector::chooseSwapSurfaceFormat(swapChainSupport.formats);
+        VkSurfaceFormatKHR surfaceFormat = static_cast<VkSurfaceFormatKHR>(GPUSelector::chooseSwapSurfaceFormat(swapChainSupport.formats));
         vk::PresentModeKHR presentMode = GPUSelector::chooseSwapPresentMode(swapChainSupport.presentModes);
         VkExtent2D extent = GPUSelector::chooseSwapExtent(swapChainSupport.capabilities, window);
 

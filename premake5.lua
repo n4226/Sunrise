@@ -31,7 +31,7 @@ project "Sunrise"
 	libdirs {
 		--"C:/code/visual studio/FSTS/Sunrise/vendor/mango-master/mango-master/build/vs2019/x64/Debug",
 		"C:/code/visual studio/GPUObjectsV6/Dependencies/mango-master/mango-master/build/Debug",
-		"C:/VulkanSDK/1.2.154.1/Lib",
+		"C:/VulkanSDK/1.3.211.0/Lib",
 		
 		"vendor/bin/NVIDIA_Nsight_Aftermath_SDK_2021.1.0.21090/lib/x64",
 
@@ -52,7 +52,7 @@ project "Sunrise"
 	includedirs {
 		"src", "src/Sunrise",
 		"vendor/spdlog/include",
-		"C:/VulkanSDK/1.2.154.1/Include",
+		"C:/VulkanSDK/1.3.211.0/Include",
 		"vendor/glm-master",
 		"vendor/marl-main/marl-main/include",
 		"vendor/stb",

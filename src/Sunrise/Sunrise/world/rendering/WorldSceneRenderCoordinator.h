@@ -16,7 +16,7 @@ namespace sunrise {
 	class WorldSceneRenderCoordinator: public gfx::SceneRenderCoordinator
 	{
 	public:
-		WorldSceneRenderCoordinator(WorldScene* scene);
+		WorldSceneRenderCoordinator(WorldScene* scene, gfx::Renderer* renderer);
 		~WorldSceneRenderCoordinator();
 
 		void createPasses() override;
@@ -28,7 +28,7 @@ namespace sunrise {
 		
 		gfx::ComposableRenderPass::CreateOptions renderpassConfig(vk::Format swapChainFormat) override;
 
-		void preEncodeUpdate(gfx::Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window) override;
+		void preEncodeUpdate(vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window) override;
 
 
 		void updateSceneUniformBuffer(Window& window) override;

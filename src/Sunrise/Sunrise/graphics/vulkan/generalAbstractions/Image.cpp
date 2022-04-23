@@ -40,7 +40,7 @@ namespace sunrise::gfx {
 		if (options.sharingMode == vk::SharingMode::eConcurrent)
 			imageInfo.setQueueFamilyIndices(options.sharingQueueFamilieIndicies);
 
-		VkImageCreateInfo c_imageInfo = imageInfo;
+		VkImageCreateInfo c_imageInfo = static_cast<VkImageCreateInfo>(imageInfo);
 
 
 		// allocate

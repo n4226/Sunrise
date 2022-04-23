@@ -7,7 +7,9 @@ namespace sunrise {
 	UIScene::UIScene(Application* app)
 		: Scene(app)
 	{
-		coordinator = new UISceneRenderCoordinator(this);
+		coordinatorCreator = ([this](auto renderer) {
+			return new UISceneRenderCoordinator(this,renderer);
+		});
 	}
 
 }

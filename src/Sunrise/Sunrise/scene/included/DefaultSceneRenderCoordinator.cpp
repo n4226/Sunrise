@@ -99,7 +99,7 @@ namespace sunrise {
 		auto gbuffer_depth = gfx::ComposableRenderPass::CreateOptions::VAttatchment();
 
 		auto depthBufferFormat =
-			gfx::GPUSelector::findSupportedFormat(app.renderers[0]->physicalDevice, { vk::Format::eD32Sfloat }, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
+			gfx::GPUSelector::findSupportedFormat(renderer->physicalDevice, { vk::Format::eD32Sfloat }, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
 
 		gbuffer_depth.type = gfx::ComposableRenderPass::CreateOptions::AttatchmentType::Depth;
 		gbuffer_depth.format = depthBufferFormat;
@@ -120,7 +120,7 @@ namespace sunrise {
 
 	void DefaultSceneRenderCoordinator::createUniforms()
 	{
-		WorldUniformCreator::createUniforms(app, uniformBuffers);
+		WorldUniformCreator::createUniforms(renderer, uniformBuffers);
 	}
 
 	void DefaultSceneRenderCoordinator::updateSceneUniformBuffer(Window& window)

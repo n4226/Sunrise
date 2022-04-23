@@ -7,7 +7,6 @@
 #include "Sunrise/Sunrise/math/mesh/Mesh.h"
 #include "Sunrise/Sunrise/graphics/vulkan/resources/uniforms.h"
 
-#include <vulkan/vulkan.hpp>
 #include <array>
 
 
@@ -69,7 +68,7 @@ namespace sunrise::gfx {
 		info.sequencesIndexBuffer = static_cast<VkBuffer>(VK_NULL_HANDLE);
 		info.sequencesIndexOffset = 0;
 
-		VkGeneratedCommandsInfoNV c_info = info;
+		VkGeneratedCommandsInfoNV c_info = static_cast<VkGeneratedCommandsInfoNV>(info);
 
 		vkCmdExecuteGeneratedCommandsNV(cmdBuff, optimized, &c_info);
 
@@ -163,7 +162,7 @@ namespace sunrise::gfx {
 		info.setStreamStrides(strides);
 
 
-		VkIndirectCommandsLayoutCreateInfoNV c_info = info;
+		VkIndirectCommandsLayoutCreateInfoNV c_info = static_cast<VkIndirectCommandsLayoutCreateInfoNV>(info);
 
 		//vkCreateIndirectCommandsLayoutNV(device, &info_c, nullptr, result);
 

@@ -58,7 +58,7 @@ namespace sunrise {
 		{
 		public:
 
-			SceneRenderCoordinator(Scene* scene);
+			SceneRenderCoordinator(Scene* scene,Renderer* renderer);
 			virtual ~SceneRenderCoordinator();
 
 			/// <summary>
@@ -74,7 +74,7 @@ namespace sunrise {
 			/// <param name="firstLevelCMDBuffer"></param>
 			/// <param name="frameID"></param>
 			/// <param name="window"></param>
-			void encodePassesForFrame(Renderer* renderer,vk::CommandBuffer firstLevelCMDBuffer,size_t frameID, Window& window);
+			void encodePassesForFrame(vk::CommandBuffer firstLevelCMDBuffer,size_t frameID, Window& window);
 
 			Scene* const scene;
 			Application& app;
@@ -107,6 +107,7 @@ namespace sunrise {
 			void setLastStage(GPUStage* lastStage);
 
 			// TOOD right now just one per scene but for multi-gpu there will need to be one per scene and device so this will need to be an array
+			//Later me - i'm confused as to why this is an array when there is one coordinator per gpu
 			std::vector<CRPHolder*> sceneRenderpassHolders;
 
 			ComposableRenderPass::CreateOptions wholeFrameRenderPassOptions;
@@ -138,6 +139,8 @@ namespace sunrise {
 			// one per surface
 			std::vector<std::vector<gfx::Buffer*>> uniformBuffers;
 
+			Renderer* renderer;
+
 		protected:
 			friend Window;
 			friend Application;
@@ -157,7 +160,7 @@ namespace sunrise {
 			/// <summary>
 			/// allows subclass to perform any actions before frame encoding
 			/// </summary>
-			virtual void preEncodeUpdate(Renderer* renderer, vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window);
+			virtual void preEncodeUpdate(vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window);
 
 
 			/// <summary>

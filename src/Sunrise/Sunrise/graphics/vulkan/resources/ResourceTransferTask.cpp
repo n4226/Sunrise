@@ -92,7 +92,7 @@ namespace sunrise {
 			static int c = 0;
 			//if (c++ > 7) return;
 
-			PROFILE_FUNCTION
+			PROFILE_FUNCTION;
 			{
 				//// will lock the ticket until the lock goes out of scope
 				//TODO: fix this

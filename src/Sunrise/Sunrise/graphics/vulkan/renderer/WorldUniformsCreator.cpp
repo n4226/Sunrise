@@ -72,12 +72,12 @@ namespace sunrise {
 		//renderer->camFrustroms[globalIndex] = std::move(math::Frustum(uniforms.viewProjection));
 	}
 
-	void WorldUniformCreator::createUniforms(Application& app, std::vector<std::vector<gfx::Buffer*>>& uniformBuffers)
+	void WorldUniformCreator::createUniforms(gfx::Renderer* renderer, std::vector<std::vector<gfx::Buffer*>>& uniformBuffers)
 {
 		using namespace gfx;
 		PROFILE_FUNCTION;
 
-		auto renderer = app.renderers[0];
+		auto& app = renderer->app;
 
 		//TODO test using a staging buff
 

@@ -20,7 +20,7 @@ namespace sunrise {
 	using namespace gfx;
 
 	TerrainSystem::TerrainSystem(Application& app, Scene* scene, glm::dvec3* origin)
-		: tree(math::dEarthRad), app(app), meshLoader(), origin(origin)
+		: tree(math::dEarthRad), app(app), origin(origin)
 	{
 		PROFILE_FUNCTION;
 		SR_CORE_TRACE("Initializing Terrain System");
@@ -29,8 +29,15 @@ namespace sunrise {
 
 		this->scene = scene;
 
-		meshLoader.renderer = app.renderers[0];
-		meshLoader.terrainSystem = this;
+		for each (auto renderer in app.renderers)
+		{
+			TerrainMeshLoader meshLoader{};
+			meshLoader.renderer = renderer;
+			meshLoader.terrainSystem = this;
+			meshLoaders.emplace(std::make_pair(renderer,meshLoader));
+
+			pendingDrawObjects.insert(std::make_pair(renderer,new libguarded::shared_guarded<std::map<TerrainQuadTreeNode*, TreeNodeDrawData>>()));
+		}
 
 		CreateRenderResources();
 
@@ -40,7 +47,10 @@ namespace sunrise {
 		if (world->terrainMask == nullptr) {
 			// initial setup of the base 8 chunks
 			for (TerrainQuadTreeNode* child : tree.leafNodes) {
-				meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
+				for (auto& [_, meshLoader] : meshLoaders)
+				{
+					meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
+				}
 			}
 		}
 		else {
@@ -111,9 +121,12 @@ namespace sunrise {
         }
         
         // remove all draw objects;
-        for( auto chunk : tree.rootNodes) {
-            meshLoader.removeDrawChunk(chunk);
-        }
+		for (auto& [renderer, meshLoader] : meshLoaders) {
+			for (auto chunk : tree.rootNodes) {
+				meshLoader.removeDrawChunk(chunk);
+			}
+			delete pendingDrawObjects.at(renderer);
+		}
         
 	}
 
@@ -283,51 +296,68 @@ namespace sunrise {
 			}
 
 			marl::schedule([this,world,noSparclyPop]() {
+				OPTICK_THREAD("Update Tree Thread");
 				PROFILE_SCOPE("create draw draw job");
 				//MarlSafeTicketLock lock(ticket);
 
 				marl::WaitGroup preLoadingWaitGroup(toDrawDraw.size());
 
 				for (TerrainQuadTreeNode* chunk : toDrawDraw) {
-					marl::schedule([this, chunk, preLoadingWaitGroup,noSparclyPop]() {
-						defer(preLoadingWaitGroup.done());
-						meshLoader.loadMeshPreDrawChunk(chunk, true,maskedMode && !noSparclyPop);
+					//only needs to be loaded once and each gpu can load into inst own buffer
+					//for (auto& [_, meshLoader] : meshLoaders) {
+						//TODO: one copy must be done here - maybe
+						//auto& ml = meshLoader;
+						marl::schedule([this, chunk, preLoadingWaitGroup, noSparclyPop]() {
+							defer(preLoadingWaitGroup.done());
+							meshLoaders.at(app.renderers[0]).loadMeshPreDrawChunk(chunk, true, maskedMode && !noSparclyPop);
 						});
+					//}
 				}
 
 				preLoadingWaitGroup.wait();
 
 				// actually modify render structures
 				for (TerrainQuadTreeNode* chunk : toDrawDraw) {
-					meshLoader.drawChunk(chunk, {}, false);
+					for (auto& [_, meshLoader] : meshLoaders) {
+						meshLoader.drawChunk(chunk, {}, false);
+					}
 				}
 
 				//write staging buffer updates to gpu buffs
-				writePendingDrawOobjects(*app.renderers[0]);
+
+				for (auto& [_, meshLoader] : meshLoaders) {
+					writePendingDrawOobjects(*meshLoader.renderer);
+				}
 
 
 				toDrawDraw.clear();
 
 				// this here so that "deleted chiunks dont render but THEY ARE NOT ACTUALLY FREED RIGHT NOW"
 				for (TerrainQuadTreeNode* chunk : toDestroyDraw) {
-					meshLoader.removeDrawChunk(chunk);
-				}
-
-				// re encode draws
-				// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
-				auto tstage = world->coordinator->getRegisteredStageOfType<TerrainGPUStage>();
-
-				// todo make this more robust
-				for (auto win : app.renderers[0]->windows) {
-					for (size_t surface = 0; surface < win->numSwapImages(); surface++)
-					{
-						tstage->reEncodeBuffer(*win, surface);
+					for (auto& [_, meshLoader] : meshLoaders) {
+						meshLoader.removeDrawChunk(chunk);
 					}
 				}
 
-				{ // swaping active command buffers
-					auto activeHandler = tstage->activeBuffer.lock();
-					*activeHandler = (*activeHandler + 1) % TerrainGPUStage::setsOfCMDBuffers;
+
+				for (auto renderer : app.renderers) {
+					// re encode draws
+					// todo ------------------------------------ DO NOT DO THIS EACH FRAME cash the value #fixme
+					auto tstage = world->coordinators.at(renderer)->getRegisteredStageOfType<TerrainGPUStage>();
+
+					// todo make this more robust
+					for (auto win : renderer->windows) {
+						for (size_t surface = 0; surface < win->numSwapImages(); surface++)
+						{
+							tstage->reEncodeBuffer(*win, surface);
+						}
+					}
+
+					{ // swaping active command buffers
+						auto activeHandler = tstage->activeBuffer.lock();
+						*activeHandler = (*activeHandler + 1) % TerrainGPUStage::setsOfCMDBuffers;
+					}
+
 				}
 
 				//todo: wait and then calculate when to delete old chunks that should be see below
@@ -412,6 +442,7 @@ namespace sunrise {
 
 	void TerrainSystem::writePendingDrawOobjects(Renderer& renderer)
 	{
+		PROFILE_FUNCTION;
 		// copy from staging buffers to gpu ones - asynchronously
 
 		ResourceTransferer::BufferTransferTask vertexTask;
@@ -433,7 +464,7 @@ namespace sunrise {
 		modelTask.dstBuffer = renderer.globalModelBuffers[renderer.gpuActiveGlobalModelBuffer]->vkItem;
 
 		{
-			auto drawQueue = pendingDrawObjects.lock_shared();
+			auto drawQueue = pendingDrawObjects.at(&renderer)->lock_shared();
 			if (drawQueue->size() == 0) return;
 
 			for (std::pair<TerrainQuadTreeNode*, TreeNodeDrawData> objectData : *drawQueue) {
@@ -460,7 +491,7 @@ namespace sunrise {
 			{
 				PROFILE_SCOPE("terrain system ResourceTransferer::shared->newTask completion callback")
 				{
-					auto drawQueue = pendingDrawObjects.lock();
+					auto drawQueue = pendingDrawObjects.at(&renderer)->lock();
 					auto drawObjects = this->drawObjects.lock();
 					drawObjects->insert(drawQueue->begin(), drawQueue->end());
 					drawQueue->clear();

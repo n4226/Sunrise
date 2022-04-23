@@ -54,7 +54,7 @@ namespace sunrise {
 		//Renderer* renderer;
 
 		// max lod levels for terrain - max lod is this - 1
-		const uint16_t lodLevels = 14;
+		const uint16_t lodLevels = 13;// 14;
 
 	private:
 
@@ -80,7 +80,7 @@ namespace sunrise {
 		libguarded::shared_guarded<bool> drawCommandsValid = libguarded::shared_guarded<bool>(false);
 		std::vector<std::vector<bool>> cmdBuffsUpToDate;
 #endif
-		libguarded::shared_guarded<std::map<TerrainQuadTreeNode*, TreeNodeDrawData>> pendingDrawObjects;
+		std::unordered_map<gfx::Renderer*,libguarded::shared_guarded<std::map<TerrainQuadTreeNode*, TreeNodeDrawData>>*> pendingDrawObjects;
 
 		//async resources
 		marl::Ticket::Queue ticketQueue;
@@ -118,7 +118,9 @@ namespace sunrise {
 		void writePendingDrawOobjects(gfx::Renderer& renderer);
 
 		TerrainQuadTree tree;
-		TerrainMeshLoader meshLoader;
+		//TerrainMeshLoader meshLoader;
+		std::unordered_map<gfx::Renderer*,TerrainMeshLoader> meshLoaders;
+		std::unordered_map<gfx::Renderer*,TerrainGPUStage*> terrainStages;
 
 
 		friend FloatingOriginSystem;

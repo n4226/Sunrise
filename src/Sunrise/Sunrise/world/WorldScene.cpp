@@ -8,6 +8,8 @@
 #include "../graphics/vulkan/renderer/MaterialManager.h"
 #include "rendering/WorldSceneRenderCoordinator.h"
 #include "../fileSystem/FileManager.h"
+#include <marl/defer.h>
+
 
 namespace sunrise {
 
@@ -17,7 +19,9 @@ namespace sunrise {
 	{
 		PROFILE_FUNCTION;
 
-		coordinator = new WorldSceneRenderCoordinator(this);
+		coordinatorCreator = ([this](auto renderer) {
+			return new WorldSceneRenderCoordinator(this, renderer);
+		});
 	}
 
 	WorldScene::~WorldScene()
@@ -42,7 +46,7 @@ namespace sunrise {
 		//dynamic_cast<WorldSceneRenderCoordinator*>(coordinator)->createUniforms();
 
 		/// <summary>
-		/// it is important that the camera systems befoer floating origin so that floating origin snaps before first frame
+		/// it is important that the camera systems before floating origin so that floating origin snaps before first frame
 		/// </summary>
 		systems = { new PlayerMovementSystem(), new WindowCameraController(), new CameraSystem(), new FloatingOriginSystem() };
 
@@ -50,14 +54,24 @@ namespace sunrise {
 
 	void WorldScene::lateLoad()
 	{
+		PROFILE_FUNCTION
 		Scene::lateLoad();
 
 		systems[0]->update();
 
+
 		//TODO: find better way to do this
-		for (auto ren : app.renderers)
-			ren->materialManager->loadStaticEarth();
-	}
+		marl::WaitGroup preLoadingWaitGroup(app.renderers.size());
+		SR_CORE_INFO("Beginning async material loading");
+		for (auto ren : app.renderers) {
+			marl::schedule([this, ren, preLoadingWaitGroup]() {
+				defer(preLoadingWaitGroup.done());
+				ren->materialManager->loadStaticEarth();
+			});
+		}
+		preLoadingWaitGroup.wait();
+		SR_CORE_INFO("ended async material loading");
+	} 
 
 	void WorldScene::onDrawUI()
 	{

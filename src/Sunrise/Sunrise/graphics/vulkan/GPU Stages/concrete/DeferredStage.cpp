@@ -24,14 +24,14 @@ namespace sunrise {
 		square = new Basic2DMesh(MeshPrimatives::Basic2D::screenQuad());
 
 		// TODO: make staging buffer so faster for simple draw
-		meshBuff = new gfx::Basic2DMeshBuffer(app.renderers[0]->device, app.renderers[0]->allocator,
+		meshBuff = new gfx::Basic2DMeshBuffer(coord->renderer->device, coord->renderer->allocator,
 			{ gfx::ResourceStorageType::cpuToGpu,vk::BufferUsageFlagBits::eVertexBuffer | vk::BufferUsageFlagBits::eIndexBuffer,
 			vk::SharingMode::eExclusive }
 		, square);
 		meshBuff->writeMeshToBuffer(true);
 
 
-		inputImageSampler = new gfx::Sampler(app.renderers[0]->device, {});
+		inputImageSampler = new gfx::Sampler(coord->renderer->device, {});
 
 		size_t estimatedSurfaceCount = app.maxSwapChainImages * app.windows.size();
 
@@ -41,14 +41,14 @@ namespace sunrise {
         
 		gfx::DescriptorPool::CreateOptions::DescriptorTypeAllocOptions uniformAllocOptions = { vk::DescriptorType::eUniformBuffer, estimatedSurfaceCount };
 
-		descriptorPool = new gfx::DescriptorPool(app.renderers[0]->device, { estimatedSurfaceCount * 6, { sampledImageAllocOptions, uniformAllocOptions, combinedSampledImageAllocOptions} });
+		descriptorPool = new gfx::DescriptorPool(coord->renderer->device, { estimatedSurfaceCount * 6, { sampledImageAllocOptions, uniformAllocOptions, combinedSampledImageAllocOptions} });
 
 	}
 
 	void DeferredStage::lateSetup()
 	{
 		//TODO: label why this has to be done
-		for (auto window : app.renderers[0]->windows)
+		for (auto window : coord->renderer->windows)
 		{
 			descriptorSets[window] = {};
 			for (int childI = 0; childI < (window->isVirtual() ? window->numSubWindows() : 1); childI++)
@@ -63,16 +63,16 @@ namespace sunrise {
 					uint32_t layer = childI;
 
 					vk::DescriptorImageInfo imageInfo1 = { inputImageSampler->vkItem ,
-						app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAlbedoMetalicIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
+						coord->sceneRenderpassHolders[0]->getImage(attachments.gbuffAlbedoMetalicIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
 
 					vk::DescriptorImageInfo imageInfo2 = { inputImageSampler->vkItem ,
-						app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffNormalSpecularIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
+						coord->sceneRenderpassHolders[0]->getImage(attachments.gbuffNormalSpecularIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
 
 					vk::DescriptorImageInfo imageInfo3 = { inputImageSampler->vkItem ,
-						app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffAoIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
+						coord->sceneRenderpassHolders[0]->getImage(attachments.gbuffAoIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
 
 					vk::DescriptorImageInfo imageInfo4 = { inputImageSampler->vkItem ,
-						app.loadedScenes[0]->coordinator->sceneRenderpassHolders[0]->getImage(attachments.gbuffDepthIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
+						coord->sceneRenderpassHolders[0]->getImage(attachments.gbuffDepthIndex,window)->createView(1,layer),vk::ImageLayout::eShaderReadOnlyOptimal };
 
 
 					VkDescriptorBufferInfo globalUniformBufferInfo{};
@@ -80,7 +80,7 @@ namespace sunrise {
 					globalUniformBufferInfo.offset = 0;
 					globalUniformBufferInfo.range = VK_WHOLE_SIZE;
 
-					//this is the dcescriptor array's index not images which is why it should be zero
+					//this is the descriptor array's index not images which is why it should be zero
 					uint32_t dstArrayLayerStart = 0;
 
 					gfx::DescriptorPool::UpdateOperation updateOp1 = { gfx::DescriptorPool::UpdateOperation::Type::write,

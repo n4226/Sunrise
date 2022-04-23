@@ -34,6 +34,7 @@
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPURenderStage.h"
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPUComputeStage.h"
+#include "Sunrise/Sunrise/graphics/vulkan/ComposableRenderPass.h"
 
 
 ////////////////////////////////////////// Scene

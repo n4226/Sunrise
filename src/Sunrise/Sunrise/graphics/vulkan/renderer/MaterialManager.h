@@ -21,6 +21,7 @@ namespace sunrise {
 		class SceneRenderCoordinator;
 	}
 
+	//TODO: eventual major material system needs to span accros gpus maybe - maybe it hsould be individual - has to deal with different sized memories of different gpus
 	class SUNRISE_API MaterialManager
 	{
 	public:

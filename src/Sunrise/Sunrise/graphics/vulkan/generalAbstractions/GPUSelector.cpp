@@ -68,8 +68,8 @@ namespace sunrise::gfx {
 		PROFILE_FUNCTION;
 
 		SR_CORE_TRACE("determining if this gpu ({}) is sutable", device);
-		VkPhysicalDeviceProperties2 deviceProperties = vk::PhysicalDeviceProperties2();
-		VkPhysicalDeviceIDProperties deviceIds = vk::PhysicalDeviceIDProperties();
+		VkPhysicalDeviceProperties2 deviceProperties = static_cast<VkPhysicalDeviceProperties2>(vk::PhysicalDeviceProperties2());
+		VkPhysicalDeviceIDProperties deviceIds = static_cast<VkPhysicalDeviceIDProperties>(vk::PhysicalDeviceIDProperties());
 		deviceProperties.pNext = &deviceIds;
 		vkGetPhysicalDeviceProperties2(device, &deviceProperties);
 		VkPhysicalDeviceFeatures deviceFeatures;
@@ -111,8 +111,8 @@ namespace sunrise::gfx {
 
 	bool GPUSelector::WindowsVarifiedCorrectGPUForMonitor(vk::PhysicalDevice device, const Window* window)
 	{
-		VkPhysicalDeviceProperties2 deviceProperties = vk::PhysicalDeviceProperties2();
-		VkPhysicalDeviceIDProperties deviceIds = vk::PhysicalDeviceIDProperties();
+		VkPhysicalDeviceProperties2 deviceProperties = static_cast<VkPhysicalDeviceProperties2>(vk::PhysicalDeviceProperties2());
+		VkPhysicalDeviceIDProperties deviceIds = static_cast<VkPhysicalDeviceIDProperties>(vk::PhysicalDeviceIDProperties());
 		deviceProperties.pNext = &deviceIds;
 		vkGetPhysicalDeviceProperties2(device, &deviceProperties);
 
@@ -234,7 +234,7 @@ namespace sunrise::gfx {
 		PROFILE_FUNCTION;
 			SwapChainSupportDetails details;
 
-		details.capabilities = device.getSurfaceCapabilitiesKHR(surface);
+		details.capabilities = static_cast<VkSurfaceCapabilitiesKHR>(device.getSurfaceCapabilitiesKHR(surface));
 
 		uint32_t formatCount;
 		device.getSurfaceFormatsKHR(surface, &formatCount, nullptr);

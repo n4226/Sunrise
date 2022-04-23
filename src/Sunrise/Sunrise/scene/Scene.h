@@ -5,19 +5,22 @@
 
 namespace sunrise {
 	namespace gfx {
+		class Renderer;
 		class SceneRenderCoordinator;
+		using SceneRenderCoordinatorCreator = std::function<SceneRenderCoordinator* (Renderer*)>;
 	}
+
 
 	class SUNRISE_API Scene
 	{
 	public:
 		/// <summary>
-		/// for proper initilization, subclsses should set their coordinator in the body of their constructor
+		/// for proper initilization, subclsses should set their coordinators in the body of their constructor by calling initCoordinators
 		/// </summary>
 		/// <param name="app"></param>
 		/// <param name="inControlOfCoordinatorLifecycle"></param>
 		Scene(Application* app, bool inControlOfCoordinatorLifecycle = true);
-		Scene(Application* app, gfx::SceneRenderCoordinator* coordinator, bool inControlOfCoordinatorLifecycle = false);
+		Scene(Application* app, gfx::SceneRenderCoordinatorCreator creator, bool inControlOfCoordinatorLifecycle = false);
 		virtual ~Scene();
 
 		virtual void load();
@@ -46,14 +49,25 @@ namespace sunrise {
 
 		Application& app;
 
-		gfx::SceneRenderCoordinator* coordinator;
+		/// <summary>
+		/// MARK: deprecated, Reason: did not support multi gpu
+		/// </summary>
+		//gfx::SceneRenderCoordinator* coordinator;
+		std::unordered_map<gfx::Renderer*, gfx::SceneRenderCoordinator*> coordinators{};
 
 		//TODO: wrap entt types
 		//entities
 		entt::registry registry;
 
 		glm::vec2 sunLL{};
-	protected:	
+	protected:
+
+		friend Application;
+
+		gfx::SceneRenderCoordinatorCreator coordinatorCreator;
+
+		void initCoordinators();
+
 		bool inControlOfCoordinatorLifecycle = false;
 
 		std::vector<System*> systems;
