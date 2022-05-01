@@ -60,6 +60,8 @@ namespace sunrise::gfx {
 
 		//TODO: add many more control varibles here such as winding order and backface culling and msaa ...
 
+		vk::PrimitiveTopology primitiveType = vk::PrimitiveTopology::eTriangleList;
+		float lineWidth = 1.0f;
 
 	};
 

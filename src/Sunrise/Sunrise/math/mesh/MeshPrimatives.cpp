@@ -55,57 +55,58 @@ namespace sunrise {
 		Mesh cube{};
 
         cube.verts = {
-            glm::vec3(0, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-			glm::vec3(0, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 1, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 0, 0) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(0, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 1, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
-            glm::vec3(1, 0, 1) - glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+			glm::vec3(0, 0, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 0) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 0, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(0, 1, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 1, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 1) + glm::vec3(- 0.5,-0.5,-0.5),
+            glm::vec3(1, 0, 1) + glm::vec3(- 0.5,-0.5,-0.5),
 		};
 
+        //f6 is one of the side faces
         cube.uvs = {
-			glm::vec2(0, 0),
-			glm::vec2(0, 0),
-			glm::vec2(0, 0),
-			glm::vec2(0, 1),
-			glm::vec2(0, 1),
-			glm::vec2(0, 1),
-			glm::vec2(1, 1),
-			glm::vec2(1, 1),
-			glm::vec2(1, 1),
-			glm::vec2(1, 0),
-			glm::vec2(1, 0),
-			glm::vec2(1, 0),
-			glm::vec2(0, 0),
-			glm::vec2(0, 0),
-			glm::vec2(0, 0),
-			glm::vec2(0, 1),
-			glm::vec2(0, 1),
-			glm::vec2(0, 1),
-			glm::vec2(1, 1),
-			glm::vec2(1, 1),
-			glm::vec2(1, 1),
-			glm::vec2(1, 0),
-			glm::vec2(1, 0),
-			glm::vec2(1, 0),
+			glm::vec2(0, 0),//f1
+			glm::vec2(0, 0),//f2
+			glm::vec2(0, 0),//f3
+			glm::vec2(0, 1),//f1
+			glm::vec2(0, 0),//f5
+			glm::vec2(0, 1),//f3
+			glm::vec2(0, 0),//f4
+			glm::vec2(0, 1),//f5
+			glm::vec2(1, 0),//f3
+			glm::vec2(0, 1),//f4
+			glm::vec2(1, 0),//f2
+			glm::vec2(1, 1),//f3
+			glm::vec2(1, 0),//f1
+			glm::vec2(0, 1),//f2
+			glm::vec2(1, 1),//f6
+			glm::vec2(1, 1),//f1
+			glm::vec2(1, 0),//f5
+			glm::vec2(1, 0),//f6
+			glm::vec2(1, 0),//f4
+			glm::vec2(1, 1),//f5
+			glm::vec2(0, 0),//f6
+			glm::vec2(1, 1),//f4
+			glm::vec2(1, 1),//f2
+			glm::vec2(0, 1),//f6
 		};
 
         cube.normals = {

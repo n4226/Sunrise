@@ -5,6 +5,7 @@
 #include "Sunrise/Sunrise/Math.h"
 #include "Sunrise/Sunrise/memory.h"
 #include "Sunrise/Sunrise/graphics/vulkan/resources/MeshBuffers.h"
+#include "DebugDrawer.h"
 
 namespace sunrise {
 
@@ -44,6 +45,7 @@ namespace sunrise {
 			void printVMAAllocattedStats();
 
 			void beforeRenderScene();
+			void afterRenderScene();
 			void renderFrame(Window& window);
 
 			void windowSizeChanged(size_t allWindowIndex);
@@ -139,7 +141,7 @@ namespace sunrise {
 
 			std::vector<math::Frustum> camFrustroms;
 
-
+			DebugDrawer* debugDraw;
 
 			// handles
 			Application& app;

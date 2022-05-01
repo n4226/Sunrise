@@ -37,9 +37,11 @@ namespace sunrise::gfx {
 		for (auto holders : sceneRenderpassHolders)
 			delete holders;
 
-		destroyIMGUIResources(scene->app);
+		if (renderer == app.renderers[0]) {
+			destroyIMGUIResources(scene->app);
 
-		ImGui::DestroyContext();
+			ImGui::DestroyContext();
+		}
 
         //deleting stages is done in super class
 	}
@@ -324,6 +326,9 @@ namespace sunrise::gfx {
 			//}
 			imguiInitilized = true;
 		}
+
+		//todo find beter place for this
+		renderer->materialManager->loadStaticEarth();
 	}
 
 	void SceneRenderCoordinator::drawableReleased(Window* window, size_t appFrame)

@@ -160,6 +160,9 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Sunrise.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h" />
@@ -296,8 +299,11 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ImguiRenderPassManager.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.cpp" />

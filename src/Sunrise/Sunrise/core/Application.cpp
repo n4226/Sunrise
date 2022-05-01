@@ -433,7 +433,14 @@ namespace sunrise {
     }
 
 
-    void Application::runLoop()
+	void Application::hotReloadSceneGFX()
+	{
+		SR_CORE_WARN("Graphics Hot Reload Initiated. Waiting for end of frame to reload");
+
+        pendingGFXHotReload = true;
+	}
+
+	void Application::runLoop()
     {
 
         //worldScene->updateScene();
@@ -483,6 +490,9 @@ namespace sunrise {
         if (pendingHotReload)
             _performHoReloadScene();
 
+        if (pendingGFXHotReload)
+            _performSceneGFXReload();
+
         if (!config.wantsWindows || !config.vulkan || loadedScenes.size() == 0) return;
 
         // run application updates
@@ -526,11 +536,13 @@ namespace sunrise {
 
                 //Should never happen
                 if (window->_owned) continue;
+
                 if (window->getDrawable() == true) continue;
                 renderers[ren]->renderFrame(*window);
                 window->presentDrawable();
             }
 
+            renderers[ren]->afterRenderScene();
         }
 
         currentFrameID++;
@@ -573,6 +585,10 @@ namespace sunrise {
             
             if (ImGui::MenuItem("Hot Reload Scene","ctr+r"))
                 hotReloadScene();
+
+			if (ImGui::MenuItem("Hot Reload Graphics", "ctr+g"))
+				hotReloadSceneGFX();
+
 
             if (getKey(GLFW_KEY_R | GLFW_MOD_CONTROL))
                 hotReloadScene();
@@ -783,6 +799,9 @@ namespace sunrise {
         seperateDepth.pNext = nullptr;
         seperateDepth.separateDepthStencilLayouts = true;*/
 
+        //TODO: do only if supported
+        requestedDeviceFeatures.wideLines = VK_TRUE;
+
         VkPhysicalDeviceFeatures supportedFeatures;
         vkGetPhysicalDeviceFeatures(physicalDevice, &supportedFeatures);
 
@@ -989,13 +1008,50 @@ namespace sunrise {
         pendingHotReload = false;
     }
 
-    void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	void Application::_performSceneGFXReload()
+	{
+		//TODO: add option to disable and generalize to not be so computer spacific remove absolute esk path
+#if SR_DEBUG
+        auto path = "../../../extern/Sunrise/src/Sunrise/Sunrise/graphics/shaders/compileShaders.bat";
+        std::string fullPath = std::filesystem::absolute(path).string();
+        SR_CORE_INFO("going to run at path: {}",fullPath);
+		auto result = std::system(fullPath.c_str());
+
+#endif
+
+
+        for (auto renderer : renderers)
+            renderer->device.waitIdle();
+
+        auto scene = loadedScenes[0];
+
+		for (auto renderer : renderers)
+			scene->coordinators.at(renderer)->reset();
+
+		for (auto renderer : renderers) {
+
+			auto coord = scene->coordinators.at(renderer);
+
+			coord->createUniforms();
+			coord->createPasses();
+
+			coord->buildGraph();
+		}
+
+        pendingGFXHotReload = false;
+	}
+
+	void Application::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
         //SR_CORE_INFO("key {} pressed, key");
         //engine->app.
         if (key == GLFW_KEY_R && (mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL && action == GLFW_PRESS) {
             engine->app->hotReloadScene();
         }
+
+		if (key == GLFW_KEY_G && (mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL && action == GLFW_PRESS) {
+			engine->app->hotReloadSceneGFX();
+		}
     }
 
     void Application::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)

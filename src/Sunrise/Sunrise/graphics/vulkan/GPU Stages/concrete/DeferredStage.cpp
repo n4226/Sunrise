@@ -123,6 +123,8 @@ namespace sunrise {
 		meshBuff->bindVerticiesIntoCommandBuffer(*buff, 0);
 		meshBuff->bindIndiciesIntoCommandBuffer(*buff);
 
+		auto renderer = coord->renderer;
+
 		for (uint32_t childI = 0; childI < (options.window.isVirtual() ? options.window.numSubWindows() : 1); childI++)
 		{
 
@@ -135,6 +137,42 @@ namespace sunrise {
 			buff->drawIndexed(square->indicies.size(), 1, 0, 0, 0);
 
 		}
+
+
+
+		//todo: support multiple windows through mrv right now just renderers to first
+		//draw debug lines
+		//very slow since right now buffers are in cpu memory
+#if SR_DEBUG
+		setPipeline(options.window, *buff, debugLineDrawPipeline);
+		auto linesPipe = getConcretePipeline(options.window, debugLineDrawPipeline);
+
+		auto& lines = renderer->debugDraw->getLines();
+		auto& buffs = renderer->debugDraw->getBuffers();
+
+		auto& lineBuff = buffs.at(&options.window)[options.window.currentSurfaceIndex];
+
+		buff->bindVertexBuffers(0, {lineBuff ->vkItem }, { 0 });
+
+		auto childI = 0;
+
+		//TODO: in future have to make this pipeline and engine as a whole more modular since now pipeline has to declare all 5 descriptros in layout to just get camera postion
+		//buff->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, linesPipe->pipelineLayout, 0, , { 0 });
+		buff->bindDescriptorSets(vk::PipelineBindPoint::eGraphics,
+			linesPipe->pipelineLayout, 0,
+			{ descriptorSets[&options.window][((size_t)childI * options.window.numSwapImages()) + options.window.currentSurfaceIndex]->vkItem, }, {});
+
+
+		for (int i = 0; i < lines.size() ; i++)
+		{
+			buff->pushConstants(linesPipe->pipelineLayout, vk::ShaderStageFlagBits::eFragment, 0, sizeof(glm::vec4), &lines[i].color);
+			
+			//first vertex offset is in verts not bytes
+			buff->draw(2,1,i * 2, 0);
+		}
+
+#endif
+
 
 		buff->end();
 

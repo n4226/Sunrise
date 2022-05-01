@@ -12,7 +12,7 @@ namespace sunrise {
 			{"asphalt1", 3},
 			//{"concrete1", 4},
 			{"grass3", 6},
-
+			{"TestSunriseMaterial",9},
 	};
 
 	std::map<glm::uint32, std::string> StaticMaterialTable::reverseEntries = {
@@ -24,6 +24,7 @@ namespace sunrise {
 			//{4, "concrete1"},
 			//{5, "grass2"},
 			{6, "grass3"},
+			{9, "TestSunriseMaterial"},
 	};
 
 }

@@ -30,10 +30,13 @@ namespace sunrise {
         
 		void loadStaticEarth();
 
-		void loadMat(std::string& matRootPath, const char* matFolder);
+		void loadMat(uint32_t matID, std::string& matRootPath, const char* matFolder);
 
 		const std::vector<gfx::Image*>& allImages();
 
+
+		size_t getLoadedMatIndex(uint32_t matID);
+		std::optional<size_t> tryGetLoadedMatIndex(uint32_t matID);
 
 	private:
 		friend gfx::SceneRenderCoordinator;
@@ -88,6 +91,13 @@ namespace sunrise {
 		std::vector<std::pair<gfx::SceneRenderCoordinator*, std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>*>> registeredDescriptors{};
 
 		bool staticEarthLoaded = false;
+
+
+		/// <summary>
+		/// key is material id - for static listed in static mat table
+		/// value - index of material in material array - this is the value to pass in push constants for draw calls
+		/// </summary>
+		std::unordered_map<uint32_t, size_t> loadedMaterialIndicies;
 	};
 
 

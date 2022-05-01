@@ -1,4 +1,8 @@
-for %%i in (*.vert *.frag *.comp) do "C:\VulkanSDK\1.2.154.1\Bin\glslangValidator.exe" -V "%%~i" -o "%%~i.spv" -g
+SET mypath=%~dp0
+echo %mypath:~0,-1%
+cd %mypath:~0,-1%
+
+for %%i in (*.vert *.frag *.comp) do "C:\VulkanSDK\1.3.211.0\Bin\glslangValidator.exe" -V "%%~i" -o "%%~i.spv" -g
 echo off
 Rem C:\code\visual_studio\SunriseWorldlMeshGen\extern\Sunrise\src\Sunrise\Sunrise\graphics\shaders\compileShaders.bat
 Rem ../../../../../../

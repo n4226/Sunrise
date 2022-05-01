@@ -1,10 +1,15 @@
 #pragma once
 
 #include "igl/AABB.h"
+#include "../../scene/Transform.h"
 
 namespace sunrise {
 
 	class BinaryMeshAttrributes;
+
+	namespace gfx {
+		class Renderer;
+	}
 
 	/// <summary>
 	/// an abstract representation of a mesh
@@ -57,6 +62,9 @@ namespace sunrise {
 		BinaryMeshAttrributes* attributes = nullptr;
 
 		void calculateTangentsAndBitangents();
+
+		//debug
+		void debugDrawNormals(gfx::Renderer* renderer,const Transform& modelTransform);
 	};
 
 

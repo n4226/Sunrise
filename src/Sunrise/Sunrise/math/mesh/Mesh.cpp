@@ -2,6 +2,8 @@
 #include "Mesh.h"
 
 #include "../../graphics/vulkan/generalAbstractions/AttributeHelpers.h"
+#include "../../scene/Transform.h"
+#include "../../graphics/vulkan/renderer/Renderer.h"
 
 namespace sunrise {
 
@@ -190,10 +192,54 @@ namespace sunrise {
 			for (size_t v = 0; v < verts.size(); v++)
 			{
 				//i dont know why - is needed but tbn matrix was messed up without this
-				bitangents[v] = -glm::cross(normals[v], tangents[v]);
+				//i removed the - sign in form this statement it was inverting result
+				bitangents[v] = glm::cross(normals[v], tangents[v]);
 			}
 
 		}
+	}
+
+
+	void Mesh::debugDrawNormals(gfx::Renderer* renderer, const Transform& modelTransform)
+	{
+		/*
+			for every triangle, find it's midpoint, convert to world coords and debug draw a vector in direction of normal
+		*/
+
+		//triangle normals
+		for (int subMesh = 0; subMesh < indicies.size(); subMesh++)
+		{
+			for (int tri = 0; tri < indicies[subMesh].size(); tri += 3)
+			{
+				auto v1 = verts[indicies[subMesh][tri]];
+				auto v2 = verts[indicies[subMesh][tri + 1]];
+				auto v3 = verts[indicies[subMesh][tri + 2]];
+
+				auto n1 = normals[indicies[subMesh][tri]];
+				auto n2 = normals[indicies[subMesh][tri + 1]];
+				auto n3 = normals[indicies[subMesh][tri + 2]];
+				auto avgN = glm::normalize(n1 + n2 + n3);
+
+				auto midPoint = (v1 + v2 + v3) / 3.f;
+
+				glm::vec3 transformedNormal = modelTransform.matrix() * glm::vec4(avgN, 0);
+				glm::vec3 transformedPosition = modelTransform.matrix() * glm::vec4(midPoint, 1);
+
+				renderer->debugDraw->drawVector(transformedNormal, transformedPosition);
+			}
+		}
+
+		//vertextNormals
+
+		for (int i = 0; i < verts.size() ; i++)
+		{
+			//tangent should be +u axis and bitangent should be +v axis
+			glm::vec3 transformedNormal = modelTransform.matrix() * glm::vec4(bitangents[i], 0);
+			glm::vec3 transformedPosition = modelTransform.matrix() * glm::vec4(verts[i], 1);
+
+			//renderer->debugDraw->drawVector(transformedNormal, transformedPosition);
+		}
+
 	}
 
 

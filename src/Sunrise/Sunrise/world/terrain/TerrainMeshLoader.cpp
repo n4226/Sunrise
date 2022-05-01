@@ -2,6 +2,7 @@
 #include "TerrainMeshLoader.h"
 #include "TerrainSystem.h"
 #include "../../graphics/vulkan/renderer/Renderer.h"
+#include "../../graphics/vulkan/renderer/MaterialManager.h"
 #include "../../fileSystem/FileManager.h"
 #include "../../fileFormats/binary/BinaryMesh.h"
 #include "Sunrise/Sunrise/graphics/vulkan/resources/MeshBuffers.h"
@@ -85,7 +86,7 @@ namespace sunrise {
 		Buffer* stagingModelBuff;
 
 		// have to review how in job works
-		SR_ASSERT(!inJob);
+		SR_CORE_ASSERT(!inJob);
 		if (!inJob) {
 			stagingMeshBuff = renderer->globalMeshStagingBuffer;
 			stagingModelBuff = renderer->globalModelBufferStaging;
@@ -113,7 +114,7 @@ namespace sunrise {
 				{// sync point
 					auto meshThreadFree = renderer->freeThreadLocalGlobalMeshandModelStagingBufferIndicies.lock();
 
-					assert(meshThreadFree->size() > 0);
+					SR_CORE_ASSERT(meshThreadFree->size() > 0);
 					index = (*meshThreadFree)[meshThreadFree->size() - 1];
 					meshThreadFree->pop_back();
 				}
@@ -241,7 +242,8 @@ namespace sunrise {
 			
 
 			drawData.drawDatas[i].modelIndex = static_cast<glm::uint32>(modelIndex / modelAllocSize);
-			drawData.drawDatas[i].matIndex = matIndex;
+			//set this to the loaded material index not static mat id
+			drawData.drawDatas[i].matIndex = renderer->materialManager->getLoadedMatIndex(matIndex);
 		}
 
 

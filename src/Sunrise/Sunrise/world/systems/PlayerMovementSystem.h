@@ -26,7 +26,9 @@ namespace sunrise {
 	private:
 
 		//TODO: set to simlink to sink to xplane
-		MovementMode mode = MovementMode::Simlink;//MovementMode::Manual;
+		MovementMode mode = 
+			//MovementMode::Simlink;
+			MovementMode::Manual;
 
 		bool hasConnection = false;
 
@@ -101,6 +103,8 @@ namespace sunrise {
 		math::Path<glm::dvec3> cameraPath;
 
 		libguarded::shared_guarded<SimlinkMessages::simpleUpdate> updateStreamed = libguarded::shared_guarded<SimlinkMessages::simpleUpdate>(SimlinkMessages::simpleUpdate());
+
+		libguarded::plain_guarded<double> updateInterval = 0;
 
 		sunrise::NetworkManager* networkManager = nullptr;
 	};

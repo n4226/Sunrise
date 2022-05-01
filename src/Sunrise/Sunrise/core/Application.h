@@ -57,9 +57,14 @@ namespace sunrise {
 		void unloadScene(Scene* scene);
 
 		/// <summary>
-		/// requests a hot freload to be preformed after this frame and before the next
+		/// requests a hot reload to be preformed after this frame and before the next
 		/// </summary>
 		void hotReloadScene();
+
+		/// <summary>
+		/// requests scene graphics to be reloaded between this and next frame - basically just resets and restarts all scene render coordinators
+		/// </summary>
+		void hotReloadSceneGFX();
 
 		
 		/// <summary>
@@ -104,7 +109,9 @@ namespace sunrise {
 		static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 		void _performHoReloadScene();
+		void _performSceneGFXReload();
 		bool pendingHotReload = false;
+		bool pendingGFXHotReload = false;
 
 
 		/// <summary>

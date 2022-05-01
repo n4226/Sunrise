@@ -5,6 +5,7 @@
 #include <Sunrise/Sunrise/world/gfxPipelines/WorldTerrainPipeline.h>
 #include "Sunrise/core/Window.h"
 #include "Sunrise/graphics/vulkan/resources/ResourceTransferTask.h"
+#include "Sunrise/graphics/vulkan/renderer/MaterialManager.h"
 
 namespace sunrise {
 
@@ -231,7 +232,7 @@ namespace sunrise {
 
 				auto meshBuff = meshBuffers.at(ent);
 				auto model = modelUniformIndicies.at(ent);
-				auto material = renderer.material;
+				auto material = coord->renderer->materialManager->getLoadedMatIndex(renderer.material);
 
 
 				//if transform updated update buffer - does not support dynamic meshes yet

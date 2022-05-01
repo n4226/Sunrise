@@ -38,8 +38,10 @@ namespace sunrise {
 		auto terrainStage = new TerrainGPUStage(this);
 		auto deferredStage = new DeferredStage(this, { 1,2,3,4 });
 
+		//TODO: registering pipelines should be done by stages and not here
 		registerPipeline(worldTerrainPipeline,terrainStage);
 		registerPipeline(deferredPipeline,deferredStage);
+		registerPipeline(debugLineDrawPipeline, deferredStage);
 
 		registerForGlobalMaterials(&terrainStage->descriptorSets);
 

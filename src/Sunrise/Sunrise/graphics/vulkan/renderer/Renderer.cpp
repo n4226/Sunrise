@@ -29,6 +29,7 @@ namespace sunrise::gfx {
 		//TODO: for multi gpu this maybe should not be owned by a rednerer but the application
 		materialManager = new MaterialManager(*this);
 
+		debugDraw = new DebugDrawer(this, {});
 	}
 
 	void Renderer::createAllResources()
@@ -291,12 +292,16 @@ namespace sunrise::gfx {
 	{
 		//updateSceneUniformBuffer();
 
+		//for (auto win : windows)
+		//	debugDraw->sendToBuffer(win);
 
 	}
 
 	void Renderer::renderFrame(Window& window)
 	{
 		PROFILE_FUNCTION;
+
+		debugDraw->sendToBuffer(&window);
 
 
 		/*
@@ -414,6 +419,11 @@ namespace sunrise::gfx {
 		// submit queue
 
 		deviceQueues.graphics.submit({ submitInfo }, window.inFlightFences[app.currentFrame]);
+	}
+
+	void Renderer::afterRenderScene()
+	{
+		debugDraw->flushData();
 	}
 
 }

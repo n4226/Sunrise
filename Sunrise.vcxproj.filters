@@ -495,6 +495,9 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -836,5 +839,8 @@
     <ClCompile Include="vendor\optick\src\optick_server.cpp">
       <Filter>vendor\optick\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.cpp" />
   </ItemGroup>
 </Project>

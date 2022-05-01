@@ -133,8 +133,9 @@ vec3 light(SampledPBRMaterial mat, Light lights, vec3 fragWorldNormal, vec3 frag
 
     // normal distribution
     float NDF = DistributionGGX(N, H, mat.roughness);
-
+    //return vec3(NDF);
     float G = GeometrySmith(N, V, L, mat.roughness);
+    //return vec3(G);
 
     // calc cook-torrance BRDF -- putting it all together
 
@@ -254,7 +255,7 @@ vec3 calculateLighting(
 
     sunLight.type = 1;
     sunLight.direction = sunDir;
-    sunLight.intensity = vec3(7);//vec3(4);//vec3(8);
+    sunLight.intensity = vec3(4);//vec3(4);//vec3(8);
 
     //return vec3(3);
     //return worldSpaceFragPosition.xyz;

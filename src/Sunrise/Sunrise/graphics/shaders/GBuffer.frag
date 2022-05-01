@@ -408,8 +408,10 @@ void main() {
     if (depth == 1) {
         color.xyz = calculatePostAtmosphereicScatering(ubo.renderTargetSize,inPos.xy,ubo.camFloatedGloabelPos[gl_Layer].xyz - ubo.earthCenter.xyz,ubo.viewMat[gl_Layer],ubo.sunDir.xyz);
         // color *= ubo.sunDir.xyz;
-        //color.xyz = vec3(0,0.2,0.4) * 1; 
         //albedo_metallic.w = 1;
+
+        
+        color.xyz = vec3(0,0.2,0.4) * 1; 
     }
     else {
         SampledPBRMaterial mat;
@@ -423,10 +425,12 @@ void main() {
         
         //float brightness = dot(normalize(normal_sroughness.xyz),normalize(ubo.sunDir.xyz));
         //color = vec3(normal_sroughness.xyz) * max(brightness,0);
+        //color = normal_sroughness.xyz;
+        //color = albedo_metallic.xyz;
     }
 
  // todo add ACES tone mapping in a better place such as post pass
-    //color = ACESFitted(color);
+    color = ACESFitted(color);
 
     outColor = vec4(color, 1);
 }

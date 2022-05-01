@@ -25,4 +25,19 @@ namespace sunrise {
 
 	extern DeferredPipeline* deferredPipeline;
 
+	class DebugLineDrawPipeline : public gfx::VirtualGraphicsPipeline
+	{
+	public:
+		using gfx::VirtualGraphicsPipeline::VirtualGraphicsPipeline;
+
+	protected:
+
+		virtual gfx::GraphicsPipelineOptions makeDeff() override;
+
+
+	};
+
+	extern DebugLineDrawPipeline* debugLineDrawPipeline;
+
+
 }

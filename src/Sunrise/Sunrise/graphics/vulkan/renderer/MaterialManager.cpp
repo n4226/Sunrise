@@ -57,7 +57,7 @@ namespace sunrise {
 		for (auto mat : StaticMaterialTable::reverseEntries)
 		{
 			if (FileManager::exists(matRootPath + mat.second))
-				loadMat(matRootPath, mat.second.c_str());
+				loadMat(mat.first, matRootPath, mat.second.c_str());
 			else
 				SR_CORE_WARN("Skiping {} world material becuase its directory was not found", mat.second);
 		}
@@ -84,7 +84,7 @@ namespace sunrise {
 		SR_CORE_TRACE("Static Material loading complete");
 	}
 
-	void MaterialManager::loadMat(std::string& matRootPath, const char* matFolder)
+	void MaterialManager::loadMat(uint32_t matID, std::string& matRootPath, const char* matFolder)
 	{
 		PROFILE_FUNCTION;
 
@@ -141,6 +141,7 @@ namespace sunrise {
 		matInfor.baseTextureIndex = al_index;
 
 		auto index = renderer.matUniformAllocator->alloc();
+		auto matLoadedIndex = index / sizeof(matInfor);
 
 		renderer.globalMaterialUniformBufferStaging->tempMapAndWrite(&matInfor, index, sizeof(matInfor));
 
@@ -155,6 +156,8 @@ namespace sunrise {
 		ResourceTransferer::Task task = { ResourceTransferer::TaskType::bufferTransfers };
 		task.bufferTransferTask = transferTask;
 
+		//save index into global array to mark it as loaded -- todo maybe wait until the mat is actually loaded
+		loadedMaterialIndicies.emplace(std::make_pair(matID, matLoadedIndex));
 	
 		pendingGFXTasks.push_back(task);
 	}
@@ -163,6 +166,12 @@ namespace sunrise {
 		return images;
 	}
 
+
+	size_t MaterialManager::getLoadedMatIndex(uint32_t matID)
+	{
+		SR_CORE_ASSERT(loadedMaterialIndicies.count(matID));
+		return loadedMaterialIndicies.at(matID);
+	}
 
 	MaterialManager::MaterialFiles MaterialManager::getFilesForMaterial(std::string& matRootPath, const char* matFolder, const std::unordered_set<std::string>& suportedFileExtensions)
 	{
@@ -194,7 +203,7 @@ namespace sunrise {
 				result.roughness = std::move(file);
 			else if (file.find("metal") != std::string::npos)
 				result.metalic = std::move(file);
-			else if (file.find("ao") != std::string::npos)
+			else if (file.find("ao") != std::string::npos || file.find("ambientocclusion") != std::string::npos)
 				result.ambientOclusion = std::move(file);
 		}
 

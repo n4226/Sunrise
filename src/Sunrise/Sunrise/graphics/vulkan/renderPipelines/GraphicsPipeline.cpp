@@ -110,7 +110,7 @@ namespace sunrise::gfx {
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        inputAssembly.topology = static_cast<VkPrimitiveTopology>(options.primitiveType);//VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
         VkViewport viewport{};
@@ -140,7 +140,7 @@ namespace sunrise::gfx {
 
         rasterizer.rasterizerDiscardEnable = VK_FALSE;
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
-        rasterizer.lineWidth = 1.0f;
+        rasterizer.lineWidth = options.lineWidth;
 
         rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
         // TODO: i thought - turn this to couter clockwise for my gpu driven models to work 

@@ -27,6 +27,7 @@ namespace sunrise {
 
 		registerPipeline(worldTerrainPipeline, entStage);
 		registerPipeline(deferredPipeline, deferredStage);
+		registerPipeline(debugLineDrawPipeline, deferredStage);
 
 		registerForGlobalMaterials(&entStage->descriptorSets);
 

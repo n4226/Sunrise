@@ -168,7 +168,7 @@ namespace sunrise {
 					//renderer.deviceQueues.graphics.waitIdle();
 				}
 				else {
-					SR_CORE_INFO("submitting resource task(s) to transfer queue");
+					//SR_CORE_INFO("submitting resource task(s) to transfer queue");
 					renderer.deviceQueues.resourceTransfer.submit(submitInfo, waitFence);
 					//renderer.deviceQueues.resourceTransfer.waitIdle();
 					//renderer.device.waitIdle();

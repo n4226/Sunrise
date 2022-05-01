@@ -32,11 +32,19 @@ namespace sunrise {
 
 			networkManager->registerUDPMessageCalback(std::function([this](const sunrise::SimlinkMessages::simpleUpdate& data) {
 				//SR_INFO("got a simpleUpdate: position: ({}, {}, {})", data.lla.x, data.lla.y, data.lla.z);
+				static auto lastUpdateTime = std::chrono::high_resolution_clock::now();
+				auto currentTime = std::chrono::high_resolution_clock::now();
 				{
 					auto handle = updateStreamed.lock();
 
 					(*handle) = data;
 					hasConnection = true;
+				}
+				{
+					auto handle = updateInterval.lock();
+
+					*handle = std::chrono::duration<double, std::chrono::seconds::period>(currentTime - lastUpdateTime).count();
+					lastUpdateTime = currentTime;
 				}
 				}));
 
@@ -72,10 +80,23 @@ namespace sunrise {
 						* glm::angleAxis(simlinkRot.z, glm::vec3(0, 1, 0))
 						* glm::angleAxis(simlinkRot.y, glm::vec3(0, 0, -1))
 						* glm::angleAxis(simlinkRot.x, glm::vec3(-1, 0, 0));
+
 				}
 				else {
 					// do nothing
 				}
+
+				//draw dignostics window
+				ImGui::Begin("Simlink Connection Stats");
+
+				{
+					auto handle = updateInterval.lock();
+					auto fps = (1000.0 / *handle / 1000);
+					ImGui::Text("Update Interval: 2%f", *handle);
+					ImGui::Text("Update FPS: %d", (int)fps);
+				}
+
+				ImGui::End();
 			}
 			else {
 				if (mode == MovementMode::Path) {
