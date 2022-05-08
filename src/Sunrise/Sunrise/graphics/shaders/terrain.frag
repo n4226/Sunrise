@@ -32,14 +32,19 @@ layout(binding = 3) uniform sampler2D textures[];
 
 
 //layout(location = 0) in vec3 TBNMatrix;
-layout(location = 0) in vec3 fragModelNormal;
-layout(location = 1) in vec3 fragModelTangent;
-layout(location = 2) in vec3 fragModelBitangent;
-layout(location = 3) in vec2 uvs;
+// layout(location = 0) in vec3 fragModelNormal;
+// layout(location = 1) in vec3 fragModelTangent;
+// layout(location = 2) in vec3 fragModelBitangent;
+layout(location = 0) in vec2 uvs;
+layout(location = 1) in mat3 inTBN;
 
 layout(location = 0) out vec4 outAlbedo_Metallic;
 layout(location = 1) out vec4 outNormal_Roughness;
 layout(location = 2) out float outAO;
+
+vec3 srgb_to_linear(vec3 c) {
+    return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c));
+}
 
 void main() {
     vec2 finalUvs = uvs * 0.1;
@@ -54,20 +59,31 @@ void main() {
 
     mat4 matGeo = modelUniform.data[drawData.modelIndex].model;
 
-    // remape normals to correct domain
-    normal = normal * 2.0 - 1.0; 
+    // normal = srgb_to_linear(normal);
+    // remape normals to correct domain to [-1,1]
+    normal = normalize(normal * 2.0 - 1.0); 
+    // normal.y = -normal.y;
+    // normal.z = -normal.z;
+    // normal.x = -normal.x;
 
-    //temp
+    //temp - NORMAL MAPS STILL NOT WORKING OTHER PBR STUFF SHOULD BE
     normal = vec3(0,0,1);
 
-
-    //TODO: remove minus on bitang ? - the bitangents ahe been inverted in the way they are now generated
-    mat3 TBN = mat3(fragModelTangent, fragModelBitangent, fragModelNormal);
     
-    
-    vec3 worldNormal = (matGeo * vec4(TBN * normal,0)).xyz;
+    vec3 modelNormal = normalize(inTBN * normal);
+    // in dommain [-1,1]
+    //see: https://vulkanppp.wordpress.com/2017/07/06/week-6-normal-mapping-specular-mapping-pipeline-refactoring/
+    vec3 worldNormal = modelNormal;//((matGeo * vec4(modelNormal,0)).xyz);
+    //worldNormal = normal;
+    //worldNormal = inTBN[0];
 
+    worldNormal = normalize(worldNormal);
+    // remap to domain [0,1]
+    worldNormal = (worldNormal + 1.0) * 0.5;
+    // worldNormal.xy = uvs;
+    // worldNormal.z = 0;
     outAlbedo_Metallic = vec4(color,metallic);//vec4(color, metallic);
     outNormal_Roughness = vec4(worldNormal, roughness);
     outAO = ao;
 }
+

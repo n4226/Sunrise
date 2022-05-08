@@ -18,25 +18,6 @@ namespace sunrise::gfx {
 
 		void createRequiredRenderResources();
 
-		// Render Resources
-
-		/// <summary>
-		/// one for each drawable
-		/// </summary>
-		std::vector<std::vector<vk::CommandPool  >> cmdBufferPools{};
-		std::vector<std::vector<vk::CommandBuffer>> commandBuffers{};
-
-
-		/// <summary>
-		/// configrues and begins encoding in the buffer
-		/// </summary>
-		/// <param name="subpass"></param>
-		/// <param name="window"></param>
-		/// <returns></returns>
-		vk::CommandBuffer* selectAndSetupCommandBuff(RunOptions options);
-
-		void setupCommandBuff(vk::CommandBuffer buff, SceneRenderCoordinator* coordinator, size_t pass,const Window& window,size_t surface,vk::CommandBufferUsageFlags flags = vk::CommandBufferUsageFlagBits::eRenderPassContinue);
-
 		void setPipeline(const sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline);
 		GraphicsPipeline* getConcretePipeline(const sunrise::Window& window, VirtualGraphicsPipeline* pipeline);
 
@@ -48,6 +29,9 @@ namespace sunrise::gfx {
 		virtual void cleanup() override = 0;
 		// called every frame
 		virtual vk::CommandBuffer* encode(RunOptions options) override = 0;
+
+		void registerPipeline(VirtualGraphicsPipeline* virtualPipe);
+
 
 		bool useInternalresources;
 	};

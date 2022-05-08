@@ -30,7 +30,7 @@ namespace sunrise::gfx {
 	{
 		PROFILE_FUNCTION;
 
-		SR_CORE_TRACE("Creating {} GPU Render Stage resources", name);
+		SR_CORE_TRACE("Creating {} GPU Stage resources", name);
 
 
 		cmdBufferPools.resize(coord->renderer->windows.size());
@@ -42,38 +42,6 @@ namespace sunrise::gfx {
 
 	}
 
-
-	vk::CommandBuffer* GPURenderStage::selectAndSetupCommandBuff(RunOptions options)
-	{
-		uint32_t bufferIndex = options.window.currentSurfaceIndex;
-
-		auto renderer = options.window.renderer;
-
-		//TODO write down why i am using a comand buffer and pool per serface if they are reset each frame - think it has to do with inflight frames
-		renderer->device.resetCommandPool(cmdBufferPools[options.window.indexInRenderer][bufferIndex], {});
-
-		vk::CommandBuffer* buffer = &commandBuffers[options.window.indexInRenderer][bufferIndex];
-
-		setupCommandBuff(*buffer, options.coordinator, options.pass, options.window, bufferIndex);
-
-		return buffer;
-	}
-
-	void GPURenderStage::setupCommandBuff(vk::CommandBuffer buff, SceneRenderCoordinator* coordinator, size_t pass, const Window& window, size_t surface, vk::CommandBufferUsageFlags flags)
-	{
-		auto [renderPass, subpass] = coordinator->sceneRenderpassHolders[0]->renderPass(pass);
-
-		vk::CommandBufferInheritanceInfo inheritanceInfo{};
-		inheritanceInfo.renderPass = renderPass->renderPass;
-		inheritanceInfo.subpass = subpass;
-		inheritanceInfo.framebuffer = coordinator->sceneRenderpassHolders[0]->getFrameBuffer(pass, &window, surface);
-
-		vk::CommandBufferBeginInfo beginInfo{};
-		beginInfo.flags = flags; // Optional
-		beginInfo.pInheritanceInfo = &inheritanceInfo; // Optional
-
-		buff.begin(beginInfo);
-	}
 
 	void GPURenderStage::setPipeline(const sunrise::Window& window, vk::CommandBuffer buffer, VirtualGraphicsPipeline* pipeline)
 	{
@@ -88,6 +56,12 @@ namespace sunrise::gfx {
 		return window.loadedPipes.find(pipeline)->second;
 	}
 
-	
+
+
+	void GPURenderStage::registerPipeline(VirtualGraphicsPipeline* virtualPipe)
+	{
+		coord->registerPipeline(virtualPipe, this);
+	}
+
 
 }

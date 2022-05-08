@@ -28,10 +28,11 @@ layout(location = 2) in vec3 inNormal;
 layout(location = 3) in vec3 inTangent;
 layout(location = 4) in vec3 inBitangent;
 
-layout(location = 0) out vec3 outFragModelNormal;
-layout(location = 1) out vec3 outFragModelTangent;
-layout(location = 2) out vec3 outFragModelBitangent;
-layout(location = 3) out vec2 outUvs;
+// layout(location = 0) out vec3 outFragModelNormal;
+// layout(location = 1) out vec3 outFragModelTangent;
+// layout(location = 2) out vec3 outFragModelBitangent;
+layout(location = 0) out vec2 outUvs;
+layout(location = 1) out mat3 outTBN;
 layout (viewport_relative) out highp int gl_Layer;
 
 //vec2 positions[3] = vec2[](
@@ -49,9 +50,16 @@ layout (viewport_relative) out highp int gl_Layer;
 void main() {
 
     outUvs = inUv;
-    outFragModelNormal = inNormal;
-    outFragModelTangent = inTangent;
-    outFragModelBitangent = inBitangent;
+    // outFragModelNormal = inNormal;
+    // outFragModelTangent = inTangent;
+    // outFragModelBitangent = inBitangent;
+
+    vec3 worldTan = (modelUniform.data[drawData.modelIndex].model * vec4(inTangent, 0.0)).xyz;
+    vec3 worldBitan = (modelUniform.data[drawData.modelIndex].model * vec4(inBitangent, 0.0)).xyz;
+    vec3 worldNormal = (modelUniform.data[drawData.modelIndex].model * vec4(inNormal, 0.0)).xyz;
+
+    outTBN = mat3(worldTan, worldBitan, worldNormal);
+
 
     // convert normal to worldspace
     //outWorldNormal = (modelUniform.data[drawData.modelIndex].model * vec4(inNormal,0)).xyz;

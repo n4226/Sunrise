@@ -47,6 +47,7 @@ namespace sunrise {
         //TODO: understand the point of variable descriptor arrays if you still have to pass length
 		descriptorPool = new gfx::DescriptorPool(renderer->device, 
 			{ app.maxSwapChainImages * renderer->windows.size(),{ globalUniformPoolSize, modelAndMatUniformPoolSize, materialTexturesPoolSize} });
+		coord->registerForGlobalMaterials(&descriptorSets);
 
 
 		for (size_t i = 0; i < setsOfCMDBuffers; i++)
@@ -62,6 +63,7 @@ namespace sunrise {
 
 		}
 
+		registerPipeline(worldTerrainPipeline);
 	}
 
 	void TerrainGPUStage::lateSetup()

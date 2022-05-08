@@ -23,6 +23,7 @@ namespace sunrise::gfx {
 
 		imageInfo.arrayLayers = options.layers;
 
+
 		imageInfo.format = options.format;
 
 		imageInfo.tiling = options.tilling;
@@ -59,6 +60,17 @@ namespace sunrise::gfx {
 		vmaCreateImage(allocator, &c_imageInfo, &allocInfo, &vkItem, &allocation, nullptr);
 
 		ImageViewCreationOptions viewOptions = { vk::ImageViewType::e2D, options.format, aspectFlags, mipLevels, options.layers,0 };
+
+
+		if (options.layers > 1) {
+			if (options.type == vk::ImageType::e1D)
+				viewOptions.type = vk::ImageViewType::e1DArray;
+			if (options.type == vk::ImageType::e2D)
+				viewOptions.type = vk::ImageViewType::e2DArray;
+			/*if (options.type == vk::ImageType::e3D)
+				imageInfo.imageType = vk::ImageViewType::e;*/
+		}
+		//	imageInfo.arrayLayers = VK_REMAINING_ARRAY_LAYERS;
 
 		view = vkHelpers::createImageView(device, vkItem, viewOptions);
 	}

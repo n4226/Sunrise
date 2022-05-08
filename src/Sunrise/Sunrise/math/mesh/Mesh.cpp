@@ -220,12 +220,26 @@ namespace sunrise {
 				auto n3 = normals[indicies[subMesh][tri + 2]];
 				auto avgN = glm::normalize(n1 + n2 + n3);
 
+				auto t1 = tangents[indicies[subMesh][tri]];
+				auto t2 = tangents[indicies[subMesh][tri + 1]];
+				auto t3 = tangents[indicies[subMesh][tri + 2]];
+				auto avgT = glm::normalize(t1 + t2 + t3);
+
+				auto b1 = bitangents[indicies[subMesh][tri]];
+				auto b2 = bitangents[indicies[subMesh][tri + 1]];
+				auto b3 = bitangents[indicies[subMesh][tri + 2]];
+				auto avgB = glm::normalize(b1 + b2 + b3);
+
 				auto midPoint = (v1 + v2 + v3) / 3.f;
 
 				glm::vec3 transformedNormal = modelTransform.matrix() * glm::vec4(avgN, 0);
+				glm::vec3 transformedTangent = modelTransform.matrix() * glm::vec4(avgT, 0);
+				glm::vec3 transformedBitangent = modelTransform.matrix() * glm::vec4(avgB, 0);
 				glm::vec3 transformedPosition = modelTransform.matrix() * glm::vec4(midPoint, 1);
 
-				renderer->debugDraw->drawVector(transformedNormal, transformedPosition);
+				renderer->debugDraw->drawVector(transformedNormal, transformedPosition, 0.5f, {0,0,1,1});
+				renderer->debugDraw->drawVector(transformedTangent, transformedPosition, 0.5f, {1,0,0,1});
+				renderer->debugDraw->drawVector(transformedBitangent, transformedPosition, 0.5f, {0,1,0,1});
 			}
 		}
 
@@ -237,7 +251,7 @@ namespace sunrise {
 			glm::vec3 transformedNormal = modelTransform.matrix() * glm::vec4(bitangents[i], 0);
 			glm::vec3 transformedPosition = modelTransform.matrix() * glm::vec4(verts[i], 1);
 
-			//renderer->debugDraw->drawVector(transformedNormal, transformedPosition);
+			renderer->debugDraw->drawVector(transformedNormal, transformedPosition);
 		}
 
 	}

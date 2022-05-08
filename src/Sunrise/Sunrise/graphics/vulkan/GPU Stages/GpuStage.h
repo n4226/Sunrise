@@ -65,6 +65,29 @@ namespace sunrise {
 		protected:
 			friend GPUStageDispatcher;
 
+
+
+			// Render Resources
+
+			/// <summary>
+			/// one for each drawable
+			/// </summary>
+			std::vector<std::vector<vk::CommandPool  >> cmdBufferPools{};
+			std::vector<std::vector<vk::CommandBuffer>> commandBuffers{};
+
+
+			/// <summary>
+			/// configrues and begins encoding in the buffer
+			/// </summary>
+			/// <param name="subpass"></param>
+			/// <param name="window"></param>
+			/// <returns></returns>
+			vk::CommandBuffer* selectAndSetupCommandBuff(RunOptions options);
+
+			void setupCommandBuff(vk::CommandBuffer buff, SceneRenderCoordinator* coordinator, size_t pass, const Window& window, size_t surface, vk::CommandBufferUsageFlags flags = vk::CommandBufferUsageFlagBits::eRenderPassContinue);
+
+
+
 			bool _setup = false;
 
 		};

@@ -25,16 +25,10 @@ namespace sunrise {
 		auto entStage = new EntityRenderingGPUStage(this);
 		auto deferredStage = new DeferredStage(this, { 1,2,3,4 });
 
-		registerPipeline(worldTerrainPipeline, entStage);
-		registerPipeline(deferredPipeline, deferredStage);
-		registerPipeline(debugLineDrawPipeline, deferredStage);
-
-		registerForGlobalMaterials(&entStage->descriptorSets);
 
 		registerStage(entStage, {}, {}, {});
 		registerStage(deferredStage, { entStage }, std::move(gbuffToDeferredOptions), {});
 
-		//setLastStage(entStage);
 		setLastStage(deferredStage);
 
 		generateImguiStage = true;

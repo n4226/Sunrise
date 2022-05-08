@@ -24,8 +24,6 @@ namespace sunrise {
 	
 	void WorldSceneRenderCoordinator::createPasses()
 	{
-
-
 		//https://stackoverflow.com/questions/8192185/using-stdarray-with-initialization-lists
 		std::vector<GPUStageDispatcher::DependencyOptions> gbuffToDeferredOptions = { {
 			{0, vk::ImageLayout::eColorAttachmentOptimal, vk::AttachmentLoadOp::eClear},
@@ -35,15 +33,8 @@ namespace sunrise {
 			{4, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eLoad}
 		} };
 
-		auto terrainStage = new TerrainGPUStage(this);
+		auto terrainStage  = new TerrainGPUStage(this);
 		auto deferredStage = new DeferredStage(this, { 1,2,3,4 });
-
-		//TODO: registering pipelines should be done by stages and not here
-		registerPipeline(worldTerrainPipeline,terrainStage);
-		registerPipeline(deferredPipeline,deferredStage);
-		registerPipeline(debugLineDrawPipeline, deferredStage);
-
-		registerForGlobalMaterials(&terrainStage->descriptorSets);
 
 
 		registerStage(terrainStage, {}, {}, {});

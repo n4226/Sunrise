@@ -81,7 +81,7 @@ namespace sunrise {
 
 			/// <summary>
 			/// Registers the pipeline definition to be instantiuated by all windows rendering the scene
-			/// currently only pipelines registered before the createPasses funciton exits are garenteed to be instantiated by all windows.
+			/// this function should only be called by gpu stages themselves and must be done before their setup method exits (not valid for imgui stage)
 			/// must only be called once for a given pipeline and stage
 			/// 
 			/// the same virtual pipe can be registered for multiple stages but //TODO: figure out if this is okay

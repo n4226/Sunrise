@@ -12,7 +12,7 @@ namespace sunrise {
 	EntityRenderingGPUStage::EntityRenderingGPUStage(gfx::SceneRenderCoordinator* coord)
 		: GPURenderStage(coord, "Scene Entity Render Stage")
 	{
-
+		coord->registerForGlobalMaterials(&descriptorSets);
 	}
 
 	void EntityRenderingGPUStage::setup()
@@ -23,6 +23,7 @@ namespace sunrise {
 
 		createDescriptorPool();
 
+		registerPipeline(worldTerrainPipeline);
 	}
 
 	void EntityRenderingGPUStage::loadMeshResources()
@@ -176,6 +177,7 @@ namespace sunrise {
 		//TODO: understand the point of variable descriptor arrays if you still have to pass length
 		descriptorPool = new gfx::DescriptorPool(coord->renderer->device,
 			{ app.maxSwapChainImages * coord->renderer->windows.size(),{ globalUniformPoolSize, modelAndMatUniformPoolSize, materialTexturesPoolSize} });
+
 	}
 
 	void EntityRenderingGPUStage::cleanup()

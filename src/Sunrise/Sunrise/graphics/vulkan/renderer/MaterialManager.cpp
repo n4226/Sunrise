@@ -126,9 +126,9 @@ namespace sunrise {
 
 
 		// 5 textures per material -- this order is important
-		auto al_index = FinishLoadingTexture(loadTex(files.albedoPath.c_str(),(std::string(matFolder) + " Albedo").c_str()));
+		auto al_index = FinishLoadingTexture(loadTex(files.albedoPath.c_str(),(std::string(matFolder) + " Albedo").c_str(),true));
 		auto n_index  = FinishLoadingTexture(loadTex(files.normal.c_str(), (std::string(matFolder) + " Normal").c_str()));
-		auto m_index  = FinishLoadingTexture(loadTex(files.metalic.c_str(), (std::string(matFolder) + " Metalic").c_str()));
+		auto m_index  = FinishLoadingTexture(loadTex(files.metalic.c_str(), (std::string(matFolder) + " Metallic").c_str()));
 		auto ao_index = FinishLoadingTexture(loadTex(files.ambientOclusion.c_str(), (std::string(matFolder) + " AO").c_str()));
 		auto r_index  = FinishLoadingTexture(loadTex(files.roughness.c_str(), (std::string(matFolder) + " Roughness").c_str()));
 
@@ -251,7 +251,7 @@ namespace sunrise {
 
 
 
-	std::tuple<Buffer*, Image*> MaterialManager::loadTex(const char* path,const char* name)
+	std::tuple<Buffer*, Image*> MaterialManager::loadTex(const char* path,const char* name, bool albedo)
 	{
 		PROFILE_FUNCTION;
 
@@ -285,7 +285,7 @@ namespace sunrise {
 			header.height = texHeight;
 			header.depth = 1;
 
-			auto format = vk::Format::eR8G8B8A8Srgb;
+			auto format = !albedo ? vk::Format::eR8G8B8A8Unorm : vk::Format::eR8G8B8A8Srgb;
 			header.format = static_cast<VkFormat>(format);
 			header.linearLayout = true;
 

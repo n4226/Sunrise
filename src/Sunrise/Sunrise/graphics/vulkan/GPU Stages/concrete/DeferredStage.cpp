@@ -43,6 +43,8 @@ namespace sunrise {
 
 		descriptorPool = new gfx::DescriptorPool(coord->renderer->device, { estimatedSurfaceCount * 6, { sampledImageAllocOptions, uniformAllocOptions, combinedSampledImageAllocOptions} });
 
+		registerPipeline(deferredPipeline);
+		registerPipeline(debugLineDrawPipeline);
 	}
 
 	void DeferredStage::lateSetup()

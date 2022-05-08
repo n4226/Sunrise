@@ -34,6 +34,7 @@ namespace sunrise::gfx {
 		};
 
 		DebugDrawer(Renderer* renderer,Config config);
+		~DebugDrawer();
 
 
 		void drawLine(glm::vec3 from, glm::vec3 to, glm::vec4 color = { 0.9,0.1,0.1,1 });
@@ -62,7 +63,7 @@ namespace sunrise::gfx {
 		std::vector<LineData> lines;
 
 		std::unordered_map<Window*,std::vector<Buffer*>> linesBuffers;
-		std::unordered_map < Window*, std::vector<IndexAllocator*>> allocators;
+		//std::unordered_map < Window*, std::vector<IndexAllocator*>> allocators;
 
 		Config config;
 		Renderer* renderer;

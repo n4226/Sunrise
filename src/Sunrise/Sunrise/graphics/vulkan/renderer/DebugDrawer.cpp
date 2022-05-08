@@ -45,14 +45,14 @@ namespace sunrise::gfx {
 				linesBuffers[win] = {};
 				linesBuffers[win].resize(win->numSwapImages());
 
-				allocators[win] = {};
-				allocators[win].resize(win->numSwapImages());
+				//allocators[win] = {};
+				//allocators[win].resize(win->numSwapImages());
 			}
 		}
 
 
 		auto& buffsForWindow = linesBuffers.at(window);
-		auto& allocsForWindow = allocators.at(window);
+		//auto& allocsForWindow = allocators.at(window);
 
 		//know that each line takes up exactlyu sizeof(glm::vec3) * 2 in the buffer
 		if (buffsForWindow[window->currentSurfaceIndex] == nullptr) {
@@ -62,13 +62,13 @@ namespace sunrise::gfx {
 				{ renderer->queueFamilyIndices.graphicsFamily.value(), renderer->queueFamilyIndices.resourceTransferFamily.value() } };
 
 			buffsForWindow[window->currentSurfaceIndex] = new Buffer(renderer->device, renderer->allocator, maxLines * sizeof(lineBuffStride), options);
-			allocsForWindow[window->currentSurfaceIndex] = new IndexAllocator(maxLines * lineBuffStride, lineBuffStride);
+			//allocsForWindow[window->currentSurfaceIndex] = new IndexAllocator(maxLines * lineBuffStride, lineBuffStride);
 		}
 		//todo: delete old lines once their drawable has been released
 		//although this is sort of done sine bufer cleared on new draw of same surface
 		
 		auto currentBuff = buffsForWindow[window->currentSurfaceIndex];
-		auto currentAlloc = allocsForWindow[window->currentSurfaceIndex];
+		//auto currentAlloc = allocsForWindow[window->currentSurfaceIndex];
 
 		//actually dont need allocator since each frame reset so buffer will jsut be populated with values from begigigng
 
@@ -83,6 +83,14 @@ namespace sunrise::gfx {
 	const std::unordered_map<Window*, std::vector<Buffer*>>& DebugDrawer::getBuffers()
 	{
 		return linesBuffers;
+	}
+
+	DebugDrawer::~DebugDrawer()
+	{
+		for (auto [win, buffs] : linesBuffers)
+			for (auto buf : buffs)
+				delete buf;
+
 	}
 
 	std::array<VkVertexInputBindingDescription, 1> DebugDrawer::LineData::getBindingDescription()

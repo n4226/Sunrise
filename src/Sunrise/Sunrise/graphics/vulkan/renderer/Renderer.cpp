@@ -64,9 +64,9 @@ namespace sunrise::gfx {
         
         device.waitIdle();
         
+		delete debugDraw;
 		delete materialManager;
 		delete resouceTransferer;
-
 
 		for (auto pool : dynamicCommandPools)
 			for (auto spool : pool)

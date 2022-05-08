@@ -5,7 +5,8 @@
 #extension GL_NV_viewport_array2: enable
 
 //#include "headers/lighting/atmScat.h"
-#include "headers/lighting/pbr.h"
+// #include "headers/lighting/pbr.h"
+#include "headers/lighting/pbr2.h"
 
 
 //TODO: move this back to binding 4 when depth buffer added back
@@ -401,6 +402,8 @@ void main() {
     float depth =            texture(GBuffer_Depth,uvs).x; 
     //albedo_metallic = normal_sroughness;
 
+    //remap normals to domain [-1,1]
+    normal_sroughness.xyz = normalize((normal_sroughness.xyz * 2) - 1);
 
     vec3 color;
 
@@ -411,7 +414,7 @@ void main() {
         //albedo_metallic.w = 1;
 
         
-        color.xyz = vec3(0,0.2,0.4) * 1; 
+        // color.xyz = vec3(0,0.2,0.4) * 1; 
     }
     else {
         SampledPBRMaterial mat;
@@ -421,12 +424,27 @@ void main() {
         mat.ao = ao.x;
         mat.roughness = normal_sroughness.w;
         
-        color = calculateLighting(uvs,depth,ubo.invertedViewMat[gl_Layer],ubo.invertedProjMat[gl_Layer],mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos[gl_Layer].xyz);
+        //i had acidentally switched projeciton and view matrices inputed into this function
+        color = calculateLighting(uvs,depth,ubo.invertedProjMat[gl_Layer],ubo.invertedViewMat[gl_Layer],mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos[gl_Layer].xyz);
         
         //float brightness = dot(normalize(normal_sroughness.xyz),normalize(ubo.sunDir.xyz));
         //color = vec3(normal_sroughness.xyz) * max(brightness,0);
-        //color = normal_sroughness.xyz;
-        //color = albedo_metallic.xyz;
+        // color = normal_sroughness.xyz;
+        // color = normal_sroughness.www;
+        // color = albedo_metallic.xyz;
+        // color = albedo_metallic.www;
+        //color = ao.xxx;
+
+
+        /*this work,s for getting world position
+        // vec4 way2 = ubo.invertedProjMat[gl_Layer] * vec4(uvs * 2 - 1,depth,1);
+        // way2 /= way2.w;
+
+        // vec4 way2World = (ubo.invertedViewMat[gl_Layer] * way2).xyzw;
+
+
+        // color = (way2World.xyz);
+        */
     }
 
  // todo add ACES tone mapping in a better place such as post pass
