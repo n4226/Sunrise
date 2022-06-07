@@ -75,6 +75,7 @@
 #include <filesystem>
 
 #include <random>
+#include <bitset>
 
 #ifdef SR_PLATFORM_WINDOWS
 #define NOMINMAX

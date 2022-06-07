@@ -2,6 +2,7 @@
 
 #include "srpch.h"
 #include "generalAbstractions/GPUSelector.h"
+#include "../../materialSystem/MaterialSystem.h"
 
 namespace sunrise {
 	class Window;
@@ -34,12 +35,15 @@ namespace sunrise {
 			std::vector<QueueFamilyIndices >          queueFamilyIndices;
 			//
 
+			MaterialSystem* materialSystem;
+
 			size_t currentFrameID = 0;
 
 			size_t currentFrame = 0;
 			size_t maxSwapChainImages = 0;
 
 			const size_t MAX_FRAMES_IN_FLIGHT = 3;
+
 
 		protected:
 

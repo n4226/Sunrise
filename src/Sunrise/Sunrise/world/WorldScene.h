@@ -5,6 +5,7 @@
 #include "../scene/Scene.h"
 #include "../graphics/vulkan/renderer/Renderer.h"
 #include "terrain/TerrainSystem.h"
+#include "date+Time/WorldClock.h"
 
 namespace sunrise {
 
@@ -28,6 +29,8 @@ namespace sunrise {
 		virtual void onDrawMainMenu() override;
 
 		virtual void update() override;
+
+		virtual void earlyUpdate() override;
 
 		virtual void unload() override;
 #pragma endregion
@@ -71,6 +74,9 @@ namespace sunrise {
 		/// the lat and lon of sun
 		/// </summary>
 		glm::dvec3 sunLL = initialPlayerLLA;
+
+		WorldClock worldTime{};
+
 	};
 
 

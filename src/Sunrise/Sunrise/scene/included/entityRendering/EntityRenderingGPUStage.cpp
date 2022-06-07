@@ -2,7 +2,7 @@
 #include "EntityRenderingGPUStage.h"
 
 #include "Sunrise/graphics/vulkan/resources/uniforms.h"
-#include <Sunrise/Sunrise/world/gfxPipelines/WorldTerrainPipeline.h>
+#include <Sunrise/Sunrise/world/gfxPipelines/StandardPBRPipeline.h>
 #include "Sunrise/core/Window.h"
 #include "Sunrise/graphics/vulkan/resources/ResourceTransferTask.h"
 #include "Sunrise/graphics/vulkan/renderer/MaterialManager.h"
@@ -23,7 +23,7 @@ namespace sunrise {
 
 		createDescriptorPool();
 
-		registerPipeline(worldTerrainPipeline);
+		registerPipeline(standardPBRPipeline);
 	}
 
 	void EntityRenderingGPUStage::loadMeshResources()
@@ -109,7 +109,7 @@ namespace sunrise {
 			descriptorSets[window] = {};
 			for (size_t swap = 0; swap < window->swapChainImages.size(); swap++)
 			{
-				auto pipeline = getConcretePipeline(*window, worldTerrainPipeline);
+				auto pipeline = getConcretePipeline(*window, standardPBRPipeline);
 
 
 				// allocating for all static materials
@@ -200,10 +200,10 @@ namespace sunrise {
 		auto cmdBuff = selectAndSetupCommandBuff(options);
 
 
-		setPipeline(options.window, *cmdBuff, worldTerrainPipeline);
+		setPipeline(options.window, *cmdBuff, standardPBRPipeline);
 
 		// setup descriptor and buffer bindings
-		auto pipeline = getConcretePipeline(options.window, worldTerrainPipeline);
+		auto pipeline = getConcretePipeline(options.window, standardPBRPipeline);
 
 		cmdBuff->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipeline->pipelineLayout,
 			0, { descriptorSets.find(&options.window)->second[options.window.currentSurfaceIndex]->vkItem }, {});

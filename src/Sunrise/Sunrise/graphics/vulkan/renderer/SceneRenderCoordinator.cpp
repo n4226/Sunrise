@@ -367,11 +367,13 @@ namespace sunrise::gfx {
 		sceneRenderpassHolders.push_back(new CRPHolder(std::move(__tempWholeFrameRenderPassOptions), holderOptions, renderer));
 
 
+		/*
 		// set render pass pointer on all windows even owned ones
 		for (auto win : renderer->allWindows) {
 			//TODO: this object has to be deleted somewhere???!!
 			win->renderPassManager = sceneRenderpassHolders[0]->renderPass(sceneRenderpassHolders[0]->passCount() - 1).first;
 		}
+		*/
 	}
 
 
@@ -453,7 +455,9 @@ namespace sunrise::gfx {
 			renderer->debugObject.beginRegion(firstLevelCMDBuffer, stage->name.c_str(), glm::vec4(0.7, 0.2, 0.3, 1));
 #endif
 			//if (currentPass == 1)
-				firstLevelCMDBuffer.executeCommands(*buff);
+			//marks this buffer as in use to the material system
+			renderer->materialManager->bindBuffer(*buff, &window, window.currentSurfaceIndex);
+			firstLevelCMDBuffer.executeCommands(*buff);
 #if SR_LOGGING
  			renderer->debugObject.endRegion(firstLevelCMDBuffer);
 #endif

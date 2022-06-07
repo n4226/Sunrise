@@ -31,6 +31,9 @@ namespace sunrise {
 		virtual void lateLoad();
 
 		virtual void update();
+		
+		//udually not overidden called in system::update()
+		virtual void earlyUpdate() {};
 
 		//TODO: better abstract
 		virtual void onDrawUI() {};

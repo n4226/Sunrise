@@ -31,6 +31,7 @@ namespace sunrise {
 		TerrainSystem(Application& app, Scene* scene, glm::dvec3* origin);
 		~TerrainSystem();
 
+
 		void CreateRenderResources();
 
 		// todo remove this function as moving to GPU-stage system
@@ -45,6 +46,9 @@ namespace sunrise {
 		void reloadTerrainInMask();
 #pragma endregion
 
+
+		void waitForOtherThreads();
+
 		Transform* trackedTransform = nullptr;
 		glm::dvec3* origin = nullptr;
 
@@ -55,6 +59,9 @@ namespace sunrise {
 
 		// max lod levels for terrain - max lod is this - 1
 		const uint16_t lodLevels = 13;// 14;
+
+
+		void onGraphicsReload() override;
 
 	private:
 
@@ -136,6 +143,7 @@ namespace sunrise {
 
 
 		bool maskedMode = false;
+		bool firstUpdate = true;
 	};
 
 }

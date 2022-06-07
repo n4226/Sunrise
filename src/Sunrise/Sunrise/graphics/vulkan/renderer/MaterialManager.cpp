@@ -28,7 +28,163 @@ namespace sunrise {
             delete sampler;
     }
 
+	bool MaterialManager::useTicket(MaterialSystem::Ticket ticket, vk::CommandBuffer buffer, gfx::Renderer* renderer)
+	{
+		{
+			auto handle = ticketLinks.lock();
 
+			if (handle->count(buffer) == 0) {
+				handle->emplace(std::make_pair(buffer, std::vector<glm::uint64>{ticket.val}));
+			}
+			else {
+				handle->at(buffer).push_back(ticket.val);
+			}
+		}
+		//TODO: change return type to have ids to pass to shader
+		return false;
+	}
+
+	void MaterialManager::bindBuffer(vk::CommandBuffer buffer, Window* window, uint32_t surface)
+	{
+		{
+			auto handle = registeredBuffers.lock();
+
+			if (handle->count(window) == 0) {
+				handle->emplace(std::make_pair(window, std::unordered_map<uint32_t,std::vector<VkCommandBuffer>>()));
+			}
+			
+			if (handle->at(window).count(surface) == 0) {
+				handle->at(window).emplace(std::make_pair(surface, std::vector<VkCommandBuffer>()));
+			}
+			
+
+			(*handle)[window].at(surface).push_back(buffer);
+
+			//update arc
+
+			auto buffTicketHandle = ticketLinks.lock();
+			auto arcHandle = ticketArc.lock();
+			
+
+			//TODO: remove once sure this isn't happaning
+			//SR_CORE_ASSERT(buffTicketHandle->count(buffer));
+			if (buffTicketHandle->count(buffer) > 0) {
+				auto& boundTickets = buffTicketHandle->at(buffer);
+				for (auto ticket : boundTickets) {
+
+					if (arcHandle->count(ticket) == 0) {
+						arcHandle->emplace(std::make_pair(ticket, 1));
+					}
+					else {
+						auto arcCount = arcHandle->at(ticket);
+						arcHandle->emplace(std::make_pair(ticket, arcCount + 1));
+					}
+				}
+
+			}
+
+		}
+	}
+
+	void MaterialManager::resetBuffer(vk::CommandBuffer buffer)
+	{
+		{
+			auto handle = ticketLinks.lock();
+
+			handle->erase(buffer);
+		}
+	}
+
+	bool MaterialManager::ticketLoaded(MaterialSystem::Ticket ticket)
+	{
+		return false;
+	}
+
+
+
+	void MaterialManager::drawableReleased(Window* window, size_t surface)
+	{
+		
+		/* Update ARC
+		* find the cmd buffers bound to the surface just released
+		* for every ticket linked to each buffer, decrement its arcCount and if it is zero call dealocateTicket()
+		*/
+
+		{
+			auto handle = registeredBuffers.lock();
+
+			std::vector<glm::uint64> ticketsToDeallocate{};
+			ticketsToDeallocate.reserve(10);
+
+			
+			if (handle->count(window) == 0) { SR_CORE_ERROR("Unexpeted Material Arc: window not found"); return; }
+			if (handle->at(window).count(surface) == 0) { SR_CORE_ERROR("Unexpeted Material Arc: surface not found"); return; }
+
+			auto& boundBuffers = handle->at(window).at(surface);
+
+			auto buffTicketHandle = ticketLinks.lock();
+			auto arcHandle = ticketArc.lock();
+			
+			//Procces ARC
+			for (auto buffer : boundBuffers) {
+
+				if (buffTicketHandle->count(buffer) > 0) {
+					auto& boundTickets = buffTicketHandle->at(buffer);
+					for (auto ticket : boundTickets) {
+
+						SR_CORE_ASSERT(arcHandle->count(ticket));
+						auto arcCount = arcHandle->at(ticket);
+
+						if (arcCount == 1) {
+							//deallocate
+							ticketsToDeallocate.push_back(ticket);
+						}
+						else {
+							arcHandle->emplace(std::make_pair(ticket,arcCount - 1));
+						}
+
+					}
+				}
+
+			}
+
+			//deallocate required ones
+
+			//TODO: add support for systems to add event listener to when a ticket is deallocated
+
+			//TODO: not great for time complexity
+			for (auto ticket : ticketsToDeallocate) {
+
+				arcHandle->erase(ticket);
+
+				unloadMaterial({ ticket });
+			}
+
+			handle->at(window).erase(surface);
+		}
+	}
+	
+
+	void MaterialManager::drawDebugView()
+	{
+		ImGui::Text("Material Sys");
+		ImGui::Text("___ Loaded Tickets");
+		//Add more debug info
+		ImGui::ProgressBar((float)allocatedSize / (float)allocationBudget);
+	}
+
+	
+
+
+
+
+
+
+
+
+
+
+	
 	void MaterialManager::loadStaticEarth()
 	{
 		PROFILE_FUNCTION;
@@ -173,6 +329,7 @@ namespace sunrise {
 		return loadedMaterialIndicies.at(matID);
 	}
 
+
 	MaterialManager::MaterialFiles MaterialManager::getFilesForMaterial(std::string& matRootPath, const char* matFolder, const std::unordered_set<std::string>& suportedFileExtensions)
 	{
 		MaterialFiles result{};
@@ -249,9 +406,18 @@ namespace sunrise {
 		pendingGFXTasks.push_back(task);
 	}
 
+	bool MaterialManager::loadMaterial(MaterialSystem::Ticket ticket, const Material& material, glm::int8 priority)
+	{
+		//TODO: IMPLiment
+		return false;
+	}
 
+	void MaterialManager::unloadMaterial(MaterialSystem::Ticket ticket)
+	{
 
-	std::tuple<Buffer*, Image*> MaterialManager::loadTex(const char* path,const char* name, bool albedo)
+	}
+
+	std::tuple<Buffer*, Image*> MaterialManager::loadTex(const char* path, const char* name, bool albedo)
 	{
 		PROFILE_FUNCTION;
 
@@ -268,7 +434,7 @@ namespace sunrise {
 
 		// if null load now and save to cash
 		if (!bimage) {
-			SR_CORE_TRACE("Culd not find material {} in cash so reading file", name);
+			SR_CORE_TRACE("Could not find material {} in cash so reading file", name);
 			int texWidth, texHeight, texChannels;
 
 			stbi_uc* pixels;
@@ -320,9 +486,11 @@ namespace sunrise {
 
 		assert(bimage != nullptr);
 
+		
+
 		VkDeviceSize imageBufferSize = bimage->dataSize();//texWidth * texHeight * 4;// * texChannels;
-
-
+		
+		allocatedSize += imageBufferSize * 1000;
 
 		auto buff = new Buffer(renderer.device, renderer.allocator, imageBufferSize, bufferOptions);
 

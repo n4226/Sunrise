@@ -1,33 +1,23 @@
-#pragma once
-
+#ifndef pbr_h
+#define pbr_h
 
 
 #include "../base.h"
+#include "atmScat.h"
 
 
-#ifdef SR_PLATFORM_WINDOWS
-#include <glm/glm.hpp>
-using namespace glm;
-#endif // SR_PLATFORM_WINDOWS
-
-// PBR MATH
-
-// types
-
-//enum lightType {
-//    lightTypePoint = 0,
-//    lightTypeDir = 1
-//};
 
 struct Light {
-
+    vec3 intensity; // intensity of the light used for all types
     // see LightType
     int type;
 
-    vec3 intensity;
-    vec3 position;
-    vec3 direction;
-
+    // union {
+    //     vec3 position; //not used for directional light
+    //     vec3 direction; //not used for point light
+    // };
+    vec3 aux1; // either the direction or the position besed on type
+    int aux2; // not used - needed for padding
 };
 
 
@@ -39,139 +29,169 @@ struct SampledPBRMaterial {
     float roughness;
 };
 
-//
+//constrants
 
-float DistributionGGX(vec3 N, vec3 H, float a)
+const float Epsilon = 0.00001;
+const vec3 Fdielectric = vec3(0.04);
+
+
+//base functions
+
+// GGX/Towbridge-Reitz normal distribution function.
+// Uses Disney's reparametrization of alpha = roughness^2.
+float ndfGGX(float cosLh, float roughness)
 {
-    float a2 = a * a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH * NdotH;
+	float alpha   = roughness * roughness;
+	float alphaSq = alpha * alpha;
 
-    float nom = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
-
-    return nom / denom;
+	float denom = (cosLh * cosLh) * (alphaSq - 1.0) + 1.0;
+	return alphaSq / (PI * denom * denom);
 }
 
-float GeometrySchlickGGX(float NdotV, float k)
+// Single term for separable Schlick-GGX below.
+float gaSchlickG1(float cosTheta, float k)
 {
-    float nom = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
-
-    return nom / denom;
+	return cosTheta / (cosTheta * (1.0 - k) + k);
 }
 
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float k)
+// Schlick-GGX approximation of geometric attenuation function using Smith's method.
+float gaSchlickGGX(float cosLi, float cosLo, float roughness)
 {
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotL = max(dot(N, L), 0.0);
-    float ggx1 = GeometrySchlickGGX(NdotV, k);
-    float ggx2 = GeometrySchlickGGX(NdotL, k);
-
-    return ggx1 * ggx2;
+	float r = roughness + 1.0;
+	float k = (r * r) / 8.0; // Epic suggests using this roughness remapping for analytic lights.
+	return gaSchlickG1(cosLi, k) * gaSchlickG1(cosLo, k);
 }
 
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
+// Shlick's approximation of the Fresnel factor.
+vec3 fresnelSchlick(vec3 F0, float cosTheta)
 {
-    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+	return F0 + (vec3(1.0) - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
-//todo suport multiple lights in the future 
-// see good pbr video explination: https://www.youtube.com/watch?v=j-A0mwsJRmk
-vec3 light(SampledPBRMaterial mat, Light lights, vec3 fragWorldNormal, vec3 fragWorldPos, vec3 camWorldPos) { 
 
-    // frage normal vector
-    vec3 N = normalize(fragWorldNormal);
-    // view vector
-    vec3 V = normalize(camWorldPos - fragWorldPos);
+//see: https://github.com/SaschaWillems/Vulkan-glTF-PBR/blob/master/data/shaders/pbr_khr.frag
+//see helpful github demoRepo: https://github.com/Nadrin/PBR
+    //https://github.com/Nadrin/PBR/blob/master/data/shaders/glsl/pbr_fs.glsl
+//uses a physically based cook torance brdf
+//all calcls in world space
 
-    // light somethign something
-    vec3 Lo = vec3(0.0);
-    //    for(int i = 0; i < 4; ++i) {
-    Light light = lights;
 
-    vec3 radiance;
-    // halfway vector
-    vec3 H;
-    // light direction vector e.g direction of the light for dir lights or the direction from the fragment to the light for points (the one for points seems backwords)
-    vec3 L;
 
-    //if (light.type == lightTypePoint) {
-    //    // calc constants
-    //    xhalf3 lightPos = xhalf3(light.position);
-    //    L = normalize(lightPos - worldPos);
-    //    H = normalize(V + L);
+/* important questions that need to be answered
+- are the normals being clamped from when they are exported in gbuffer pass and imported in lighting pass?
+    could have to do with negative values beimg messed up
 
-    //    xhalf distance = length(lightPos - worldPos);
-    //    xhalf attenuation = 1.0 / (distance * distance);
-    //    radiance = xhalf3(light.intensity) * attenuation;
-    //}
-    //else {
-    //todo for now all lights are directional
-        radiance = light.intensity;
-        L = normalize(light.direction);
-        H = normalize(V + L);
-    //}
+*/
+vec3 light(SampledPBRMaterial mat, Light lights, vec3 fragWorldPos, vec3 camWorldPos) {
 
-    //temp
-        //return ((radiance * max(dot(N, L), 0.0f)) + 0.03f) * mat.albedo;
 
-    // calc fresnel, dist, and geometry
+	// Outgoing light direction (vector from world-space fragment position to the "eye").
+	vec3 Lo = normalize(camWorldPos - fragWorldPos);
+
+    // Get curresnt fragment's normal and transform to world space.
+	vec3 N = mat.worldSpaceNormals;
+
+    // Angle between surface normal and outgoing light direction.
+	float cosLo = max(0.0, dot(N, Lo));
+
+    // Specular reflection vector.
+	vec3 Lr = 2.0 * cosLo * N - Lo;
+
+    // Fresnel reflectance at normal incidence (for metals use albedo color).
+	vec3 F0 = mix(Fdielectric, mat.albedo, mat.metallic);
+
+    // Direct lighting calculation for analytical lights.
+	vec3 directLighting = vec3(0);
+
+    // Loop over all lights. - for now there is just one - the sun
+    {
+        vec3 Li = lights.aux1;
+		vec3 Lradiance = lights.intensity;
+
+        // Half-vector between Li and Lo.
+		vec3 Lh = normalize(Li + Lo);
+
+        
+		// Calculate angles between surface normal and various light vectors.
+		float cosLi = max(0.0, dot(N, Li));
+		float cosLh = max(0.0, dot(N, Lh));
+
+        // Calculate Fresnel term for direct lighting. 
+		vec3 F  = fresnelSchlick(F0, max(0.0, dot(Lh, Lo)));
+		// Calculate normal distribution for specular BRDF.
+		float D = ndfGGX(cosLh, mat.roughness);
+		// Calculate geometric attenuation for specular BRDF.
+		float G = gaSchlickGGX(cosLi, cosLo, mat.roughness);
+        // return vec3(F);
+
+        // Diffuse scattering happens due to light being refracted multiple times by a dielectric medium.
+		// Metals on the other hand either reflect or absorb energy, so diffuse contribution is always zero.
+		// To be energy conserving we must scale diffuse BRDF contribution based on Fresnel factor & metalness.
+		vec3 kd = mix(vec3(1.0) - F, vec3(0.0), mat.metallic);
+
+        // Lambert diffuse BRDF.
+		// We don't scale by 1/PI for lighting & material units to be more convenient.
+		// See: https://seblagarde.wordpress.com/2012/01/08/pi-or-not-to-pi-in-game-lighting-equation/
+		vec3 diffuseBRDF = kd * mat.albedo;
+
+
+        // Cook-Torrance specular microfacet BRDF.
+		vec3 specularBRDF = (F * D * G) / max(Epsilon, 4.0 * cosLi * cosLo);
+
+		// Total contribution for this light.
+		directLighting += (diffuseBRDF + specularBRDF) * Lradiance * cosLi;
+    }
+
+    // Ambient lighting (IBL).
+	vec3 ambientLighting;
+
+    //TODO: add ambient here
+    ambientLighting = vec3(0.03);
+
+    {
+
+        vec3 irradiance = calculatePostAtmosphereicScatering(fragWorldPos, N, lights.aux1, vec3(0));
+
+        // Calculate Fresnel term for ambient lighting.
+		// Since we use pre-filtered cubemap(s) and irradiance is coming from many directions
+		// use cosLo instead of angle with light's half-vector (cosLh above).
+		// See: https://seblagarde.wordpress.com/2011/08/17/hello-world/
+		vec3 F = fresnelSchlick(F0, cosLo);
+
+        
+		// Get diffuse contribution factor (as with direct lighting).
+		vec3 kd = mix(vec3(1.0) - F, vec3(0.0), mat.metallic);
+
+        // Irradiance map contains exitant radiance assuming Lambertian BRDF, no need to scale by 1/PI here either.
+		vec3 diffuseIBL = kd * mat.albedo * irradiance;
+
+        
+		// // Sample pre-filtered specular reflection environment at correct mipmap level.
+		// int specularTextureLevels = textureQueryLevels(specularTexture);
+		// vec3 specularIrradiance = textureLod(specularTexture, Lr, roughness * specularTextureLevels).rgb;
+        
+        //vec3 specularIrradiance = calculatePostAtmosphereicScatering(fragWorldPos, Lr, lights.aux1, vec3(0));
+
+		// // Split-sum approximation factors for Cook-Torrance specular BRDF.
+		// vec2 specularBRDF = texture(specularBRDF_LUT, vec2(cosLo, roughness)).rg;
+
+		// // Total specular IBL contribution.
+		// vec3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
+
+		// Total ambient lighting contribution.
+		ambientLighting = diffuseIBL;// + specularIBL;
+    }
+
     
-    //the base ___ see pbr video: https://www.youtube.com/watch?v=j-A0mwsJRmk
-    vec3 F0 = vec3(0.04);
-
-    // this is because metals do not have a base defuse color but non metals do
-    F0 = mix(F0, vec3(mat.albedo), vec3(mat.metallic));
-    
-    // the angle theta is betwen the halfay direciton (normal of the surface) and the view direction
-    float cosTheta = max(dot(H, V), float(0.0));
-   
-    // fernel_Schlick value
-    vec3 F = fresnelSchlick(cosTheta, F0);
-
-    // normal distribution
-    float NDF = DistributionGGX(N, H, mat.roughness);
-    // return vec3(NDF);
-    float G = GeometrySmith(N, V, L, mat.roughness);
-    //return vec3(G);
-
-    // calc cook-torrance BRDF -- putting it all together
-
-    //  previus values put together
-    vec3 numerator = NDF * G * F;
-    // some transformation corrections
-    float denominator = 4.0 * max(dot(N, V), float(0.0)) * max(dot(N, L), float(0.0));
-    vec3 specular = numerator / max(denominator, float(0.001));
-
-
-    // final calcs
-    vec3 kS = F;
-    vec3 kD = vec3(1.0) - kS;
-
-    kD *= 1.0 - mat.metallic;
-
-    float NdotL = max(dot(N, L), float(0.0));
-
-    // add the contribution of this light to all the lights
-    Lo += (kD * vec3(mat.albedo) / PI_f + specular) * radiance * NdotL;
-    //}
-
-    // calculaitons on total Lo
-
-    vec3 ambient = vec3(0.03) * vec3(mat.albedo) * mat.ao;
-    vec3 color = ambient + Lo;
-
-
-    return color;
-
+	// Final fragment color.
+	return directLighting + ambientLighting;
 }
 
 
 
-
-
+//called by frag lighting shader
+//input sun dir is directiuon rto sun
+//texCoards are in range [0,1]
 vec3 calculateLighting(
                       vec2 texCoards,
                       float depth,
@@ -182,13 +202,18 @@ vec3 calculateLighting(
                         vec3 worldCamPos
                         ) {
         
-    // really good copmarison of ndc spaces - https://github.com/gpuweb/gpuweb/issues/416
     // re create frag wold pos
-    float z = depth;
-    vec4 clipSpaceFragPos = vec4(texCoards * 2.0f - 1.0f, z, 1.0);
+    // really good copmarison of ndc spaces - https://github.com/gpuweb/gpuweb/issues/416
+    //for converting frag pos to world pos see: https://stackoverflow.com/questions/38938498/how-do-i-convert-gl-fragcoord-to-a-world-space-point-in-a-fragment-shader
+    //anser by Nicol Bolas
+    //and also see: https://stackoverflow.com/questions/32227283/getting-world-position-from-depth-buffer-value
 
-    // dont think i need this but i dont know;
-    //clipSpaceFragPos.y = -clipSpaceFragPos.y;
+    //z value may be wrong
+    //vulkan ndc has z in depth range [0,1] - where 1 is the far plane and 0 is the near plane
+    vec4 ndc = vec4(texCoards * 2.0f - 1.0f, depth, 1.0);
+
+    //clip space has x and y in domain [-1,1]
+    vec4 clipSpaceFragPos = ndc;
 
 
     vec4 viewSpaceFragPosition =
@@ -203,17 +228,17 @@ vec3 calculateLighting(
     Light sunLight;
 
     sunLight.type = 1;
-    sunLight.direction = sunDir;
-    sunLight.intensity = vec3(7);//vec3(4);//vec3(8);
+    sunLight.aux1 = sunDir;
+    sunLight.intensity = vec3(3);//vec3(4);//vec3(8);
 
-    //return vec3(3);
-    //return worldSpaceFragPosition.xyz;
-    vec3 color = light(mat, sunLight, mat.worldSpaceNormals, worldSpaceFragPosition.xyz, worldCamPos);
+    //mat.metallic = 1.0;
+    //mat.roughness = 0.0;
+    //mat.albedo = vec3(1);
 
-
-    // todo add ACES tone mapping here or better in another post pass
-    //color = ACESFitted(color);
-
+    vec3 color = light(mat, sunLight, worldSpaceFragPosition.xyz, worldCamPos);
+    
     return color;
-    //return vec3(mat.worldSpaceNormals.xyz);
+
+    //cool normal packing info see here: https://aras-p.info/texts/CompactNormalStorage.html
 }
+#endif //pbr_h

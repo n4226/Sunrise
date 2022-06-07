@@ -1,4 +1,11 @@
-#pragma once
+
+#ifndef base_h
+#define base_h
+
+#ifdef SR_PLATFORM_WINDOWS
+#include <glm/glm.hpp>
+using namespace glm;
+#endif // SR_PLATFORM_WINDOWS
 
 // constants
 
@@ -75,3 +82,5 @@ vec3 ACESFitted(vec3 color)
 
     return color;
 }
+
+#endif // base_h

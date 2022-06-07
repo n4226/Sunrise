@@ -69,74 +69,7 @@ namespace sunrise {
 		createSyncObjects();
 
     }
-
-    void Window::SetupImgui()
-    {
-
-        // Setup Dear ImGui context
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-        // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
-        //ImGui::StyleColorsClassic();
-        
-
-
-        // Create imgui Descriptor Pool
-        {
-            VkDescriptorPoolSize pool_sizes[] =
-            {
-                { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
-                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
-                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
-                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
-            };
-            VkDescriptorPoolCreateInfo pool_info = {};
-            pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-            pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-            pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
-            pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
-            pool_info.pPoolSizes = pool_sizes;
-            auto err = vkCreateDescriptorPool(device, &pool_info, nullptr, &imguiDescriptorQueue);
-            //(err);
-        }
-
-        // Setup Platform/Renderer bindings
-        ImGui_ImplGlfw_InitForVulkan(window, true);
-        ImGui_ImplVulkan_InitInfo init_info = {};
-        init_info.Instance = app.instance;
-        init_info.PhysicalDevice = renderer->physicalDevice;
-        init_info.Device = renderer->device;
-        init_info.QueueFamily = renderer->queueFamilyIndices.graphicsFamily.value();
-        init_info.Queue = renderer->deviceQueues.graphics;
-        init_info.PipelineCache = nullptr;
-        init_info.DescriptorPool = imguiDescriptorQueue;
-        init_info.Allocator = nullptr;
-        init_info.Subpass = 1;
-        //TODO set this to an actual value
-        init_info.MinImageCount = 2;
-        init_info.ImageCount = swapChainImages.size();
-        init_info.CheckVkResultFn = nullptr;
-        // for now going to try to use the standard world renderpass
-        ImGui_ImplVulkan_Init(&init_info, renderPassManager->renderPass);
-
-        io.Fonts->AddFontDefault();
-        // not sure if this is supposed to be called explicitily but error if not
-        io.Fonts->Build();
-
-    }
-
+	
     void Window::recreateSwapchain()
     {
         throw std::runtime_error(
@@ -157,33 +90,6 @@ namespace sunrise {
         createSwapchain();
         createSwapchainImageViews();
 
-        //WorldScene* world = dynamic_cast<WorldScene*>(app.loadedScenes[0]);
-       /* if (world != nullptr) {
-            renderPassManager = new RenderPassManager(device, albedoFormat, normalFormat, aoFormat, swapchainImageFormat, depthBufferFormat);
-
-            if (_virtual) {
-                renderPassManager->multiViewport = true;
-                renderPassManager->multiViewCount = subWindows.size();
-            }
-
-            renderPassManager->createMainRenderPass();
-
-        }*/
-        
-  /*    
-        if (world != nullptr) {
-            pipelineCreator = new TerrainPipeline(device, swapchainExtent, *renderPassManager);
-
-            pipelineCreator->createPipeline();
-
-            deferredPass = new DeferredPass(device, swapchainExtent, *renderPassManager);
-
-            deferredPass->createPipeline();
-            gpuGenPipe = new GPUGenCommandsPipeline(app, device, *pipelineCreator);
-        }*/
-
-        createFrameBufferImages();
-        createFramebuffers();
 
 
         //TODO: call renderer.updateDescriptors() somehow
@@ -330,103 +236,6 @@ namespace sunrise {
             swapChainImageViews[i] = device.createImageView({ createInfo });
         }
 
-    }
-
-    void Window::createFrameBufferImages()
-    {
-        //GBUffer Images
-
-        albedoFormat = VkFormat(
-            //vk::Format::eR8G8B8A8Unorm);
-            vk::Format::eB8G8R8A8Unorm);
-        //TODO: roughness field will have half the precioins if it uses range [0,1] so consider changing this
-        normalFormat = VkFormat(vk::Format::eB8G8R8A8Unorm);
-        aoFormat = VkFormat(vk::Format::eR8Unorm);
-
-        ImageCreationOptions createOptions;
-
-        createOptions.sharingMode = vk::SharingMode::eExclusive;
-        createOptions.storage = ResourceStorageType::gpu;
-        createOptions.usage = vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eInputAttachment;
-
-        createOptions.type = vk::ImageType::e2D;
-        createOptions.layout = vk::ImageLayout::eUndefined;
-        createOptions.tilling = vk::ImageTiling::eOptimal;
-
-        createOptions.layers = 1;
-        if (_virtual)
-           createOptions.layers = subWindows.size();
-
-        createOptions.format = vk::Format(albedoFormat);
-
-        gbuffer_albedo_metallic = new Image(device, renderer->allocator, { swapchainExtent.width,swapchainExtent.height,1 }, createOptions, vk::ImageAspectFlagBits::eColor);
-
-        createOptions.format = vk::Format(normalFormat);
-
-        gbuffer_normal_roughness = new Image(device, renderer->allocator, { swapchainExtent.width,swapchainExtent.height,1 }, createOptions, vk::ImageAspectFlagBits::eColor);
-
-        createOptions.format = vk::Format(aoFormat);
-
-        gbuffer_ao = new Image(device, renderer->allocator, { swapchainExtent.width,swapchainExtent.height,1 }, createOptions, vk::ImageAspectFlagBits::eColor);
-
-
-
-        { // Depth
-            depthBufferFormat = VkFormat(GPUSelector::findSupportedFormat(renderer->physicalDevice, { vk::Format::eD32Sfloat }, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment));
-
-
-            ImageCreationOptions depthOptions;
-
-            depthOptions.sharingMode = vk::SharingMode::eExclusive;
-            depthOptions.storage = ResourceStorageType::gpu;
-            depthOptions.usage = vk::ImageUsageFlagBits::eDepthStencilAttachment | vk::ImageUsageFlagBits::eInputAttachment;
-
-            depthOptions.type = vk::ImageType::e2D;
-            depthOptions.layout = vk::ImageLayout::eUndefined;
-            depthOptions.tilling = vk::ImageTiling::eOptimal;
-
-            depthOptions.layers = createOptions.layers;
-
-            depthOptions.format = vk::Format(depthBufferFormat);
-
-
-            depthImage = new Image(device, renderer->allocator, { swapchainExtent.width,swapchainExtent.height,1 }, depthOptions, vk::ImageAspectFlagBits::eDepth);
-        }
-
-
-
-    }
-
-    //TODO remove
-    void Window::createFramebuffers()
-    {
-        return;
-
-        PROFILE_FUNCTION;
-        swapChainFramebuffers.resize(swapChainImageViews.size());
-
-        for (size_t i = 0; i < swapChainImageViews.size(); i++) {
-            // see renderpass.cpp for info on order of attachments
-            std::vector<vk::ImageView> attachments = {
-                //Gbuffer
-                gbuffer_albedo_metallic->view,
-                gbuffer_normal_roughness->view,
-                gbuffer_ao->view,
-                depthImage->view,
-                //Deferred
-                swapChainImageViews[i],
-            };
-             
-            vk::FramebufferCreateInfo framebufferInfo{};
-            framebufferInfo.renderPass = renderPassManager->renderPass;
-            framebufferInfo.attachmentCount = attachments.size();
-            framebufferInfo.pAttachments = attachments.data();
-            framebufferInfo.width = swapchainExtent.width;
-            framebufferInfo.height = swapchainExtent.height;
-            framebufferInfo.layers = 1;
-
-            swapChainFramebuffers[i] = device.createFramebuffer(framebufferInfo);
-        }
     }
 
     void Window::createSyncObjects()

@@ -114,6 +114,8 @@
 /// 100,000
 #define maxModelUniformDescriptorArrayCount 100'000
 
+#define MAX_NUM_GPUS 4
+
 //TODO: fix max material stuff
 #ifdef SR_PLATFORM_MACOS
 #define maxMaterialTextureDescriptorArrayCount 16

@@ -73,6 +73,8 @@ namespace sunrise {
 		time = newtime;
 		timef = newtimef;
 
+		earlyUpdate();
+
 		for (System* sys : systems) {
 			sys->update();
 		}

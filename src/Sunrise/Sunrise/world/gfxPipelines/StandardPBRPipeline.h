@@ -9,7 +9,7 @@ namespace sunrise {
 	/// <summary>
 	/// this is an abstract comman "deffered" pieleine and gpu stage to be modularaly used
 	/// </summary>
-	class WorldTerrainPipeline : public gfx::VirtualGraphicsPipeline
+	class StandardPBRPipeline : public gfx::VirtualGraphicsPipeline
 	{
 	public:
 		using gfx::VirtualGraphicsPipeline::VirtualGraphicsPipeline;
@@ -21,6 +21,6 @@ namespace sunrise {
 
 	};
 
-	extern WorldTerrainPipeline* worldTerrainPipeline;
+	extern StandardPBRPipeline* standardPBRPipeline;
 
 }

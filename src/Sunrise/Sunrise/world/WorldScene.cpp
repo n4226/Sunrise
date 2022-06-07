@@ -11,6 +11,8 @@
 #include <marl/defer.h>
 
 
+using namespace std::chrono_literals;
+
 namespace sunrise {
 
 
@@ -49,6 +51,9 @@ namespace sunrise {
 		/// it is important that the camera systems before floating origin so that floating origin snaps before first frame
 		/// </summary>
 		systems = { new PlayerMovementSystem(), new WindowCameraController(), new CameraSystem(), new FloatingOriginSystem() };
+
+
+		worldTime.setDate(date::year{2022} / date::jun / 10, 0h);
 
 	}
 
@@ -93,15 +98,47 @@ namespace sunrise {
 		}
 
 		//sunPos
-		glm::vec3 sunLL = this->sunLL;
-		std::array<float, 2> sun = { sunLL.x, sunLL.y };
-		if (ImGui::SliderFloat2("Sun Pos", sun.data(), -180.f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
-			this->sunLL.x = sun[0];
-			this->sunLL.y = sun[1];
+		//glm::vec3 sunLL = this->sunLL;
+		//std::array<float, 2> sun = { sunLL.x, sunLL.y };
+		//if (ImGui::SliderFloat2("Sun Pos", sun.data(), -180.f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
+		//	this->sunLL.x = sun[0];
+		//	this->sunLL.y = sun[1];
+		//}
+		//if (ImGui::Button("Reset Sun")) {
+		//	this->sunLL = initialPlayerLLA;
+		//}
+
+		ImGui::Separator();
+
+		ImGui::Text("Date and Time Debug");
+
+		date::year_month_day ymd = worldTime.utcDays();
+		std::array<int, 3> ymdInt = { (int)ymd.year(), (unsigned)ymd.month(), (unsigned)ymd.day() };
+		bool dateChange = (ImGui::DragInt3("Year Month Day", ymdInt.data()));
+
+
+		//ImGui::InputInt("Year: ", (int*)&ymd.year());
+		//ImGui::SameLine();
+		//ImGui::InputInt("Month: ", (int*)&ymd.month());
+		//ImGui::SameLine();
+		//ImGui::InputInt("Day: ", (int*)&ymd.day());
+
+		date::hh_mm_ss<std::chrono::seconds> timeOfDay = date::make_time(date::floor<std::chrono::seconds>(worldTime.utcTimeOfDay()));
+
+		std::array<int, 3> timeOfDayInt = { timeOfDay.hours().count(), timeOfDay.minutes().count(), timeOfDay.seconds().count() };
+
+		bool timeChanged = (ImGui::InputInt3("Time of Day", timeOfDayInt.data()));
+
+		if (timeChanged || dateChange) {
+			date::year_month_day newYMD = date::year_month_day((date::year)ymdInt[0], (date::month)ymdInt[1], (date::day)ymdInt[2]);
+			auto time = std::chrono::hours(timeOfDayInt[0]) + std::chrono::minutes(timeOfDayInt[1]) + std::chrono::seconds(timeOfDayInt[2]);
+			worldTime.setDate(newYMD, time);
 		}
-		if (ImGui::Button("Reset Sun")) {
-			this->sunLL = initialPlayerLLA;
-		}
+
+		ImGui::Checkbox("Play Time", &worldTime.running);
+		ImGui::SliderFloat("Run Speed", &worldTime.runRate, 1, 1000);
+		
+		ImGui::Text("Sun Pos: %f, %f", sunLL.x, sunLL.y);
 
 		ImGui::End();
 
@@ -112,16 +149,21 @@ namespace sunrise {
 		ImGui::Text("GPU Memory");
 
 
-		for (auto renderer : app.renderers) {
+		for (size_t i = 0; i < app.renderers.size(); i++)
+		{
+			auto renderer = app.renderers[i];
 
-			ImGui::Text("GPU 1");
+			ImGui::Text("GPU {}",i);
 
-			renderer->gloablIndAllocator->imguiDrawDebug("Index Alocator");
+			renderer->gloablIndAllocator->imguiDrawDebug("Index Allocator");
 
 			ImGui::Spacing();
 
-			renderer->gloablVertAllocator->imguiDrawDebug("Vertex Alocator");
+			renderer->gloablVertAllocator->imguiDrawDebug("Vertex Allocator");
 
+			ImGui::Separator();
+			
+			renderer->materialManager->drawDebugView();
 		}
 
 		ImGui::Separator();
@@ -157,6 +199,8 @@ namespace sunrise {
 	void WorldScene::update()
 	{
 		PROFILE_FUNCTION;
+
+
 		Scene::update();
 
 //		if (frameNum == 200) {
@@ -195,6 +239,13 @@ namespace sunrise {
 		SR_CORE_TRACE("Mouse at ({},{})", app.mousePos.x,app.mousePos.y);*/
 
 		frameNum += 1;
+	}
+
+	void WorldScene::earlyUpdate()
+	{
+		worldTime.update(deltaTime);
+		auto sunll = worldTime.getCurrentSunPosition();
+		sunLL = { sunll.x, sunll.y, 0 };
 	}
 
 	void WorldScene::unload()

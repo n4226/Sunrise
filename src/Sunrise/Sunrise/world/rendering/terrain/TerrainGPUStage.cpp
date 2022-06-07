@@ -7,7 +7,7 @@
 #include"Sunrise/Sunrise/scene/Scene.h"
 #include"Sunrise/Sunrise/graphics/vulkan/renderer/Renderer.h"
 #include"Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
-#include "../../gfxPipelines/WorldTerrainPipeline.h"
+#include "../../gfxPipelines/StandardPBRPipeline.h"
 #include "../WorldSceneRenderCoordinator.h"
 #include "../../WorldScene.h"
 #include "../../../world/materials/StaticMaterialTable.h"
@@ -63,7 +63,7 @@ namespace sunrise {
 
 		}
 
-		registerPipeline(worldTerrainPipeline);
+		registerPipeline(standardPBRPipeline);
 	}
 
 	void TerrainGPUStage::lateSetup()
@@ -80,7 +80,7 @@ namespace sunrise {
 			descriptorSets[window] = {};
 			for (size_t swap = 0; swap < window->numSwapImages(); swap++)
 			{
-				auto pipeline = getConcretePipeline(*window, worldTerrainPipeline);
+				auto pipeline = getConcretePipeline(*window, standardPBRPipeline);
                 
                 
                 // aloocating for all static materials
@@ -145,8 +145,11 @@ namespace sunrise {
 
 	void TerrainGPUStage::cleanup()
 	{
+		
         // does not nees to block until sure all encoding threads have finished because that is the job of the terrain system which spawned them
         
+
+
 		descriptorPool->reset();
 
 		auto renderer = coord->renderer;
@@ -262,10 +265,10 @@ namespace sunrise {
 
 		setupCommandBuff(buffer, coord, selfPass, window, surface);
 
-		setPipeline(window, buffer, worldTerrainPipeline);
+		setPipeline(window, buffer, standardPBRPipeline);
 
 		// setup descriptor and buffer bindings
-		auto pipeline = getConcretePipeline(window, worldTerrainPipeline);
+		auto pipeline = getConcretePipeline(window, standardPBRPipeline);
 
 
 		buffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipeline->pipelineLayout, 0, { descriptorSets.find(&window)->second[surface]->vkItem }, {});

@@ -44,22 +44,6 @@ namespace sunrise {
 		auto world = getScene<WorldScene>();
 
 
-		if (world->terrainMask == nullptr) {
-			// initial setup of the base 8 chunks
-			for (TerrainQuadTreeNode* child : tree.leafNodes) {
-				for (auto& [_, meshLoader] : meshLoaders)
-				{
-					meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
-				}
-			}
-		}
-		else {
-			SR_CORE_INFO("Terrain System Initiated in Masked mode. DO NOT change this for the lifetime of thie object");
-			maskedMode = true;
-			//TODO: fix memory leak here
-			tree.leafNodes.clear();
-			//CreateTerrainInMask(scene, app);
-		}
 
 		//writePendingDrawOobjects();
 	}
@@ -92,6 +76,32 @@ namespace sunrise {
 		CreateTerrainInMask(*world, scene->app);
 	}
 
+	void TerrainSystem::waitForOtherThreads()
+	{
+		while (true) {
+			{
+				auto threadRunning = treeUpdateJobActive.lock();
+
+				// todo: make this waiting much better
+				if (!(*threadRunning)) {
+					break;
+				}
+			}
+			SR_CORE_INFO("sleeping waiting for terrain sys encode job on remote thread to finish");
+
+#ifdef SR_PLATFORM_MACOS
+			sleep(1);
+#else
+			Sleep(1);
+#endif
+		}
+	}
+
+	void TerrainSystem::onGraphicsReload()
+	{
+		waitForOtherThreads();
+	}
+
 	TerrainSystem::~TerrainSystem()
 	{
 	/*	for (auto pool : cmdBufferPools)
@@ -102,23 +112,8 @@ namespace sunrise {
         
        
         //TODO: abstract this wait type thing to function - also used in terraingpupass
-        while (true) {
-            {
-                auto threadRunning = treeUpdateJobActive.lock();
+		waitForOtherThreads();
 
-                // todo: make this waiting much better
-                if (!(*threadRunning)) {
-                    break;
-                }
-            }
-            SR_CORE_INFO("sleeping waiting for terrain sys encode job on remote thread to finish");
-            
-#ifdef SR_PLATFORM_MACOS
-            sleep(1);
-#else
-            Sleep(1);
-#endif
-        }
         
         // remove all draw objects;
 		for (auto& [renderer, meshLoader] : meshLoaders) {
@@ -161,6 +156,30 @@ namespace sunrise {
 	void TerrainSystem::update()
 	{
 		PROFILE_FUNCTION;
+
+		if (firstUpdate) {
+			auto world = getScene<WorldScene>();
+
+
+			if (world->terrainMask == nullptr) {
+				// initial setup of the base 8 chunks
+				for (TerrainQuadTreeNode* child : tree.leafNodes) {
+					for (auto& [_, meshLoader] : meshLoaders)
+					{
+						meshLoader.drawChunk(child, meshLoader.loadMeshPreDrawChunk(child), false);
+					}
+				}
+			}
+			else {
+				SR_CORE_INFO("Terrain System Initiated in Masked mode. DO NOT change this for the lifetime of thie object");
+				maskedMode = true;
+				//TODO: fix memory leak here
+				tree.leafNodes.clear();
+				//CreateTerrainInMask(scene, app);
+			}
+
+			firstUpdate = false;
+		}
 
 		if (!maskedMode)
 			processTree();

@@ -3,7 +3,7 @@
 #include "srpch.h"
 
 #include "Sunrise/Sunrise/graphics/vulkan/renderer/SceneRenderCoordinator.h"
-#include "../gfxPipelines/WorldTerrainPipeline.h"
+#include "../gfxPipelines/StandardPBRPipeline.h"
 #include "terrain/TerrainGPUStage.h"
 
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/concrete/DeferredStage.h"

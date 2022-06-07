@@ -23,7 +23,7 @@ namespace sunrise {
 	Application::Application(Scene* initialScene)
 		: loadedScenes({initialScene})
 	{
-
+        materialSystem = new MaterialSystem(*this);
 	}
 
 	Application::~Application()
@@ -505,6 +505,8 @@ namespace sunrise {
         ImGui::NewFrame();
         _imguiValid = true;
 
+		config.setAppTheme();
+
         if (config.drawAppDomainUI)
             drawMainUI();
 
@@ -551,7 +553,6 @@ namespace sunrise {
 
     void Application::drawMainUI()
     {
-        config.setAppTheme();
 
         ImGui::BeginMainMenuBar();
 
@@ -705,6 +706,7 @@ namespace sunrise {
         allocatorInfo.physicalDevice = physicalDevices[deviceIndex];
         allocatorInfo.device = devices[deviceIndex];
         allocatorInfo.instance = instance;
+        allocatorInfo.flags = VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT;
 
         VmaAllocator allocator;
         vmaCreateAllocator(&allocatorInfo, &allocator);
@@ -831,6 +833,7 @@ namespace sunrise {
         desIndexingFeatures.runtimeDescriptorArray = VK_TRUE;
 
         bool debugExtAvailable = false;
+        bool memBodugtAvialable = false;
 
         uint32_t extensionCount;
         vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
@@ -845,7 +848,10 @@ namespace sunrise {
             }
             if (!strcmp(ext.extensionName, VK_NV_VIEWPORT_ARRAY2_EXTENSION_NAME)) {
                 multiViewportAvailable = true;
-                //TODO: do better way of varifying all required features for this are available - geometry shaders and multple viewports
+                //TODO: do better way of verifying all required features for this are available - geometry shaders and multple viewports
+            }
+            if (!strcmp(ext.extensionName, VK_EXT_MEMORY_BUDGET_EXTENSION_NAME)) {
+                memBodugtAvialable = true;
             }
         }
 
@@ -864,6 +870,10 @@ namespace sunrise {
         if (multiViewportAvailable) {
             extensionNames.push_back(VK_NV_VIEWPORT_ARRAY2_EXTENSION_NAME);
         }
+
+		if (memBodugtAvialable) {
+			extensionNames.push_back(VK_EXT_MEMORY_BUDGET_EXTENSION_NAME);
+		}
 
         SR_CORE_INFO("creating logical device with the following extensions: ");
         
@@ -1025,6 +1035,9 @@ namespace sunrise {
 
         auto scene = loadedScenes[0];
 
+        for (auto sys : scene->systems)
+            sys->onGraphicsReload();
+			
 		for (auto renderer : renderers)
 			scene->coordinators.at(renderer)->reset();
 
@@ -1052,6 +1065,10 @@ namespace sunrise {
 		if (key == GLFW_KEY_G && (mods & GLFW_MOD_CONTROL) == GLFW_MOD_CONTROL && action == GLFW_PRESS) {
 			engine->app->hotReloadSceneGFX();
 		}
+
+        if (key == GLFW_KEY_LEFT_ALT && action == GLFW_PRESS) {
+            engine->app->toggleDrawAppMenu();
+        }
     }
 
     void Application::cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
@@ -1183,6 +1200,16 @@ namespace sunrise {
             Instrumentor::Get().EndSession();
         profiling = false;
     }
+
+	void Application::toggleDrawAppMenu()
+	{
+        setDrawAppMenu(!config.drawAppDomainUI);
+	}
+
+	void Application::setDrawAppMenu(bool draw)
+	{
+        config.drawAppDomainUI = draw;
+	}
 
 }
 

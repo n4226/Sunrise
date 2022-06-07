@@ -98,6 +98,9 @@ namespace sunrise {
         bool isProfiling();
         void endProfileSession();
         
+		void toggleDrawAppMenu();
+		void setDrawAppMenu(bool draw);
+
     protected:
         bool profiling = false;
 		
@@ -178,6 +181,9 @@ namespace sunrise {
 
 
 		VkDebugReportCallbackEXT debugObject;
+
+
+
 
 	};
 

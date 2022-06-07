@@ -339,6 +339,8 @@ namespace sunrise {
 				auto uvx = (chunkStrideLat / frame.size.x) * nonLLAFrameHeight;
 				auto uvy = (chunkStrideLon / frame.size.y) * nonLLAFrameWidth;
 
+
+
 				// chunk uvs
 				//auto uvx = chunkStrideLat / frame.size.x;
 				//auto uvy = chunkStrideLon / frame.size.y;
@@ -352,7 +354,13 @@ namespace sunrise {
 	//                        uvx -= 1
 	//                    }
 
-				mesh->uvs.emplace_back(static_cast<float>(uvx), static_cast<float>(uvy));
+				auto metersPerTeture = 3.0;
+
+
+				auto uv = glm::vec2((glm::dvec2(lat, lon) - frame.start) / (frame.getEnd() - frame.start) * math::llaDistance(frame.start, frame.getEnd()) * metersPerTeture);
+
+				mesh->uvs.emplace_back(uv);
+				//mesh->uvs.emplace_back(static_cast<float>(uvx), static_cast<float>(uvy));
 
 			}
 		}

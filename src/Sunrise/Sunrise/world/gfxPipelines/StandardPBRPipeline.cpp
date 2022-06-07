@@ -1,14 +1,14 @@
 #include "srpch.h"
-#include "WorldTerrainPipeline.h"
+#include "StandardPBRPipeline.h"
 
 #include "../../math/mesh/Mesh.h"
 #include "../../graphics/vulkan/resources/uniforms.h"
 
 namespace sunrise {
 
-	WorldTerrainPipeline* worldTerrainPipeline = new WorldTerrainPipeline();
+	StandardPBRPipeline* standardPBRPipeline = new StandardPBRPipeline();
 
-	gfx::GraphicsPipelineOptions sunrise::WorldTerrainPipeline::makeDeff()
+	gfx::GraphicsPipelineOptions sunrise::StandardPBRPipeline::makeDeff()
 	{
 		PROFILE_FUNCTION;
         

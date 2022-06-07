@@ -20,6 +20,9 @@ namespace sunrise {
 		virtual void setup() {}
 		virtual void cleanup() {}
 
+		//for cleanup before graphics reload
+		virtual void onGraphicsReload() {}
+
 	protected:
 		
 			template<typename SceneType>

@@ -5,6 +5,21 @@
 
 namespace sunrise::gfx {
 
+	
+	struct ComputePipelineOptions {
+		
+		std::vector<DescriptorSetLayout::CreateOptions> descriptorSetLayouts;
+
+		std::string shaderPath;
+
+
+		//TODO add suportfor multiple push ranges
+		bool enablePushConstants = false;
+		VkDeviceSize pushConstantOffset = 0;
+		VkDeviceSize pushConstantSize = 0;
+		vk::ShaderStageFlags pushConstantStages;
+
+	};
 
 	class ComputePipeline
 	{

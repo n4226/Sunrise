@@ -8,6 +8,30 @@
 #include "../../graphics/vulkan/resources/uniforms.h"
 #include "../../graphics/vulkan/resources/MeshBuffers.h"
 
+/* 
+	TODO: make notes more perminent
+
+	sctructure of terrain file systen(s)
+	
+	each module is defined as a folder with an index.terrain file
+	modules can have sub modules
+	
+	in the engine dir is a file denoting all known modules
+
+	the engine will load this adn acodiated modules to build an efficient tree to konw very quickly where the terrain for a spacific chunk is located
+
+	one or sevral modules can be linked up to be for remote chunks loaded elswhere
+
+
+	
+	there can be extenral modules - should  be an external modules reference file type one of which hosted on official website to get current options
+	engine funcitn to validate local modules for broken files: can fix module files and point out terrain files which have errors or are corrupt
+	
+
+*/
+
+
+
 namespace sunrise {
 
 	namespace gfx {

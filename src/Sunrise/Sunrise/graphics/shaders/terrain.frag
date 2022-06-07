@@ -1,7 +1,9 @@
 #version 450
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_EXT_nonuniform_qualifier : enable
-
+#extension GL_GOOGLE_include_directive : enable
+#include "headers/base.h"
+#include "headers/math.h"
 
 layout( push_constant ) uniform DrawPushData {
   uint modelIndex;
@@ -46,8 +48,11 @@ vec3 srgb_to_linear(vec3 c) {
     return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c));
 }
 
+
+
+
 void main() {
-    vec2 finalUvs = uvs * 0.1;
+    vec2 finalUvs = uvs * 0.1 * 0.5;
     
     MaterialUniforms mat = materialUniform.data[drawData.matIndex];
 
@@ -59,17 +64,15 @@ void main() {
 
     mat4 matGeo = modelUniform.data[drawData.modelIndex].model;
 
-    // normal = srgb_to_linear(normal);
     // remape normals to correct domain to [-1,1]
     normal = normalize(normal * 2.0 - 1.0); 
-    // normal.y = -normal.y;
-    // normal.z = -normal.z;
-    // normal.x = -normal.x;
-
-    //temp - NORMAL MAPS STILL NOT WORKING OTHER PBR STUFF SHOULD BE
-    normal = vec3(0,0,1);
 
     
+    //adjustments:
+    //float perlin = perlin(vec2(finalUvs),1);
+    //color = vec3(perlin,perlin,perlin);
+
+
     vec3 modelNormal = normalize(inTBN * normal);
     // in dommain [-1,1]
     //see: https://vulkanppp.wordpress.com/2017/07/06/week-6-normal-mapping-specular-mapping-pipeline-refactoring/

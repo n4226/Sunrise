@@ -90,14 +90,6 @@ namespace sunrise {
 		/// </summary>
 		size_t globalIndex;
 
-		//// application specific - will move to other class after refactor - not sure about render pass manager yet
-
-
-			// manager objects
-
-		gfx::RenderPassManager* renderPassManager;
-		//gfx::GraphicsPipeline* pipelineCreator;
-
 		//// window specific - will keep here after refactor
 
 
@@ -125,19 +117,7 @@ namespace sunrise {
 		std::vector<VkFramebuffer> swapChainFramebuffers;
 		std::vector<gfx::Image*> virtualSwapImages;
 
-		/* Manualy created Frame Buffer Images */
-
-		VkFormat depthBufferFormat;
-
-		VkFormat albedoFormat;
-		VkFormat normalFormat;
-		VkFormat aoFormat;
-
-		//GBuffer
-		gfx::Image* gbuffer_albedo_metallic;
-		gfx::Image* gbuffer_normal_roughness;
-		gfx::Image* gbuffer_ao;
-		gfx::Image* depthImage;
+	
 
 		//Deferred 
 		//Image* deferred_colorAttachment; - right now befoe adding post processing passes the deferred writes directly to swap chain
@@ -163,7 +143,7 @@ namespace sunrise {
 		/// </summary>
 		std::vector<VkFence> inFlightFences;
 		/// <summary>
-		/// indicies are window surface inndexes i.e. window.currentSurfaceIndex
+		/// indicies are window surface indicies i.e. window.currentSurfaceIndex
 		/// </summary>
 		std::vector<VkFence> imagesInFlight;
 		
@@ -171,7 +151,7 @@ namespace sunrise {
 
 		void recreateSwapchain();
 
-		// refrences =
+		// references
 
 		vk::Device device;
 		gfx::Renderer* renderer;
@@ -241,9 +221,6 @@ namespace sunrise {
 		void createSwapchain();
 
 		void createSwapchainImageViews();
-		void createFrameBufferImages();
-
-		void createFramebuffers();
 
 		void createSyncObjects();
 
@@ -252,7 +229,7 @@ namespace sunrise {
 			imagesInFlight.resize(swapChainImages.size(), VK_NULL_HANDLE);
 		}
 
-        void SetupImgui();
+        //void SetupImgui();
 
 		VkDescriptorPool imguiDescriptorQueue;
 

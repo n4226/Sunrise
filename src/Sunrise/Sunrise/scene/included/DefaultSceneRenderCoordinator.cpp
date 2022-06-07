@@ -3,7 +3,7 @@
 #include "DefaultSceneRenderCoordinator.h"
 #include "entityRendering/EntityRenderingGPUStage.h"
 #include "../../graphics/vulkan/GPU Stages/concrete/DeferredStage.h"
-#include "../../world/gfxPipelines/WorldTerrainPipeline.h"
+#include "../../world/gfxPipelines/StandardPBRPipeline.h"
 #include "../../graphics/vulkan/renderer/WorldUniformsCreator.h"
 #include "../../graphics/vulkan/renderPipelines/concrete/GPUStages/DeferredPipeline.h"
 
@@ -120,7 +120,7 @@ namespace sunrise {
 
 	void DefaultSceneRenderCoordinator::updateSceneUniformBuffer(Window& window)
 	{
-		WorldUniformCreator::updateSceneUniformBuffer(window, { scene->sunLL,0 }, { 0,0,0 }, 100, uniformBuffers);
+		WorldUniformCreator::updateSceneUniformBuffer(window, { scene->sunLL,0 }, { 0,-math::fEarthRad,0 }, 100, uniformBuffers);
 	}
 
 }

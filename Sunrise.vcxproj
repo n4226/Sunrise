@@ -160,9 +160,6 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Sunrise.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.h" />
     <ClInclude Include="src\Sunrise\Sunrise\Math.h" />
     <ClInclude Include="src\Sunrise\Sunrise\configuration\ConfigSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\core\Application.h" />
@@ -188,6 +185,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\graphics\imGui\ImGuiVulkanContainer.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\imGui\extensions\ProgressIndicators.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\_old_pbr.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\pbr.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\math.h" />
@@ -198,6 +196,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\ImguiRenderPassManager.h" />
@@ -221,6 +221,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\RenderSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.h" />
@@ -233,6 +234,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.h" />
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.h" />
     <ClInclude Include="src\Sunrise\Sunrise\helpers\StringHelpers.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\materialSystem\Material.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\materialSystem\MaterialSystem.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\Box.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\FrustrumMath.h" />
     <ClInclude Include="src\Sunrise\Sunrise\math\mesh\Mesh.h" />
@@ -254,9 +257,11 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\UIScene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\OnboardWorldBGScene.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\date+Time\SolarPositionAlgorithm\spa.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\gfxPipelines\StandardPBRPipeline.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\rendering\WorldSceneRenderCoordinator.h" />
     <ClInclude Include="src\Sunrise\Sunrise\world\rendering\terrain\TerrainGPUStage.h" />
@@ -298,12 +303,11 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPURenderStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GPUStageDispatcher.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPUStagesRenderPass.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\ImguiRenderPassManager.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\RenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\SingalPassRenderPassManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\generalAbstractions\AttributeHelpers.cpp" />
@@ -325,6 +329,7 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TerrainPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\TrianglePipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\RenderSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\Renderer.cpp" />
@@ -337,6 +342,8 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\ResourceTransferTask.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\resources\uniforms.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\helpers\StringHelpers.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\materialSystem\Material.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\materialSystem\MaterialSystem.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\FrustrumMath.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\math\Math.cpp" />
@@ -357,9 +364,13 @@ copy /B /Y $(SolutionDir)\extern\Sunrise\vendor\bin\NVIDIA_Nsight_Aftermath_SDK_
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\UIScene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\UISceneRenderCoordinator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\scene\included\entityRendering\EntityRenderingGPUStage.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\OnboardWorldBGScene.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\date+Time\SolarPositionAlgorithm\spa.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\gfxPipelines\StandardPBRPipeline.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\rendering\WorldSceneRenderCoordinator.cpp" />
     <ClCompile Include="src\Sunrise\Sunrise\world\rendering\terrain\TerrainGPUStage.cpp" />

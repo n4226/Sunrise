@@ -58,6 +58,9 @@
     <Filter Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages">
       <UniqueIdentifier>{3F82EFFA-2B00-4094-14F8-FD2B001582BC}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing">
+      <UniqueIdentifier>{01A774AF-6D6F-4233-3600-4B45A287726E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete">
       <UniqueIdentifier>{4112C13C-ADF9-AB32-B6E7-ADAE224E4FF5}</UniqueIdentifier>
     </Filter>
@@ -87,6 +90,9 @@
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\helpers">
       <UniqueIdentifier>{FF565158-6B64-7F3E-F44A-7B2960574BF5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sunrise\Sunrise\materialSystem">
+      <UniqueIdentifier>{609830A1-4CD4-330B-B5E6-4B02A141DC25}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\math">
       <UniqueIdentifier>{366C948D-2291-E30D-4BDC-C89D3760E22B}</UniqueIdentifier>
@@ -120,6 +126,9 @@
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\world\date+Time">
       <UniqueIdentifier>{FB3A17D7-67F4-8181-F053-9C5B5C0C38F1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sunrise\Sunrise\world\date+Time\SolarPositionAlgorithm">
+      <UniqueIdentifier>{C794F859-B354-89FE-1C72-710908519C10}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sunrise\Sunrise\world\gfxPipelines">
       <UniqueIdentifier>{71CA9A7D-5D1C-726D-463B-AF7D322C8B56}</UniqueIdentifier>
@@ -246,6 +255,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\base.h">
       <Filter>src\Sunrise\Sunrise\graphics\shaders\headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\_old_pbr.h">
+      <Filter>src\Sunrise\Sunrise\graphics\shaders\headers\lighting</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\shaders\headers\lighting\atmScat.h">
       <Filter>src\Sunrise\Sunrise\graphics\shaders\headers\lighting</Filter>
     </ClInclude>
@@ -275,6 +287,12 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete</Filter>
@@ -345,6 +363,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.h">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.h">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClInclude>
@@ -380,6 +401,12 @@
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\helpers\StringHelpers.h">
       <Filter>src\Sunrise\Sunrise\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\materialSystem\Material.h">
+      <Filter>src\Sunrise\Sunrise\materialSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\materialSystem\MaterialSystem.h">
+      <Filter>src\Sunrise\Sunrise\materialSystem</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\math\Box.h">
       <Filter>src\Sunrise\Sunrise\math</Filter>
@@ -447,10 +474,13 @@
     <ClInclude Include="src\Sunrise\Sunrise\world\WorldScene.h">
       <Filter>src\Sunrise\Sunrise\world</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\date+Time\SolarPositionAlgorithm\spa.h">
+      <Filter>src\Sunrise\Sunrise\world\date+Time\SolarPositionAlgorithm</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.h">
       <Filter>src\Sunrise\Sunrise\world\date+Time</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.h">
+    <ClInclude Include="src\Sunrise\Sunrise\world\gfxPipelines\StandardPBRPipeline.h">
       <Filter>src\Sunrise\Sunrise\world\gfxPipelines</Filter>
     </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.h">
@@ -495,9 +525,7 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.h" />
-    <ClInclude Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.h" />
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\OnboardWorldBGScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -575,6 +603,12 @@
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\GpuStage.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete\DeferredStage.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\concrete</Filter>
     </ClCompile>
@@ -641,6 +675,9 @@
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven\GPUGenCommandsPipeline.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderPipelines\concrete\gpuDriven</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.cpp">
+      <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\MaterialManager.cpp">
       <Filter>src\Sunrise\Sunrise\graphics\vulkan\renderer</Filter>
     </ClCompile>
@@ -676,6 +713,12 @@
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\helpers\StringHelpers.cpp">
       <Filter>src\Sunrise\Sunrise\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\materialSystem\Material.cpp">
+      <Filter>src\Sunrise\Sunrise\materialSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\materialSystem\MaterialSystem.cpp">
+      <Filter>src\Sunrise\Sunrise\materialSystem</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\math\Box.cpp">
       <Filter>src\Sunrise\Sunrise\math</Filter>
@@ -740,10 +783,13 @@
     <ClCompile Include="src\Sunrise\Sunrise\world\WorldScene.cpp">
       <Filter>src\Sunrise\Sunrise\world</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\date+Time\SolarPositionAlgorithm\spa.c">
+      <Filter>src\Sunrise\Sunrise\world\date+Time\SolarPositionAlgorithm</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\date+Time\WorldClock.cpp">
       <Filter>src\Sunrise\Sunrise\world\date+Time</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\world\gfxPipelines\WorldTerrainPipeline.cpp">
+    <ClCompile Include="src\Sunrise\Sunrise\world\gfxPipelines\StandardPBRPipeline.cpp">
       <Filter>src\Sunrise\Sunrise\world\gfxPipelines</Filter>
     </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\materials\StaticMaterialTable.cpp">
@@ -839,8 +885,6 @@
     <ClCompile Include="vendor\optick\src\optick_server.cpp">
       <Filter>vendor\optick\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\PostProcessingGPUStage.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\GPU Stages\PostProccesing\Bloom.cpp" />
-    <ClCompile Include="src\Sunrise\Sunrise\graphics\vulkan\renderer\DebugDrawer.cpp" />
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\OnboardWorldBGScene.cpp" />
   </ItemGroup>
 </Project>

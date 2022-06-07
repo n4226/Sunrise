@@ -278,13 +278,15 @@ namespace sunrise::gfx {
 			(device, dynamicCommandPools[i], dynamicCommandBuffers[i], app.maxSwapChainImages, queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::ePrimary);
 	}
 
-	void Renderer::drawableReleased(Window* window, size_t appFrame)
+	void Renderer::drawableReleased(Window* window, size_t surface)
 	{
 		// todo make better way to get active scene
 		//auto scene = app.loadedScenes[0];
 
+		materialManager->drawableReleased(window, surface);
+
 		for (auto scene : app.loadedScenes)
-			scene->coordinators.at(this)->drawableReleased(window, appFrame);
+			scene->coordinators.at(this)->drawableReleased(window, surface);
 	}
 
 
