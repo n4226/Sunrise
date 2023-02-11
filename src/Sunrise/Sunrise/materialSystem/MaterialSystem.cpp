@@ -31,6 +31,12 @@ namespace sunrise {
 
 	}
 
+	void MaterialSystem::startup()
+	{
+		//register all static mats at launch
+		registerStaticMaterials();
+	}
+
 	//thread safe
 	sunrise::MaterialSystem::System MaterialSystem::createSystem(const SystemCreateInfo& options)
 	{
@@ -153,8 +159,7 @@ namespace sunrise {
 			return;
 		}
 
-
-		SR_CORE_INFO("Attempting to load {} Required materials", StaticMaterialTable::entries.size());
+		SR_CORE_INFO("Attempting to load Required materials", StaticMaterialTable::entries.size());
 
 		auto matRootPath = FileManager::engineMaterialDir() + "staticAlloc/";
 

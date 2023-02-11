@@ -1,6 +1,7 @@
 #pragma once
 
 #include "srpch.h"
+#include "Sunrise/materialSystem/MaterialSystem.h"
 #include "Sunrise/Sunrise/graphics/vulkan/GPU Stages/GPURenderStage.h"
 #include "../WorldSceneRenderCoordinator.h"
 
@@ -20,10 +21,14 @@ namespace sunrise {
 		vk::CommandBuffer* encode(RunOptions options) override;
 
 		std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>> descriptorSets{};
+
+		static const size_t setsOfCMDBuffers = 2;
+
 	protected:
 		friend gfx::Renderer;
 		friend TerrainSystem;
 		friend MaterialManager;
+		friend WorldSceneRenderCoordinator;
 
 		void reEncodeBuffer(const Window& window, size_t surface);
 
@@ -34,7 +39,6 @@ namespace sunrise {
 		/// <param name="surface"></param>
 		void drawableReleased(Window* window, size_t surface) override;
 
-		static const size_t setsOfCMDBuffers = 2;
 		/// <summary>
 		/// two sets of one for each drawable
 		/// one of the two elements in the outer std::array is active and so will be sent to gpu to execute the other can be filled by worker thread

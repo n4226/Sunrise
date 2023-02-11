@@ -28,7 +28,7 @@ project "Sunrise"
 
 		"vendor/optick/src/*.cpp",
 
-		"vendo/SPIRV_Reflect/spirv_reflect.cpp",
+		"vendor/SPIRV_Reflect/spirv_reflect.cpp",
 	}
 
 	libdirs {
@@ -164,5 +164,5 @@ project "Sunrise"
 			"vendor/DirectX/Bin/Windows10_2022/x64/Release"
 		}
 
-	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp or files:vendor/imgui/**.cpp or files:vendor/optick/src/**.cpp or files:src/**.c' }
+	filter { 'files:src/Sunrise/Sunrise/graphics/vulkan/generalAbstractions/vma.cpp or files:vendor/imgui/**.cpp or files:vendor/optick/src/**.cpp or files:src/**.c or files:vendor/SPIRV_Reflect/spirv_reflect.cpp' }
 		flags {"NoPCH"}

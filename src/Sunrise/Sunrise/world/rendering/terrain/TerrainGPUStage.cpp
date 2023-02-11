@@ -16,9 +16,9 @@
 namespace sunrise {
 
 	TerrainGPUStage::TerrainGPUStage(WorldSceneRenderCoordinator* coord)
-		: GPURenderStage(coord,"World Terrain Render Stage"), worldCoord(coord)
+		: GPURenderStage(coord,"World Terrain Render Stage"), worldCoord(coord), matSys(coord->app.materialSystem->createSystem({ "Terrain GPU Stage" }))
 	{
-		matSys = coord->app.materialSystem->createSystem({"Terrain GPU Stage"});
+		//matSys =
 	}
 
 	void TerrainGPUStage::setup()
@@ -55,10 +55,16 @@ namespace sunrise {
 			cmdBufferPools[i].resize(renderer->windows.size());
 			commandBuffers[i].resize(renderer->windows.size());
 
+			worldCoord->terrainCommandMetrics[i].resize(renderer->windows.size());
+
 			for (size_t j = 0; j < renderer->windows.size(); j++) {
 				gfx::vkHelpers::createPoolsAndCommandBufffers
 				(renderer->device, cmdBufferPools[i][j], commandBuffers[i][j], app.maxSwapChainImages, renderer->queueFamilyIndices.graphicsFamily.value(), vk::CommandBufferLevel::eSecondary);
-				
+				worldCoord->terrainCommandMetrics[i][j].resize(app.maxSwapChainImages);
+				for (int k = 0; k < app.maxSwapChainImages; k++)
+				{
+					worldCoord->terrainCommandMetrics[i][j][k] = new libguarded::plain_guarded<RenderCommandMetrics>();
+				}
 			}
 
 		}
@@ -177,7 +183,6 @@ namespace sunrise {
 
 		uint32_t bufferIndex = options.window.currentSurfaceIndex;
 
-
 		// check if back command buffers are done and ready to be swaped
 		// if so swap
 
@@ -194,7 +199,7 @@ namespace sunrise {
 		//return active buff
 		size_t activeBUff = mainThreadLocalCopyOfActiveBuffer;
 
-		// mark this buffer as being used
+		// mark this buffer as being used by the surface or frame i dont rember
 		{ 
 			auto handle = this->commandBuffersInUse.lock();
 
@@ -206,8 +211,6 @@ namespace sunrise {
 
 			setUsedBySurface[&options.window][bufferIndex] = activeBUff;
 		}
-
-
 		return &commandBuffers[activeBUff][options.window.indexInRenderer][bufferIndex];
 	}
 
@@ -261,6 +264,9 @@ namespace sunrise {
 
 		//SR_CORE_TRACE("encoding terrain using set {}", buffSet);
 
+		//get and clear metrics
+		auto metrics = (*worldCoord->terrainCommandMetrics[buffSet][window.indexInRenderer][surface]).lock();
+		*metrics = RenderCommandMetrics();
 
 		renderer->device.resetCommandPool(cmdBufferPools[buffSet][window.indexInRenderer][surface], {});
 
@@ -306,6 +312,8 @@ namespace sunrise {
 
 					buffer.pushConstants(pipeline->pipelineLayout, vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment, 0, sizeof(gfx::DrawPushData), &it->second.drawDatas[i]);
 					buffer.drawIndexed(indexCount, 1, indexOffset, it->second.vertIndex, 0);
+					metrics->vertCountMetric += it->second.vertcount;
+					metrics->triCountMetric += indexCount / 3;
 				}
 			}
 		}// TODO: WARN rare crash her on device destruction if truing to aquire a mutex

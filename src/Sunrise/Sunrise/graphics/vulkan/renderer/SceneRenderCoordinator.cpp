@@ -563,6 +563,11 @@ namespace sunrise::gfx {
 		updateSceneUniformBuffer(window);
 	}
 
+	std::vector<GPUStage*>& SceneRenderCoordinator::getStagesInOrder()
+	{
+		return stagesInOrder;
+	}
+
 	void SceneRenderCoordinator::registerForGlobalMaterials(std::unordered_map<const Window*, std::vector<gfx::DescriptorSet*>>* descriptors)
 	{
 		renderer->materialManager->registeredDescriptors.push_back(std::make_pair(this,descriptors));

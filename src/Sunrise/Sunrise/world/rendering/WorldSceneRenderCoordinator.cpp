@@ -15,6 +15,11 @@ namespace sunrise {
 	WorldSceneRenderCoordinator::WorldSceneRenderCoordinator(WorldScene* scene, gfx::Renderer* renderer)
 		: SceneRenderCoordinator(scene,renderer), worldScene(scene)
 	{
+		for (int i = 0; i < terrainCommandMetrics.size() ; i++)
+		{
+			terrainCommandMetrics[i] = {};
+		}
+		terrainMetricsGood = true;
 	}
 
 	WorldSceneRenderCoordinator::~WorldSceneRenderCoordinator()
@@ -33,7 +38,7 @@ namespace sunrise {
 			{4, vk::ImageLayout::eShaderReadOnlyOptimal, vk::AttachmentLoadOp::eLoad}
 		} };
 
-		auto terrainStage  = new TerrainGPUStage(this);
+		terrainStage  = new TerrainGPUStage(this);
 		auto deferredStage = new DeferredStage(this, { 1,2,3,4 });
 
 
@@ -58,6 +63,12 @@ namespace sunrise {
 	{
 		WorldUniformCreator::updateSceneUniformBuffer(window, worldScene->sunLL, -worldScene->origin, worldScene->terrainSystem->getRadius(), uniformBuffers);
 	}
+
+	size_t WorldSceneRenderCoordinator::geActiveTerrainCommandIndex()
+	{
+		return terrainStage->mainThreadLocalCopyOfActiveBuffer;
+	}
+
 
 	gfx::ComposableRenderPass::CreateOptions WorldSceneRenderCoordinator::renderpassConfig(vk::Format swapChainFormat)
 	{

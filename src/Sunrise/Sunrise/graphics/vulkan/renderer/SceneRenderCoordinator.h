@@ -162,6 +162,14 @@ namespace sunrise {
 			/// </summary>
 			virtual void preEncodeUpdate(vk::CommandBuffer firstLevelCMDBuffer, size_t frameID, Window& window);
 
+			std::vector < GPUStage*>& getStagesInOrder();
+
+			//make a template function to return the first stage of a requested type
+			// make sure to cache result: slow
+			template <typename T>
+			T* getFirstStageOfType();
+				
+
 
 			/// <summary>
 			/// must be set before buildGraph() is called
@@ -211,6 +219,16 @@ namespace sunrise {
 			}
 			SR_CORE_ERROR("stage requested from sceene render coordinator but was not found");
 			return nullptr;
+		}
+
+		template<typename T>
+		inline T* SceneRenderCoordinator::getFirstStageOfType()
+		{
+			for (size_t i = 0; i < stagesInOrder.size(); i++)
+			{
+				if (dynamic_cast<T*>(stagesInOrder[i]))
+					return dynamic_cast<T*>(stagesInOrder[i]);
+			}
 		}
 
 }

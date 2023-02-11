@@ -13,6 +13,7 @@ namespace sunrise {
 	{
 	public:
 		MaterialSystem(Application& app);
+		void startup();
 
 		struct SystemCreateInfo {
 			std::string name;
@@ -27,6 +28,10 @@ namespace sunrise {
 			System(glm::uint32 val);
 
 			friend MaterialSystem;
+
+			static const glm::uint32 empty = 0xFFFFFFFF;
+		public:
+			static System CreateEmpty();
 		};
 
 		using GPUBitField = std::bitset<MAX_NUM_GPUS>;
@@ -62,7 +67,7 @@ namespace sunrise {
 
 		struct ReplacementMaterial
 		{
-			/// <summary>
+			/// <summary> ? do the true false delfs below need to be flipped?
 			/// false = interchangeable with original material
 			/// true = only if original is not available - then will be replaced in order provided
 			/// </summary>

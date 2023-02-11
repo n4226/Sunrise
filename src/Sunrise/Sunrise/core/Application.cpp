@@ -137,6 +137,11 @@ namespace sunrise {
         loc_vkCreateDebugReportCallbackEXT(instance, &debugInfo,nullptr, &debugObject);
 #endif
 
+        {
+            SR_CORE_TRACE("Initializing Material System");
+            materialSystem->startup();
+        }
+
         createWindows();
 
         {
@@ -479,6 +484,8 @@ namespace sunrise {
         PROFILE_FUNCTION_LEVEL2;
         {
 #if SR_PROFILING
+            //this is so when profiling the next scope is measured as a child of the function
+            //this line runs a heap alloc
             std::string s = "loooooooooooooong string";
 #endif
             PROFILE_SCOPE("glfwPollEvents");
@@ -499,17 +506,25 @@ namespace sunrise {
         mousePosFrameDelta = mousePos - lastFrameMosPos;
         lastFrameMosPos = mousePos;
  
-        //update imGUI
-        ImGui_ImplGlfw_NewFrame();
-        ImGui_ImplVulkan_NewFrame();
-        ImGui::NewFrame();
-        _imguiValid = true;
+        { //update imGUI  
+            {
+                PROFILE_SCOPE("ImGui Next Frame");
+                ImGui_ImplGlfw_NewFrame();
+                ImGui_ImplVulkan_NewFrame();
+                ImGui::NewFrame();
+                _imguiValid = true;
+            }
+            {
+                PROFILE_SCOPE("ImGui Set Theme");
+                config.setAppTheme();
+            }
 
-		config.setAppTheme();
-
-        if (config.drawAppDomainUI)
-            drawMainUI();
-
+            if (config.drawAppDomainUI)
+            {
+			    PROFILE_SCOPE("ImGui Draw App UI");
+                drawMainUI();
+            }
+        }
         // update scene
         loadedScenes[0]->update();
 
@@ -605,13 +620,12 @@ namespace sunrise {
 
         ImGui::EndMainMenuBar();
 
-        
+         
         if (timingView) {
             ImGui::Begin("Frame Time");
 //            ImGui::Text("%f",);
             
             static std::vector<float> frames;
-            static int max_fps = 1000;
             
             int fps = (1/loadedScenes[0]->deltaTime);
 
@@ -636,10 +650,6 @@ namespace sunrise {
             ImGui::Text("Frames: %d", fps);
             
             ImGui::PlotHistogram("Framerate", frames.data(), frames.size(), 0, NULL, 0.0f, 100.0f, ImVec2(300, 100));
-                if (ImGui::SliderInt("Max FPS", &max_fps, -1, 2000, NULL))
-                {
-//                    time->SetMaxFPS(max_fps);
-                }
             
             ImGui::End();
         }

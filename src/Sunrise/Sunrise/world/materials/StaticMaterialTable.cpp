@@ -4,10 +4,16 @@
 
 namespace sunrise {
 
+	/*
+		changes: porfolio weekend:
+		changed grass back to 1
+	*/
+
 	std::unordered_map<std::string, glm::uint32> StaticMaterialTable::entries = {
 		// doenst seem linke anytihg is useing this list currenlty
-			{"ocean1", 0},
-			{"grass4", 1},
+			//{"ocean1", 0},
+			{"water_0", 0},
+			{"grass1", 1},
 			{"building1", 2},
 			{"asphalt1", 3},
 			//{"concrete1", 4},
@@ -18,8 +24,9 @@ namespace sunrise {
 
 	std::map<glm::uint32, std::string> StaticMaterialTable::reverseEntries = {
 
-			{0, "ocean1"},
-			{1, "grass4"},
+			//{0, "ocean1"},
+			{0, "water_0"},
+			{1, "grass1"},
             {2, "building1"},
 			{3, "asphalt1"},
 			//{4, "concrete1"},

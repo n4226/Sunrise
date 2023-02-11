@@ -13,6 +13,11 @@ namespace sunrise {
 
 	class TerrainGPUStage;
 
+	struct RenderCommandMetrics {
+		size_t vertCountMetric = 0;
+		size_t triCountMetric = 0;
+	};
+
 	class WorldSceneRenderCoordinator: public gfx::SceneRenderCoordinator
 	{
 	public:
@@ -22,6 +27,11 @@ namespace sunrise {
 		void createPasses() override;
 
 		void createUniforms() override;
+
+		//TODO: cant set array size to  TerrainGPUStage::setsOfCMDBuffers because circular dependancy
+		std::array<std::vector<std::vector<libguarded::plain_guarded<RenderCommandMetrics>*>>,5> terrainCommandMetrics{};
+		bool terrainMetricsGood = false;
+		size_t geActiveTerrainCommandIndex();
 	private:
 		friend TerrainGPUStage;
 		friend DeferredStage;
@@ -33,8 +43,9 @@ namespace sunrise {
 
 		void updateSceneUniformBuffer(Window& window) override;
 
-		WorldScene* worldScene;
+		TerrainGPUStage* terrainStage;
 
+		WorldScene* worldScene;
 
 	};
 

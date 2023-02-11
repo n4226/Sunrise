@@ -48,7 +48,7 @@ namespace sunrise {
 	void VaribleIndexAllocator::imguiDrawDebug(const std::string& name) {
 
 		//"{} ({})", name, totalSize
-		auto s = fmt::format("{} ({})", name, totalSize);
+		auto s = fmt::format("{} ({} slots)", name, totalSize);
 		ImGui::Text(s.c_str());
 		ImGui::ProgressBar((float)allocatedSize / totalSize);
 	}

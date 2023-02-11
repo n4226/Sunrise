@@ -80,106 +80,132 @@ namespace sunrise {
 
 	void WorldScene::onDrawUI()
 	{
-		ImGui::Begin("World Scene Settings", nullptr, ImGuiWindowFlags_NoCollapse);
-
-		ImGui::Text("World Scene Settings");
-
-		glm::vec3 playerLLA = this->playerLLA;
-		std::array<float, 3> llaPos = { playerLLA.x, playerLLA.y, playerLLA.z };
-
-		if (ImGui::InputFloat3("LLA Position", llaPos.data(), "%.5f")) {
-			this->playerLLA.x = llaPos[0];
-			this->playerLLA.y = llaPos[1];
-			this->playerLLA.z = llaPos[2];
-		}
-
-		if (ImGui::Button("Reset POS")) {
-			this->playerLLA = initialPlayerLLA;
-		}
-
-		//sunPos
-		//glm::vec3 sunLL = this->sunLL;
-		//std::array<float, 2> sun = { sunLL.x, sunLL.y };
-		//if (ImGui::SliderFloat2("Sun Pos", sun.data(), -180.f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
-		//	this->sunLL.x = sun[0];
-		//	this->sunLL.y = sun[1];
-		//}
-		//if (ImGui::Button("Reset Sun")) {
-		//	this->sunLL = initialPlayerLLA;
-		//}
-
-		ImGui::Separator();
-
-		ImGui::Text("Date and Time Debug");
-
-		date::year_month_day ymd = worldTime.utcDays();
-		std::array<int, 3> ymdInt = { (int)ymd.year(), (unsigned)ymd.month(), (unsigned)ymd.day() };
-		bool dateChange = (ImGui::DragInt3("Year Month Day", ymdInt.data()));
-
-
-		//ImGui::InputInt("Year: ", (int*)&ymd.year());
-		//ImGui::SameLine();
-		//ImGui::InputInt("Month: ", (int*)&ymd.month());
-		//ImGui::SameLine();
-		//ImGui::InputInt("Day: ", (int*)&ymd.day());
-
-		date::hh_mm_ss<std::chrono::seconds> timeOfDay = date::make_time(date::floor<std::chrono::seconds>(worldTime.utcTimeOfDay()));
-
-		std::array<int, 3> timeOfDayInt = { timeOfDay.hours().count(), timeOfDay.minutes().count(), timeOfDay.seconds().count() };
-
-		bool timeChanged = (ImGui::InputInt3("Time of Day", timeOfDayInt.data()));
-
-		if (timeChanged || dateChange) {
-			date::year_month_day newYMD = date::year_month_day((date::year)ymdInt[0], (date::month)ymdInt[1], (date::day)ymdInt[2]);
-			auto time = std::chrono::hours(timeOfDayInt[0]) + std::chrono::minutes(timeOfDayInt[1]) + std::chrono::seconds(timeOfDayInt[2]);
-			worldTime.setDate(newYMD, time);
-		}
-
-		ImGui::Checkbox("Play Time", &worldTime.running);
-		ImGui::SliderFloat("Run Speed", &worldTime.runRate, 1, 1000);
-		
-		ImGui::Text("Sun Pos: %f, %f", sunLL.x, sunLL.y);
-
-		ImGui::End();
-
-		ImGui::Begin("World Debug");
-
-		ImGui::Separator();
-
-		ImGui::Text("GPU Memory");
-
-
-		for (size_t i = 0; i < app.renderers.size(); i++)
 		{
-			auto renderer = app.renderers[i];
+			ImGui::Begin("World Scene Settings", nullptr, ImGuiWindowFlags_NoCollapse);
 
-			ImGui::Text("GPU {}",i);
+			ImGui::Text("World Scene Settings");
 
-			renderer->gloablIndAllocator->imguiDrawDebug("Index Allocator");
+			glm::vec3 playerLLA = this->playerLLA;
+			std::array<float, 3> llaPos = { playerLLA.x, playerLLA.y, playerLLA.z };
 
-			ImGui::Spacing();
+			if (ImGui::InputFloat3("LLA Position", llaPos.data(), "%.5f")) {
+				this->playerLLA.x = llaPos[0];
+				this->playerLLA.y = llaPos[1];
+				this->playerLLA.z = llaPos[2];
+			}
 
-			renderer->gloablVertAllocator->imguiDrawDebug("Vertex Allocator");
+			if (ImGui::Button("Reset POS")) {
+				this->playerLLA = initialPlayerLLA;
+			}
+
+			//sunPos
+			//glm::vec3 sunLL = this->sunLL;
+			//std::array<float, 2> sun = { sunLL.x, sunLL.y };
+			//if (ImGui::SliderFloat2("Sun Pos", sun.data(), -180.f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
+			//	this->sunLL.x = sun[0];
+			//	this->sunLL.y = sun[1];
+			//}
+			//if (ImGui::Button("Reset Sun")) {
+			//	this->sunLL = initialPlayerLLA;
+			//}
 
 			ImGui::Separator();
-			
-			renderer->materialManager->drawDebugView();
+
+			ImGui::Text("Date and Time Debug");
+
+			date::year_month_day ymd = worldTime.utcDays();
+			std::array<int, 3> ymdInt = { (int)ymd.year(), (unsigned)ymd.month(), (unsigned)ymd.day() };
+			bool dateChange = (ImGui::DragInt3("Year Month Day", ymdInt.data()));
+
+
+			//ImGui::InputInt("Year: ", (int*)&ymd.year());
+			//ImGui::SameLine();
+			//ImGui::InputInt("Month: ", (int*)&ymd.month());
+			//ImGui::SameLine();
+			//ImGui::InputInt("Day: ", (int*)&ymd.day());
+
+			date::hh_mm_ss<std::chrono::seconds> timeOfDay = date::make_time(date::floor<std::chrono::seconds>(worldTime.utcTimeOfDay()));
+
+			std::array<int, 3> timeOfDayInt = { timeOfDay.hours().count(), timeOfDay.minutes().count(), timeOfDay.seconds().count() };
+
+			bool timeChanged = (ImGui::InputInt3("Time of Day", timeOfDayInt.data()));
+
+			if (timeChanged || dateChange) {
+				date::year_month_day newYMD = date::year_month_day((date::year)ymdInt[0], (date::month)ymdInt[1], (date::day)ymdInt[2]);
+				auto time = std::chrono::hours(timeOfDayInt[0]) + std::chrono::minutes(timeOfDayInt[1]) + std::chrono::seconds(timeOfDayInt[2]);
+				worldTime.setDate(newYMD, time);
+			}
+
+			ImGui::Checkbox("Play Time", &worldTime.running);
+			ImGui::SliderFloat("Run Speed", &worldTime.runRate, 1, 1000);
+
+			ImGui::Text("Sun Pos: %f, %f", sunLL.x, sunLL.y);
+
+			ImGui::End();
 		}
 
-		ImGui::Separator();
+		{
+			ImGui::Begin("World Debug");
 
-		//if (ImGui::BeginChild("Materials")) {
+			ImGui::Separator();
 
-		//	//asymes 2d image
-		//	for (auto image : app.renderers[0]->materialManager->allImages()) {
-		//		ImGui::Text("Image");
-		//		ImGui::Image(image->vkItem, { (float)image->size.width, (float)image->size.depth });
-		//	}
+			ImGui::Text("Scene Stats");
 
-		//	ImGui::EndChild();
-		//}
+			//TODO: now the vert and try stats will be based on the first window of gpu 0
+			auto worldCoord = dynamic_cast<WorldSceneRenderCoordinator*>(coordinators.at(app.renderers[0]));
+			auto window = app.renderers[0]->windows[0];
 
-		ImGui::End();
+
+			if (worldCoord && worldCoord->terrainMetricsGood && worldCoord->terrainCommandMetrics[0].size() > 0) {
+				auto metrics = worldCoord->terrainCommandMetrics[worldCoord->geActiveTerrainCommandIndex()][0][window->currentSurfaceIndex]->lock();
+
+				ImGui::Text(fmt::format("{} Vertices", metrics->vertCountMetric).c_str());
+				ImGui::Text(fmt::format("{} Triangles", metrics->triCountMetric).c_str());
+			}
+			else {
+				ImGui::Text("Loading...");
+			}
+
+			ImGui::Separator();
+
+			ImGui::Text("GPU Memory");
+
+
+			for (size_t i = 0; i < app.renderers.size(); i++)
+			{
+				auto renderer = app.renderers[i];
+
+				auto s = fmt::format("GPU {}", i);
+				ImGui::Text(s.c_str());
+
+				renderer->gloablIndAllocator->imguiDrawDebug("Index Allocator");
+
+				ImGui::Spacing();
+
+				renderer->gloablVertAllocator->imguiDrawDebug("Vertex Allocator");
+
+
+				/*Not drawing new mat system debug yet bc not done*/
+				//ImGui::Separator();
+
+				//renderer->materialManager->drawDebugView();
+			}
+
+			ImGui::Separator();
+
+			//if (ImGui::BeginChild("Materials")) {
+
+			//	//asymes 2d image
+			//	for (auto image : app.renderers[0]->materialManager->allImages()) {
+			//		ImGui::Text("Image");
+			//		ImGui::Image(image->vkItem, { (float)image->size.width, (float)image->size.depth });
+			//	}
+
+			//	ImGui::EndChild();
+			//}
+
+			ImGui::End();
+		}
 
 	}
 

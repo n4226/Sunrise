@@ -21,7 +21,7 @@ namespace sunrise {
     using namespace gfx;
 
     Window::Window(Application* app, size_t globalIndex, bool isPrimary,bool isVirtual)
-        : app(*app), globalIndex(globalIndex), _virtual(isVirtual), _primary(isPrimary)
+        : app(*app), globalIndex(globalIndex), _virtual(isVirtual), _primary(isPrimary), currentSurfaceIndex(0)
     {
 
     }

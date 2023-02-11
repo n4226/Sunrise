@@ -154,14 +154,11 @@
     <Filter Include="src\Sunrise\Sunrise\world\terrain">
       <UniqueIdentifier>{38BDFCE5-A42B-5265-ED14-0D6559C24701}</UniqueIdentifier>
     </Filter>
-    <Filter Include="vendo">
-      <UniqueIdentifier>{218F8F10-8DA3-B7C1-5625-5B21C2F8B3F2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="vendo\SPIRV_Reflect">
-      <UniqueIdentifier>{08233CF6-7484-1904-FDF1-5FB6695250C3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\SPIRV_Reflect">
+      <UniqueIdentifier>{1A9F69D6-062E-F39F-AF4C-079B9BBA0346}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor\imgui">
       <UniqueIdentifier>{5D3BD0F0-499E-5F95-F223-984BDE652B18}</UniqueIdentifier>
@@ -845,8 +842,8 @@
     <ClCompile Include="src\srpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="vendo\SPIRV_Reflect\spirv_reflect.cpp">
-      <Filter>vendo\SPIRV_Reflect</Filter>
+    <ClCompile Include="vendor\SPIRV_Reflect\spirv_reflect.cpp">
+      <Filter>vendor\SPIRV_Reflect</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp">
       <Filter>vendor\imgui\backends</Filter>
