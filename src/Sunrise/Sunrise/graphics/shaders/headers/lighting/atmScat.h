@@ -110,9 +110,19 @@ vec3 computeIncidentLight(
 
     uint numSamples, numSamplesLight;
 
+//regular
+    // if (highPrecision) {
+    //     numSamples = 10;
+    //     numSamplesLight = 5;
+    // } else {
+    //     numSamples = 2;
+    //     numSamplesLight = 1;
+    // }
+
+//faster
     if (highPrecision) {
-        numSamples = 10;
-        numSamplesLight = 5;
+    numSamples = 8;
+    numSamplesLight = 4;
     } else {
         numSamples = 2;
         numSamplesLight = 1;

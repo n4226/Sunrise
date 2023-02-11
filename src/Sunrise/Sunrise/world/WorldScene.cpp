@@ -80,8 +80,22 @@ namespace sunrise {
 
 	void WorldScene::onDrawUI()
 	{
+		static bool showUIWindows = true;
+		
+		if (app.getKey(GLFW_KEY_H))
+			showUIWindows = false;
+
+		if (app.getKey(GLFW_KEY_G))
+			showUIWindows = true;
+
+		if (!showUIWindows) return;
+
 		{
 			ImGui::Begin("World Scene Settings", nullptr, ImGuiWindowFlags_NoCollapse);
+
+			ImGui::Text("H hides and G shows the windows");
+
+			ImGui::Separator();
 
 			ImGui::Text("World Scene Settings");
 
@@ -146,6 +160,7 @@ namespace sunrise {
 
 		{
 			ImGui::Begin("World Debug");
+
 
 			ImGui::Separator();
 

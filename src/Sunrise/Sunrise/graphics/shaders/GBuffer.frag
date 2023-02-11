@@ -82,12 +82,19 @@ void main() {
         color = calculateLighting(uvs,depth,ubo.invertedProjMat[gl_Layer],ubo.invertedViewMat[gl_Layer],mat,ubo.sunDir.xyz,ubo.camFloatedGloabelPos[gl_Layer].xyz);
     }else {
         color = vec3(0);
+        // color.xyz = calculatePostAtmosphereicScatering(
+        //     inPos.xy,ubo.camFloatedGloabelPos[gl_Layer].xyz,
+        //     ubo.invertedProjMat[gl_Layer],ubo.invertedViewMat[gl_Layer],
+        //     ubo.sunDir.xyz,ubo.earthCenter.xyz,color.xyz,depth);
+        // color.xyz = vec3(0.1,0.9,0.2);
     }
 
-    color.xyz = calculatePostAtmosphereicScatering(
-        inPos.xy,ubo.camFloatedGloabelPos[gl_Layer].xyz,
-        ubo.invertedProjMat[gl_Layer],ubo.invertedViewMat[gl_Layer],
-        ubo.sunDir.xyz,ubo.earthCenter.xyz,color.xyz,depth);
+    if (depth > 0.9) {
+        color.xyz = calculatePostAtmosphereicScatering(
+            inPos.xy,ubo.camFloatedGloabelPos[gl_Layer].xyz,
+            ubo.invertedProjMat[gl_Layer],ubo.invertedViewMat[gl_Layer],
+            ubo.sunDir.xyz,ubo.earthCenter.xyz,color.xyz,depth);
+    }
     //atm skybox 
         
 

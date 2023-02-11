@@ -150,7 +150,9 @@ vec3 light(SampledPBRMaterial mat, Light lights, vec3 fragWorldPos, vec3 camWorl
 
     {
 
-        vec3 irradiance = calculatePostAtmosphereicScatering(fragWorldPos, N, lights.aux1, vec3(0));
+        //irradience makes it look good but dissabling for speed
+        //vec3 irradiance = calculatePostAtmosphereicScatering(fragWorldPos, N, lights.aux1, vec3(0));
+        vec3 irradiance = vec3(0.1f);
 
         // Calculate Fresnel term for ambient lighting.
 		// Since we use pre-filtered cubemap(s) and irradiance is coming from many directions
