@@ -49,3 +49,6 @@
 [submodule "vendor/DirectX"]
 	path = vendor/DirectX
 	url = https://github.com/microsoft/DirectXTK
+[submodule "vendor/SPIRV_Reflect"]
+	path = vendor/SPIRV_Reflect
+	url = https://github.com/KhronosGroup/SPIRV-Reflect

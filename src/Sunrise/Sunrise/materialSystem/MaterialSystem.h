@@ -98,6 +98,7 @@ namespace sunrise {
 
 	private:
 
+		void registerStaticMat(const Material& material, MaterialID matID);
 		void registerStaticMaterials();
 		bool staticMatsRegistered = false;
 

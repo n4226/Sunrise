@@ -6,6 +6,8 @@
 #include "../world/gfxPipelines/StandardPBRPipeline.h"
 #include "../world/materials/StaticMaterialTable.h"
 
+#include <spirv_reflect.h>
+
 
 namespace sunrise {
 
@@ -80,6 +82,9 @@ namespace sunrise {
 		//TODO: here goes material checking and possible inserting engine descritpor set layout
 
 
+
+		
+
 		//
 		
 
@@ -131,6 +136,16 @@ namespace sunrise {
 		return result;
 	}
 
+	void MaterialSystem::registerStaticMat(const Material& material, MaterialID matID)
+	{
+		//add to material list
+		{
+			auto handle = materials.lock();
+			handle->emplace(std::make_pair(matID, material));
+		}
+
+	}
+
 	void MaterialSystem::registerStaticMaterials()
 	{
 		if (staticMatsRegistered) {
@@ -151,13 +166,16 @@ namespace sunrise {
 
 				auto imageSetDescriptor = MaterialImageSetDescriptor::stdPBRSet(matRootPath + mat.second);
 
-				Material mat{};
-				mat.imageSets = { imageSetDescriptor };
-				//mat.pipleineOptions = standardPBRPipeline->definition;
+				Material material{};
+				material.imageSets = { imageSetDescriptor };
+				material.type = Material::Type::Graphics;
+				material.pipleineOptions = StandardPBRDef();
+				
+				registerStaticMat(material,{mat.first});
 			}
 			else SR_CORE_WARN("Skiping {} world material becuase its directory was not found", mat.second);
 
-		}			
+		}
 	}
 
 }

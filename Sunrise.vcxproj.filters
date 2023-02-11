@@ -154,6 +154,12 @@
     <Filter Include="src\Sunrise\Sunrise\world\terrain">
       <UniqueIdentifier>{38BDFCE5-A42B-5265-ED14-0D6559C24701}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendo">
+      <UniqueIdentifier>{218F8F10-8DA3-B7C1-5625-5B21C2F8B3F2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendo\SPIRV_Reflect">
+      <UniqueIdentifier>{08233CF6-7484-1904-FDF1-5FB6695250C3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -510,6 +516,9 @@
     <ClInclude Include="src\Sunrise\Sunrise\world\systems\WindowCameraController.h">
       <Filter>src\Sunrise\Sunrise\world\systems</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\OnboardWorldBGScene.h">
+      <Filter>src\Sunrise\Sunrise\world\terrain</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.h">
       <Filter>src\Sunrise\Sunrise\world\terrain</Filter>
     </ClInclude>
@@ -525,7 +534,6 @@
     <ClInclude Include="src\srpch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sunrise\Sunrise\world\terrain\OnboardWorldBGScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sunrise\Sunrise\configuration\ConfigSystem.cpp">
@@ -819,6 +827,9 @@
     <ClCompile Include="src\Sunrise\Sunrise\world\systems\WindowCameraController.cpp">
       <Filter>src\Sunrise\Sunrise\world\systems</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\OnboardWorldBGScene.cpp">
+      <Filter>src\Sunrise\Sunrise\world\terrain</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sunrise\Sunrise\world\terrain\TerrainMeshLoader.cpp">
       <Filter>src\Sunrise\Sunrise\world\terrain</Filter>
     </ClCompile>
@@ -833,6 +844,9 @@
     </ClCompile>
     <ClCompile Include="src\srpch.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="vendo\SPIRV_Reflect\spirv_reflect.cpp">
+      <Filter>vendo\SPIRV_Reflect</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imgui\backends\imgui_impl_glfw.cpp">
       <Filter>vendor\imgui\backends</Filter>
@@ -885,6 +899,5 @@
     <ClCompile Include="vendor\optick\src\optick_server.cpp">
       <Filter>vendor\optick\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sunrise\Sunrise\world\terrain\OnboardWorldBGScene.cpp" />
   </ItemGroup>
 </Project>

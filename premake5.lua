@@ -27,6 +27,8 @@ project "Sunrise"
 		"vendor/imgui/backends/imgui_impl_glfw.cpp",
 
 		"vendor/optick/src/*.cpp",
+
+		"vendo/SPIRV_Reflect/spirv_reflect.cpp",
 	}
 
 	libdirs {
@@ -76,6 +78,7 @@ project "Sunrise"
 		"vendor/geos/capi/",
 		"vendor/geos/include/",
 		"vendor/DirectX/Inc",
+		"vendor/SPIRV_Reflect/",
 	}	
 
 	postbuildcommands {

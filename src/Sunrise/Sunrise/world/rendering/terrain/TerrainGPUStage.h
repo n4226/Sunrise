@@ -73,6 +73,7 @@ namespace sunrise {
 		/// </summary>
 		size_t selfPass = 0;
 
+		MaterialSystem::System matSys;
 	};
 
 }

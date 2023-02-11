@@ -18,7 +18,7 @@ namespace sunrise {
 	TerrainGPUStage::TerrainGPUStage(WorldSceneRenderCoordinator* coord)
 		: GPURenderStage(coord,"World Terrain Render Stage"), worldCoord(coord)
 	{
-
+		matSys = coord->app.materialSystem->createSystem({"Terrain GPU Stage"});
 	}
 
 	void TerrainGPUStage::setup()
@@ -62,6 +62,9 @@ namespace sunrise {
 			}
 
 		}
+
+
+		auto ticket = coord->app.materialSystem->loadMaterial(matSys, { 1 }, { 1 }, {});
 
 		registerPipeline(standardPBRPipeline);
 	}

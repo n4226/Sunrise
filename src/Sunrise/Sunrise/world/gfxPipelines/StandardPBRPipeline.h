@@ -21,6 +21,10 @@ namespace sunrise {
 
 	};
 
+
+	//TOOD: find beter way for this
+	gfx::GraphicsPipelineOptions StandardPBRDef();
+
 	extern StandardPBRPipeline* standardPBRPipeline;
 
 }
