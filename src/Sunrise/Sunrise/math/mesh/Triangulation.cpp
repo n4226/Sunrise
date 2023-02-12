@@ -1109,6 +1109,10 @@ namespace sunrise::math::mesh {
 		//TODO: this memory leaks becasue GEOSgeom type is
 		//SR_CORE_INFO("just intersected two polygons and got a {}", GEOSGeomType(result));
 
+		//see meshgen notes in docs folderfor why this is here -- a call to this casued null here
+		if (result == nullptr) {
+			return {};
+		}
 		
 		return GEOSMultiPolyToSR(result);
 	}

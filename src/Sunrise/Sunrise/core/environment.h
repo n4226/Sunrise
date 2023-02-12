@@ -9,7 +9,7 @@
 
 #define SR_MULTI_THREADED_PROFILING 1
 
-#define SR_RenderDocCompatible 1 && SR_DEBUG
+#define SR_RenderDocCompatible 0 && SR_DEBUG
 #define SR_SingleQueueForRenderDoc 0 && SR_DEBUG
 
 // will not build without modifications

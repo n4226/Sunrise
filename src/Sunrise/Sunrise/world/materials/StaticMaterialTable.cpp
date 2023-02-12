@@ -23,10 +23,16 @@ namespace sunrise {
 			{"SunriseTestWoodMat", 10},
 		*/
 		//For Paper Mats (1 ocean, 1 grass, 2 buidlings, 1 building roof, 
-		{"ocean_0", 0},
+		{"water_0", 0},
 		{"grass1", 1},
 		{"building1",2},
-		
+		{"asphalt1", 3},
+		{"asphalt2", 4},
+		{"grass3", 6},
+		{"building2", 11},
+		{"building_brick1", 12},
+		{"concreteRoof1", 20},
+		{"concreteRoof2", 21},
 	};
 
 	std::map<glm::uint32, std::string> StaticMaterialTable::reverseEntries = {
@@ -43,9 +49,16 @@ namespace sunrise {
 			{10, "SunriseTestWoodMat"},
 		*/
 		//FOr Paper Mats
-		{0, "ocean_0"},
+		{0, "water_0"},
 		{1, "grass1"},
 		{2, "building1"},
+		{3, "asphalt1"},
+		{4, "asphalt2"},
+		{6, "grass3"},
+		{11, "building2"},
+		{12, "building_brick1"},
+		{20, "concreteRoof1"},
+		{21, "concreteRoof2"},
 	};
 
 }

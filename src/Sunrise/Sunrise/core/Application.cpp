@@ -865,6 +865,9 @@ namespace sunrise {
             }
         }
 
+        //TODO:remobe for debug on multi windows only
+        //multiViewportAvailable = false;
+
         // devie extensions
         std::vector<const char*> extensionNames = {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME,

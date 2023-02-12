@@ -27,8 +27,8 @@ namespace sunrise {
 
 		//TODO: set to simlink to sink to xplane
 		MovementMode mode = 
-			//MovementMode::Simlink;
-			MovementMode::Manual;
+			MovementMode::Simlink;
+			//MovementMode::Manual;
 
 		bool hasConnection = false;
 

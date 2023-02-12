@@ -176,7 +176,7 @@ namespace sunrise::gfx {
 
 		//todo: make this more configureable and make sure it is supported by the gpu
 
-		VkDeviceSize vCount = 70'000'000 * 5;
+		VkDeviceSize vCount = (VkDeviceSize)70'000'000 * 5; 
 		VkDeviceSize indexCount = 220'000'000 * 0.5;
 
 #if SR_RenderDocCompatible
@@ -184,7 +184,7 @@ namespace sunrise::gfx {
 		//makeGlobalMeshBuffers(vCount / 10, indexCount / 10);
 		makeGlobalMeshBuffers(vCount / 5, indexCount / 5);
 #else
-		makeGlobalMeshBuffers(vCount, indexCount);
+		makeGlobalMeshBuffers(vCount / 5, indexCount / 3);
 #endif
 #pragma endregion
 

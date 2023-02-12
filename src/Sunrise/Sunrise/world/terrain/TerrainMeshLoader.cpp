@@ -184,6 +184,8 @@ namespace sunrise {
 		{
 			PROFILE_SCOPE("loading with pre creating empty mesh");//todo fix to work with more than 1 submesh
 			
+			//if (preLoadedMesh.mesh == nullptr) { //TODO: the mesh could also be null need to hanfle
+
 			auto mesh = preLoadedMesh.mesh;
 
 			vertCount = mesh->verts.size();
